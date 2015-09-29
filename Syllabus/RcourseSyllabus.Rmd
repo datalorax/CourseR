@@ -76,7 +76,7 @@ Prior to the first class you should have the latest version of R downloaded and
   
 ## Course Website
 All the code for this course, as well as lectures and course readings, will be 
-  available in a github repository (https://github.com/DJAnderson07/Rcourse). 
+  available in a github repository (https://github.com/DJAnderson07/CourseR). 
   This is where the basic work with git will come in, as I'll be asking you to
   clone the repository onto your local machine and update it periodically as I 
   push new content into the repository.
