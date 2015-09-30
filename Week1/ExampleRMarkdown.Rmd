@@ -1,0 +1,48 @@
+---
+title: Example Markdown document
+author: Daniel Anderson
+date: "`r Sys.Date()`"
+---
+
+# Level 1
+
+## Level 2
+
+### Level 3 (etc.)
+
+
+* Unordered list
+  - inset
+    + inset more
+  - etc.
+
+1. Ordered list
+  a. blah blah
+2. More stuff
+
+```{r}
+a <- 3
+b <- 5
+
+a + b * (exp(a)/b)
+```
+
+This is an example of inline code, where I want to refer to the sum of `a` and
+  `b`, which is `r a + b`.
+
+
+You can show code without evaluating it, using `eval = FALSE`. 
+
+```{r, eval = FALSE}
+a + b * (exp(a)/b)
+```
+
+Alternatively, you can evaluate the code without displaying it
+
+```{r, echo = FALSE}
+data(mtcars)
+with(mtcars, plot(mpg, hp, 
+	xlab = "Miles Per Gallon", 
+	ylab = "Horsepower",
+	main = "Relation between Miles Per Gallon and Horsepower"))
+```
