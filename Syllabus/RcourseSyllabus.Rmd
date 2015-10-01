@@ -75,7 +75,7 @@ Prior to the first class you should have the latest version of R downloaded and
       Publishing.
   * Wickham, H. (2015). *Advanced R*. Available online 
       at http://adv-r.had.co.nz
-  * Wickham, H. (2015). *ggplot2*. New York, NY: Springer.
+  * Wickham, H. (2010). *ggplot2*. New York, NY: Springer.
   
 ## Course Website
 All the code for this course, as well as lectures and course readings, will be 
@@ -100,25 +100,30 @@ Upon completion of this course, the successful student will:
        fitted model through visualizations.
 
 ## Course Schedule
-#### Week 1: Getting Started Introduction and overview of the R environment  
+#### Week 1.1: Getting Started Introduction and overview of the R environment  
 * Objectives
+    + Decide on a text editor or IDE for R
     + Clone course github repository
-    + Get a text editor or IDE for R
+    + Understand vectors, matrices, and subsetting each
 * Topics
     + Objects in R
-    + Vectors and Matrices (brief intro)
-    + Reading data into R
-        - Setting and changing your directory
-    + Subsetting
-        - vectors
-        - matrices
-        - data frames
-        - conditional subsetting
-        - subsetting other elements with vectors
-    + R packages
     + Getting help
+    + R packages
+    + Vectors and matrices
+    + Subsetting vectors and matrices
     + The grammar of syntax
-    + Introduction to *R Markdown* & *git*
+* Lab
+    + Reading data into R and subsetting
+* Readings
+    + Syntax style: http://adv-r.had.co.nz/Style.html
+    + Kabacoff: Chapter 1
+    + Chacon: Chapters 1 & 2
+
+#### Week 1.2: *R Markdown* and reading/writing data into/from R
+* Topics
+    + Directory management
+    + Reading data into R    
+    + Introduction to *R Markdown*
 * Lab
     + Reading data into R and subsetting
 * Readings
@@ -126,8 +131,8 @@ Upon completion of this course, the successful student will:
         - http://RMarkdown.rstudio.com
         - http://RMarkdown.rstudio.com/authoring_basics.html
         - http://RMarkdown.rstudio.com/authoring_rcodechunks.html
-    + Syntax style: http://adv-r.had.co.nz/Style.html
-    + Kabacoff: Chapter 1
+    
+
 * Homework
     + Creating an *R Markdown* document
     
