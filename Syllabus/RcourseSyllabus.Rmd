@@ -64,6 +64,9 @@ Prior to the first class you should have the latest version of R downloaded and
   resources that may be helpful (http://www.ats.ucla.edu/stat/r/). In this 
   course, we will primarily rely on the following resources
 
+  * Chacon, S., and Straub, B. (2014). *Pro Git: Everything you need to know 
+      about git*. (2nd edition). Available online at 
+      https://git-scm.com/book/en/v2
   * Gelman, A., and Hill, J. (2007). *Data Analysis Using Regression and 
       Multilevel/Hierarchical Models*. New York, NY: Cambridge University Press.
   * Kabacoff, R, I. (2011). *R in Action: Data analysis and graphics with R*. 
