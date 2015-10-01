@@ -1052,6 +1052,20 @@ To receive full credit, please create and render an *R Markdown*  document in
   Make some manipulation to the data (e.g., remove a few random cases) and 
   report the mean in text again, using code.
 
+----
+## Lab
+
+Sort of an abbreviated version of the homework
+
+* Create an R Markdown document (RStudio will create a template for you, if 
+  you're going that route)
+* Read in data from `CourseR/data/` (any one you choose)
+* Display the first six rows of the data
+* Subset the data so there are only 2 columns.
+* Write out the data with two columns only to your desktop.
+* Render the document
+
+
 
 
 

@@ -715,7 +715,7 @@ Sort of an abbreviated version of the homework
 * Read in data from `CourseR/data/` (any one you choose)
 * Display the first six rows of the data
 * Subset the data so there are only 2 columns.
-* Diplay the first 6 rows of the subset data
+* Write out the data with two columns only to your desktop.
 * Render the document
 
 
