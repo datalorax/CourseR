@@ -31,7 +31,6 @@ knitr::kable(classes)
 ## Welcome to R
 
 ```{r setup, include = FALSE}
-# Note, this needs to be run manually before running slidify()
 knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
 ```
 
@@ -274,7 +273,7 @@ Buckeyes <- 1
 ```
 Then clear the console, so they can't see the code you've previously written.
 
------- bg:url(/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week1/assets/img/fightingduck.jpg)
+------ bg:url(/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week1p1/assets/img/fightingduck.jpg)
 
 ```{r}
 Ducks > Buckeyes

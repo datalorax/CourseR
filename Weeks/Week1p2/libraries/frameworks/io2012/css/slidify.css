@@ -257,7 +257,7 @@ ol {
   padding: .6em 3.5em;
   position: absolute;
   font: bold .82em sans-serif;
-  text-align: center;
+  text-align: left;
   text-decoration: none;
   text-shadow: 1px -1px 8px rgba(0,0,0,0.60);
   -webkit-user-select: none;
@@ -352,7 +352,7 @@ pre code {
 }
 
 .title-slide {
-  background-color: #CBE7A5; /* #EDE0CF; ; #CA9F9D*/
+  background-color: #B0C4DE; /* #6495ED; /* #CA9F9D; /* #EDE0CF; /* #CBE7A5; ; #CA9F9D*/
   /* background-image:url(http://goo.gl/EpXln); */
 }
 

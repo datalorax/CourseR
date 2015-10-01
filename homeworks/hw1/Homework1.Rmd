@@ -1,5 +1,6 @@
 ---
 title: Homework 1
+output: pdf_document
 ---
 The purpose of this document is to get you some basic practice using *R 
   Markdown*. As mentioned in the syllabus, I will also be asking for all 
@@ -7,47 +8,70 @@ The purpose of this document is to get you some basic practice using *R
 
 To receive full credit, please create and render an *R Markdown*  document in 
   html or pdf format that has the following elements.
-    - Title, author and date
-    	+ Use a YAML header in your document to do this
-    - An R code chunk displaying how to load data into R and store it into 
-    	an object, along with text explaing in the code.
-    - A generic ordered or unordered list with at least one level of nesting 
-      (could even be a shopping list)
-    - Some R output of some sort
-    - Calculate the mean of a variable and display it in text. Make some
-    	manipulation to the data (e.g., remove a few random cases) and 
-    	report the mean in text again, using code. For 
-    	example:
+
+- Title, author and date
+    + Use a YAML header in your document to do this
+- An R code chunk displaying how to load data into R and store it into an 
+  object, along with text explaining  the code.
+- A generic ordered or unordered list with at least one level of nesting (could 
+  even be a shopping list)
+- Some R output of some sort
+- Calculate the mean of a variable, via `mean()` and display it in text. If 
+  there are missing data in the vector that you are trying to calculate the mean
+  from, you will also need to include the additional argument `na.rm = TRUE`. 
+  Make some manipulation to the data (e.g., remove a few random cases) and 
+  report the mean in text again, using code. For example:
 
 ```{r}
 data(ChickWeight)
 head(ChickWeight)
-```
-
-```{r, echo = FALSE}
+# globally round all output to two digits
 options(digits = 2)
 ```
+
 *The average chick weight was `r mean(ChickWeight$weight, na.rm = TRUE)` grams. 
-  At time time point 0 the average weight was 
+  At time point 0 the average weight was 
   `r tapply(ChickWeight$weight, ChickWeight$Time, mean, na.rm = TRUE)[1]` 
   grams.*
 
-To see the datasets available in R, type in `data()` at the command prompt. You
-  should see a summary of many different datasets. To get information on any one
-  of these datasets, type `?` and the name of the dataset. For example 
-  `?ChickWeight` will tell you some information about the dataset above.
-
 ## Plot
-For the final portion of this homework, please pick a dataset (please pick one
-  other than the ChickWeight dataset) and produce a `pairs()` plot. I encourage 
-  you do play around with this and check out the documentation. Basically, you 
-  just need to feed it a dataframe with the variables you want to visualize 
-  through the scatterplot matrix. For example
+For the final portion of this homework, please either use the dataset you 
+  loaded, or pick a new dataset from base R to produce a `pairs()` plot 
+  (scatterplot matrix). To see the datasets available in R, type `data()` at the 
+  command prompt. You should see a summary of many different datasets. To get 
+  information on any one of these datasets, type `?` and the name of the 
+  dataset. For example `?ChickWeight` will tell you some information about the 
+  dataset above. If you choose to use a base R dataset, please use one other
+  than the ChickWeight dataset.
+
+  To produce a pairs plot, you just need to feed it a data frame with the 
+  variables you want plotted. I encourage you to play around with this function 
+  and check out the documentation. For example, to get a scatterplot matrix of 
+  all but the third variable in the ChickWeight dataset, use
 
 ```{r}
-pairs(ChickWeight)
+pairs(ChickWeight[ ,-3])
 ```
 
+## Render the document
+Once you have fulfilled all the requirements of the homework, you  need to 
+  render it to html (recommended) or pdf using either the `knit` function from
+  the `knitr` package, or `render` from the `rmarkdown` package. The `knit2html`
+  button in Rstudio will essentially just run the code for you.
 
-Now you just need to render the document using either the `knit` function in 
-  RStudio, or using `knit::knit2html("yourFile.Rmd")`.
+If you're using RStudio, you shouldn't have to worry about much to get it 
+  rendered. If not, make sure you have the correct packages installed. The code
+  below should help.
+
+```{r, eval = FALSE}
+#### Via the knitr package
+# install package
+install.packages("knitr") # note, this only needs to be done once
+library(kntir)
+knit2html("yourFile.Rmd")
+
+#### Via the RMarkdown package
+install.packages("rmarkdown")
+library(rmarkdown)
+render("yourFile.Rmd", "html_document")
+```

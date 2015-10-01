@@ -306,7 +306,7 @@ Buckeyes <- 1
 ```
 Then clear the console, so they can't see the code you've previously written.
 
------- bg:url(/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week1/assets/img/fightingduck.jpg)
+------ bg:url(/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week1p1/assets/img/fightingduck.jpg)
 
 
 ```r

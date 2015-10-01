@@ -113,7 +113,7 @@ Upon completion of this course, the successful student will:
     + Subsetting vectors and matrices
     + The grammar of syntax
 * Lab
-    + Reading data into R and subsetting
+    + Subsetting
 * Readings
     + Syntax style: http://adv-r.had.co.nz/Style.html
     + Kabacoff: Chapter 1

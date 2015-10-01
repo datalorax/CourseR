@@ -11,6 +11,199 @@ mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
 
 ---
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
+```
+## Welcome back
+# Today's agenda
+* Introduction to *R Markdown*
+* Directory management
+* Reading and Writing Data
+* Subsetting data frames
+* Overview homework
+* Lab
+
+--- .segue
+# A Brief Intro to R Markdown
+
+<div align = "right">
+<img src = assets/img/exampleRMarkdown.png width = 500 height = 750>
+</div>
+
+---- &twocol
+## What is R Markdown
+
+*** =left
+* Simple language for convering R code/output into other formats, most notably 
+  HTML and PDF
+* These slides were produced using a varient of Markdown
+* Why is markdown useful?
+  - Transparent and reproducible
+  - Can (eventually) be more efficient
+  - Simple for simple tasks (like homeworks)
+
+*** =right
+<div align = "center">
+<img src = assets/img/markdownPDF.png width = 500 height = 600>
+</div>
+
+----
+## YAML Front Matter
+
+```
+---
+title: Example Markdown document
+author: Daniel Anderson
+date: "2015-09-17"
+---
+```
+
+![frontMatter](assets/img/frontMatter.png)
+
+* Three dashes before and after the YAML fields
+* Case sensitive
+* Many other fields are possible.
+  + For example, you may want to include an `output:` argument (`pdf_document`,
+    `html_document`, `word_document`). Must be specified as it is rendered, if
+    not supplied.
+
+
+
+---- &twocol
+## Headings and Lists
+
+*** =left
+
+```
+# Level 1
+## Level 2 
+### Level 3 (etc.)
+```
+
+```
+* Unordered list
+  - inset
+    + inset more
+  - etc.
+
+1. Ordered list
+  a. blah blah
+2. More stuff
+```
+
+*** =right
+
+![headersLists](assets/img/headersLists.png)
+
+---- &twocol
+## Code chunks
+
+Start a code chunk with \`\`\`{r}, then produce some r code, then close the 
+  chunk with three additional back ticks \`\`\`.
+
+*** =left
+
+![codechunk1](assets/img/codeChunk1.png)
+
+
+```{r}
+a <- 3
+b <- 5
+
+a + b * (exp(a)/b)
+```
+
+You can show code without evaluating it, using `eval = FALSE`. 
+
+![codechunk2](assets/img/codeChunk2.png)
+
+*** =right
+
+Alternatively, you can evaluate the code without displaying it, using `echo = 
+  FALSE`.
+
+![codechunk3](assets/img/codeChunk3.png)
+
+```{r, echo = FALSE, fig.width = 6, fig.height = 3.8}
+data(mtcars)
+with(mtcars, plot(mpg, hp, 
+  xlab = "Miles Per Gallon", 
+  ylab = "Horsepower",
+  main = "Relation between Miles Per Gallon and Horsepower"))
+```
+
+-----
+## Inline code
+
+A single back tick followed by `r` prooduces inline code to be evaluated.
+
+<div align = "center">
+<img src = assets/img/inlineCode.png width = 1000 height = 80>
+</div>
+<br>
+
+This is an example of inline code, where I want to refer to the sum of `a` and
+  `b`, which is `r a + b`.
+
+
+----- &twocol
+## Rendering the document
+
+*** =left
+
+Through a text editor (e.g., SublimeText)
+
+```{r, eval = FALSE}
+install.packages("rmarkdown")
+library(rmarkdown)
+setwd("dir/to/Rmd/doc")
+render("ExampleRMarkdown.Rmd", 
+  "html_document")
+```
+
+Note that the document type need not be specified if `output:` is supplied in 
+  the YAML front matter. 
+
+*** =right
+
+Through RStudio
+
+![knitRStudio](assets/img/knitRStudio.png)
+
+
+---- &twocol
+## Final Product
+
+*** =left
+<div align = "right">
+<img src = assets/img/rMarkdownCode.png width = 500 height = 600>
+</div>
+
+*** =right
+<div align = "left">
+<img src = assets/img/fullRMarkdownDoc.png width = 500 height = 600>
+</div>
+
+----
+## Final remarks on R Markdown
+
+* Make sure to look at the documentation
+    + http://RMarkdown.rstudio.com
+    + http://RMarkdown.rstudio.com/authoring_basics.html
+    + http://RMarkdown.rstudio.com/authoring_rcodechunks.html
+
+* Don't spend too much time fussing around with it
+    + It's meant to be an easy way for me to see what you did and give you 
+      feedback for homeworks. If you find yourself stuck, look at the 
+      documentation, search google, and/or ask me for help
+
+* The more you ask from it, the more complicated it will be. Basic usage is 
+  pretty straightforward
+
+---- .segue
+# Directory management and reading/writing data
+
+----
 ## Directory Management
 
 What is a working directory?
@@ -431,140 +624,102 @@ subset(cars,
 subset(cars, hp > 220)
 ```
 
---- .segue
-# A Brief Intro to R Markdown
+----
+## Writing Data
+* Write text files with essentially the same process, using `write.table()` or
+  `write.csv()`
 
-<div align = "right">
-<img src = assets/img/exampleRMarkdown.png width = 500 height = 750>
-</div>
+![writeTable](assets/img/writeTable.png)
 
 ----
-## YAML Front Matter
-
-```
----
-title: Example Markdown document
-author: Daniel Anderson
-date: "2015-09-17"
----
-```
-
-![frontMatter](assets/img/frontMatter.png)
-
-* Three dashes before and after the YAML fields
-* Case sensitive
-* Many other fields are possible.
-  + For example, you may want to include an `output:` argument (`pdf_document`,
-    `html_document`, `word_document`). Must be specified as it is rendered, if
-    not supplied.
-
-
-
----- &twocol
-## Headings and Lists
-
-*** =left
-
-```
-# Level 1
-## Level 2 
-### Level 3 (etc.)
-```
-
-```
-* Unordered list
-  - inset
-    + inset more
-  - etc.
-
-1. Ordered list
-  a. blah blah
-2. More stuff
-```
-
-*** =right
-
-![headersLists](assets/img/headersLists.png)
-
----- &twocol
-## Code chunks
-
-Start a code chunk with \`\`\`{r}, then produce some r code, then close the 
-  chunk with three additional back ticks \`\`\`.
-
-*** =left
-
-![codechunk1](assets/img/codeChunk1.png)
-
-
-```{r}
-a <- 3
-b <- 5
-
-a + b * (exp(a)/b)
-```
-
-You can show code without evaluating it, using `eval = FALSE`. 
-
-![codechunk2](assets/img/codeChunk2.png)
-
-*** =right
-
-Alternatively, you can evaluate the code without displaying it, using `echo = 
-  FALSE`.
-
-![codechunk3](assets/img/codeChunk3.png)
-
-```{r, echo = FALSE, fig.width = 6, fig.height = 3.8}
-data(mtcars)
-with(mtcars, plot(mpg, hp, 
-  xlab = "Miles Per Gallon", 
-  ylab = "Horsepower",
-  main = "Relation between Miles Per Gallon and Horsepower"))
-```
-
------
-## Inline code
-
-A single back tick followed by `r` prooduces inline code to be evaluated.
-
-<div align = "center">
-<img src = assets/img/inlineCode.png width = 1000 height = 80>
-</div>
-<br>
-
-This is an example of inline code, where I want to refer to the sum of `a` and
-  `b`, which is `r a + b`.
-
-
------ &twocol
-## Rendering the document
-
-*** =left
-
-Through a text editor (e.g., SublimeText)
+## Example
+* Write csv file
 
 ```{r, eval = FALSE}
-install.packages("rmarkdown")
-library(rmarkdown)
-setwd("dir/to/Rmd/doc")
-render("ExampleRMarkdown.Rmd", 
-  "html_document")
+write.csv(cars, file = "carsData.csv", row.names = FALSE)
 ```
 
-Note that the document type need not be specified if `output:` is supplied in 
-  the YAML front matter. 
+* Write dat file for mplus
 
-*** =right
-
-Through RStudio
-
-![knitRStudio](assets/img/knitRStudio.png)
-
+```{r, eval = FALSE}
+write.table(cars, file = "carsData.dat", 
+  sep = "\t", 
+  col.names = FALSE,
+  row.names = FALSE,
+  na = "999")
+```
 
 ----
-## Final Product
+## Write an R file
 
-<div align = "left">
-<img src = assets/img/fullRMarkdownDoc.png width = 500 height = 600>
-</div>
+```{r, eval = FALSE}
+save(cars, file = "carsData.Rda")
+```
+
+Loading the data is then really easy
+
+```{r, eval = FALSE}
+load("carsData.Rda")
+```
+
+```{r}
+head(cars)
+```
+
+----
+## A note on writing R files
+* When you load the `carsData.Rda` file, the object `cars` is loaded (i.e., it
+  is not `carsData`). The reason is the file is `carsData`, but the object saved
+  was `cars`. It's often helpful to keep them the same.
+
+```{r, eval = FALSE}
+carsData <- cars
+save(carsData, file = "carsData.Rda")
+```
+
+* Other options (both readable by text editors)
+  - `dump()`
+  - `dput()` 
+
+For the most part, I'd recommend either writing a text file or an r-specific 
+  `.Rda` file.
+
+----
+## Homework
+
+# Take a look: Anything appear confusing?
+---
+To receive full credit, please create and render an *R Markdown*  document in 
+  html or pdf format that has the following elements.
+
+- Title, author and date
+    + Use a YAML header in your document to do this
+- An R code chunk displaying how to load data into R and store it into an 
+  object, along with text explaining  the code.
+- A generic ordered or unordered list with at least one level of nesting (could 
+  even be a shopping list)
+- Some R output of some sort
+- Calculate the mean of a variable, via `mean()` and display it in text. If 
+  there are missing data in the vector that you are trying to calculate the mean
+  from, you will also need to include the additional argument `na.rm = TRUE`. 
+  Make some manipulation to the data (e.g., remove a few random cases) and 
+  report the mean in text again, using code.
+
+----
+## Lab
+
+Sort of an abbreviated version of the homework
+
+* Create an R Markdown document (RStudio will create a template for you, if 
+  you're going that route)
+* Read in data from `CourseR/data/` (any one you choose)
+* Display the first six rows of the data
+* Subset the data so there are only 2 columns.
+* Diplay the first 6 rows of the subset data
+* Render the document
+
+
+
+
+
+
