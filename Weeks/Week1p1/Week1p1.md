@@ -64,10 +64,29 @@ knit        : slidify::knit2slides
 ## Course structure
 * Weekly homeworks (graded on a completion basis)
 * Daily 
-	- first ~30 minutes: review previous week's homework
+	- Review previous week's homework
 	- Lecture (with some interactive pieces)
   - Discuss next homework
 	- Lab (work in small groups or individually to address a particular task)
+
+---- &twocol
+## Assignments
+*** =left
+# Final Project
+* Get a dataset (ideally one you are actually interested in)
+* Process data for analysis
+* Produce at least 3 exploratory plots
+* Analyze data
+* Plot at least 1 plot of fitted model
+* Use R Markdown
+* Outline due Week 5
+
+*** =right
+# Homeworks
+* 9 @ 10 points each
+
+# Labs
+* Daily (5 points each)
 
 
 ---- &twocol
