@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Getting Data into R</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Getting Data into R">
+  <meta name="author" content="Daniel Anderson">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Getting Data into R</h1>
+    <h2>Week 1.2</h2>
+    <p>Daniel Anderson<br/>R Course</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Directory Management</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>What is a working directory?</p>
+
+<ul>
+<li>Exactly what it sounds like--the directory from which R will work</li>
+<li>Read and write files from and to this directory</li>
+</ul>
+
+<p>Identify current working directory</p>
+
+<pre><code class="r">getwd()
+</code></pre>
+
+<pre><code>## [1] &quot;/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week1p2&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Looking into a working directory</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>What&#39;s in this directory? Two ways to find out:</p>
+
+<ul>
+<li><p>Navigate to the directory and take a look.</p>
+
+<div align = "left">
+<img src = assets/img/currentDIR.png width = 500 height = 150>
+</div></li>
+<li><p>Have R look for you</p></li>
+</ul>
+
+<pre><code class="r">list.files()
+</code></pre>
+
+<pre><code>## [1] &quot;assets&quot;      &quot;Week1p2.Rmd&quot;
+</code></pre>
+
+<p>The <code>list.files()</code> function shows what R &quot;sees&quot;.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Navigating your directory quickly</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Change directory from current location to a nested folder</li>
+</ul>
+
+<pre><code class="r">setwd(&quot;./nested/folders&quot;)
+</code></pre>
+
+<p>Here the <code>.</code> is essentially a fill-in for <code>getwd()</code>. </p>
+
+<ul>
+<li>Navigate back one folder</li>
+</ul>
+
+<pre><code class="r">setwd(&quot;..&quot;)
+</code></pre>
+
+<ul>
+<li>Navigate back two folders</li>
+</ul>
+
+<pre><code class="r">setwd(&quot;../..&quot;)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Reading Data into R</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>To read data into R, you must tell R where the data are located by either 
+  changing the working directory, or by providing the full path. For 
+  example</p>
+
+<pre><code class="r">setwd(&quot;/Users/Daniel/Dropbox/Teaching/CourseR/data/&quot;)
+d &lt;- read.csv(&quot;cars.csv&quot;)
+</code></pre>
+
+<p>is equivalent to</p>
+
+<pre><code class="r">d &lt;- read.csv(&quot;/Users/Daniel/Dropbox/Teaching/CourseR/data/cars.csv&quot;)
+</code></pre>
+
+<p>Also note that the shortcuts for changing directories can be used here too, 
+  which can often increase efficiency.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>My advice</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Set your working directory to where you want to save all your data files.</li>
+<li>Move the data you are working with to that file, or to a nearby folder 
+e.g.,</li>
+</ul>
+
+<pre><code class="r">&quot;(../raw)&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>What data can be read into R?</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>R can read multiple data files
+
+<ul>
+<li>text files (csv, tab delimited, pipe delimited, etc)</li>
+<li>web pages</li>
+<li>SPSS, SAS, etc. (via the <code>foreign</code> or <code>memisc</code> packages)</li>
+<li>Excel (I have not had great success here, and typically just convert it to 
+csv first)</li>
+<li>relational and non-relational databases (I have no experience here, but I 
+know it is possible)</li>
+<li>Directly entered data</li>
+</ul></li>
+<li>Simple text files are typically the most straightforward</li>
+</ul>
+
+<p><span style="color:green; font-weight:bold">
+Fairly good blog post: </span>
+<a href="http://www.r-bloggers.com/importing-data-into-r-from-different-sources/">http://www.r-bloggers.com/importing-data-into-r-from-different-sources/</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Diving deeper into reading data with R</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">?read.table
+</code></pre>
+
+<div align = "left">
+<img src = assets/img/readTable.png width=900 height=500>
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Important Arguments</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <ul>
+<li><code>file</code>
+
+<ul>
+<li>name of file, including extension, in quotes</li>
+<li>e.g. <code>&quot;cars.txt&quot;</code></li>
+</ul></li>
+<li><code>header</code> 
+
+<ul>
+<li><code>read.table</code> defaults to <code>FALSE</code></li>
+<li><code>read.csv</code> and others default to <code>TRUE</code></li>
+</ul></li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li><p><code>sep</code> </p>
+
+<ul>
+<li><code>read.table</code> defaults to <code>&quot;&quot;</code></li>
+<li><code>read.csv</code> defaults to <code>&quot;,&quot;</code></li>
+<li><code>read.delim</code> defaults to tab delimiter <code>&quot;\t&quot;</code></li>
+</ul></li>
+<li><p>Others</p>
+
+<ul>
+<li><code>na.strings</code></li>
+<li><code>skip</code></li>
+<li><code>comment.char</code></li>
+<li><code>stringsAsFactors</code></li>
+</ul></li>
+</ul>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Examples</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <p><img src="assets/img/carsExcel.png" alt="excel"></p>
+
+<ul>
+<li>Although csv files open in Excel, they are actually just text files</li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/img/carsTxt.png" alt="txt"></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Examples</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">getwd()
+</code></pre>
+
+<pre><code>## [1] &quot;/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week1p2&quot;
+</code></pre>
+
+<pre><code class="r">cars &lt;- read.csv(&quot;./data/cars.csv&quot;)
+</code></pre>
+
+<pre><code>## Warning in file(file, &quot;rt&quot;): cannot open file &#39;./data/cars.csv&#39;: No such
+## file or directory
+</code></pre>
+
+<pre><code>## Error in file(file, &quot;rt&quot;): cannot open the connection
+</code></pre>
+
+<ul>
+<li>Use <code>head()</code> <code>tail()</code> and <code>str()</code> to check that the data were read in properly</li>
+</ul>
+
+<pre><code class="r">head(cars)
+</code></pre>
+
+<pre><code>##   speed dist
+## 1     4    2
+## 2     4   10
+## 3     7    4
+## 4     7   22
+## 5     8   16
+## 6     9   10
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">tail(cars)
+</code></pre>
+
+<pre><code>##    speed dist
+## 45    23   54
+## 46    24   70
+## 47    24   92
+## 48    24   93
+## 49    24  120
+## 50    25   85
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">str(cars)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    50 obs. of  2 variables:
+##  $ speed: num  4 4 7 7 8 9 10 10 10 11 ...
+##  $ dist : num  2 10 4 22 16 10 18 26 34 17 ...
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Learn more with <code>summary()</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">summary(cars)
+</code></pre>
+
+<pre><code>##      speed           dist       
+##  Min.   : 4.0   Min.   :  2.00  
+##  1st Qu.:12.0   1st Qu.: 26.00  
+##  Median :15.0   Median : 36.00  
+##  Mean   :15.4   Mean   : 42.98  
+##  3rd Qu.:19.0   3rd Qu.: 56.00  
+##  Max.   :25.0   Max.   :120.00
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>A more complicated example</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <ul>
+<li>No column names</li>
+<li>pipe-delimited</li>
+<li><code>NA</code> coded as 999</li>
+<li><code>read.csv()</code> won&#39;t work here</li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <div align = "left">
+<img src = assets/img/treesData.png width = 200 height = 600>
+</div>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <article data-timings="">
+    <ul>
+<li><code>read.table()</code></li>
+<li>Explicit calls to 
+
+<ul>
+<li><code>sep</code>, <code>na</code>, and <code>col.names</code></li>
+</ul></li>
+</ul>
+
+<pre><code class="r">trees &lt;- read.table(&quot;./data/trees.txt&quot;, sep = &quot;|&quot;, na = &quot;999&quot;, 
+    col.names = c(&quot;Girth&quot;, &quot;Height&quot;, &quot;Volume&quot;))
+</code></pre>
+
+<pre><code>## Warning in file(file, &quot;rt&quot;): cannot open file &#39;./data/trees.txt&#39;: No such
+## file or directory
+</code></pre>
+
+<pre><code>## Error in file(file, &quot;rt&quot;): cannot open the connection
+</code></pre>
+
+<pre><code class="r">head(trees)
+</code></pre>
+
+<pre><code>##   Girth Height Volume
+## 1   8.3     70   10.3
+## 2   8.6     65   10.3
+## 3   8.8     63   10.2
+## 4  10.5     72   16.4
+## 5  10.7     81   18.8
+## 6  10.8     83   19.7
+</code></pre>
+
+<ul>
+<li>Note that the column names are defined as a vector, via <code>c</code>.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>Last example: SPSS</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="assets/img/USViolentActs.png" alt="spss"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">library(foreign)
+violence &lt;- read.spss(&quot;./data/USViolentActs.sav&quot;, to.data.frame = TRUE)
+</code></pre>
+
+<pre><code>## Error in read.spss(&quot;./data/USViolentActs.sav&quot;, to.data.frame = TRUE): unable to open file: &#39;No such file or directory&#39;
+</code></pre>
+
+<pre><code class="r">head(violence)
+</code></pre>
+
+<pre><code>## Error in head(violence): object &#39;violence&#39; not found
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>More on reading SPSS files</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <ul>
+<li>It&#39;s a hassle</li>
+<li>Support is limited (and no longer being developed)</li>
+<li>Warnings are (for now) ignorable</li>
+<li><code>foreign</code> package</li>
+<li><code>to.data.frame = TRUE</code> is vital</li>
+<li><code>Hmisc</code> package may be a better alternative (I haven&#39;t explored it much, and 
+generally try to avoid SPSS files)</li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">?read.spss
+</code></pre>
+
+<p><img src="assets/img/spssHelp.png" alt="spssHelp"></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
+  <hgroup>
+    <h2>Your turn</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>In the repository you cloned earlier in class, there is a folder called &quot;data&quot;.
+Read in the following files</p>
+
+<ul>
+<li>longley.csv</li>
+<li>attitude.txt</li>
+</ul>
+
+<p><span style="color:gray" > (You can work with a partner) </span></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  <article data-timings="">
+    <p>The longley file is a csv, with headers, and can be read in pretty simply:</p>
+
+<pre><code class="r">longley &lt;- read.csv(&quot;./data/longley.csv&quot;)
+</code></pre>
+
+<pre><code>## Warning in file(file, &quot;rt&quot;): cannot open file &#39;./data/longley.csv&#39;: No such
+## file or directory
+</code></pre>
+
+<pre><code>## Error in file(file, &quot;rt&quot;): cannot open the connection
+</code></pre>
+
+<pre><code class="r">head(longley)
+</code></pre>
+
+<pre><code>##      GNP.deflator     GNP Unemployed Armed.Forces Population Year Employed
+## 1947         83.0 234.289      235.6        159.0    107.608 1947   60.323
+## 1948         88.5 259.426      232.5        145.6    108.632 1948   61.122
+## 1949         88.2 258.054      368.2        161.6    109.773 1949   60.171
+## 1950         89.5 284.599      335.1        165.0    110.929 1950   61.187
+## 1951         96.2 328.975      209.9        309.9    112.075 1951   63.221
+## 1952         98.1 346.999      193.2        359.4    113.270 1952   63.639
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  <article data-timings="">
+    <p>The attitude file is a bit more tricky. It&#39;s tab separated. We can use either
+  <code>read.table()</code> or <code>read.delim()</code>.</p>
+
+<pre><code class="r">att &lt;- read.table(&quot;./data/attitude.txt&quot;, sep = &quot;\t&quot;)
+</code></pre>
+
+<pre><code>## Warning in file(file, &quot;rt&quot;): cannot open file &#39;./data/attitude.txt&#39;: No
+## such file or directory
+</code></pre>
+
+<pre><code>## Error in file(file, &quot;rt&quot;): cannot open the connection
+</code></pre>
+
+<pre><code class="r">att &lt;- read.delim(&quot;./data/attitude.txt&quot;)
+</code></pre>
+
+<pre><code>## Warning in file(file, &quot;rt&quot;): cannot open file &#39;./data/attitude.txt&#39;: No
+## such file or directory
+</code></pre>
+
+<pre><code>## Error in file(file, &quot;rt&quot;): cannot open the connection
+</code></pre>
+
+<pre><code class="r">head(att)
+</code></pre>
+
+<pre><code>## Error in head(att): object &#39;att&#39; not found
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  <hgroup>
+    <h2>Subsetting data frames</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Data frames can be subset in numerous ways, including indexing equivalent to 
+matrices</li>
+</ul>
+
+<pre><code class="r">head(cars)
+</code></pre>
+
+<pre><code>##   speed dist
+## 1     4    2
+## 2     4   10
+## 3     7    4
+## 4     7   22
+## 5     8   16
+## 6     9   10
+</code></pre>
+
+<ul>
+<li>Select the first 10 rows of the 3rd column</li>
+</ul>
+
+<pre><code class="r">cars[1:10,3]
+</code></pre>
+
+<pre><code>## NULL
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  <article data-timings="">
+    <p>Select the same elements, but keep the data frame intact</p>
+
+<pre><code class="r">cars[1:10,3, drop = FALSE]
+</code></pre>
+
+<pre><code>## Error in `[.data.frame`(cars, 1:10, 3, drop = FALSE): undefined columns selected
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-24" style="background:;">
+  <hgroup>
+    <h2><code>str()</code> gives us a hint at an alternative subsetting method</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">str(cars)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    50 obs. of  2 variables:
+##  $ speed: num  4 4 7 7 8 9 10 10 10 11 ...
+##  $ dist : num  2 10 4 22 16 10 18 26 34 17 ...
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  <hgroup>
+    <h2>Selecting columns by name</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The <code>$</code> operator can also be used to select columns</p>
+
+<ul>
+<li>Select the <code>mpg</code> variable/column</li>
+</ul>
+
+<pre><code class="r">cars$mpg
+</code></pre>
+
+<pre><code>## NULL
+</code></pre>
+
+<ul>
+<li>Select the <code>cyl</code> variable/column</li>
+</ul>
+
+<pre><code class="r">cars$cyl
+</code></pre>
+
+<pre><code>## NULL
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h2>A brief pause...Why so much focus on subsetting?</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <ul>
+<li><p>Used constantly in applied analysis work</p>
+
+<ul>
+<li>analyze specific columns within a dataframe</li>
+<li>explore differences in one variable by a factor</li>
+<li>restrict the data (analytic sample as a subset of the full raw sample)</li>
+</ul></li>
+<li><p>Examples</p></li>
+</ul>
+
+<pre><code class="r"># Frequency of cylinders
+table(cars$cyl)
+</code></pre>
+
+<pre><code>## &lt; table of extent 0 &gt;
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r"># plot the relation between horse
+# power and miles per gallon
+plot(cars$hp, cars$mpg)
+</code></pre>
+
+<pre><code>## Warning in min(x): no non-missing arguments to min; returning Inf
+</code></pre>
+
+<pre><code>## Warning in max(x): no non-missing arguments to max; returning -Inf
+</code></pre>
+
+<pre><code>## Warning in min(x): no non-missing arguments to min; returning Inf
+</code></pre>
+
+<pre><code>## Warning in max(x): no non-missing arguments to max; returning -Inf
+</code></pre>
+
+<pre><code>## Error in plot.window(...): need finite &#39;xlim&#39; values
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-27-1.png" alt="plot of chunk unnamed-chunk-27"> 
+Not the prettiest plot (and we&#39;ll make them prettier soon), but the subsetting
+  allows us to select the columns we want for the plot.</p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <hgroup>
+    <h2>A few more subsetting notes</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <ul>
+<li>Names can also be used within the <code>[]</code>, as long as they are supplied as a 
+string</li>
+<li><p>Multiple columns can be selected in this manner if a vector of names is 
+supplied</p>
+
+<ul>
+<li>vectors are returned if you are using the <code>row , column</code> notation with a 
+single variable and you do not specifiy <code>drop = FALSE</code></li>
+<li>data frame maintained if only the names are supplied</li>
+</ul></li>
+<li><p>The following two lines of code are equivalent</p></li>
+</ul>
+
+<pre><code class="r">cars[c(&quot;mpg&quot;,&quot;cyl&quot;)]
+cars[ ,c(&quot;mpg&quot;,&quot;cyl&quot;)]
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li>As are these</li>
+</ul>
+
+<pre><code class="r">cars[&quot;mpg&quot;]
+cars[ ,&quot;mpg&quot;, drop = FALSE]
+</code></pre>
+
+<ul>
+<li>However, these are not</li>
+</ul>
+
+<pre><code class="r">cars[&quot;mpg&quot;]
+cars[ ,&quot;mpg&quot;]
+</code></pre>
+
+<ul>
+<li>The first maintains the data frame, while the second returns a vector</li>
+</ul>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  <hgroup>
+    <h2>Example</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <pre><code class="r">cars[&quot;mpg&quot;]
+</code></pre>
+
+<pre><code>## Error in `[.data.frame`(cars, &quot;mpg&quot;): undefined columns selected
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">cars[ ,&quot;mpg&quot;]
+</code></pre>
+
+<pre><code>## Error in `[.data.frame`(cars, , &quot;mpg&quot;): undefined columns selected
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-29" style="background:;">
+  <hgroup>
+    <h2>Logical subsetting can also be used with data frames</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">mpg25up &lt;- cars$mpg &gt; 25
+cars[mpg25up, ]
+</code></pre>
+
+<pre><code>## [1] speed dist 
+## &lt;0 rows&gt; (or 0-length row.names)
+</code></pre>
+
+<pre><code class="r">cars[cars$mpg &gt; 25 &amp; cars$gear == 5, ]
+</code></pre>
+
+<pre><code>## [1] speed dist 
+## &lt;0 rows&gt; (or 0-length row.names)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  <hgroup>
+    <h2>How do these logical subsets work?</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">cars$mpg &gt; 25
+</code></pre>
+
+<pre><code>## logical(0)
+</code></pre>
+
+<pre><code class="r">cars$mpg &gt; 25 &amp; cars$gear == 5
+</code></pre>
+
+<pre><code>## logical(0)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  <hgroup>
+    <h2>Final note on subsetting</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>The <code>subset()</code> function can be very useful for subsetting vectors, matrices, 
+or data frames</li>
+</ul>
+
+<pre><code class="r">?subset
+</code></pre>
+
+<div align = "center">
+<img src = assets/img/subsetHelp.png width = 1000 height = 650>
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-32" style="background:;">
+  <hgroup>
+    <h2>Examples of <code>subset</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><code>x</code> = object to subset</li>
+<li><code>subset</code> logical vector</li>
+<li><code>select</code> optionally used to select columns</li>
+</ul>
+
+<div style='float:left;width:48%;' class='centered'>
+  <pre><code class="r">subset(cars, 
+    subset = mpg &gt; 25, 
+    select = c(&quot;model&quot;, &quot;mpg&quot;, &quot;hp&quot;))
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;mpg&#39; not found
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">subset(cars, hp &gt; 220)
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;hp&#39; not found
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="segue" id="slide-33" style="background:;">
+  <hgroup>
+    <h1>A Brief Intro to R Markdown</h1>
+  </hgroup>
+  <article data-timings="">
+    <div align = "right">
+<img src = assets/img/exampleRMarkdown.png width = 500 height = 750>
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-34" style="background:;">
+  <hgroup>
+    <h2>YAML Front Matter</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code>---
+title: Example Markdown document
+author: Daniel Anderson
+date: &quot;2015-09-17&quot;
+---
+</code></pre>
+
+<p><img src="assets/img/frontMatter.png" alt="frontMatter"></p>
+
+<ul>
+<li>Three dashes before and after the YAML fields</li>
+<li>Case sensitive</li>
+<li>Many other fields are possible.
+
+<ul>
+<li>For example, you may want to include an <code>output:</code> argument (<code>pdf_document</code>,
+<code>html_document</code>, <code>word_document</code>). Must be specified as it is rendered, if
+not supplied.</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-35" style="background:;">
+  <hgroup>
+    <h2>Headings and Lists</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <pre><code># Level 1
+## Level 2 
+### Level 3 (etc.)
+</code></pre>
+
+<pre><code>* Unordered list
+  - inset
+    + inset more
+  - etc.
+
+1. Ordered list
+  a. blah blah
+2. More stuff
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/img/headersLists.png" alt="headersLists"></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-36" style="background:;">
+  <hgroup>
+    <h2>Code chunks</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Start a code chunk with ```{r}, then produce some r code, then close the 
+  chunk with three additional back ticks ```.</p>
+
+<div style='float:left;width:48%;' class='centered'>
+  <p><img src="assets/img/codeChunk1.png" alt="codechunk1"></p>
+
+<pre><code class="r">a &lt;- 3
+b &lt;- 5
+
+a + b * (exp(a)/b)
+</code></pre>
+
+<pre><code>## [1] 23.08554
+</code></pre>
+
+<p>You can show code without evaluating it, using <code>eval = FALSE</code>. </p>
+
+<p><img src="assets/img/codeChunk2.png" alt="codechunk2"></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p>Alternatively, you can evaluate the code without displaying it, using <code>echo = 
+  FALSE</code>.</p>
+
+<p><img src="assets/img/codeChunk3.png" alt="codechunk3"></p>
+
+<p><img src="assets/fig/unnamed-chunk-40-1.png" alt="plot of chunk unnamed-chunk-40"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-37" style="background:;">
+  <hgroup>
+    <h2>Inline code</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>A single back tick followed by <code>r</code> prooduces inline code to be evaluated.</p>
+
+<div align = "center">
+<img src = assets/img/inlineCode.png width = 1000 height = 80>
+</div>
+
+<p><br></p>
+
+<p>This is an example of inline code, where I want to refer to the sum of <code>a</code> and
+  <code>b</code>, which is 8.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-38" style="background:;">
+  <hgroup>
+    <h2>Rendering the document</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <p>Through a text editor (e.g., SublimeText)</p>
+
+<pre><code class="r">install.packages(&quot;rmarkdown&quot;)
+library(rmarkdown)
+setwd(&quot;dir/to/Rmd/doc&quot;)
+render(&quot;ExampleRMarkdown.Rmd&quot;, 
+  &quot;html_document&quot;)
+</code></pre>
+
+<p>Note that the document type need not be specified if <code>output:</code> is supplied in 
+  the YAML front matter. </p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p>Through RStudio</p>
+
+<p><img src="assets/img/knitRStudio.png" alt="knitRStudio"></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-39" style="background:;">
+  <hgroup>
+    <h2>Final Product</h2>
+  </hgroup>
+  <article data-timings="">
+    <div align = "left">
+<img src = assets/img/fullRMarkdownDoc.png width = 500 height = 600>
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Directory Management'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Looking into a working directory'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Navigating your directory quickly'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Reading Data into R'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='My advice'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='What data can be read into R?'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='Diving deeper into reading data with R'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Important Arguments'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='Examples'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Examples'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='NA'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='NA'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Learn more with <code>summary()</code>'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='A more complicated example'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='NA'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='Last example: SPSS'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='NA'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='More on reading SPSS files'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='Your turn'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='NA'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='NA'>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='Subsetting data frames'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='NA'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='<code>str()</code> gives us a hint at an alternative subsetting method'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='Selecting columns by name'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='A brief pause...Why so much focus on subsetting?'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='A few more subsetting notes'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='Example'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='Logical subsetting can also be used with data frames'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='How do these logical subsets work?'>
+         30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='Final note on subsetting'>
+         31
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='Examples of <code>subset</code>'>
+         32
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='A Brief Intro to R Markdown'>
+         33
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=34 title='YAML Front Matter'>
+         34
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=35 title='Headings and Lists'>
+         35
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=36 title='Code chunks'>
+         36
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=37 title='Inline code'>
+         37
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=38 title='Rendering the document'>
+         38
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=39 title='Final Product'>
+         39
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

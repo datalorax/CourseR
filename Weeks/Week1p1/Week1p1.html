@@ -1,0 +1,2223 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to R</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Welcome to R">
+  <meta name="author" content="Daniel Anderson">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Welcome to R</h1>
+    <h2>Week 1.1</h2>
+    <p>Daniel Anderson<br/>R Course</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Before we get started....</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Scheduling</h1>
+
+<table><thead>
+<tr>
+<th align="left">Week</th>
+<th align="left">Date</th>
+<th align="left">Time</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Week 1.1</td>
+<td align="left">2015-10-02</td>
+<td align="left">9-11 am</td>
+</tr>
+<tr>
+<td align="left">Week 1.2</td>
+<td align="left">2015-10-16</td>
+<td align="left">9-11 am</td>
+</tr>
+<tr>
+<td align="left">Week 2.1</td>
+<td align="left">2015-10-30</td>
+<td align="left">9-11 am</td>
+</tr>
+<tr>
+<td align="left">Week 2.2</td>
+<td align="left">2015-11-13</td>
+<td align="left">9-11 am</td>
+</tr>
+<tr>
+<td align="left">Week 3.1</td>
+<td align="left">2015-11-27</td>
+<td align="left">9-11 am</td>
+</tr>
+<tr>
+<td align="left">Week 3.2</td>
+<td align="left">2015-12-11</td>
+<td align="left">9-11 am</td>
+</tr>
+</tbody></table>
+
+<p><br>
+<span style="color:red" > Reschedule: 2015-11-27  </span></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <h2>Welcome to R</h2>
+
+<p><img src="assets/fig/unnamed-chunk-2-1.png" alt="plot of chunk unnamed-chunk-2"> </p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li>Moving from SPSS to R is a substantial shift </li>
+<li>It will take time to get used to a code-based interface </li>
+<li>It will take time to shift the way you think about data </li>
+<li>Be patient with yourself.</li>
+</ul>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Overview of this course</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <h3>Basic philosophy</h3>
+
+<ul>
+<li>Part art, part science, part technical details
+
+<ul>
+<li>Analogy to songwriting: tools vs process</li>
+</ul></li>
+<li>The only way to <strong>truly</strong> become proficient at the art, is through doing.
+
+<ul>
+<li>you learn from me, I learn from you</li>
+</ul></li>
+<li>This course is about jumping into a whole new framework for the processing,
+analysis, and visualization of data. We&#39;ll start from the foundation.</li>
+<li>It&#39;s meant to be hard. It hopefully will
+also be rewarding.</li>
+<li>Mostly, this class is about a tool, R</li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <div align = "center">
+<img src = assets/img/artDataScience.png width = 500 height = 600>
+</div>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Course structure</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Weekly homeworks (graded on a completion basis)</li>
+<li>Daily 
+
+<ul>
+<li>first ~30 minutes: review previous week&#39;s homework</li>
+<li>Lecture (with some interactive pieces)</li>
+<li>Discuss next homework</li>
+<li>Lab (work in small groups or individually to address a particular task)</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Overview of Today</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <ul>
+<li>House cleaning
+
+<ul>
+<li>Text editors/R environments</li>
+<li><em>git</em> and <em>github</em></li>
+</ul></li>
+<li>Very basics of R
+
+<ul>
+<li>The R environment</li>
+<li>Object assignment</li>
+<li>Vectors and matrices
+
+<ul>
+<li>subsetting</li>
+</ul></li>
+<li>Directory management</li>
+<li>Reading and writing data</li>
+<li>Data frames
+
+<ul>
+<li>subsetting</li>
+</ul></li>
+</ul></li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li>Introduction to R Markdown
+
+<ul>
+<li>Text vs code chunks, headers, etc.</li>
+<li>html vs PDF output
+
+<ul>
+<li><code>knitr</code> and <code>knit2html</code></li>
+</ul></li>
+<li>Overview of homework</li>
+</ul></li>
+</ul>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>Logistics: Enviornment</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Find an environment that works for you  </p>
+
+<div style='float:left;width:48%;'>
+  <p><img src="assets/img/SublimeText.png" alt="Sublime text"></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/img/RStudio.png" alt="RStudio"></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Logistics: git</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Install <em>git</em>
+
+<ul>
+<li><a href="https://git-scm.com/downloads">https://git-scm.com/downloads</a></li>
+<li>Optional: Install <em>git</em> GUI (might be easier, but 
+you&#39;re on your own here)</li>
+</ul></li>
+</ul>
+
+<p><img src="assets/img/gitgui.png" alt="gitgui"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Why git?</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><p>Version control</p>
+
+<ul>
+<li>&quot;A system that records changes to a file or set of files over time so 
+that you can recall specific versions later&quot;</li>
+<li>Great for working on code collaboratively: track changes others have made
+(including who made the change), accept/reject them, etc. </li>
+<li>Also allows you to revert to previous versions if some small change has
+cascading deleterious effects.</li>
+<li>&quot;Check out&quot; a repository, commit some changes, push it to the repository.</li>
+</ul></li>
+<li><p>All you&#39;ll ever need to know on <em>git</em> and then some: <a href="https://git-scm.com/book/en/v2">https://git-scm.com/book/en/v2</a></p></li>
+</ul>
+
+<p><img src="assets/img/gitBook.png" alt="gitBook"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>A tiny bit of background on git</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Three states</h1>
+
+<ul>
+<li>Committed: data are safely stored in your <em>local</em> database </li>
+<li>Modified: the file has been changed, but not committed </li>
+<li>Staged: the modified file has been marked for commit</li>
+</ul>
+
+<p><img src="assets/img/gitStates.png" alt="gitStates"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Logistics: Course repository</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><em>github</em><br>
+
+<ul>
+<li><a href="https://github.com/DJAnderson07/CourseR">https://github.com/DJAnderson07/CourseR</a></li>
+</ul></li>
+<li>clone the repository</li>
+</ul>
+
+<div align = "left">
+<img src = assets/img/github.png width = 900 height = 500>
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Cloning without a GUI</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <ul>
+<li>Open terminal or Windows Command prompt</li>
+<li>Change directory via <code>cd</code> (mac) or <code>CD</code> (windows) to where you want the course
+materials saved on your local hard drive</li>
+<li>Use <code>git  clone</code> to clone the repository</li>
+</ul>
+
+<div align = "center">
+<img src = assets/img/commandPromptLoc.png width = 300 height = 300>
+</div>
+  
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><code>cd [directory]</code></p>
+
+<p><code>git  clone</code>
+<br>
+<a href="https://github.com/DJAnderson07/CourseR.git">https://github.com/DJAnderson07/CourseR.git</a></p>
+
+<p><img src="assets/img/terminal.png" alt="terminal">
+<img src="assets/img/clonedRepo.png" alt="clonedRepo"></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>Typical git process</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Navigate to the git folder using <code>cd</code> (or <code>CD</code>)</li>
+<li>Use <code>git status</code> to see if any changes have been made</li>
+<li>Use <code>git pull</code> to update your folder with all the recent changes</li>
+</ul>
+
+<p>I will be sending emails periodically asking you to update the folders. For at 
+  least the first first few times, I will also give explicit instructions to get
+  your repository up to date.</p>
+
+<div align = "center">
+<img src = assets/img/windowsCommandPrompt.png width = 750 height = 400>
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Let&#39;s do it!</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Clone the course repository onto your local hard drive</p>
+
+<pre><code>cd PATH
+git clone https://github.com/DJAnderson07/CourseR.git
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Finally... Onto R</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>R as a big calculator</p>
+
+<pre><code class="r">3 + 2
+</code></pre>
+
+<pre><code>## [1] 5
+</code></pre>
+
+<pre><code class="r">(1/-(3/2)^2) / 2^-1/9
+</code></pre>
+
+<pre><code>## [1] -0.09876543
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <h1>Object Assignment</h1>
+
+<pre><code class="r">a &lt;- 3
+b &lt;- 2
+a + b
+</code></pre>
+
+<pre><code>## [1] 5
+</code></pre>
+
+<pre><code class="r">a / (a + b)
+</code></pre>
+
+<pre><code>## [1] 0.6
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <h1>Object re-assignment</h1>
+
+<pre><code class="r">a &lt;- 3
+a
+</code></pre>
+
+<pre><code>## [1] 3
+</code></pre>
+
+<pre><code class="r">a &lt;- 7
+a
+</code></pre>
+
+<pre><code>## [1] 7
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>Object Assignment (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <p>Objects can be of a variety of types, which we&#39;ll talk about 
+  much more starting next week. But here are just a few</p>
+
+<pre><code class="r">string &lt;- &quot;Hello world!&quot;
+logical &lt;- TRUE
+double &lt;- 3.2587021
+Integer &lt;- 6
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p>In this case, we can&#39;t exactly do arithimetic with all of these. 
+  For example</p>
+
+<pre><code class="r">string + double
+</code></pre>
+
+<pre><code>## Error in string + double: non-numeric argument to binary operator
+</code></pre>
+
+<p>But, these objects can be extremely useful in programming, as we
+  will see.</p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>Playing a trick on Shawn</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Object assignment can be helpful to play a trick on somebody (this is one I 
+  actually did with our friend from Ohio).</p>
+
+<pre><code class="r">Ducks &lt;- 2
+Buckeyes &lt;- 1
+</code></pre>
+
+<p>Then clear the console, so they can&#39;t see the code you&#39;ve previously written.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:url(/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week1/assets/img/fightingduck.jpg);">
+  <article data-timings="">
+    <pre><code class="r">Ducks &gt; Buckeyes
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<pre><code class="r">Ducks &lt; Buckeyes
+</code></pre>
+
+<pre><code>## [1] FALSE
+</code></pre>
+
+<pre><code class="r">Buckeyes &gt; Ducks
+</code></pre>
+
+<pre><code>## [1] FALSE
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
+  <hgroup>
+    <h2>R Environment</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <h1>R functions</h1>
+
+<ul>
+<li>Anything that carries out an operation in R is a function, even <code>+</code>. </li>
+<li>Functions (outside of primitive functions) are preceded by <code>()</code>
+
+<ul>
+<li>e.g., <code>sum()</code>, <code>lm()</code></li>
+</ul></li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <h1>Getting help</h1>
+
+<ul>
+<li><code>?</code> is your best friend 
+
+<ul>
+<li>e.g., <code>?lm</code> will tell you all the arguments for the `lm function</li>
+</ul></li>
+<li>Google is your other best friend
+
+<ul>
+<li>If the documentation from <code>?</code> is too confusing (often the case), try 
+google.</li>
+</ul></li>
+<li>Other good websites
+
+<ul>
+<li><a href="http://stackoverflow.com">http://stackoverflow.com</a></li>
+<li>Resource list: 
+
+<ul>
+<li><a href="http://www.ats.ucla.edu/stat/r/">http://www.ats.ucla.edu/stat/r/</a></li>
+</ul></li>
+<li>Mailing lists: 
+
+<ul>
+<li><a href="https://stat.ethz.ch/mailman/listinfo/r-help">https://stat.ethz.ch/mailman/listinfo/r-help</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  <hgroup>
+    <h2>R Packages</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>An R package is a suite of functions generally organized around a common theme.</p>
+
+<div style='float:left;width:48%;'>
+  <ul>
+<li>Examples
+
+<ul>
+<li><code>stringr</code>
+
+<ul>
+<li>Functions to make working with string variables more 
+simplistic and potentially efficient</li>
+</ul></li>
+<li><code>lme4</code>
+
+<ul>
+<li>Functions for Linear Mixed Effects Regression modeling </li>
+</ul></li>
+<li> <code>ggplot2</code>
+
+<ul>
+<li>Wrapper functions for the base graphics to quickly produce complex 
+plots</li>
+</ul></li>
+</ul></li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li><p>As of this writing (09-30-2015), there are 7,239 packages available 
+through CRAN.</p>
+
+<ul>
+<li>These can all be installed via <code>install.packages(&quot;packageName&quot;)</code></li>
+</ul></li>
+<li><p>Countless other packages on github, personal websites, etc. Often come with 
+installation instructions.</p>
+
+<ul>
+<li>My <code>r2Winsteps</code> package</li>
+</ul></li>
+<li><p>We will be using multiple packages throughout the course</p></li>
+<li><p>You will write your own (small) package by the end of the course</p></li>
+</ul>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  <hgroup>
+    <h2>Vectors</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Two global rules for R:</h1>
+
+<ol>
+<li>Anything that carries out an operation is a function, even <code>+</code>. </li>
+<li>Essentially every object in R can be reduced to a vector, or set of vectors.</li>
+</ol>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">is.vector(Ducks)
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<ul>
+<li>The object <code>Ducks</code> is a vector, of length one</li>
+<li>So what is a vector?
+
+<ul>
+<li>essentially equivalent to the math definition</li>
+</ul></li>
+<li><span style="color:blue" > A vector of dimension <strong>n</strong> is an ordered 
+collection of <em>n</em> elements, which are called components. </span>
+<a href="http://www.math.com/tables/oddsends/vectordefs.htm">math.com</a></li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <h1>Column Vector</h1>
+
+<p>\[
+\begin{equation*}
+ \qquad \begin{bmatrix}
+    p_{1} \\\
+    p_{2} \\\
+    \vdots \\\
+    p_{n}
+  \end{bmatrix}
+\end{equation*}
+\]</p>
+
+<h1>Row Vector</h1>
+
+<p>\[
+\begin{equation*}
+ \qquad \begin{bmatrix}
+    p_{1} & p_{2} & \ldots & p_{n}
+  \end{bmatrix}
+\end{equation*}
+\]</p>
+
+<ul>
+<li>Note that a vector of length one is typically referred to as a <strong>scalar</strong></li>
+</ul>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  <hgroup>
+    <h2>Creating vectors</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>\[
+\begin{equation*}
+ \qquad \begin{bmatrix}
+    1 & 2 & 3
+  \end{bmatrix}
+\end{equation*}
+\]</p>
+
+<pre><code class="r">numVec &lt;- c(1, 2, 3)
+numVec
+</code></pre>
+
+<pre><code>## [1] 1 2 3
+</code></pre>
+
+<p>\[
+\begin{equation*}
+ \qquad \begin{bmatrix}
+    A & B & C
+  \end{bmatrix}
+\end{equation*}
+\]</p>
+
+<pre><code class="r">letVec &lt;- c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
+letVec
+</code></pre>
+
+<pre><code>## [1] &quot;A&quot; &quot;B&quot; &quot;C&quot;
+</code></pre>
+
+<ul>
+<li><code>c()</code> function, which stands for <strong>concatenate</strong> or <strong>combine</strong>. </li>
+<li>Perhaps the most common function in all of R</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  <hgroup>
+    <h2>Matrices</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <ul>
+<li>Technically - a vector with a dimension attribute</li>
+<li>Conceptually - vectors of the same length bound together</li>
+</ul>
+
+<p>\[
+\begin{equation*}
+  \textbf{M} = \qquad 
+  \begin{bmatrix}
+    p_{11} & p_{12} & \ldots
+    & p_{1n} \\
+    p_{21} & p_{22} & \ldots
+    & p_{2n} \\
+    \vdots & \vdots & \ddots
+    & \vdots \\
+    p_{m1} & p_{m2} & \ldots
+    & p_{mn}
+  \end{bmatrix}
+\end{equation*}
+\]</p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li>Matrices can be constructed by the conceptual method</li>
+</ul>
+
+<pre><code class="r">v1 &lt;- c(10, 11, 12, 13)
+v2 &lt;- c(20, 21, 22, 23)
+v3 &lt;- c(30, 31, 32, 33)
+
+mat &lt;- matrix(c(v1, v2, v3), 
+    nrow = 3, ncol = 4, byrow = TRUE)
+mat
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   10   11   12   13
+## [2,]   20   21   22   23
+## [3,]   30   31   32   33
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-24" style="background:;">
+  <hgroup>
+    <h2>More on constructing matrices</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">?matrix
+</code></pre>
+
+<p><img src="assets/img/matrixHelp.png" alt="matrixHelp"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  <hgroup>
+    <h2><code>byrow</code> or <code>bycol</code>?</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">matRow &lt;- matrix(c(v1, v2, v3), 
+    nrow = 3, ncol = 4, byrow = TRUE)
+matRow
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   10   11   12   13
+## [2,]   20   21   22   23
+## [3,]   30   31   32   33
+</code></pre>
+
+<pre><code class="r">matCol &lt;- matrix(c(v1, v2, v3), 
+    nrow = 3, ncol = 4, byrow = FALSE)
+matCol
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   10   13   22   31
+## [2,]   11   20   23   32
+## [3,]   12   21   30   33
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">v1 &lt;- c(10, 11, 12, 13)
+v2 &lt;- c(20, 21, 22, 23)
+v3 &lt;- c(30, 31, 32, 33)
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h2>One final note (for now)</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <ul>
+<li>Vectors can be entered directly into the matrix function, but they still need
+to be entered as a vector or group of vectors</li>
+</ul>
+
+<pre><code class="r">matRow &lt;- matrix(c(
+        c(10, 11, 12, 13), 
+        c(20, 21, 22, 23),
+        c(30, 31, 32, 33)
+        ), 
+    nrow = 3, ncol = 4, byrow = TRUE)
+matRow
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   10   11   12   13
+## [2,]   20   21   22   23
+## [3,]   30   31   32   33
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">matRow &lt;- matrix(c(
+                   10, 11, 12, 13, 
+                   20, 21, 22, 23,
+                   30, 31, 32, 33
+                    ), 
+    nrow = 3, ncol = 4, byrow = TRUE)
+matRow
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   10   11   12   13
+## [2,]   20   21   22   23
+## [3,]   30   31   32   33
+</code></pre>
+
+<ul>
+<li>Note again, the importance of the <code>byrow</code> argument</li>
+</ul>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <hgroup>
+    <h2>Check-in</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <p>Which snippets of code will produce the matrix below</p>
+
+<p>\[
+\begin{equation*}
+  \textbf{mat} = \qquad 
+  \begin{bmatrix}
+    23 & 41 & 18 & 27 \\
+    16 & 11 & 72 & 29 \\
+    18 & 51 & 32 & 63 \\
+  \end{bmatrix}
+\end{equation*}
+\]</p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">A &lt;- matrix(c(
+           23, 41, 18, 27, 
+           16, 11, 72, 29,
+           18, 51, 32, 63), 
+  nrow = 3, ncol = 4)
+
+B &lt;- matrix(c(
+           c(23, 41, 18, 27), 
+           c(16, 11, 72, 29),
+           c(18, 51, 32, 63)
+           ), 
+  nrow = 3, ncol = 4, byrow = TRUE)
+
+C &lt;- matrix(c(
+          c(23, 16, 18), 
+          c(41, 11, 51),
+          c(18, 72, 32),
+          c(27, 29, 63)
+          ), 
+  nrow = 3, ncol = 4)
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  <hgroup>
+    <h2>Your turn</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Produce the following matrix and vector. 
+\[
+\begin{equation*}
+  \textbf{m} = \qquad 
+  \begin{bmatrix}
+    67 & 11 & 10 \\
+    44 & 22 & 33 \\
+    39 & 94 & 85 \\
+    49 & 6 & 12 \\
+    22 & 86 & 61 \\
+  \end{bmatrix}
+\end{equation*}
+\]</p>
+
+<p>\[
+\begin{equation*}
+  \textbf{v} = \qquad 
+  \begin{bmatrix}
+    11 & 22 & 33 & 44 & 55 \\
+  \end{bmatrix}
+\end{equation*}
+\]</p>
+
+<p><br>
+Now add them together. What do you get?</p>
+
+<p><span style="color:gray" > (You can work with a partner) </span></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-29" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">c1 &lt;- c(67, 44, 39, 49, 22)
+c2 &lt;- c(11, 22, 94, 6, 86)
+c3 &lt;- c(10, 33, 85, 12, 61)
+
+m &lt;- matrix(c(c1, c2, c3), ncol = 3)
+v &lt;- c(11, 22, 33, 44, 55)
+
+v + m
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3]
+## [1,]   78   22   21
+## [2,]   66   44   55
+## [3,]   72  127  118
+## [4,]   93   50   56
+## [5,]   77  141  116
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  <hgroup>
+    <h2>Before we get too far... A note on syntax</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Just like there are rules of writing, there are generally accepted guidelines
+for writing code to make it more readable. For example</li>
+</ul>
+
+<pre><code class="r">matRow &lt;- matrix(c(
+           10, 11, 12, 13, 
+           20, 21, 22, 23,
+           30, 31, 32, 33
+          ), 
+  nrow = 3, ncol = 4, byrow = TRUE)
+</code></pre>
+
+<p>Is more readable, and easy to understand than</p>
+
+<pre><code class="r">matRow&lt;-matrix(c(10,11,12,13,20,21,22,23,30,31,32,33),nrow=3,ncol=4,byrow=TRUE)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  <hgroup>
+    <h2>The grammar of syntax</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Proper spacing and indentation is <em>critical</em> for code to be easily 
+interpretable.</li>
+<li>After you get used to applying the rules, poorly formatted code is like nails
+on a chalkboard
+<img src="assets/img/Takei.png" alt="Takei"></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-32" style="background:;">
+  <hgroup>
+    <h2>Style guide</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><strong>Please</strong> review a style guide, and follow those protocols religiously</p>
+
+<ul>
+<li><p>I recommend starting with Wickham&#39;s <a href="http://adv-r.had.co.nz/Style.html">http://adv-r.had.co.nz/Style.html</a> </p>
+
+<ul>
+<li>It&#39;s short (will take &lt; 20 minutes to go through)</li>
+</ul></li>
+<li><p>Will make both our lives easier</p></li>
+</ul>
+
+<p><img src="assets/img/WickhamStyle.png" alt="wStyle"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="segue" id="slide-33" style="background:;">
+  <hgroup>
+    <h1>Subsetting Vectors and Matrices</h1>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-34" style="background:;">
+  <hgroup>
+    <h2>Subsetting vectors</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">v1 &lt;- c(11, 12, 13, 14, 15,
+        16, 17, 18, 19, 20)
+</code></pre>
+
+<ul>
+<li>Indexing
+
+<ul>
+<li>select the fifth element </li>
+</ul></li>
+</ul>
+
+<pre><code class="r">v1[5]
+</code></pre>
+
+<pre><code>## [1] 15
+</code></pre>
+
+<ul>
+<li>Exclude the fifth element</li>
+</ul>
+
+<pre><code class="r">v1[-5]
+</code></pre>
+
+<pre><code>## [1] 11 12 13 14 16 17 18 19 20
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li>select the 7th - 10th elements</li>
+</ul>
+
+<pre><code class="r">sevenToTen &lt;- 7:10
+sevenToTen
+</code></pre>
+
+<pre><code>## [1]  7  8  9 10
+</code></pre>
+
+<pre><code class="r">v1[sevenToTen]
+</code></pre>
+
+<pre><code>## [1] 17 18 19 20
+</code></pre>
+
+<pre><code class="r">v1[7:10]
+</code></pre>
+
+<pre><code>## [1] 17 18 19 20
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-35" style="background:;">
+  <hgroup>
+    <h2>Subsetting vectors (continud)</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">v1 &lt;- c(11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
+</code></pre>
+
+<ul>
+<li>Logical
+
+<ul>
+<li>select elements greater than 13</li>
+</ul></li>
+</ul>
+
+<pre><code class="r">gt13 &lt;- v1 &gt; 13
+gt13
+</code></pre>
+
+<pre><code>##  [1] FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+</code></pre>
+
+<pre><code class="r">v1[gt13]
+</code></pre>
+
+<pre><code>## [1] 14 15 16 17 18 19 20
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-36" style="background:;">
+  <hgroup>
+    <h2>Subsetting vectors (continud)</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">v1 &lt;- c(11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
+</code></pre>
+
+<div style='float:left;width:48%;'>
+  <ul>
+<li>Logical
+
+<ul>
+<li>select odd elements</li>
+</ul></li>
+</ul>
+
+<pre><code class="r">odd &lt;- seq(from = min(v1), 
+           to = max(v1), 
+           by = 2)
+odd
+</code></pre>
+
+<pre><code>## [1] 11 13 15 17 19
+</code></pre>
+
+<p>Note that the above code assumes the lowest value is odd (i.e., this isn&#39;t 
+  great code, but illustrates the principle)</p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">select &lt;- v1 %in% odd
+select
+</code></pre>
+
+<pre><code>##  [1]  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE
+</code></pre>
+
+<pre><code class="r">v1[select]
+</code></pre>
+
+<pre><code>## [1] 11 13 15 17 19
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-37" style="background:;">
+  <hgroup>
+    <h2>Alternatives for selecting odd elements (indexing)</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">v1 &lt;- c(11, 12, 13, 14, 15, 
+        16, 17, 18, 19, 20)
+</code></pre>
+
+<ul>
+<li>Odd by element location</li>
+</ul>
+
+<pre><code class="r">oddLoc &lt;- seq(from = 1, 
+              to = length(v1), 
+              by = 2)
+oddLoc
+</code></pre>
+
+<pre><code>## [1] 1 3 5 7 9
+</code></pre>
+
+<pre><code class="r">v1[oddLoc]
+</code></pre>
+
+<pre><code>## [1] 11 13 15 17 19
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">v1[c(TRUE, FALSE)]
+</code></pre>
+
+<pre><code>## [1] 11 13 15 17 19
+</code></pre>
+
+<p>The above code illustrates the principle of <em>recycling</em>, which we&#39;ll discuss 
+  more in Week 3.</p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-38" style="background:;">
+  <hgroup>
+    <h2>Your turn</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Create the following vector</li>
+</ul>
+
+<p>\[
+\begin{equation*}
+  \textbf{v} = \qquad 
+  \begin{bmatrix}
+    18 & 16 & 13 & 35 & 2 & 17 & 92 & 4 \\
+  \end{bmatrix}
+\end{equation*}
+\]</p>
+
+<p>Subset the vector by:</p>
+
+<ul>
+<li>Selecting the first 3 values</li>
+<li>Removing the last two values (somewhat tricky)</li>
+<li>Values greater than 15</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-39" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">v &lt;- c(18, 16, 13, 35, 2, 17, 92, 4)
+</code></pre>
+
+<p>Selecting the first 3 values</p>
+
+<pre><code class="r">v[1:3]
+</code></pre>
+
+<pre><code>## [1] 18 16 13
+</code></pre>
+
+<p>Removing the last two values</p>
+
+<pre><code class="r">v[-c(7:8)]
+v[-7:-8]
+</code></pre>
+
+<pre><code>## [1] 18 16 13 35  2 17
+</code></pre>
+
+<p>Values greater than 15</p>
+
+<pre><code class="r">v[v &gt; 15]
+</code></pre>
+
+<pre><code>## [1] 18 16 35 17 92
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-40" style="background:;">
+  <hgroup>
+    <h2>Subsetting Matrices</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <ul>
+<li><p>indexing</p>
+
+<ul>
+<li>Matrices can be subset by using <code>[]</code> with the same conventions as 
+mathematical matrices, i.e.,
+<code>[row , column]</code>.</li>
+</ul>
+
+<hr></li>
+</ul>
+
+<p>\[
+\begin{equation*}
+  \textbf{mat} = \qquad 
+  \begin{bmatrix}
+    10 & 11 & 12 & 13 \\
+    20 & 21 & 22 & 23 \\
+    30 & 31 & 32 & 33 \\
+  \end{bmatrix}
+\end{equation*}
+\]</p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li>Select the third element of the second column</li>
+</ul>
+
+<pre><code class="r">mat[3,2]
+</code></pre>
+
+<pre><code>## [1] 31
+</code></pre>
+
+<ul>
+<li>Select the second element of the fourth column</li>
+</ul>
+
+<pre><code class="r">mat[2,4]
+</code></pre>
+
+<pre><code>## [1] 23
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-41" style="background:;">
+  <hgroup>
+    <h2>Subsetting Matrices (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <h4>Select an entire row: Leave the column indicator blank</h4>
+
+<ul>
+<li>Select the entire second row</li>
+</ul>
+
+<pre><code class="r">mat[2, ]
+</code></pre>
+
+<pre><code>## [1] 20 21 22 23
+</code></pre>
+
+<p>\[
+\begin{equation*}
+  \textbf{mat} = \qquad 
+  \begin{bmatrix}
+    10 & 11 & 12 & 13 \\
+    20 & 21 & 22 & 23 \\
+    30 & 31 & 32 & 33 \\
+  \end{bmatrix}
+\end{equation*}
+\]</p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <h4>Select an entire column: Leave the row indicator blank</h4>
+
+<ul>
+<li>Select the entire third column</li>
+</ul>
+
+<pre><code class="r">mat[ ,3]
+</code></pre>
+
+<pre><code>## [1] 12 22 32
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-42" style="background:;">
+  <hgroup>
+    <h2>Subsetting Matrices (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <ul>
+<li>The return from subsetting a matrix is a vector, which can also be
+subset.</li>
+</ul>
+
+<pre><code class="r">column3 &lt;- mat[ ,3]
+column3
+</code></pre>
+
+<pre><code>## [1] 12 22 32
+</code></pre>
+
+<ul>
+<li>select the second element of the new vector</li>
+</ul>
+
+<pre><code class="r">column3[2]
+</code></pre>
+
+<pre><code>## [1] 22
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li>Alternatively</li>
+</ul>
+
+<pre><code class="r">mat[ ,3][2]
+</code></pre>
+
+<pre><code>## [1] 22
+</code></pre>
+
+<p class='..'>which is the same as</p>
+
+<pre><code class="r">mat[2,3]
+</code></pre>
+
+<pre><code>## [1] 22
+</code></pre>
+
+<p>\[
+\begin{equation*}
+  \textbf{mat} = \qquad 
+  \begin{bmatrix}
+    10 & 11 & 12 & 13 \\
+    20 & 21 & 22 & 23 \\
+    30 & 31 & 32 & 33 \\
+  \end{bmatrix}
+\end{equation*}
+\]</p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-43" style="background:;">
+  <hgroup>
+    <h2>Additional arguments</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>You can avoid data being reduced to vectors by using the options <code>drop = FALSE</code>
+argument</li>
+</ul>
+
+<pre><code class="r">mat[ ,2, drop = FALSE]
+</code></pre>
+
+<pre><code>##      [,1]
+## [1,]   11
+## [2,]   21
+## [3,]   31
+</code></pre>
+
+<ul>
+<li>Use a vector to select multiple rows/columns</li>
+</ul>
+
+<pre><code class="r">col1_3 &lt;- c(1,3)
+mat[ ,col1_3]
+</code></pre>
+
+<pre><code>##      [,1] [,2]
+## [1,]   10   12
+## [2,]   20   22
+## [3,]   30   32
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-44" style="background:;">
+  <hgroup>
+    <h2>Subsetting Matrices (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>Logical</h3>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">log1 &lt;- mat &gt; 13 &amp; mat &lt; 23
+log1
+</code></pre>
+
+<pre><code>##       [,1]  [,2]  [,3]  [,4]
+## [1,] FALSE FALSE FALSE FALSE
+## [2,]  TRUE  TRUE  TRUE FALSE
+## [3,] FALSE FALSE FALSE FALSE
+</code></pre>
+
+<pre><code class="r">mat[log1]
+</code></pre>
+
+<pre><code>## [1] 20 21 22
+</code></pre>
+
+<p>\[
+\begin{equation*}
+  \textbf{mat} = \qquad 
+  \begin{bmatrix}
+    10 & 11 & 12 & 13 \\
+    20 & 21 & 22 & 23 \\
+    30 & 31 & 32 & 33 \\
+  \end{bmatrix}
+\end{equation*}
+\]</p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">log2 &lt;- (mat &gt; 13 &amp; mat &lt; 23) | 
+        (mat &gt; 30 &amp; mat &lt; 33)
+log2
+</code></pre>
+
+<pre><code>##       [,1]  [,2]  [,3]  [,4]
+## [1,] FALSE FALSE FALSE FALSE
+## [2,]  TRUE  TRUE  TRUE FALSE
+## [3,] FALSE  TRUE  TRUE FALSE
+</code></pre>
+
+<pre><code class="r">mat[log2]
+</code></pre>
+
+<pre><code>## [1] 20 21 31 22 32
+</code></pre>
+
+<p>Note the odd order, because the subsetting is occuring by column, rather than
+  row.</p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-45" style="background:;">
+  <hgroup>
+    <h2>Your Turn</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Create the following matrix:</p>
+
+<p>\[
+\begin{equation*}
+  \textbf{m} = \qquad 
+  \begin{bmatrix}
+    18 & 32 & 11 & 41 & 73 \\
+    61 & 47 & 22 & 87 & 63 \\
+    44 & 52 & 23 & 42 & 77 \\
+    23 & 17 & 5 & 72 & 83 \\
+  \end{bmatrix}
+\end{equation*}
+\]</p>
+
+<p>Subset the mmatrix by:</p>
+
+<ul>
+<li>Selecting the third column</li>
+<li>Excluding the second column</li>
+<li>Selecting the third and fifth elements from the second row (somewhat tricky)</li>
+<li>Selecting values greater than 25</li>
+<li>Create a vector that is the sum of the first and fourth rows</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-46" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">m &lt;- matrix(c(
+    18, 32, 11, 41, 73,
+    61, 47, 22, 87, 63,
+    44, 52, 23, 42, 77,
+    23, 17, 5, 72, 83
+    ), 
+  byrow = TRUE, ncol = 5
+)
+</code></pre>
+
+<p>Select the third column</p>
+
+<pre><code class="r">m[ ,3]
+</code></pre>
+
+<pre><code>## [1] 11 22 23  5
+</code></pre>
+
+<p>Exclude the second column</p>
+
+<pre><code class="r">m[ ,-2]
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   18   11   41   73
+## [2,]   61   22   87   63
+## [3,]   44   23   42   77
+## [4,]   23    5   72   83
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-47" style="background:;">
+  <article data-timings="">
+    <p>Select third and fifth elements from the second row</p>
+
+<pre><code class="r">m[2,c(3,5)]
+</code></pre>
+
+<pre><code>## [1] 22 63
+</code></pre>
+
+<p>Select values greater than 25</p>
+
+<pre><code class="r">m[m &gt; 25]
+</code></pre>
+
+<pre><code>##  [1] 61 44 32 47 52 41 87 42 72 73 63 77 83
+</code></pre>
+
+<p>Create a vector that is the sum of the first and fourth rows</p>
+
+<pre><code class="r">m[1, ] + m[4, ]
+</code></pre>
+
+<pre><code>## [1]  41  49  16 113 156
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-48" style="background:;">
+  <hgroup>
+    <h2>Data structures (very briefly)</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <ul>
+<li>Vectors</li>
+<li>Matrices</li>
+<li>Data frames
+
+<ul>
+<li>to be discussed momentarily</li>
+</ul></li>
+<li>others to be discussed later</li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li>All data stored in vectors and matrices must be of the same <strong>type</strong></li>
+<li>Data frames are more flexible (more like what you would expect in SPSS). All
+data within a specific <strong>column</strong> must be the same type, but types can differ
+between columns (not true of matrices).</li>
+<li>All this will be discussed in much greater detail starting next week.</li>
+</ul>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-49" style="background:;">
+  <hgroup>
+    <h2>Lab</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Start with the following matrix (which we created earlier)
+\[
+\begin{equation*}
+  \textbf{m} = \qquad 
+  \begin{bmatrix}
+    18 & 32 & 11 & 41 & 73 \\
+    61 & 47 & 22 & 87 & 63 \\
+    44 & 52 & 23 & 42 & 77 \\
+    23 & 17 & 5 & 72 & 83 \\
+  \end{bmatrix}
+\end{equation*}
+\]</p>
+
+<ul>
+<li>Use three different methods to subset the matrix and obtain the following vector</li>
+</ul>
+
+<p>\[
+\begin{equation*}
+  \textbf{v} = \qquad 
+  \begin{bmatrix}
+    52 & 42 & 77 \\
+  \end{bmatrix}
+\end{equation*}
+\]
+<br></p>
+
+<ul>
+<li>First subset the matrix to get \(\begin{bmatrix} 87 & 42 \end{bmatrix}\). Next, 
+create a new matrix using the following steps:
+
+<ul>
+<li>Drop the final column of matrix m</li>
+<li>Add \(\begin{bmatrix} 87 & 42 \end{bmatrix}\) to the second and fourth rows 
+(this will utilize recycling
+). </li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-50" style="background:;">
+  <hgroup>
+    <h2>Lab solutions: Question 1</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>A couple possible subsetting solutions </p>
+
+<pre><code class="r">m[3, c(1,2,4,5)]
+m[ ,c(1,2,4,5)][3, ]
+m[3, m[3, ] &gt; 40]
+m[3, c(TRUE, TRUE, FALSE, TRUE, TRUE)]
+
+m[3, ][ m[3, ] &gt; 40 ]
+
+subset(m, c(FALSE, FALSE, TRUE, FALSE), select = c(1,2,4,5))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-51" style="background:;">
+  <hgroup>
+    <h2>Lab solutions: Question 2</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>One possible method</p>
+
+<pre><code class="r">v &lt;- m[c(2,3), 4]
+v
+</code></pre>
+
+<pre><code>## [1] 87 42
+</code></pre>
+
+<pre><code class="r">m2 &lt;- m[ ,-5]
+m2[2, ] &lt;-  v + m2[2, ]
+m2[4, ] &lt;-  v + m2[4, ]
+m2
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   18   32   11   41
+## [2,]  148   89  109  129
+## [3,]   44   52   23   42
+## [4,]  110   59   92  114
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Before we get started....'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='NA'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Overview of this course'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Course structure'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Overview of Today'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='Logistics: Enviornment'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='Logistics: git'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Why git?'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='A tiny bit of background on git'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Logistics: Course repository'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='Cloning without a GUI'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='Typical git process'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Let&#39;s do it!'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='Finally... Onto R'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='NA'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='Object Assignment (continued)'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='Playing a trick on Shawn'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='NA'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='R Environment'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='R Packages'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='Vectors'>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='Creating vectors'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='Matrices'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='More on constructing matrices'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='<code>byrow</code> or <code>bycol</code>?'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='One final note (for now)'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='Check-in'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='Your turn'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='NA'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='Before we get too far... A note on syntax'>
+         30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='The grammar of syntax'>
+         31
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='Style guide'>
+         32
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='Subsetting Vectors and Matrices'>
+         33
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=34 title='Subsetting vectors'>
+         34
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=35 title='Subsetting vectors (continud)'>
+         35
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=36 title='Subsetting vectors (continud)'>
+         36
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=37 title='Alternatives for selecting odd elements (indexing)'>
+         37
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=38 title='Your turn'>
+         38
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=39 title='NA'>
+         39
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=40 title='Subsetting Matrices'>
+         40
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=41 title='Subsetting Matrices (continued)'>
+         41
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=42 title='Subsetting Matrices (continued)'>
+         42
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=43 title='Additional arguments'>
+         43
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=44 title='Subsetting Matrices (continued)'>
+         44
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=45 title='Your Turn'>
+         45
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=46 title='NA'>
+         46
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=47 title='NA'>
+         47
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=48 title='Data structures (very briefly)'>
+         48
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=49 title='Lab'>
+         49
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=50 title='Lab solutions: Question 1'>
+         50
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=51 title='Lab solutions: Question 2'>
+         51
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
