@@ -3,7 +3,8 @@ title: Homework 1
 output: pdf_document
 ---
 The purpose of this document is to get you some basic practice using *R 
-  Markdown*. As mentioned in the syllabus, I will also be asking for all 
+  Markdown*, as well as to get some practice reading in data and working with
+  vectors and matrices. As mentioned in the syllabus, I will be asking for all 
   homeworks to be completed with *R Markdown* so it's worth getting used to now.
 
 To receive full credit, please create and render an *R Markdown*  document in 
@@ -35,14 +36,13 @@ options(digits = 2)
   grams.*
 
 ## Plot
-For the final portion of this homework, please either use the dataset you 
-  loaded, or pick a new dataset from base R to produce a `pairs()` plot 
-  (scatterplot matrix). To see the datasets available in R, type `data()` at the 
-  command prompt. You should see a summary of many different datasets. To get 
-  information on any one of these datasets, type `?` and the name of the 
-  dataset. For example `?ChickWeight` will tell you some information about the 
-  dataset above. If you choose to use a base R dataset, please use one other
-  than the ChickWeight dataset.
+Use the dataset you loaded, or pick a new dataset from base R to produce a 
+  `pairs()` plot (scatterplot matrix). To see the datasets available in R, type 
+  `data()` at the command prompt. You should see a summary of many different 
+  datasets. To get information on any one of these datasets, type `?` and the 
+  name of the dataset. For example `?ChickWeight` will tell you some information 
+  about the dataset above. If you choose to use a base R dataset, please use one 
+  other than the ChickWeight dataset.
 
   To produce a pairs plot, you just need to feed it a data frame with the 
   variables you want plotted. I encourage you to play around with this function 
@@ -53,11 +53,44 @@ For the final portion of this homework, please either use the dataset you
 pairs(ChickWeight[ ,-3])
 ```
 
+## Matrices and Vectors
+Create the following matrix (which we created during the first class, if you
+  saved your syntax)
+$$\mathbf{m} = 
+\left [
+  \begin{array}{ccccc}
+    18 & 32 & 11 & 41 & 73 \\\
+    61 & 47 & 22 & 87 & 63 \\\
+    44 & 52 & 23 & 42 & 77 \\\
+    23 & 17 & 5 & 72 & 83
+  \end{array}
+  \right ]
+$$
+
+1) Use three different methods to subset the matrix and obtain the following 
+  vector
+$$\mathbf{v} = 
+\left [
+  \begin{array}{ccc}
+    52 & 42 & 77
+  \end{array}
+  \right ]
+$$
+
+2) Subset **m** again to get 
+  $\mathbf{v2} = \left [\begin{array}{cc} 87 & 42 \end{array} \right ]$. Then 
+  create a new matrix using the following steps:
+     + Drop the final column of matrix **m**
+     + Add **v2** to the second and fourth rows (this will utilize the property 
+       of recycling). 
+
+
 ## Render the document
 Once you have fulfilled all the requirements of the homework, you  need to 
-  render it to html (recommended) or pdf using either the `knit` function from
-  the `knitr` package, or `render` from the `rmarkdown` package. The `knit2html`
-  button in Rstudio will essentially just run the code for you.
+  render it to html (recommended) or pdf (requires additional software 
+  installations) using either the `knit` function from the `knitr` package, or 
+  `render` from the `rmarkdown` package. The `knit2html` button in Rstudio will 
+  essentially just run the code for you.
 
 If you're using RStudio, you shouldn't have to worry about much to get it 
   rendered. If not, make sure you have the correct packages installed. The code
