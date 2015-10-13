@@ -89,6 +89,8 @@ git clone https://github.com/DJAnderson07/CourseR.git
 After you hit enter, the course materials should all be cloned (copied) into 
   your directory.
 
+![gitClone](/Users/Daniel/Dropbox/Teaching/CourseR/git_Tutorials/img/gitClone.png)
+
 **Note.** If you do not have command line tools installed, you will be prompted
   to do so. You will need to install the command line tools to work with *git*
   via terminal.
@@ -105,7 +107,7 @@ As mentioned in the opening, if you're planning on doing any serious coding, you
 3. Type `git pull` and hit enter. Assuming the repository has been updated, 
    terminal should print some messages about some files.
 
-![gitPull](/Users/Daniel/Dropbox/School/CourseR/git_Tutorials/img/gitPull.png)
+![gitPull](/Users/Daniel/Dropbox/Teaching/CourseR/git_Tutorials/img//gitPull.png)
 
 4. Type `git status`. If you see the following message, you should be good to 
    go. If you see something like "master ahead of branch by X commits", or some

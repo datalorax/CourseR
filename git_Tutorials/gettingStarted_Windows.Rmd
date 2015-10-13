@@ -81,6 +81,8 @@ git clone https://github.com/DJAnderson07/CourseR.git
 After you hit enter, the course materials should all be cloned (copied) into 
   your directory.
 
+![winGitClone](/Users/Daniel/Dropbox/Teaching/CourseR/git_Tutorials/img/winGitClone.png)
+
 ## Updating the repository
 As mentioned in the opening, if you're planning on doing any serious coding, you
   should really dig into *git* a bit more. However, for the purposes of this 
@@ -93,7 +95,7 @@ As mentioned in the opening, if you're planning on doing any serious coding, you
 3. Type `git pull` and hit enter. Assuming the repository has been updated, 
    the Command Prompt should print some messages about some files.
 
-![gitPull](/Users/Daniel/Dropbox/School/CourseR/git_Tutorials/img/gitPull.png)
+![winGitPull](/Users/Daniel/Dropbox/Teaching/CourseR/git_Tutorials/img/winGitPull.png)
 
 4. Type `git status`. If you see the following message, you should be good to 
    go. If you see something like "master ahead of branch by X commits", or some
