@@ -1,0 +1,544 @@
+---
+title       : Data Structures
+subtitle    : Week 2.1
+author      : Daniel Anderson
+job         : CourseR
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
+```
+## Today's Agenda (not exactly ordered)
+
+* Scalars, Vectors, Matrices, Arrays, Data frames
+* Data types: Logical, Integer, Double (numeric), Character
+* Attributes: Names, Dimensions, Custom
+* Coercion 
+
+# Next week
+* A note on matrix algebra vs element-wise algebra
+* Classes
+* Lists
+* Data frames
+
+<br>
+Note that much of this presentation is based off Wickham (2015): 
+  http://adv-r.had.co.nz/Data-structures.html
+
+--- 
+## Data structures
+
+```{r, echo = FALSE}
+dim <- c(1, 2, "n")
+hom <- c("Atomic Vector", "Matrix", "Array")
+het <- c("List", "Data frame", "")
+df <- data.frame(Dimensions = dim, Homogenous = hom, Heterogeneous = het)
+
+knitr::kable(df)
+```
+<br>
+* Note: Table taken from Wickham (2015)
+
+----
+## Properties of Vectors
+
+# Type 
+* Type of elements stored in the vector
+    - use `typeof()` or `is.character()`, `is.integer()`, etc.
+
+# Length
+* Number of elements in the vector
+    - use `length()`
+
+# Attributes
+* Arbitrary metadata
+    - use `attributes()` and/or `attr()`
+
+---- &twocol
+## Atomic Vectors vs Lists
+
+*** =left
+
+* Atomic
+    - All elements of the same type
+
+* Lists
+    - Element types differ
+
+<br>
+
+We will wait until next class to talk about lists.
+
+*** =right
+
+```{r}
+atomic <- c(1, 7, 9, 23, 5)
+atomic
+
+lst <- list("a", 2, TRUE)
+lst
+```
+
+---- &twocol
+## Data types
+
+*** =left
+* Double
+    - numeric with arbitrary precision
+* Integer
+    - numeric whole number
+* Logical
+    - true/false
+* Character
+    - string elements
+
+*** =right
+
+```{r}
+dbl <- c(1.357, 2, 4.67)
+int <- c(2L, 5L, 7L, 1L)
+log <- c(TRUE, FALSE, T, F)
+chr <- c("a", "b", "c")
+```
+Note the specific "L" placed after each number on the integer vector to coerce
+  the elements to integer, rather than double.
+
+```{r}
+int
+```
+
+---- &twocol
+## Determining and Testing Types
+
+*** =left
+
+```{r}
+typeof(dbl)
+is.double(dbl)
+is.integer(dbl)
+is.atomic(dbl)
+```
+
+*** =right
+# Be careful of more generic tests
+
+```{r}
+is.numeric(dbl)
+is.numeric(int)
+```
+
+----
+## Check in
+* What data types are the following vectors?
+
+```{r}
+w <- c(TRUE, FALSE, FALSE, TRUE)
+x <- c(3, 5, 8, 9, 2.5)
+y <- c("green", "red", "blue")
+z <- c(5L, 7L, 2L, 18L)
+```
+
+----
+## Coercion
+
+# Take a guess: What will the following vectors produce?
+
+```{r}
+w <- c("1", 2, 3)
+x <- c(1, TRUE, FALSE)
+y <- c(3.25, 5L, 7L)
+z <- c("a", "b", 7, TRUE)
+```
+
+---- &twocol
+
+*** =left
+
+```{r}
+c("1", 2, 3); is.character(w)
+c(1, TRUE, FALSE); is.double(x)
+```
+
+*** =right
+
+```{r}
+c(3.25, 5L, 7L); is.double(y)
+c("a", "b", 7, TRUE); is.character(z)
+```
+
+----
+## Coercion rules
+Remember: Atomic vectors must contain data of the same type.
+
+* Most flexible: Character
+* Least flexible: Logical
+
+When logical vectors are coerced to be numeric, `TRUE` are coded 1, and `FALSE`
+  are coded 0.
+
+Explicitely coerce via `as.___`.
+
+---- &twocol
+## Explicit coercion
+
+*** =left
+
+# Override default coercions
+
+```{r}
+c(FALSE,1,TRUE,0)
+as.logical(c(FALSE,1,TRUE,0))
+c("1", 2, 3)
+as.double(c("1", 2, 3))
+```
+*** =right
+
+# Convert to specific type
+
+```{r}
+as.character(1:5)
+```
+<br>
+# Careful with specific coercsions
+
+```{r}
+c("a", "b", 7, "TRUE")
+as.integer(c("a", "b", 7, "TRUE"))
+```
+
+----
+## Check in
+* Predict how each vector will be coerced.
+
+```{r, eval = FALSE}
+c(1, FALSE)
+c("a", TRUE)
+c("b", 1L)
+c(1L, 2)
+```
+
+----
+```{r}
+c(1, FALSE)
+c("a", TRUE)
+c("b", 1L)
+c(1L, 2)
+```
+
+----
+## Your turn
+
+Create and coerce the following vectors to the specified type
+
+```{r, eval = FALSE}
+c(0, 0, 1, TRUE) # Logical
+c(1, 5, 3.25, FALSE) # Integer
+c(TRUE, FALSE, FALSE, TRUE) # Double
+c("Male", "Female", 0, 1) # Character
+```
+
+
+---- .segue
+# Attributes
+
+----
+## Important attributes
+* `names()`, `colnames()`, `rownames()`
+* Dimensions (used to convert vectors to matrices and arrays)
+* Class: points R to correct functions to execute (e.g., `print()`, `plot()`, 
+  etc.)
+
+What is an attribute? Metadata for an object.
+
+---- &twocol
+# `names()`
+
+*** =left
+
+* Names can be assigned to an object in a couple different ways.
+
+```{r}
+y <- c("A" = 1, "B" = 2, "C" = 3)
+y
+names(y)
+```
+
+*** =right
+
+```{r}
+z <- 1:3
+z
+names(z) <- c("A", "B", "C")
+z
+names(z)
+```
+
+----
+## Factors
+* Used to store categorical data
+* Can only store predefined values
+* String variables default to factors when reading in data 
+
+```{r}
+colors <- factor(c("black", "green", "blue", "blue", "black"))
+attributes(colors)
+str(colors)
+```
+
+----
+## Adding elements to factors
+
+```{r}
+colors[6] <- "blue"
+colors
+colors[7] <- "purple"
+colors
+```
+
+---- &twocol
+## Benefits of factors
+*** =left
+* No need for multiple variables to define a categorical variable: internal 
+  dummy-coding
+
+```{r}
+contrasts(colors)
+```
+*** =right
+
+* Change the reference group by defining a new contrast matrix. For example, we 
+  can set green to the reference group with the following code.
+
+```{r}
+contrasts(colors) <- matrix(
+	c(1, 0,
+	  0, 1,
+	  0, 0),
+byrow = TRUE, ncol = 2)
+
+```
+
+---- &twocol
+# Contrast coding (continued)
+
+Alternatively, use some of the built in functions for defining new contrasts 
+  matrices 
+
+*** =left
+
+```{r}
+contr.helmert(3)
+contr.sum(3)
+```
+<br>
+(see: http://www.ats.ucla.edu/stat/r/library/contrast_coding.htm)
+*** =right
+
+```{r}
+contrasts(colors) <- contr.helmert(3)
+contrasts(colors)
+contrasts(colors) <- contr.sum(3)
+contrasts(colors)
+```
+
+----
+## Factors and attributes
+
+* Factors are atomic integer vectors with a "levels" attribute.
+
+```{r}
+is.atomic(colors)
+typeof(colors)
+```
+
+Note: Be careful with `is.vector()`. It only returns `TRUE` if the vector has no
+  attributes outside of names
+
+```{r}
+is.vector(colors)
+```
+
+----
+## Your turn
+
+* Create a factor for free or reduced lunch status that has three levels: free, 
+  reduced, pay. 
+
+* Specify a new contrast matrix using either a custom matrix or a built-in 
+  function
+
+----
+```{r}
+frl <- factor(rep(c("free", "reduced", "pay"), 5))
+frl
+effect_code <- matrix(c(-1, -1,
+						 1, 0,
+						 0, 1),
+					  ncol = 2, byrow = TRUE)
+contrasts(frl) <- effect_code
+contrasts(frl)
+```
+
+
+---- &twocol
+## Dimension attribute
+
+*** =left
+
+The way we have created matrices in the past in through the `matrix` function
+
+```{r}
+m <- matrix(1:12, ncol = 3)
+m
+```
+
+*** =right
+
+The object `m` is really just an atomic vector with a dimension attribute
+
+```{r}
+attributes(m)
+is.atomic(m)
+```
+
+---- &twocol
+## Alternative construction of the same matrix
+
+*** =left
+# Construct matrix
+
+```{r}
+m <- 1:12
+
+dim(m) <- c(4, 3)
+m
+```
+*** =right
+
+# Add row and column names
+
+```{r}
+rownames(m) <- c("r1", "r2", "r3", "r4")
+m
+colnames(m) <- c("c1", "c2", "c3")
+m
+```
+
+----
+## More on the names attributes
+For atomic vectors, and specifically matrices, `rownames()` and `colnames()` 
+  must be used, rather than `names()`. The `names()` attribute is for individual
+  elements.
+
+```{r}
+names(m)
+names(m) <- c("a", "b", "c")
+attr(m, "names")
+```
+
+---- &twocol
+## Names attributes (continued)
+
+*** =left
+
+After row, column, and element names are assigned, they can be used in 
+  subsetting
+
+```{r}
+m["r1", ]
+m[ ,"c2"]
+m["c"] 
+```
+
+*** =right
+
+You can also specify the row and column names via `dimnames()` and a list of 
+  vectors (ordered by row names, then column names, then the 3rd dimension for 
+  arrays)
+
+```{r}
+dimnames(m) <- list(
+	c("row1", "row2", "row3", "row4"), 
+	c("col1", "col2", "col3")
+					)
+```
+
+---- 
+## Adding custom attributes
+
+Occassionally there are instances when it makes sense to add a custom attribute 
+  of some sort. Here are a few examples
+
+```{r}
+comment(m) <- "Here are some  important things to remember: x, y, z"
+attr(m, "comment")
+attr(m, "new_attribute") <- "Just a different comment, but this one shows when m is printed"
+attr(m, "new_attribute")
+```
+
+Remember that you can see all the attributes of an object via `attributes(x)`
+
+---- &twocol
+## Final notes on attributes
+
+*** =left
+
+When you modify a vector, the attributes are generally lost.
+
+```{r}
+attributes(sum(m))
+```
+
+But in some cases you may want to strip the attributes from an object. You can 
+  do this by setting the attributes to `NULL`.
+
+*** =right
+
+To remove the dimension names
+
+```{r}
+attr(m, "dimnames") <- NULL
+m
+```
+
+----
+
+To remove all the attributes, and return to a basic vector
+
+```{r}
+attributes(m) <- NULL
+m
+```
+
+----
+## Lab
+$$
+\begin{equation*}
+  \textbf{m} = \qquad 
+  \begin{bmatrix}
+    11 & 26\\
+    33 & 11 \\
+    27 &  5 \\
+    91 & 18 \\
+  \end{bmatrix}
+\end{equation*}
+$$
+
+* Create the above matrix using two methods, save them into objects m1 and m2
+* Give the dimension names of each matrix using a different method
+* Give each matrix one additional (and different) attribute
+* Coerce the vector 
+$ 
+  \begin{bmatrix}
+    T & F\\
+  \end{bmatrix}
+$
+to type double or integer and add it to the third row of the matrix.
+
+
+
