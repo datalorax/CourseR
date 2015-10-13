@@ -1689,7 +1689,36 @@ log2
 
 <slide class="" id="slide-46" style="background:;">
   <hgroup>
-    <h2>Your Turn</h2>
+    <h2>Data structures (very briefly)</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <ul>
+<li>Vectors</li>
+<li>Matrices</li>
+<li>Data frames</li>
+<li>others to be discussed later</li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li>All data stored in vectors and matrices must be of the same <strong>type</strong></li>
+<li>Data frames are more flexible (more like what you would expect in SPSS). All
+data within a specific <strong>column</strong> must be the same type, but types can differ
+between columns (not true of matrices).</li>
+<li>All this will be discussed in much greater detail starting next week.</li>
+</ul>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-47" style="background:;">
+  <hgroup>
+    <h2>Brief lab</h2>
   </hgroup>
   <article data-timings="">
     <p>Create the following matrix:</p>
@@ -1706,7 +1735,7 @@ log2
 \end{equation*}
 \]</p>
 
-<p>Subset the mmatrix by:</p>
+<p>Subset the matrix by:</p>
 
 <ul>
 <li>Selecting the third column</li>
@@ -1720,7 +1749,7 @@ log2
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-47" style="background:;">
+<slide class="" id="slide-48" style="background:;">
   <article data-timings="">
     <pre><code class="r">m &lt;- matrix(c(
     18, 32, 11, 41, 73,
@@ -1756,7 +1785,7 @@ log2
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-48" style="background:;">
+<slide class="" id="slide-49" style="background:;">
   <article data-timings="">
     <p>Select third and fifth elements from the second row</p>
 
@@ -1780,139 +1809,6 @@ log2
 </code></pre>
 
 <pre><code>## [1]  41  49  16 113 156
-</code></pre>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-49" style="background:;">
-  <hgroup>
-    <h2>Data structures (very briefly)</h2>
-  </hgroup>
-  <article data-timings="">
-    
-<div style='float:left;width:48%;'>
-  <ul>
-<li>Vectors</li>
-<li>Matrices</li>
-<li>Data frames
-
-<ul>
-<li>to be discussed momentarily</li>
-</ul></li>
-<li>others to be discussed later</li>
-</ul>
-
-</div>
-<div style='float:right;width:48%;'>
-  <ul>
-<li>All data stored in vectors and matrices must be of the same <strong>type</strong></li>
-<li>Data frames are more flexible (more like what you would expect in SPSS). All
-data within a specific <strong>column</strong> must be the same type, but types can differ
-between columns (not true of matrices).</li>
-<li>All this will be discussed in much greater detail starting next week.</li>
-</ul>
-
-</div>
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-50" style="background:;">
-  <hgroup>
-    <h2>Lab</h2>
-  </hgroup>
-  <article data-timings="">
-    <p>Start with the following matrix (which we created earlier)
-\[
-\begin{equation*}
-  \textbf{m} = \qquad 
-  \begin{bmatrix}
-    18 & 32 & 11 & 41 & 73 \\
-    61 & 47 & 22 & 87 & 63 \\
-    44 & 52 & 23 & 42 & 77 \\
-    23 & 17 & 5 & 72 & 83 \\
-  \end{bmatrix}
-\end{equation*}
-\]</p>
-
-<ul>
-<li>Use three different methods to subset the matrix and obtain the following vector</li>
-</ul>
-
-<p>\[
-\begin{equation*}
-  \textbf{v} = \qquad 
-  \begin{bmatrix}
-    52 & 42 & 77 \\
-  \end{bmatrix}
-\end{equation*}
-\]
-<br></p>
-
-<ul>
-<li>First subset the matrix to get \(\begin{bmatrix} 87 & 42 \end{bmatrix}\). Next, 
-create a new matrix using the following steps:
-
-<ul>
-<li>Drop the final column of matrix m</li>
-<li>Add \(\begin{bmatrix} 87 & 42 \end{bmatrix}\) to the second and fourth rows 
-(this will utilize recycling
-). </li>
-</ul></li>
-</ul>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-51" style="background:;">
-  <hgroup>
-    <h2>Lab solutions: Question 1</h2>
-  </hgroup>
-  <article data-timings="">
-    <p>A couple possible subsetting solutions </p>
-
-<pre><code class="r">m[3, c(1,2,4,5)]
-m[ ,c(1,2,4,5)][3, ]
-m[3, m[3, ] &gt; 40]
-m[3, c(TRUE, TRUE, FALSE, TRUE, TRUE)]
-
-m[3, ][ m[3, ] &gt; 40 ]
-
-subset(m, c(FALSE, FALSE, TRUE, FALSE), select = c(1,2,4,5))
-</code></pre>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-52" style="background:;">
-  <hgroup>
-    <h2>Lab solutions: Question 2</h2>
-  </hgroup>
-  <article data-timings="">
-    <p>One possible method</p>
-
-<pre><code class="r">v &lt;- m[c(2,3), 4]
-v
-</code></pre>
-
-<pre><code>## [1] 87 42
-</code></pre>
-
-<pre><code class="r">m2 &lt;- m[ ,-5]
-m2[2, ] &lt;-  v + m2[2, ]
-m2[4, ] &lt;-  v + m2[4, ]
-m2
-</code></pre>
-
-<pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]   18   32   11   41
-## [2,]  148   89  109  129
-## [3,]   44   52   23   42
-## [4,]  110   59   92  114
 </code></pre>
 
   </article>
@@ -2195,13 +2091,13 @@ m2
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=46 title='Your Turn'>
+        data-slide=46 title='Data structures (very briefly)'>
          46
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=47 title='NA'>
+        data-slide=47 title='Brief lab'>
          47
       </a>
     </li>
@@ -2213,26 +2109,8 @@ m2
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=49 title='Data structures (very briefly)'>
+        data-slide=49 title='NA'>
          49
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=50 title='Lab'>
-         50
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=51 title='Lab solutions: Question 1'>
-         51
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=52 title='Lab solutions: Question 2'>
-         52
       </a>
     </li>
   </ul>

@@ -1259,8 +1259,23 @@ mat[log2]
 Note the odd order, because the subsetting is occuring by column, rather than
   row.
 
+---- &twocol
+## Data structures (very briefly)
+*** =left
+* Vectors
+* Matrices
+* Data frames
+* others to be discussed later
+
+*** =right
+* All data stored in vectors and matrices must be of the same **type**
+* Data frames are more flexible (more like what you would expect in SPSS). All
+  data within a specific **column** must be the same type, but types can differ
+  between columns (not true of matrices).
+* All this will be discussed in much greater detail starting next week.
+
 ----
-## Your Turn
+## Brief lab
 Create the following matrix:
 
 $$
@@ -1275,7 +1290,7 @@ $$
 \end{equation*}
 $$
 
-Subset the mmatrix by:
+Subset the matrix by:
 
 * Selecting the third column
 * Excluding the second column
@@ -1357,96 +1372,6 @@ m[1, ] + m[4, ]
 ```
 
 
----- &twocol
-## Data structures (very briefly)
-*** =left
-* Vectors
-* Matrices
-* Data frames
-  - to be discussed momentarily
-* others to be discussed later
-
-*** =right
-* All data stored in vectors and matrices must be of the same **type**
-* Data frames are more flexible (more like what you would expect in SPSS). All
-  data within a specific **column** must be the same type, but types can differ
-  between columns (not true of matrices).
-* All this will be discussed in much greater detail starting next week.
-
-----
-## Lab
-Start with the following matrix (which we created earlier)
-$$
-\begin{equation*}
-  \textbf{m} = \qquad 
-  \begin{bmatrix}
-    18 & 32 & 11 & 41 & 73 \\
-    61 & 47 & 22 & 87 & 63 \\
-    44 & 52 & 23 & 42 & 77 \\
-    23 & 17 & 5 & 72 & 83 \\
-  \end{bmatrix}
-\end{equation*}
-$$
-
-* Use three different methods to subset the matrix and obtain the following vector
-
-$$
-\begin{equation*}
-  \textbf{v} = \qquad 
-  \begin{bmatrix}
-    52 & 42 & 77 \\
-  \end{bmatrix}
-\end{equation*}
-$$
-<br>
-* First subset the matrix to get $\begin{bmatrix} 87 & 42 \end{bmatrix}$. Next, 
-   create a new matrix using the following steps:
-     + Drop the final column of matrix m
-     + Add $\begin{bmatrix} 87 & 42 \end{bmatrix}$ to the second and fourth rows 
-       (this will utilize recycling
-   ). 
-
-----
-## Lab solutions: Question 1
-A couple possible subsetting solutions 
 
 
-```r
-m[3, c(1,2,4,5)]
-m[ ,c(1,2,4,5)][3, ]
-m[3, m[3, ] > 40]
-m[3, c(TRUE, TRUE, FALSE, TRUE, TRUE)]
 
-m[3, ][ m[3, ] > 40 ]
-
-subset(m, c(FALSE, FALSE, TRUE, FALSE), select = c(1,2,4,5))
-```
-
-----
-## Lab solutions: Question 2
-One possible method
-
-
-```r
-v <- m[c(2,3), 4]
-v
-```
-
-```
-## [1] 87 42
-```
-
-```r
-m2 <- m[ ,-5]
-m2[2, ] <-  v + m2[2, ]
-m2[4, ] <-  v + m2[4, ]
-m2
-```
-
-```
-##      [,1] [,2] [,3] [,4]
-## [1,]   18   32   11   41
-## [2,]  148   89  109  129
-## [3,]   44   52   23   42
-## [4,]  110   59   92  114
-```
