@@ -102,4 +102,19 @@ As mentioned in the opening, if you're planning on doing any serious coding, you
 1. Launch terminal
 2. type `cd` followed by a space, then drag the course folder (CourseR) into 
    terminal to get the path. Hit enter.
-3. Type `git pull` and hit enter.
+3. Type `git pull` and hit enter. Assuming the repository has been updated, 
+   terminal should print some messages about some files.
+
+![gitPull](/Users/Daniel/Dropbox/School/CourseR/git_Tutorials/img/gitPull.png)
+
+4. Type `git status`. If you see the following message, you should be good to 
+   go. If you see something like "master ahead of branch by X commits", or some
+   other message, you are not up to date. Make sure you're in the right 
+   directory and try `git pull` again. Otherwise, contact me and I can try to 
+   help you diagnose the problem.
+
+```
+# On branch master
+nothing to commit, working directory clean
+```
+
