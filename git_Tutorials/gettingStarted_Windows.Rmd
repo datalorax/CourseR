@@ -1,0 +1,108 @@
+---
+title: "Getting Started with git"
+author: "Daniel Anderson, University of Oregon - College of Education"
+output: pdf_document
+---
+# Getting started with *git*
+
+*git* is a version control system for collaborating on code. The largest git 
+  hosting engine is [github](https://github.com). However, github is separate
+  from *git* itself. There are multiple git host sites. For example 
+  [Bitbucket](https://bitbucket.org) is another popular host site that has some
+  advantages over github like free private repositories (github repositories 
+  are all public, unless you pay a monthly fee). For this course, we'll be using
+  *git* with github. You will need to only understand the very basics of *git*
+  for the purposes of this class, but if you are going to go on to do any 
+  serious coding, you'll want to become more familiar with it. The first two 
+  chapters of the *Pro Git* book, available 
+  [here](https://git-scm.com/book/en/v2) will provide you with most all the 
+  background you need. The purpose of this document is to provide you an 
+  overview of installing *git* and cloning the course repository.
+
+## Installing *git*
+Installing *git* is straight forward. Simply go to the downloads portion of the
+  *git* [website](https://git-scm.com/downloads) and click on the Windows logo.
+
+![winGitDownlaod](/Users/Daniel/Dropbox/Teaching/CourseR/git_Tutorials/img/winGitDownload.png)
+
+You should then get an executable file (.exe). Launch the file and you will be 
+  prompted by a security warning. Click "Run".
+
+![winEXE](/Users/Daniel/Dropbox/Teaching/CourseR/git_Tutorials/img/winEXE.png)
+
+The installer then should launch.
+
+![winGitSetup](/Users/Daniel/Dropbox/Teaching/CourseR/git_Tutorials/img/winGitSetup.png)
+
+Click "Next" until you get to the path setup. Make sure that "Use Git from the 
+  Windows Command Prompt" is selected.
+
+![winAdjustingPath](/Users/Daniel/Dropbox/Teaching/CourseR/git_Tutorials/img/winAdjustingPath.png)
+
+**Note.** After running the installer, *git* will be installed on your computer.
+  However, you will not see it in your Program Files or anywhere else. Rather, 
+  it is installed as part of the command line tools, and you'll access *git* via
+  the Command Prompt. 
+
+## Cloning the course repository
+
+This tutorial describes how to clone the course repository through the Command 
+  Prompt. There are many free *git* graphic user interfaces (GUIs) that many 
+  people use. The windows *git* installation also installs a GUI. I don't know 
+  any of the GUIs, and prefer to just work with the code, but you can feel 
+  free to explore them.
+
+### Launch the Command Prompt
+Command Prompt is a windows application to interface with software, etc., with
+  code. It is available from the start menu in the Accessories folder
+
+![commandPromptLoc](/Users/Daniel/Dropbox/Teaching/CourseR/git_Tutorials/img/commandPromptLoc.png)
+
+After launching the Command Prompt, change your directory, via `CD` to where you 
+  would like all the course materials saved. One of the easiest ways to do this 
+  is to type `CD` and then a space, and then just drag the folder to terminal 
+  where you want the materials saved. The path will then be automatically copied 
+  into terminal.
+
+![commandPromptCD](/Users/Daniel/Dropbox/Teaching/CourseR/git_Tutorials/img/commandPromptCD.png)
+
+Finally, go to the 
+  [course github repository](https://github.com/DJAnderson07/CourseR) and copy 
+  the link to clone the repository. 
+
+![github](/Users/Daniel/Dropbox/Teaching/CourseR/git_Tutorials/img/github.png)
+
+and type `git clone` into the Command Prompt, followed by the link (i.e., paste 
+  the link). It should like like this
+
+```
+git clone https://github.com/DJAnderson07/CourseR.git
+```
+After you hit enter, the course materials should all be cloned (copied) into 
+  your directory.
+
+## Updating the repository
+As mentioned in the opening, if you're planning on doing any serious coding, you
+  should really dig into *git* a bit more. However, for the purposes of this 
+  class, you should only need one command: `git pull`. The process is pretty
+  easy. Just follow the following steps
+
+1. Launch the Command Prompt
+2. type `CD` followed by a space, then drag the course folder (CourseR) into 
+   the Command Prompt to get the path. Hit enter.
+3. Type `git pull` and hit enter. Assuming the repository has been updated, 
+   the Command Prompt should print some messages about some files.
+
+![gitPull](/Users/Daniel/Dropbox/School/CourseR/git_Tutorials/img/gitPull.png)
+
+4. Type `git status`. If you see the following message, you should be good to 
+   go. If you see something like "master ahead of branch by X commits", or some
+   other message, you are not up to date. Make sure you're in the right 
+   directory and try `git pull` again. Otherwise, contact me and I can try to 
+   help you diagnose the problem.
+
+```
+# On branch master
+nothing to commit, working directory clean
+```
+
