@@ -999,18 +999,17 @@ attr(m, &quot;names&quot;)
 ##  1  5  9
 </code></pre>
 
-<pre><code class="r">m[ ,&quot;c2&quot;]
+<pre><code class="r">m[&quot;r3&quot;,&quot;c2&quot;] 
 </code></pre>
 
-<pre><code>## r1 r2 r3 r4 
-##  5  6  7  8
+<pre><code>## [1] 7
 </code></pre>
 
-<pre><code class="r">m[&quot;c&quot;] 
+<pre><code class="r">m[&quot;b&quot;] 
 </code></pre>
 
-<pre><code>## c 
-## 3
+<pre><code>## b 
+## 2
 </code></pre>
 
 </div>
@@ -1023,6 +1022,16 @@ attr(m, &quot;names&quot;)
     c(&quot;row1&quot;, &quot;row2&quot;, &quot;row3&quot;, &quot;row4&quot;), 
     c(&quot;col1&quot;, &quot;col2&quot;, &quot;col3&quot;)
                     )
+m
+</code></pre>
+
+<pre><code>##      col1 col2 col3
+## row1    1    5    9
+## row2    2    6   10
+## row3    3    7   11
+## row4    4    8   12
+## attr(,&quot;names&quot;)
+##  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; NA  NA  NA  NA  NA  NA  NA  NA  NA
 </code></pre>
 
 </div>
@@ -1134,7 +1143,7 @@ m
 
 <ul>
 <li>Create the above matrix using two methods, save them into objects m1 and m2</li>
-<li>Give the dimension names of each matrix using a different method</li>
+<li>Give the dimension names of each matrix using a different method for each</li>
 <li>Give each matrix one additional (and different) attribute</li>
 <li>Coerce the vector 
 $ 

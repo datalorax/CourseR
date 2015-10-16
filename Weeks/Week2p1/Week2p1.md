@@ -847,21 +847,20 @@ m["r1", ]
 ```
 
 ```r
-m[ ,"c2"]
+m["r3","c2"] 
 ```
 
 ```
-## r1 r2 r3 r4 
-##  5  6  7  8
+## [1] 7
 ```
 
 ```r
-m["c"] 
+m["b"] 
 ```
 
 ```
-## c 
-## 3
+## b 
+## 2
 ```
 
 *** =right
@@ -876,6 +875,17 @@ dimnames(m) <- list(
 	c("row1", "row2", "row3", "row4"), 
 	c("col1", "col2", "col3")
 					)
+m
+```
+
+```
+##      col1 col2 col3
+## row1    1    5    9
+## row2    2    6   10
+## row3    3    7   11
+## row4    4    8   12
+## attr(,"names")
+##  [1] "a" "b" "c" NA  NA  NA  NA  NA  NA  NA  NA  NA
 ```
 
 ---- 
@@ -975,7 +985,7 @@ $$
 $$
 
 * Create the above matrix using two methods, save them into objects m1 and m2
-* Give the dimension names of each matrix using a different method
+* Give the dimension names of each matrix using a different method for each
 * Give each matrix one additional (and different) attribute
 * Coerce the vector 
 $ 

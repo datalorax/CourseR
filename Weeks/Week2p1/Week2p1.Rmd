@@ -451,8 +451,8 @@ After row, column, and element names are assigned, they can be used in
 
 ```{r}
 m["r1", ]
-m[ ,"c2"]
-m["c"] 
+m["r3","c2"] 
+m["b"] 
 ```
 
 *** =right
@@ -466,6 +466,7 @@ dimnames(m) <- list(
 	c("row1", "row2", "row3", "row4"), 
 	c("col1", "col2", "col3")
 					)
+m
 ```
 
 ---- 
@@ -530,7 +531,7 @@ $$
 $$
 
 * Create the above matrix using two methods, save them into objects m1 and m2
-* Give the dimension names of each matrix using a different method
+* Give the dimension names of each matrix using a different method for each
 * Give each matrix one additional (and different) attribute
 * Coerce the vector 
 $ 
