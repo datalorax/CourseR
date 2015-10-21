@@ -1,5 +1,5 @@
 ---
-title       : Data Structures
+title       : "A complete, applied example"
 subtitle    : Week 2.1
 author      : Daniel Anderson
 job         : CourseR
@@ -11,989 +11,563 @@ mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
 ---
 
-## Today's Agenda (not exactly ordered)
+## Agenda
+Today is an effort to come up from the weeds a bit and walk through an applied
+  example. Specifically we will
+* Go through a complete (basic) example
+  + process, plot, analyze, plot
+* Look at correlations
+* Explore linear regression modeling (very cursory)
 
-* Scalars, Vectors, Matrices, Arrays, Data frames
-* Data types: Logical, Integer, Double (numeric), Character
-* Attributes: Names, Dimensions, Custom
-* Coercion 
-
-# Next week
-* A note on matrix algebra vs element-wise algebra
-* Classes
-* Lists
-* Data frames
-
-<br>
-Note that much of this presentation is based off Wickham (2015): 
-  http://adv-r.had.co.nz/Data-structures.html
-
---- 
-## Data structures
-
-
-|Dimensions |Homogenous    |Heterogeneous |
-|:----------|:-------------|:-------------|
-|1          |Atomic Vector |List          |
-|2          |Matrix        |Data frame    |
-|n          |Array         |              |
-<br>
-* Note: Table taken from Wickham (2015)
+# Readings
+Gelman and Hill, Chapter 3
 
 ----
-## Properties of Vectors
-
-# Type 
-* Type of elements stored in the vector
-    - use `typeof()` or `is.character()`, `is.integer()`, etc.
-
-# Length
-* Number of elements in the vector
-    - use `length()`
-
-# Attributes
-* Arbitrary metadata
-    - use `attributes()` and/or `attr()`
-
----- &twocol
-## Atomic Vectors vs Lists
-
-*** =left
-
-* Atomic
-    - All elements of the same type
-
-* Lists
-    - Element types differ
-
-<br>
-
-We will wait until next class to talk about lists.
-
-*** =right
+## Load Data
+High School and Beyond
 
 
 ```r
-atomic <- c(1, 7, 9, 23, 5)
-atomic
+library(foreign)
+d <- read.spss("./data/HSB.sav", to.data.frame = TRUE)
 ```
 
 ```
-## [1]  1  7  9 23  5
+## Warning in read.spss("./data/HSB.sav", to.data.frame = TRUE): ./data/
+## HSB.sav: Unrecognized record type 7, subtype 18 encountered in system file
+```
+
+```
+## re-encoding from latin1
 ```
 
 ```r
-lst <- list("a", 2, TRUE)
-lst
+head(d)
 ```
 
 ```
-## [[1]]
-## [1] "a"
+##     id minority female    ses mathach
+## 1 1224        0      1 -1.528   5.876
+## 2 1224        0      1 -0.588  19.708
+## 3 1224        0      0 -0.528  20.349
+## 4 1224        0      0 -0.668   8.781
+## 5 1224        0      0 -0.158  17.898
+## 6 1224        0      0  0.022   4.583
+```
+
+----
+## About the HSB data
+
+<span style="color:gray" > 
+Our data file is a subsample from the 1982 High School and Beyond Survey and is 
+  used extensively in Hierarchical Linear Models by Raudenbush and Bryk. The 
+  data file, called hsb, consists of 7185 students nested in 160 schools. The 
+  outcome variable of interest is the student-level (level 1) math achievement 
+  score (mathach). The variable ses is the socio-economic status of a student 
+  and therefore is at the student level. The variable meanses is the group-mean 
+  centered version of ses and therefore is at the school level (level 2). The 
+  variable sector is an indicator variable indicating if a school is public or 
+  catholic and is therefore a school-level variable. There are 90 public schools 
+  (sector=0) and 70 catholic schools (sector=1) in the sample.
+
+
+Description from <br>
+http://www.ats.ucla.edu/stat/hlm/seminars/hlm_mlm/608/mlm_hlm_seminar_v608.htm
+ </span>
+
+
+----
+## Check out the data a bit
+
+
+```r
+summary(d)
+```
+
+```
+##        id          minority          female            ses           
+##  2305   :  67   Min.   :0.0000   Min.   :0.0000   Min.   :-3.758000  
+##  5619   :  66   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:-0.538000  
+##  4292   :  65   Median :0.0000   Median :1.0000   Median : 0.002000  
+##  3610   :  64   Mean   :0.2747   Mean   :0.5282   Mean   : 0.000143  
+##  4042   :  64   3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.: 0.602000  
+##  8857   :  64   Max.   :1.0000   Max.   :1.0000   Max.   : 2.692000  
+##  (Other):6795                                                        
+##     mathach      
+##  Min.   :-2.832  
+##  1st Qu.: 7.275  
+##  Median :13.131  
+##  Mean   :12.748  
+##  3rd Qu.:18.317  
+##  Max.   :24.993  
 ## 
-## [[2]]
-## [1] 2
-## 
-## [[3]]
-## [1] TRUE
-```
-
----- &twocol
-## Data types
-
-*** =left
-* Double
-    - numeric with arbitrary precision
-* Integer
-    - numeric whole number
-* Logical
-    - true/false
-* Character
-    - string elements
-
-*** =right
-
-
-```r
-dbl <- c(1.357, 2, 4.67)
-int <- c(2L, 5L, 7L, 1L)
-log <- c(TRUE, FALSE, T, F)
-chr <- c("a", "b", "c")
-```
-Note the specific "L" placed after each number on the integer vector to coerce
-  the elements to integer, rather than double.
-
-
-```r
-int
-```
-
-```
-## [1] 2 5 7 1
-```
-
----- &twocol
-## Determining and Testing Types
-
-*** =left
-
-
-```r
-typeof(dbl)
-```
-
-```
-## [1] "double"
-```
-
-```r
-is.double(dbl)
-```
-
-```
-## [1] TRUE
-```
-
-```r
-is.integer(dbl)
-```
-
-```
-## [1] FALSE
-```
-
-```r
-is.atomic(dbl)
-```
-
-```
-## [1] TRUE
-```
-
-*** =right
-# Be careful of more generic tests
-
-
-```r
-is.numeric(dbl)
-```
-
-```
-## [1] TRUE
-```
-
-```r
-is.numeric(int)
-```
-
-```
-## [1] TRUE
 ```
 
 ----
-## Check in
-* What data types are the following vectors?
+## Evaluate the structure of the data
 
 
 ```r
-w <- c(TRUE, FALSE, FALSE, TRUE)
-x <- c(3, 5, 8, 9, 2.5)
-y <- c("green", "red", "blue")
-z <- c(5L, 7L, 2L, 18L)
+str(d)
+```
+
+```
+## 'data.frame':	7185 obs. of  5 variables:
+##  $ id      : Factor w/ 160 levels "1224","1288",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ minority: num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ female  : num  1 1 0 0 0 0 1 0 1 0 ...
+##  $ ses     : num  -1.528 -0.588 -0.528 -0.668 -0.158 ...
+##  $ mathach : num  5.88 19.71 20.35 8.78 17.9 ...
+##  - attr(*, "variable.labels")= Named chr 
+##   ..- attr(*, "names")= chr 
+##  - attr(*, "codepage")= int 28591
 ```
 
 ----
-## Coercion
+## What is this ses variable?
+"a standardized scale constructed from variables measuring parental education,
+occupation, and income" (http://www.upa.pdx.edu/IOA/newsom/mlrclass/ho_hsb.pdf)
 
-# Take a guess: What will the following vectors produce?
-
-
-```r
-w <- c("1", 2, 3)
-x <- c(1, TRUE, FALSE)
-y <- c(3.25, 5L, 7L)
-z <- c("a", "b", 7, TRUE)
-```
-
----- &twocol
-
-*** =left
-
-
-```r
-c("1", 2, 3); is.character(w)
-```
-
-```
-## [1] "1" "2" "3"
-```
-
-```
-## [1] TRUE
-```
-
-```r
-c(1, TRUE, FALSE); is.double(x)
-```
-
-```
-## [1] 1 1 0
-```
-
-```
-## [1] TRUE
-```
-
-*** =right
-
-
-```r
-c(3.25, 5L, 7L); is.double(y)
-```
-
-```
-## [1] 3.25 5.00 7.00
-```
-
-```
-## [1] TRUE
-```
-
-```r
-c("a", "b", 7, TRUE); is.character(z)
-```
-
-```
-## [1] "a"    "b"    "7"    "TRUE"
-```
-
-```
-## [1] TRUE
-```
-
-----
-## Coercion rules
-Remember: Atomic vectors must contain data of the same type.
-
-* Most flexible: Character
-* Least flexible: Logical
-
-When logical vectors are coerced to be numeric, `TRUE` are coded 1, and `FALSE`
-  are coded 0.
-
-Explicitely coerce via `as.___`.
-
----- &twocol
-## Explicit coercion
-
-*** =left
-
-# Override default coercions
-
-
-```r
-c(FALSE,1,TRUE,0)
-```
-
-```
-## [1] 0 1 1 0
-```
-
-```r
-as.logical(c(FALSE,1,TRUE,0))
-```
-
-```
-## [1] FALSE  TRUE  TRUE FALSE
-```
-
-```r
-c("1", 2, 3)
-```
-
-```
-## [1] "1" "2" "3"
-```
-
-```r
-as.double(c("1", 2, 3))
-```
-
-```
-## [1] 1 2 3
-```
-*** =right
-
-# Convert to specific type
-
-
-```r
-as.character(1:5)
-```
-
-```
-## [1] "1" "2" "3" "4" "5"
-```
 <br>
-# Careful with specific coercsions
+So why doesn't it have a sd of 1?
 
 
 ```r
-c("a", "b", 7, "TRUE")
+sd(d$ses)
 ```
 
 ```
-## [1] "a"    "b"    "7"    "TRUE"
+## [1] 0.7793552
 ```
 
-```r
-as.integer(c("a", "b", 7, "TRUE"))
-```
-
-```
-## Warning: NAs introduced by coercion
-```
-
-```
-## [1] NA NA  7 NA
-```
+Our dataset is a sample from the full dataset. So you can still interpret a 1
+  unit change in the `ses` variable as a one standard deviation increase in the
+  population.
 
 ----
-## Check in
-* Predict how each vector will be coerced.
+## Evaluate `id`
 
 
 ```r
-c(1, FALSE)
-c("a", TRUE)
-c("b", 1L)
-c(1L, 2)
-```
-
-----
-
-```r
-c(1, FALSE)
+table(d$id) # Equivalent to SPSS Frequencies
 ```
 
 ```
-## [1] 1 0
-```
-
-```r
-c("a", TRUE)
-```
-
-```
-## [1] "a"    "TRUE"
-```
-
-```r
-c("b", 1L)
-```
-
-```
-## [1] "b" "1"
-```
-
-```r
-c(1L, 2)
-```
-
-```
-## [1] 1 2
-```
-
-----
-## Your turn
-
-Create and coerce the following vectors to the specified type
-
-
-```r
-c(0, 0, 1, TRUE) # Logical
-c(1, 5, 3.25, FALSE) # Integer
-c(TRUE, FALSE, FALSE, TRUE) # Double
-c("Male", "Female", 0, 1) # Character
-```
-
-
----- .segue
-# Attributes
-
-----
-## Important attributes
-* `names()`, `colnames()`, `rownames()`
-* Dimensions (used to convert vectors to matrices and arrays)
-* Class: points R to correct functions to execute (e.g., `print()`, `plot()`, 
-  etc.)
-
-What is an attribute? Metadata for an object.
-
----- &twocol
-# `names()`
-
-*** =left
-
-* Names can be assigned to an object in a couple different ways.
-
-
-```r
-y <- c("A" = 1, "B" = 2, "C" = 3)
-y
-```
-
-```
-## A B C 
-## 1 2 3
-```
-
-```r
-names(y)
-```
-
-```
-## [1] "A" "B" "C"
-```
-
-*** =right
-
-
-```r
-z <- 1:3
-z
-```
-
-```
-## [1] 1 2 3
-```
-
-```r
-names(z) <- c("A", "B", "C")
-z
-```
-
-```
-## A B C 
-## 1 2 3
-```
-
-```r
-names(z)
-```
-
-```
-## [1] "A" "B" "C"
-```
-
-----
-## Factors
-* Used to store categorical data
-* Can only store predefined values
-* String variables default to factors when reading in data 
-
-
-```r
-colors <- factor(c("black", "green", "blue", "blue", "black"))
-attributes(colors)
-```
-
-```
-## $levels
-## [1] "black" "blue"  "green"
 ## 
-## $class
-## [1] "factor"
-```
-
-```r
-str(colors)
-```
-
-```
-##  Factor w/ 3 levels "black","blue",..: 1 3 2 2 1
-```
-
-----
-## Adding elements to factors
-
-
-```r
-colors[6] <- "blue"
-colors
-```
-
-```
-## [1] black green blue  blue  black blue 
-## Levels: black blue green
-```
-
-```r
-colors[7] <- "purple"
-```
-
-```
-## Warning in `[<-.factor`(`*tmp*`, 7, value = "purple"): invalid factor
-## level, NA generated
-```
-
-```r
-colors
-```
-
-```
-## [1] black green blue  blue  black blue  <NA> 
-## Levels: black blue green
+## 1224 1288 1296 1308 1317 1358 1374 1433 1436 1461 1462 1477 1499 1637 1906 
+##   47   25   48   20   48   30   28   35   44   33   57   62   53   27   53 
+## 1909 1942 1946 2030 2208 2277 2305 2336 2458 2467 2526 2626 2629 2639 2651 
+##   28   29   39   47   60   61   67   47   57   52   57   38   57   42   38 
+## 2655 2658 2755 2768 2771 2818 2917 2990 2995 3013 3020 3039 3088 3152 3332 
+##   52   45   47   25   55   42   43   48   46   53   59   21   39   52   38 
+## 3351 3377 3427 3498 3499 3533 3610 3657 3688 3705 3716 3838 3881 3967 3992 
+##   39   45   49   53   38   48   64   51   43   45   41   54   41   52   53 
+## 3999 4042 4173 4223 4253 4292 4325 4350 4383 4410 4420 4458 4511 4523 4530 
+##   46   64   44   45   58   65   53   33   25   41   32   48   58   47   63 
+## 4642 4868 4931 5192 5404 5619 5640 5650 5667 5720 5761 5762 5783 5815 5819 
+##   61   34   58   28   57   66   57   45   61   53   52   37   29   25   50 
+## 5838 5937 6074 6089 6144 6170 6291 6366 6397 6415 6443 6464 6469 6484 6578 
+##   31   29   56   33   43   21   35   58   60   54   30   29   57   35   56 
+## 6600 6808 6816 6897 6990 7011 7101 7172 7232 7276 7332 7341 7342 7345 7364 
+##   56   44   55   49   53   33   28   44   52   53   48   51   58   56   44 
+## 7635 7688 7697 7734 7890 7919 8009 8150 8165 8175 8188 8193 8202 8357 8367 
+##   51   54   32   22   51   37   47   44   49   33   30   43   35   27   14 
+## 8477 8531 8627 8628 8707 8775 8800 8854 8857 8874 8946 8983 9021 9104 9158 
+##   37   41   53   61   48   48   32   32   64   36   58   51   56   55   53 
+## 9198 9225 9292 9340 9347 9359 9397 9508 9550 9586 
+##   31   36   19   29   57   53   47   35   29   59
 ```
 
 ---- &twocol
-## Benefits of factors
+## Create new Student ID
 *** =left
-* No need for multiple variables to define a categorical variable: internal 
-  dummy-coding
+# Method 1
+Use the rownames
 
 
 ```r
-contrasts(colors)
+d$SID <- rownames(d)
+head(d)
 ```
 
 ```
-##       blue green
-## black    0     0
-## blue     1     0
-## green    0     1
+##     id minority female    ses mathach SID
+## 1 1224        0      1 -1.528   5.876   1
+## 2 1224        0      1 -0.588  19.708   2
+## 3 1224        0      0 -0.528  20.349   3
+## 4 1224        0      0 -0.668   8.781   4
+## 5 1224        0      0 -0.158  17.898   5
+## 6 1224        0      0  0.022   4.583   6
 ```
 *** =right
-
-* Change the reference group by defining a new contrast matrix. For example, we 
-  can set green to the reference group with the following code.
-
-
-```r
-contrasts(colors) <- matrix(
-	c(1, 0,
-	  0, 1,
-	  0, 0),
-byrow = TRUE, ncol = 2)
-```
-
----- &twocol
-# Contrast coding (continued)
-
-Alternatively, use some of the built in functions for defining new contrasts 
-  matrices 
-
-*** =left
+# Method 2
+Use some other arbitrary index
 
 
 ```r
-contr.helmert(3)
+d$SID <- seq(from = 1e2, 
+	length.out = nrow(d), by = 8)
+head(d)
 ```
 
 ```
-##   [,1] [,2]
-## 1   -1   -1
-## 2    1   -1
-## 3    0    2
-```
-
-```r
-contr.sum(3)
-```
-
-```
-##   [,1] [,2]
-## 1    1    0
-## 2    0    1
-## 3   -1   -1
-```
-<br>
-(see: http://www.ats.ucla.edu/stat/r/library/contrast_coding.htm)
-*** =right
-
-
-```r
-contrasts(colors) <- contr.helmert(3)
-contrasts(colors)
-```
-
-```
-##       [,1] [,2]
-## black   -1   -1
-## blue     1   -1
-## green    0    2
-```
-
-```r
-contrasts(colors) <- contr.sum(3)
-contrasts(colors)
-```
-
-```
-##       [,1] [,2]
-## black    1    0
-## blue     0    1
-## green   -1   -1
+##     id minority female    ses mathach SID
+## 1 1224        0      1 -1.528   5.876 100
+## 2 1224        0      1 -0.588  19.708 108
+## 3 1224        0      0 -0.528  20.349 116
+## 4 1224        0      0 -0.668   8.781 124
+## 5 1224        0      0 -0.158  17.898 132
+## 6 1224        0      0  0.022   4.583 140
 ```
 
 ----
-## Factors and attributes
-
-* Factors are atomic integer vectors with a "levels" attribute.
+## Rename `id` variable to `ScID`
 
 
 ```r
-is.atomic(colors)
+names(d)
 ```
 
 ```
-## [1] TRUE
+## [1] "id"       "minority" "female"   "ses"      "mathach"  "SID"
 ```
-
-```r
-typeof(colors)
-```
-
-```
-## [1] "integer"
-```
-
-Note: Be careful with `is.vector()`. It only returns `TRUE` if the vector has no
-  attributes outside of names
-
 
 ```r
-is.vector(colors)
+names(d)[1] <- "ScID"
+head(d)
 ```
 
 ```
-## [1] FALSE
+##   ScID minority female    ses mathach SID
+## 1 1224        0      1 -1.528   5.876 100
+## 2 1224        0      1 -0.588  19.708 108
+## 3 1224        0      0 -0.528  20.349 116
+## 4 1224        0      0 -0.668   8.781 124
+## 5 1224        0      0 -0.158  17.898 132
+## 6 1224        0      0  0.022   4.583 140
 ```
 
 ----
-## Your turn
-
-* Create a factor for free or reduced lunch status that has three levels: free, 
-  reduced, pay. 
-
-* Specify a new contrast matrix using either a custom matrix or a built-in 
-  function
-
-----
-
-```r
-frl <- factor(rep(c("free", "reduced", "pay"), 5))
-frl
-```
-
-```
-##  [1] free    reduced pay     free    reduced pay     free    reduced
-##  [9] pay     free    reduced pay     free    reduced pay    
-## Levels: free pay reduced
-```
-
-```r
-effect_code <- matrix(c(-1, -1,
-						 1, 0,
-						 0, 1),
-					  ncol = 2, byrow = TRUE)
-contrasts(frl) <- effect_code
-contrasts(frl)
-```
-
-```
-##         [,1] [,2]
-## free      -1   -1
-## pay        1    0
-## reduced    0    1
-```
-
-
----- &twocol
-## Dimension attribute
-
-*** =left
-
-The way we have created matrices in the past in through the `matrix` function
+## Reorder variables (house cleaning)
 
 
 ```r
-m <- matrix(1:12, ncol = 3)
-m
+d <- d[ ,c("SID", "ScID", "minority", "female", "ses", "mathach")]
+head(d)
 ```
 
 ```
-##      [,1] [,2] [,3]
-## [1,]    1    5    9
-## [2,]    2    6   10
-## [3,]    3    7   11
-## [4,]    4    8   12
+##   SID ScID minority female    ses mathach
+## 1 100 1224        0      1 -1.528   5.876
+## 2 108 1224        0      1 -0.588  19.708
+## 3 116 1224        0      0 -0.528  20.349
+## 4 124 1224        0      0 -0.668   8.781
+## 5 132 1224        0      0 -0.158  17.898
+## 6 140 1224        0      0  0.022   4.583
 ```
-
-*** =right
-
-The object `m` is really just an atomic vector with a dimension attribute
+Alternatively, by index
 
 
 ```r
-attributes(m)
-```
-
-```
-## $dim
-## [1] 4 3
+d <- d[ ,c(ncol(d), 1:(ncol(d) - 1))]
 ```
 
 ```r
-is.atomic(m)
+c(ncol(d), 1:(ncol(d) - 1))
 ```
 
 ```
-## [1] TRUE
-```
-
----- &twocol
-## Alternative construction of the same matrix
-
-*** =left
-# Construct matrix
-
-
-```r
-m <- 1:12
-
-dim(m) <- c(4, 3)
-m
-```
-
-```
-##      [,1] [,2] [,3]
-## [1,]    1    5    9
-## [2,]    2    6   10
-## [3,]    3    7   11
-## [4,]    4    8   12
-```
-*** =right
-
-# Add row and column names
-
-
-```r
-rownames(m) <- c("r1", "r2", "r3", "r4")
-m
-```
-
-```
-##    [,1] [,2] [,3]
-## r1    1    5    9
-## r2    2    6   10
-## r3    3    7   11
-## r4    4    8   12
-```
-
-```r
-colnames(m) <- c("c1", "c2", "c3")
-m
-```
-
-```
-##    c1 c2 c3
-## r1  1  5  9
-## r2  2  6 10
-## r3  3  7 11
-## r4  4  8 12
+## [1] 6 1 2 3 4 5
 ```
 
 ----
-## More on the names attributes
-For atomic vectors, and specifically matrices, `rownames()` and `colnames()` 
-  must be used, rather than `names()`. The `names()` attribute is for individual
-  elements.
+## Visualize relation among all variables
 
 
 ```r
-names(m)
+pairs(d[ ,-c(1:2)])
 ```
 
-```
-## NULL
-```
+![plot of chunk unnamed-chunk-12](assets/fig/unnamed-chunk-12-1.png) 
 
-```r
-names(m) <- c("a", "b", "c")
-attr(m, "names")
-```
-
-```
-##  [1] "a" "b" "c" NA  NA  NA  NA  NA  NA  NA  NA  NA
-```
-
----- &twocol
-## Names attributes (continued)
-
-*** =left
-
-After row, column, and element names are assigned, they can be used in 
-  subsetting
+----
+## Get a better pairs plot
+Look at the documentation for `pairs()` (then scroll down)
 
 
 ```r
-m["r1", ]
+?pairs
 ```
-
-```
-## c1 c2 c3 
-##  1  5  9
-```
-
-```r
-m["r3","c2"] 
-```
-
-```
-## [1] 7
-```
-
-```r
-m["b"] 
-```
-
-```
-## b 
-## 2
-```
-
-*** =right
-
-You can also specify the row and column names via `dimnames()` and a list of 
-  vectors (ordered by row names, then column names, then the 3rd dimension for 
-  arrays)
-
-
-```r
-dimnames(m) <- list(
-	c("row1", "row2", "row3", "row4"), 
-	c("col1", "col2", "col3")
-					)
-m
-```
-
-```
-##      col1 col2 col3
-## row1    1    5    9
-## row2    2    6   10
-## row3    3    7   11
-## row4    4    8   12
-## attr(,"names")
-##  [1] "a" "b" "c" NA  NA  NA  NA  NA  NA  NA  NA  NA
-```
+![pairsDocumentation](./assets/img/pairsDocumentation.png)
 
 ---- 
-## Adding custom attributes
+## Fancy pairs plot
 
-Occassionally there are instances when it makes sense to add a custom attribute 
-  of some sort. Here are a few examples
+# Run the functions from the documentation file
+
+
+```r
+panel.hist <- function(x, ...) {
+    usr <- par("usr"); on.exit(par(usr))
+    par(usr = c(usr[1:2], 0, 1.5) )
+    h <- hist(x, plot = FALSE)
+    breaks <- h$breaks; nB <- length(breaks)
+    y <- h$counts; y <- y/max(y)
+    rect(breaks[-nB], 0, breaks[-1], y, col = "cyan", ...)
+}
+
+panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...) {
+    usr <- par("usr"); on.exit(par(usr))
+    par(usr = c(0, 1, 0, 1))
+    r <- abs(cor(x, y))
+    txt <- format(c(r, 0.123456789), digits = digits)[1]
+    txt <- paste0(prefix, txt)
+    if(missing(cex.cor)) cex.cor <- 0.8/strwidth(txt)
+    text(0.5, 0.5, txt, cex = cex.cor * r)
+}
+```
+
+----
 
 
 ```r
-comment(m) <- "Here are some  important things to remember: x, y, z"
-attr(m, "comment")
+pairs(d[ ,-c(1:2)], 
+	lower.panel = panel.smooth, 
+	diag.panel = panel.hist, 
+	upper.panel = panel.cor)
 ```
 
-```
-## [1] "Here are some  important things to remember: x, y, z"
-```
+![plot of chunk unnamed-chunk-15](assets/fig/unnamed-chunk-15-1.png) 
 
-```r
-attr(m, "new_attribute") <- "Just a different comment, but this one shows when m is printed"
-attr(m, "new_attribute")
-```
+---- .segue
 
-```
-## [1] "Just a different comment, but this one shows when m is printed"
-```
+# Exploring the relation between SES and Math Achievement
 
-Remember that you can see all the attributes of an object via `attributes(x)`
 
 ---- &twocol
-## Final notes on attributes
+## Individual Plots
 
 *** =left
 
-When you modify a vector, the attributes are generally lost.
-
 
 ```r
-attributes(sum(m))
+hist(d$mathach)
 ```
 
-```
-## NULL
+![plot of chunk unnamed-chunk-16](assets/fig/unnamed-chunk-16-1.png) 
+
+```r
+hist(d$ses)
 ```
 
-But in some cases you may want to strip the attributes from an object. You can 
-  do this by setting the attributes to `NULL`.
+![plot of chunk unnamed-chunk-16](assets/fig/unnamed-chunk-16-2.png) 
 
 *** =right
 
-To remove the dimension names
+
+```r
+plot(d$ses, d$mathach)
+```
+
+![plot of chunk unnamed-chunk-17](assets/fig/unnamed-chunk-17-1.png) 
+
+---- &twocol
+## Correlation
+
+*** =left
+
+Use the `cor()` function
 
 
 ```r
-attr(m, "dimnames") <- NULL
-m
+cor(d$ses, d$mathach)
 ```
 
 ```
-##      [,1] [,2] [,3]
-## [1,]    1    5    9
-## [2,]    2    6   10
-## [3,]    3    7   11
-## [4,]    4    8   12
-## attr(,"names")
-##  [1] "a" "b" "c" NA  NA  NA  NA  NA  NA  NA  NA  NA 
-## attr(,"new_attribute")
-## [1] "Just a different comment, but this one shows when m is printed"
+## [1] 0.3607556
 ```
+<br>
+And, as always, take a look at the documentation for `cor()`
 
-----
+*** =right
+![corDocumentation](./assets/img/corDocumentation.png)
 
-To remove all the attributes, and return to a basic vector
+---- &twocol
+## Missing data
+For illustration purposes, lets randomly make some cases missing, and then try
+  to estimate the relation between the variables again
+
+*** =left
+# Randomly 10% of assign cases to missing
 
 
 ```r
-attributes(m) <- NULL
-m
+rand <- rbinom(length(d$ses), 1, .1)
+head(rand)
 ```
 
 ```
-##  [1]  1  2  3  4  5  6  7  8  9 10 11 12
+## [1] 0 0 0 0 0 1
+```
+
+```r
+head(rand == 1)
+```
+
+```
+## [1] FALSE FALSE FALSE FALSE FALSE  TRUE
+```
+
+```r
+d$ses[rand == 1] <- NA
+```
+*** =right
+
+
+```r
+head(d)
+```
+
+```
+##   SID ScID minority female    ses mathach
+## 1 100 1224        0      1 -1.528   5.876
+## 2 108 1224        0      1 -0.588  19.708
+## 3 116 1224        0      0 -0.528  20.349
+## 4 124 1224        0      0 -0.668   8.781
+## 5 132 1224        0      0 -0.158  17.898
+## 6 140 1224        0      0     NA   4.583
+```
+
+---- &twocol
+## Correlation
+
+*** =left
+
+
+```r
+cor(d$ses, d$mathach)
+```
+
+```
+## [1] NA
+```
+This fails, because R doesn't know what to do with the missing data. Exclude
+  those cases, and let's try again.
+
+
+```r
+temp <- na.omit(d)
+head(temp)
+```
+
+```
+##   SID ScID minority female    ses mathach
+## 1 100 1224        0      1 -1.528   5.876
+## 2 108 1224        0      1 -0.588  19.708
+## 3 116 1224        0      0 -0.528  20.349
+## 4 124 1224        0      0 -0.668   8.781
+## 5 132 1224        0      0 -0.158  17.898
+## 7 148 1224        0      1 -0.618  -2.832
+```
+
+*** =right
+
+
+```r
+cor(temp$ses, temp$mathach)
+```
+
+```
+## [1] 0.3602142
+```
+Alternatively, use the optional `use` argument
+
+
+```r
+cor(d$ses, d$mathach, 
+	use = "complete.obs")
+```
+
+```
+## [1] 0.3602142
 ```
 
 ----
-## Lab
-$$
-\begin{equation*}
-  \textbf{m} = \qquad 
-  \begin{bmatrix}
-    11 & 26\\
-    33 & 11 \\
-    27 &  5 \\
-    91 & 18 \\
-  \end{bmatrix}
-\end{equation*}
-$$
-
-* Create the above matrix using two methods, save them into objects m1 and m2
-* Give the dimension names of each matrix using a different method for each
-* Give each matrix one additional (and different) attribute
-* Coerce the vector 
-$ 
-  \begin{bmatrix}
-    T & F\\
-  \end{bmatrix}
-$
-to type double or integer and add it to the third row of the matrix.
+## Linear regression
 
 
+```r
+?lm
+```
+![lmDocumentation](./assets/img/lmDocumentation.png)
 
+----
+## Formula structure
+
+
+```r
+lm(outcome ~ predictor1 + predictor2 + predictorN)
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'outcome' not found
+```
+# Important additional arguments
+* `data`: What data frame do the vectors come from?
+* `subset`: Do you want to analyze only a subset of cases?
+* `na.action`: How should missing values be handled?
+
+----
+## Modeling the relation between SES and Math
+
+
+```r
+m1 <- lm(mathach ~ ses, data = d)
+summary(m1)
+```
+![lmSummary](./assets/img/lmSummary.png)
+
+----
+## Alternative summary
+The `arm` package (applied regression modeling) provides a lot of useful 
+  functions. One simple one is just a different method for showing the summary 
+  of a regression model, using the `display()` function.
+
+
+```r
+install.packages("arm")
+library(arm)
+display(m1, detail = TRUE)
+```
+
+
+```
+## lm(formula = mathach ~ ses, data = d)
+##             coef.est coef.se t value Pr(>|t|)
+## (Intercept)  12.73     0.08  159.60    0.00  
+## ses           3.17     0.10   30.99    0.00  
+## ---
+## n = 6443, k = 2
+## residual sd = 6.40, R-Squared = 0.13
+```
+* Note that significance is not printed by default. Use `detail = TRUE` to get 
+  significance test.
+
+---- &twocol
+## Plot the relation and the model
+* Two step process: First plot the relation, then overlay the regression line.
+
+*** =left
+
+
+```r
+# Plot the relation
+plot(d$ses, d$mathach)
+
+# Overlay the regression line
+abline(a = 12.76, b = 3.15, col = "blue")
+```
+
+*** =right
+
+![plot of chunk unnamed-chunk-31](assets/fig/unnamed-chunk-31-1.png) 
