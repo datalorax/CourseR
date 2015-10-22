@@ -507,13 +507,13 @@ And, as always, take a look at the documentation for <code>cor()</code></p>
 head(rand)
 </code></pre>
 
-<pre><code>## [1] 0 0 0 0 0 1
+<pre><code>## [1] 0 0 0 0 0 0
 </code></pre>
 
 <pre><code class="r">head(rand == 1)
 </code></pre>
 
-<pre><code>## [1] FALSE FALSE FALSE FALSE FALSE  TRUE
+<pre><code>## [1] FALSE FALSE FALSE FALSE FALSE FALSE
 </code></pre>
 
 <pre><code class="r">d$ses[rand == 1] &lt;- NA
@@ -530,7 +530,7 @@ head(rand)
 ## 3 116 1224        0      0 -0.528  20.349
 ## 4 124 1224        0      0 -0.668   8.781
 ## 5 132 1224        0      0 -0.158  17.898
-## 6 140 1224        0      0     NA   4.583
+## 6 140 1224        0      0  0.022   4.583
 </code></pre>
 
 </div>
@@ -564,7 +564,7 @@ head(temp)
 ## 3 116 1224        0      0 -0.528  20.349
 ## 4 124 1224        0      0 -0.668   8.781
 ## 5 132 1224        0      0 -0.158  17.898
-## 7 148 1224        0      1 -0.618  -2.832
+## 6 140 1224        0      0  0.022   4.583
 </code></pre>
 
 </div>
@@ -572,7 +572,7 @@ head(temp)
   <pre><code class="r">cor(temp$ses, temp$mathach)
 </code></pre>
 
-<pre><code>## [1] 0.3602142
+<pre><code>## [1] 0.3616733
 </code></pre>
 
 <p>Alternatively, use the optional <code>use</code> argument</p>
@@ -581,7 +581,7 @@ head(temp)
     use = &quot;complete.obs&quot;)
 </code></pre>
 
-<pre><code>## [1] 0.3602142
+<pre><code>## [1] 0.3616733
 </code></pre>
 
 </div>
@@ -611,7 +611,15 @@ head(temp)
     <pre><code class="r">lm(outcome ~ predictor1 + predictor2 + predictorN)
 </code></pre>
 
-<pre><code>## Error in eval(expr, envir, enclos): object &#39;outcome&#39; not found
+<p>Note that the above has an implicit intercept specification. It can be explicit 
+  by</p>
+
+<pre><code class="r">lm(outcome ~ 1 + predictor1 + predictor2 + predictorN)
+</code></pre>
+
+<p>You can also suppress the estimation of the intercept</p>
+
+<pre><code class="r">lm(outcome ~ 0 + predictor1 + predictor2 + predictorN)
 </code></pre>
 
 <h1>Important additional arguments</h1>
@@ -657,11 +665,11 @@ display(m1, detail = TRUE)
 
 <pre><code>## lm(formula = mathach ~ ses, data = d)
 ##             coef.est coef.se t value Pr(&gt;|t|)
-## (Intercept)  12.73     0.08  159.60    0.00  
-## ses           3.17     0.10   30.99    0.00  
+## (Intercept)  12.79     0.08  160.16    0.00  
+## ses           3.21     0.10   31.30    0.00  
 ## ---
-## n = 6443, k = 2
-## residual sd = 6.40, R-Squared = 0.13
+## n = 6511, k = 2
+## residual sd = 6.44, R-Squared = 0.13
 </code></pre>
 
 <ul>
@@ -692,9 +700,204 @@ abline(a = 12.76, b = 3.15, col = &quot;blue&quot;)
 
 </div>
 <div style='float:right;width:48%;'>
-  <p><img src="assets/fig/unnamed-chunk-31-1.png" alt="plot of chunk unnamed-chunk-31"> </p>
+  <p><img src="assets/fig/unnamed-chunk-33-1.png" alt="plot of chunk unnamed-chunk-33"> </p>
 
 </div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  <hgroup>
+    <h2>Fit the model for females and males seperately</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">males &lt;- lm(mathach ~ ses, 
+    data = d, subset = female == 0)
+display(males)
+</code></pre>
+
+<pre><code>## lm(formula = mathach ~ ses, data = d, subset = female == 0)
+##             coef.est coef.se
+## (Intercept) 13.50     0.12  
+## ses          3.03     0.15  
+## ---
+## n = 3080, k = 2
+## residual sd = 6.65, R-Squared = 0.11
+</code></pre>
+
+<p><br>
+Note the differences between the parameter estimates. Might we want to consider
+  an interaction?</p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">females &lt;- lm(mathach ~ ses, 
+    data = d, subset = female == 1)
+display(females)
+</code></pre>
+
+<pre><code>## lm(formula = mathach ~ ses, data = d, subset = female == 1)
+##             coef.est coef.se
+## (Intercept) 12.17     0.11  
+## ses          3.27     0.14  
+## ---
+## n = 3431, k = 2
+## residual sd = 6.19, R-Squared = 0.14
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h2>Plotting male and female models</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">male_d &lt;- subset(d, female == 0)
+plot(male_d$ses, male_d$mathach)
+abline(a = 13.49, b = 3.02, 
+    col = &quot;blue&quot;)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-36-1.png" alt="plot of chunk unnamed-chunk-36"> </p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">female_d &lt;- subset(d, female == 0)
+plot(female_d$ses, female_d$mathach)
+abline(a = 12.07, b = 3.20, 
+    col = &quot;red&quot;)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-37-1.png" alt="plot of chunk unnamed-chunk-37"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <hgroup>
+    <h2>One final plot</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>We&#39;ll talk about this later, but R will (pretty much automatically) produce 
+  plots to help evaluate model assumptions</p>
+
+<pre><code class="r">par(mfrow = c(2, 2))
+plot(m1)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-38-1.png" alt="plot of chunk unnamed-chunk-38"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  <hgroup>
+    <h2>Lab</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Read in the data file <code>ratebeer_beerjobber.txt</code></li>
+<li>Find the correlation between <code>abv</code> and <code>score.overall</code></li>
+<li>Fit a simple linear regression model, with <code>abv</code> predicting <code>score.overall</code></li>
+<li>Plot the relation between <code>abv</code> (x-axis) and <code>score.overall</code> (y-axis)
+
+<ul>
+<li>Overlay the regression line</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-29" style="background:;">
+  <hgroup>
+    <h2>Lab answers</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Read in the data file <code>ratebeer_beerjobber.txt</code></p>
+
+<pre><code class="r">d &lt;- read.delim(&quot;./data/ratebeer_beerjobber.txt&quot;)
+head(d)
+</code></pre>
+
+<pre><code>##                                  name                 brewer
+## 1                     Abbey Monks Ale Abbey Beverage Company
+## 2                  Abbey Monks Tripel Abbey Beverage Company
+## 3                     Abbey Monks Wit Abbey Beverage Company
+## 4 Alameda Barn Owl Imperial Brown Ale    Alameda Brewing Co.
+## 5         Alameda Black Bear XX Stout    Alameda Brewing Co.
+## 6       Alameda El Torero Organic IPA    Alameda Brewing Co.
+##                     style abv ratings score.overall score.by.style
+## 1             Belgian Ale 5.2      96            50             49
+## 2            Abbey Tripel 8.0       3            NA             NA
+## 3 Belgian White (Witbier) 5.1      46            23             19
+## 4               Brown Ale 7.9      13            74             81
+## 5           Foreign Stout 6.8     172            94             76
+## 6    India Pale Ale (IPA) 7.2      56            74             43
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  <hgroup>
+    <h2>Lab answers (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Find the correlation between <code>abv</code> and <code>score.overall</code></p>
+
+<pre><code class="r">cor(d$abv, d$score.overall, use = &quot;complete.obs&quot;)
+</code></pre>
+
+<pre><code>## [1] 0.4758994
+</code></pre>
+
+<p>Fit a simple linear regression model, with <code>abv</code> predicting <code>score.overall</code></p>
+
+<pre><code class="r">m2 &lt;- lm(score.overall ~ abv, data = d)
+display(m2)
+</code></pre>
+
+<pre><code>## lm(formula = score.overall ~ abv, data = d)
+##             coef.est coef.se
+## (Intercept) 27.97     3.83  
+## abv          6.17     0.60  
+## ---
+## n = 367, k = 2
+## residual sd = 21.33, R-Squared = 0.23
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  <hgroup>
+    <h2>Lab answers (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Plot the relation between <code>abv</code> (x-axis) and <code>score.overall</code> (y-axis)
+  Overlay the regression line</p>
+
+<pre><code class="r">plot(score.overall ~ abv, data = d)
+abline(a = 27.97, b = 6.17, col = &quot;blue&quot;)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-42-1.png" alt="plot of chunk unnamed-chunk-42"> </p>
+
   </article>
   <!-- Presenter Notes -->
 </slide>
@@ -845,6 +1048,48 @@ abline(a = 12.76, b = 3.15, col = &quot;blue&quot;)
       <a href="#" target="_self" rel='tooltip' 
         data-slide=24 title='Plot the relation and the model'>
          24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='Fit the model for females and males seperately'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='Plotting male and female models'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='One final plot'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='Lab'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='Lab answers'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='Lab answers (continued)'>
+         30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='Lab answers (continued)'>
+         31
       </a>
     </li>
   </ul>

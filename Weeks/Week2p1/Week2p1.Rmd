@@ -284,9 +284,22 @@ cor(d$ses, d$mathach,
 ----
 ## Formula structure
 
-```{r}
+```{r, eval = FALSE}
 lm(outcome ~ predictor1 + predictor2 + predictorN)
 ```
+Note that the above has an implicit intercept specification. It can be explicit 
+  by
+
+```{r, eval = FALSE}
+lm(outcome ~ 1 + predictor1 + predictor2 + predictorN)
+```
+
+You can also suppress the estimation of the intercept
+
+```{r, eval = FALSE}
+lm(outcome ~ 0 + predictor1 + predictor2 + predictorN)
+```
+
 # Important additional arguments
 * `data`: What data frame do the vectors come from?
 * `subset`: Do you want to analyze only a subset of cases?
@@ -340,5 +353,103 @@ abline(a = 12.76, b = 3.15, col = "blue")
 plot(d$ses, d$mathach)
 
 # Overlay the regression line
-abline(a = 12.76, b = 3.15, col = "blue")
+abline(a = 12.76, b = 3.15, 
+	col = "blue")
+```
+
+---- &twocol
+## Fit the model for females and males seperately
+
+*** =left
+
+```{r}
+males <- lm(mathach ~ ses, 
+	data = d, subset = female == 0)
+display(males)
+```
+<br>
+Note the differences between the parameter estimates. Might we want to consider
+  an interaction?
+
+*** =right
+
+```{r}
+females <- lm(mathach ~ ses, 
+	data = d, subset = female == 1)
+display(females)
+```
+
+---- &twocol
+## Plotting male and female models
+
+*** =left
+
+```{r, fig.height = 6}
+male_d <- subset(d, female == 0)
+plot(male_d$ses, male_d$mathach)
+abline(a = 13.49, b = 3.02, 
+	col = "blue")
+```
+
+*** =right
+
+```{r, fig.height = 6}
+female_d <- subset(d, female == 0)
+plot(female_d$ses, female_d$mathach)
+abline(a = 12.07, b = 3.20, 
+	col = "red")
+```
+
+----
+## One final plot
+
+We'll talk about this later, but R will (pretty much automatically) produce 
+  plots to help evaluate model assumptions
+
+```{r, fig.height = 5}
+par(mfrow = c(2, 2))
+plot(m1)
+```
+
+----
+## Lab
+
+* Read in the data file `ratebeer_beerjobber.txt`
+* Find the correlation between `abv` and `score.overall`
+* Fit a simple linear regression model, with `abv` predicting `score.overall`
+* Plot the relation between `abv` (x-axis) and `score.overall` (y-axis)
+  + Overlay the regression line
+
+----
+## Lab answers
+Read in the data file `ratebeer_beerjobber.txt`
+
+```{r}
+d <- read.delim("./data/ratebeer_beerjobber.txt")
+head(d)
+```
+
+----
+## Lab answers (continued)
+Find the correlation between `abv` and `score.overall`
+
+```{r}
+cor(d$abv, d$score.overall, use = "complete.obs")
+```
+Fit a simple linear regression model, with `abv` predicting `score.overall`
+
+```{r}
+m2 <- lm(score.overall ~ abv, data = d)
+display(m2)
+```
+
+----
+## Lab answers (continued)
+
+Plot the relation between `abv` (x-axis) and `score.overall` (y-axis)
+  Overlay the regression line
+
+```{r, fig.height = 6}
+plot(score.overall ~ abv, data = d)
+abline(a = 27.97, b = 6.17, col = "blue")
 ```

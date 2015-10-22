@@ -407,7 +407,7 @@ head(rand)
 ```
 
 ```
-## [1] 0 0 0 0 0 1
+## [1] 0 0 0 0 0 0
 ```
 
 ```r
@@ -415,7 +415,7 @@ head(rand == 1)
 ```
 
 ```
-## [1] FALSE FALSE FALSE FALSE FALSE  TRUE
+## [1] FALSE FALSE FALSE FALSE FALSE FALSE
 ```
 
 ```r
@@ -435,7 +435,7 @@ head(d)
 ## 3 116 1224        0      0 -0.528  20.349
 ## 4 124 1224        0      0 -0.668   8.781
 ## 5 132 1224        0      0 -0.158  17.898
-## 6 140 1224        0      0     NA   4.583
+## 6 140 1224        0      0  0.022   4.583
 ```
 
 ---- &twocol
@@ -467,7 +467,7 @@ head(temp)
 ## 3 116 1224        0      0 -0.528  20.349
 ## 4 124 1224        0      0 -0.668   8.781
 ## 5 132 1224        0      0 -0.158  17.898
-## 7 148 1224        0      1 -0.618  -2.832
+## 6 140 1224        0      0  0.022   4.583
 ```
 
 *** =right
@@ -478,7 +478,7 @@ cor(temp$ses, temp$mathach)
 ```
 
 ```
-## [1] 0.3602142
+## [1] 0.3616733
 ```
 Alternatively, use the optional `use` argument
 
@@ -489,7 +489,7 @@ cor(d$ses, d$mathach,
 ```
 
 ```
-## [1] 0.3602142
+## [1] 0.3616733
 ```
 
 ----
@@ -508,10 +508,21 @@ cor(d$ses, d$mathach,
 ```r
 lm(outcome ~ predictor1 + predictor2 + predictorN)
 ```
+Note that the above has an implicit intercept specification. It can be explicit 
+  by
 
+
+```r
+lm(outcome ~ 1 + predictor1 + predictor2 + predictorN)
 ```
-## Error in eval(expr, envir, enclos): object 'outcome' not found
+
+You can also suppress the estimation of the intercept
+
+
+```r
+lm(outcome ~ 0 + predictor1 + predictor2 + predictorN)
 ```
+
 # Important additional arguments
 * `data`: What data frame do the vectors come from?
 * `subset`: Do you want to analyze only a subset of cases?
@@ -544,11 +555,11 @@ display(m1, detail = TRUE)
 ```
 ## lm(formula = mathach ~ ses, data = d)
 ##             coef.est coef.se t value Pr(>|t|)
-## (Intercept)  12.73     0.08  159.60    0.00  
-## ses           3.17     0.10   30.99    0.00  
+## (Intercept)  12.79     0.08  160.16    0.00  
+## ses           3.21     0.10   31.30    0.00  
 ## ---
-## n = 6443, k = 2
-## residual sd = 6.40, R-Squared = 0.13
+## n = 6511, k = 2
+## residual sd = 6.44, R-Squared = 0.13
 ```
 * Note that significance is not printed by default. Use `detail = TRUE` to get 
   significance test.
@@ -570,4 +581,169 @@ abline(a = 12.76, b = 3.15, col = "blue")
 
 *** =right
 
-![plot of chunk unnamed-chunk-31](assets/fig/unnamed-chunk-31-1.png) 
+![plot of chunk unnamed-chunk-33](assets/fig/unnamed-chunk-33-1.png) 
+
+---- &twocol
+## Fit the model for females and males seperately
+
+*** =left
+
+
+```r
+males <- lm(mathach ~ ses, 
+	data = d, subset = female == 0)
+display(males)
+```
+
+```
+## lm(formula = mathach ~ ses, data = d, subset = female == 0)
+##             coef.est coef.se
+## (Intercept) 13.50     0.12  
+## ses          3.03     0.15  
+## ---
+## n = 3080, k = 2
+## residual sd = 6.65, R-Squared = 0.11
+```
+<br>
+Note the differences between the parameter estimates. Might we want to consider
+  an interaction?
+
+*** =right
+
+
+```r
+females <- lm(mathach ~ ses, 
+	data = d, subset = female == 1)
+display(females)
+```
+
+```
+## lm(formula = mathach ~ ses, data = d, subset = female == 1)
+##             coef.est coef.se
+## (Intercept) 12.17     0.11  
+## ses          3.27     0.14  
+## ---
+## n = 3431, k = 2
+## residual sd = 6.19, R-Squared = 0.14
+```
+
+---- &twocol
+## Plotting male and female models
+
+*** =left
+
+
+```r
+male_d <- subset(d, female == 0)
+plot(male_d$ses, male_d$mathach)
+abline(a = 13.49, b = 3.02, 
+	col = "blue")
+```
+
+![plot of chunk unnamed-chunk-36](assets/fig/unnamed-chunk-36-1.png) 
+
+*** =right
+
+
+```r
+female_d <- subset(d, female == 0)
+plot(female_d$ses, female_d$mathach)
+abline(a = 12.07, b = 3.20, 
+	col = "red")
+```
+
+![plot of chunk unnamed-chunk-37](assets/fig/unnamed-chunk-37-1.png) 
+
+----
+## One final plot
+
+We'll talk about this later, but R will (pretty much automatically) produce 
+  plots to help evaluate model assumptions
+
+
+```r
+par(mfrow = c(2, 2))
+plot(m1)
+```
+
+![plot of chunk unnamed-chunk-38](assets/fig/unnamed-chunk-38-1.png) 
+
+----
+## Lab
+
+* Read in the data file `ratebeer_beerjobber.txt`
+* Find the correlation between `abv` and `score.overall`
+* Fit a simple linear regression model, with `abv` predicting `score.overall`
+* Plot the relation between `abv` (x-axis) and `score.overall` (y-axis)
+  + Overlay the regression line
+
+----
+## Lab answers
+Read in the data file `ratebeer_beerjobber.txt`
+
+
+```r
+d <- read.delim("./data/ratebeer_beerjobber.txt")
+head(d)
+```
+
+```
+##                                  name                 brewer
+## 1                     Abbey Monks Ale Abbey Beverage Company
+## 2                  Abbey Monks Tripel Abbey Beverage Company
+## 3                     Abbey Monks Wit Abbey Beverage Company
+## 4 Alameda Barn Owl Imperial Brown Ale    Alameda Brewing Co.
+## 5         Alameda Black Bear XX Stout    Alameda Brewing Co.
+## 6       Alameda El Torero Organic IPA    Alameda Brewing Co.
+##                     style abv ratings score.overall score.by.style
+## 1             Belgian Ale 5.2      96            50             49
+## 2            Abbey Tripel 8.0       3            NA             NA
+## 3 Belgian White (Witbier) 5.1      46            23             19
+## 4               Brown Ale 7.9      13            74             81
+## 5           Foreign Stout 6.8     172            94             76
+## 6    India Pale Ale (IPA) 7.2      56            74             43
+```
+
+----
+## Lab answers (continued)
+Find the correlation between `abv` and `score.overall`
+
+
+```r
+cor(d$abv, d$score.overall, use = "complete.obs")
+```
+
+```
+## [1] 0.4758994
+```
+Fit a simple linear regression model, with `abv` predicting `score.overall`
+
+
+```r
+m2 <- lm(score.overall ~ abv, data = d)
+display(m2)
+```
+
+```
+## lm(formula = score.overall ~ abv, data = d)
+##             coef.est coef.se
+## (Intercept) 27.97     3.83  
+## abv          6.17     0.60  
+## ---
+## n = 367, k = 2
+## residual sd = 21.33, R-Squared = 0.23
+```
+
+----
+## Lab answers (continued)
+
+Plot the relation between `abv` (x-axis) and `score.overall` (y-axis)
+  Overlay the regression line
+
+
+```r
+plot(score.overall ~ abv, data = d)
+abline(a = 27.97, b = 6.17, col = "blue")
+```
+
+![plot of chunk unnamed-chunk-42](assets/fig/unnamed-chunk-42-1.png) 

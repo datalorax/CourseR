@@ -1,0 +1,401 @@
+"name"	"brewer"	"style"	"abv"	"ratings"	"score.overall"	"score.by.style"
+"1"	"Abbey Monks Ale"	"Abbey Beverage Company"	"Belgian Ale"	5.2	96	50	49
+"2"	"Abbey Monks Tripel"	"Abbey Beverage Company"	"Abbey Tripel"	8	3	NA	NA
+"3"	"Abbey Monks Wit"	"Abbey Beverage Company"	"Belgian White (Witbier)"	5.1	46	23	19
+"4"	"Alameda Barn Owl Imperial Brown Ale"	"Alameda Brewing Co."	"Brown Ale"	7.9	13	74	81
+"5"	"Alameda Black Bear XX Stout"	"Alameda Brewing Co."	"Foreign Stout"	6.8	172	94	76
+"6"	"Alameda El Torero Organic IPA"	"Alameda Brewing Co."	"India Pale Ale (IPA)"	7.2	56	74	43
+"7"	"Alameda Huckleberry Hound"	"Alameda Brewing Co."	"Fruit Beer"	6.5	5	NA	NA
+"8"	"Alameda Klickitat Pale Ale"	"Alameda Brewing Co."	"American Pale Ale"	5.3	61	75	67
+"9"	"Alameda Papa Noels Olde Ale"	"Alameda Brewing Co."	"Old Ale"	7.2	53	87	70
+"10"	"Alameda Yellow Wolf Imperial IPA"	"Alameda Brewing Co."	"Imperial/Double IPA"	8.2	74	95	64
+"11"	"Ale Industries Fall Down Brown"	"Ale Industries"	"Spice/Herb/Vegetable"	8.25	8	NA	NA
+"12"	"Ale Industries Orange Shush"	"Ale Industries"	"Belgian White (Witbier)"	4.4	0	NA	NA
+"13"	"Ale Industries Ryed Piper"	"Ale Industries"	"Specialty Grain"	5.75	30	93	96
+"14"	"American Brewing American Blonde"	"American Brewing Company"	"Golden Ale/Blond Ale"	4.5	15	44	60
+"15"	"American Brewing Breakaway IPA"	"American Brewing Company"	"India Pale Ale (IPA)"	7.2	60	93	86
+"16"	"American Brewing Caboose Oatmeal Stout"	"American Brewing Company"	"Sweet Stout"	7	41	91	81
+"17"	"Appalachian 666"	"Appalachian Brewing Company (PA)"	"English Strong Ale"	7.7	43	82	85
+"18"	"Appalachian Broad Street Barley Wine"	"Appalachian Brewing Company (PA)"	"Barley Wine"	12.8	99	97	86
+"19"	"Appalachian Grinnin Grizzly"	"Appalachian Brewing Company (PA)"	"Spice/Herb/Vegetable"	5.7	37	33	37
+"20"	"Appalachian Hoppy Trails IPA"	"Appalachian Brewing Company (PA)"	"India Pale Ale (IPA)car"	6.2	143	73	42
+"21"	"Appalachian Jolly Scot Scottish Ale"	"Appalachian Brewing Company (PA)"	"Scottish Ale"	5.2	230	50	47
+"22"	"Appalachian Kipona Fest"	"Appalachian Brewing Company (PA)"	"Oktoberfest/Märzen"	5.2	63	49	76
+"23"	"Appalachian Mountain Lager"	"Appalachian Brewing Company (PA)"	"Dortmunder/Helles"	4.5	159	20	25
+"24"	"Appalachian Outta Focus"	"Appalachian Brewing Company (PA)"	"Imperial/Double IPA"	8	32	78	24
+"25"	"Appalachian Peregrine Pilsner"	"Appalachian Brewing Company (PA)"	"Bohemian Pilsener"	4.8	36	39	54
+"26"	"Appalachian Purist Pale Ale"	"Appalachian Brewing Company (PA)"	"American Pale Ale"	4.9	151	46	33
+"27"	"Appalachian Susquehanna Stout"	"Appalachian Brewing Company (PA)"	"Dry Stout"	4.6	79	89	95
+"28"	"Appalachian Trail Blaze Organic Brown"	"Appalachian Brewing Company (PA)"	"Brown Ale"	0	59	46	44
+"29"	"Appalachian Volks Weizenbock"	"Appalachian Brewing Company (PA)"	"Weizen Bock"	7.2	44	72	48
+"30"	"Appalachian Water Gap Wheat"	"Appalachian Brewing Company (PA)"	"Wheat Ale"	4.5	146	18	20
+"31"	"Bent River Mississippi Blonde"	"Bent River Brewing Company"	"Golden Ale/Blond Ale"	4.29	27	12	6
+"32"	"Bent River Uncommon Stout"	"Bent River Brewing Company"	"Sweet Stout"	6.5	65	97	96
+"33"	"Bison Organic Chocolate Stout"	"Bison Brewing Company"	"Stout"	6.1	484	91	89
+"34"	"Bison Organic Gingerbread Ale"	"Bison Brewing Company"	"Spice/Herb/Vegetable"	6	239	73	83
+"35"	"Bison Organic Honey Basil"	"Bison Brewing Company"	"Spice/Herb/Vegetable"	6	143	57	68
+"36"	"Bison Organic Imperial Brown"	"Bison Brewing Company"	"Brown Ale"	7	43	71	76
+"37"	"Bison Organic IPA"	"Bison Brewing Company"	"India Pale Ale (IPA)"	6.8	285	60	30
+"38"	"Bison Organic Pumpkin Ale"	"Bison Brewing Company"	"Spice/Herb/Vegetable"	0	26	29	32
+"39"	"Blue Mountain Isabel Bourbon Aged Robust Porter"	"Blue Mountain Brewery"	"Porter"	6	21	76	50
+"40"	"Blue Mountain Local Species"	"Blue Mountain Brewery"	"Belgian Ale"	6.6	57	95	98
+"41"	"Blue Mountain Mandolin (Barrel House)"	"Blue Mountain Brewery"	"Bière de Garde"	9	19	85	89
+"42"	"Blue Mountain Rockfish Wheat Hefeweizen"	"Blue Mountain Brewery"	"German Hefeweizen"	5.4	21	74	95
+"43"	"Blue Mountain Steel Wheels ESB"	"Blue Mountain Brewery"	"Premium Bitter/ESB"	6.5	18	76	90
+"44"	"Blue Mountain ÜberPils Imperial Pilsener"	"Blue Mountain Brewery"	"Strong Pale Lager/Imperial Pils"	7.6	26	84	93
+"45"	"Blue Point Blueberry Ale"	"Blue Point Brewing"	"Fruit Beer"	4.6	294	49	85
+"46"	"Blue Point Hoptical Illusion"	"Blue Point Brewing"	"India Pale Ale (IPA)"	6.8	730	90	78
+"47"	"Blue Point No Apologies Imperial IPA"	"Blue Point Brewing"	"Imperial/Double IPA"	10	134	93	52
+"48"	"Blue Point Oatmeal Stout"	"Blue Point Brewing"	"Sweet Stout"	5.2	130	88	72
+"49"	"Blue Point Oktoberfest"	"Blue Point Brewing"	"Oktoberfest/Märzen"	5.5	139	49	76
+"50"	"Blue Point Old Howling Bastard"	"Blue Point Brewing"	"Barley Wine"	10	203	88	47
+"51"	"Blue Point Pale Ale"	"Blue Point Brewing"	"American Pale Ale"	4.6	121	81	77
+"52"	"Blue Point Pumpkin Ale"	"Blue Point Brewing"	"Spice/Herb/Vegetable"	6	123	47	52
+"53"	"Blue Point Rastafa Rye Ale"	"Blue Point Brewing"	"Specialty Grain"	7.5	263	85	91
+"54"	"Blue Point Spring Fling"	"Blue Point Brewing"	"Amber Ale"	5.2	124	46	55
+"55"	"Blue Point Summer Ale"	"Blue Point Brewing"	"Golden Ale/Blond Ale"	4.39	165	26	28
+"56"	"Blue Point Toasted Lager"	"Blue Point Brewing"	"Vienna"	5.5	568	59	93
+"57"	"Blue Point Winter Ale"	"Blue Point Brewing"	"Amber Ale"	7	204	54	75
+"58"	"Boxcar Brown Ale"	"Boxcar Brewing Company"	"Brown Ale"	5	16	33	23
+"59"	"Boxcar Mango Ginger India Pale Ale"	"Boxcar Brewing Company"	"India Pale Ale (IPA)"	7	12	19	1
+"60"	"Boxcar Original Ale"	"Boxcar Brewing Company"	"American Pale Ale"	5	28	18	3
+"61"	"Brewers Alley 1634 Ale"	"Brewers Alley Restaurant & Brewery"	"Specialty Grain"	5.1	43	51	53
+"62"	"Brewers Alley IPA"	"Brewers Alley Restaurant & Brewery"	"India Pale Ale (IPA)"	5.8	68	58	28
+"63"	"Brewers Alley Kölsch"	"Brewers Alley Restaurant & Brewery"	"Kölsch"	5	63	62	93
+"64"	"Brewers Alley Wedding Alt"	"Brewers Alley Restaurant & Brewery"	"Altbier"	4.6	18	63	66
+"65"	"Carolina IPA"	"Carolina Brewing Company"	"India Pale Ale (IPA)"	5.9	41	70	39
+"66"	"Carolina Nut Brown Ale"	"Carolina Brewing Company"	"Brown Ale"	4.7	77	79	87
+"67"	"Carolina Oktoberfest Lager"	"Carolina Brewing Company"	"Oktoberfest/Märzen"	5.6	17	65	91
+"68"	"Carolina Pale Ale"	"Carolina Brewing Company"	"English Pale Ale"	5.6	105	37	43
+"69"	"Carolina Winter Porter"	"Carolina Brewing Company"	"Porter"	5.2	44	57	34
+"70"	"Cavalry Brewing Big Wally Porter"	"Cavalry Brewing Company"	"Porter"	4.8	7	NA	NA
+"71"	"Cavalry Brewing Dog Soldier Golden Ale"	"Cavalry Brewing Company"	"Golden Ale/Blond Ale"	4	11	39	48
+"72"	"Cavalry Brewing Hatch Plug Ale"	"Cavalry Brewing Company"	"English Pale Ale"	4.5	14	23	24
+"73"	"Cavalry Brewing Marauder IPA"	"Cavalry Brewing Company"	"India Pale Ale (IPA)"	0	11	30	4
+"74"	"Cavalry Brewing Nomad Stout"	"Cavalry Brewing Company"	"Dry Stout"	4.2	15	43	17
+"75"	"Colorado Cider Grasshop-ah"	"Colorado Cider Co."	"Cider"	6.95	11	73	93
+"76"	"Colorado Cider Pome Mel"	"Colorado Cider Co."	"Cider"	6.5	6	NA	NA
+"77"	"Glider Cider"	"Colorado Cider Co."	"Cider"	6.95	9	46	69
+"78"	"Glider Cider - Dry"	"Colorado Cider Co."	"Cider"	6.95	4	NA	NA
+"79"	"Crow Peak Canyon Cream Ale"	"Crow Peak Brewing Company"	"Cream Ale"	5	13	25	37
+"80"	"Crow Peak Eleventh Hour IPA"	"Crow Peak Brewing Company"	"India Pale Ale (IPA)"	6.5	94	59	29
+"81"	"Crow Peak Pile ODirt Porter"	"Crow Peak Brewing Company"	"Porter"	6.9	71	79	59
+"82"	"Devils Backbone Eight Point IPA"	"Devils Backbone Brewing Company"	"India Pale Ale (IPA)"	5.9	83	92	83
+"83"	"Devils Backbone Vienna Lager"	"Devils Backbone Brewing Company"	"Vienna"	4.9	67	49	90
+"84"	"Devils Canyon Bourbon Barrel Full Boar Scotch Ale"	"Devils Canyon Brewing Co."	"Scotch Ale"	9.1	9	69	39
+"85"	"Devils Canyon California Sunshine IPA"	"Devils Canyon Brewing Co."	"India Pale Ale (IPA)"	7.1	30	77	46
+"86"	"Devils Canyon Full Boar Scotch Ale"	"Devils Canyon Brewing Co."	"Scotch Ale"	7.4	55	82	53
+"87"	"Devils Canyon Thomas Morgan Amber Ale"	"Devils Canyon Brewing Co."	"Amber Ale"	0	12	45	52
+"88"	"Diamond Knot Blonde Ale"	"Diamond Knot Brewery"	"Golden Ale/Blond Ale"	4.2	32	42	54
+"89"	"Diamond Knot Brown Ale"	"Diamond Knot Brewery"	"Brown Ale"	6	92	51	51
+"90"	"Diamond Knot Ho!Ho! Winter"	"Diamond Knot Brewery"	"Spice/Herb/Vegetable"	8.5	98	83	91
+"91"	"Diamond Knot India Pale Ale"	"Diamond Knot Brewery"	"India Pale Ale (IPA)"	6.2	364	97	97
+"92"	"Diamond Knot Industrial India Pale Ale"	"Diamond Knot Brewery"	"Imperial/Double IPA"	7.9	292	97	81
+"93"	"Diamond Knot Slanes Irish Ale"	"Diamond Knot Brewery"	"Irish Ale"	6.6	38	68	93
+"94"	"Diamond Knot Vienna Style Ale"	"Diamond Knot Brewery"	"Vienna"	5.8	42	40	74
+"95"	"Diamond Knot Whip Ale"	"Diamond Knot Brewery"	"American Pale Ale"	6	69	77	70
+"96"	"Dicks Best Bitter"	"Dicks Brewing Company"	"Premium Bitter/ESB"	5.6	100	77	87
+"97"	"Dicks Cream Stout"	"Dicks Brewing Company"	"Sweet Stout"	6.25	139	92	85
+"98"	"Dicks Danger Ale"	"Dicks Brewing Company"	"Brown Ale"	5.6	140	55	57
+"99"	"Dicks Double Danger Ale"	"Dicks Brewing Company"	"American Strong Ale"	8.5	14	82	37
+"100"	"Dicks Double Diamond Winter Ale"	"Dicks Brewing Company"	"American Strong Ale"	8.5	116	93	59
+"101"	"Dicks Imperial IPA"	"Dicks Brewing Company"	"Imperial/Double IPA"	8.6	24	76	21
+"102"	"Dicks Imperial Red"	"Dicks Brewing Company"	"American Strong Ale"	8	14	85	42
+"103"	"Dicks IPA"	"Dicks Brewing Company"	"India Pale Ale (IPA)"	6	172	77	45
+"104"	"Dicks Lava Rock Porter"	"Dicks Brewing Company"	"Porter"	7	116	76	52
+"105"	"Dicks Pale Ale"	"Dicks Brewing Company"	"American Pale Ale"	5	51	46	33
+"106"	"Dicks Scottish Style Ale"	"Dicks Brewing Company"	"Scottish Ale"	8	12	78	88
+"107"	"Dicks Working Mans Brown Ale"	"Dicks Brewing Company"	"Brown Ale"	5.5	57	46	43
+"108"	"Dry Dock Hefeweizen (U-Boat)"	"Dry Dock Brewing Co."	"German Hefeweizen"	4.3	51	85	98
+"109"	"Dry Dock Seven Seas Double IPA"	"Dry Dock Brewing Co."	"Imperial/Double IPA"	9	94	97	77
+"110"	"Dry Dock Vanilla Porter (URCA)"	"Dry Dock Brewing Co."	"Porter"	5.4	72	91	89
+"111"	"DuClaw Double Naked Fish"	"DuClaw Brewing Company"	"Imperial Stout"	7.6	28	91	35
+"112"	"DuClaw Double Spiced 31"	"DuClaw Brewing Company"	"Spice/Herb/Vegetable"	5.2	12	48	54
+"113"	"DuClaw Euforia (Euphoria)"	"DuClaw Brewing Company"	"Brown Ale"	5	92	83	90
+"114"	"DuClaw Hellrazer"	"DuClaw Brewing Company"	"India Pale Ale (IPA)"	7.5	94	84	59
+"115"	"DuClaw Mysterium"	"DuClaw Brewing Company"	"Belgian Ale"	5	58	71	76
+"116"	"DuClaw Serum"	"DuClaw Brewing Company"	"Imperial/Double IPA"	9	168	94	53
+"117"	"DuClaw Venom Pale Ale"	"DuClaw Brewing Company"	"American Pale Ale"	5.6	186	94	97
+"118"	"Eddyline Boater Beer Pils"	"Eddyline Restaurant and Brewery"	"Pilsener"	4.5	13	19	46
+"119"	"Eddyline Crank Yanker Epic IPA"	"Eddyline Restaurant and Brewery"	"India Pale Ale (IPA)"	7.5	24	48	17
+"120"	"Eddyline InnerGlow Red Chile Porter"	"Eddyline Restaurant and Brewery"	"Spice/Herb/Vegetable"	7	12	35	40
+"121"	"Eddyline Pumpkin Patch Pale Ale"	"Eddyline Restaurant and Brewery"	"Spice/Herb/Vegetable"	0	9	66	77
+"122"	"Eddyline Raspberry Wheat"	"Eddyline Restaurant and Brewery"	"Fruit Beer"	0	5	NA	NA
+"123"	"Elevation Signal De Botrange"	"Elevation Beer Company"	"Belgian Ale"	7.5	16	80	87
+"124"	"Elysian 12 Beers of Apocalypse #10 - Omen Belgian Raspberry Stout"	"Elysian Brewing Co."	"Fruit Beer"	7.2	42	92	98
+"125"	"Elysian 12 Beers of Apocalypse #11 - Mortis: Sour Persimmon Ale"	"Elysian Brewing Co."	"Sour Ale/Wild Ale"	7.25	30	79	28
+"126"	"Elysian 12 Beers of Apocalypse #4 - Peste Chocolate Chili Ale"	"Elysian Brewing Co."	"Spice/Herb/Vegetable"	7.5	77	75	85
+"127"	"Elysian 12 Beers of Apocalypse #9 - Blight Pumpkin Ale"	"Elysian Brewing Co."	"Spice/Herb/Vegetable"	7.4	24	81	90
+"128"	"Elysian Avatar Jasmine IPA"	"Elysian Brewing Co."	"India Pale Ale (IPA)"	6.3	383	87	68
+"129"	"Elysian Bête Blanche Belgian Tripel (2011)"	"Elysian Brewing Co."	"Abbey Tripel"	7.5	96	87	77
+"130"	"Elysian Bifröst Winter Ale"	"Elysian Brewing Co."	"American Strong Ale"	7.5	305	91	57
+"131"	"Elysian Dark O The Moon Pumpkin Stout"	"Elysian Brewing Co."	"Spice/Herb/Vegetable"	6.5	190	98	99
+"132"	"Elysian Dragonstooth Stout"	"Elysian Brewing Co."	"Foreign Stout"	7.5	550	99	99
+"133"	"Elysian Hansel & Gretel Ginger Pumpkin Pilsner"	"Elysian Brewing Co."	"Spice/Herb/Vegetable"	4.5	61	66	77
+"134"	"Elysian Loser Pale Ale"	"Elysian Brewing Co."	"American Pale Ale"	7	165	78	73
+"135"	"Elysian Mens Room Original Red"	"Elysian Brewing Co."	"American Pale Ale"	5.6	126	70	56
+"136"	"Elysian Night Owl Pumpkin Ale"	"Elysian Brewing Co."	"Spice/Herb/Vegetable"	5.9	370	91	96
+"137"	"Elysian Prometheus Stolen Fire IPA"	"Elysian Brewing Co."	"India Pale Ale (IPA)"	6.7	121	95	91
+"138"	"Elysian Split Shot"	"Elysian Brewing Co."	"Sweet Stout"	5.6	48	92	85
+"139"	"Elysian The Great Pumpkin Imperial Pumpkin Ale"	"Elysian Brewing Co."	"Spice/Herb/Vegetable"	8.1	180	96	99
+"140"	"Elysian The Immortal IPA"	"Elysian Brewing Co."	"India Pale Ale (IPA)"	6.3	593	92	82
+"141"	"Erie Brewing Derailed Black Cherry Ale"	"Erie Brewing Company"	"Fruit Beer"	5	82	36	65
+"142"	"Erie Brewing Drakes Crude Oatmeal Stout"	"Erie Brewing Company"	"Sweet Stout"	6.9	120	78	47
+"143"	"Erie Brewing Fallenbock"	"Erie Brewing Company"	"Doppelbock"	7.8	80	43	20
+"144"	"Erie Brewing Golden Fleece Maibock"	"Erie Brewing Company"	"Heller Bock"	8.5	58	51	64
+"145"	"Erie Brewing Heritage Alt"	"Erie Brewing Company"	"Altbier"	5.4	57	79	89
+"146"	"Erie Brewing Mad Anthonys Pale Ale"	"Erie Brewing Company"	"American Pale Ale"	5.5	227	37	18
+"147"	"Erie Brewing Misery Bay IPA"	"Erie Brewing Company"	"India Pale Ale (IPA)"	6.5	194	44	12
+"148"	"Erie Brewing Ol Red Cease & Desist Scottish Ale"	"Erie Brewing Company"	"Scotch Ale"	10.1	209	76	45
+"149"	"Erie Brewing Presque Isle Pilsner"	"Erie Brewing Company"	"Bohemian Pilsener"	4	191	19	22
+"150"	"Erie Brewing Railbender Ale"	"Erie Brewing Company"	"Scottish Ale"	6.8	387	36	18
+"151"	"Evil Genius Evil Eye PA"	"Evil Genius Beer Company"	"India Pale Ale (IPA)"	6	17	41	10
+"152"	"Evil Genius Good n Evil"	"Evil Genius Beer Company"	"Kölsch"	4.5	12	27	32
+"153"	"Evil Genius Pumplestiltskin"	"Evil Genius Beer Company"	"Golden Ale/Blond Ale"	4.7	6	NA	NA
+"154"	"Evil Genius Trick or Treat"	"Evil Genius Beer Company"	"Spice/Herb/Vegetable"	5.6	19	48	55
+"155"	"Figure Eight First Ascent"	"Figure Eight Brewing LLC"	"Pale Lager"	0	8	NA	NA
+"156"	"Figure Eight Lost Saint"	"Figure Eight Brewing LLC"	"Saison"	8.5	8	NA	NA
+"157"	"Figure Eight Offwidth"	"Figure Eight Brewing LLC"	"Imperial/Double IPA"	8.3	7	NA	NA
+"158"	"Figure Eight Ro Shampo"	"Figure Eight Brewing LLC"	"American Strong Ale"	7.5	23	55	13
+"159"	"Figure Eight Snake Pro Double IPA"	"Figure Eight Brewing LLC"	"Imperial/Double IPA"	8	17	48	5
+"160"	"Figure Eight Where Lizards Dare"	"Figure Eight Brewing LLC"	"India Pale Ale (IPA)"	4	12	51	22
+"161"	"Flat 12 Amber Ale"	"Flat 12 Bierwerks"	"Amber Ale"	5.8	34	73	90
+"162"	"Flat 12 Cucumber Kolsch"	"Flat 12 Bierwerks"	"Fruit Beer"	0	2	NA	NA
+"163"	"Flat 12 Flat Jack Pumpkin Ale"	"Flat 12 Bierwerks"	"Spice/Herb/Vegetable"	5.7	14	76	85
+"164"	"Flat 12 Half Cycle IPA"	"Flat 12 Bierwerks"	"India Pale Ale (IPA)"	6	64	91	81
+"165"	"Flat 12 Lacto-Matic Milk Stout"	"Flat 12 Bierwerks"	"Sweet Stout"	5	16	66	40
+"166"	"Flat 12 Nunmoere Black ABA"	"Flat 12 Bierwerks"	"Black IPA"	6	7	NA	NA
+"167"	"Flat 12 Pogues Run Porter"	"Flat 12 Bierwerks"	"Porter"	5.5	52	90	87
+"168"	"Fort Collins 1900 Amber Lager"	"Fort Collins Brewery"	"Premium Lager"	4.5	67	42	87
+"169"	"Fort Collins Chocolate Stout"	"Fort Collins Brewery"	"Stout"	4.9	584	78	59
+"170"	"Fort Collins Double Chocolate Stout"	"Fort Collins Brewery"	"Sweet Stout"	8.1	317	95	93
+"171"	"Fort Collins Kidd Black Lager (Schwarzbier)"	"Fort Collins Brewery"	"Schwarzbier"	4.5	350	91	97
+"172"	"Fort Collins Red Banshee (Retro Red)"	"Fort Collins Brewery"	"Amber Ale"	5.3	348	57	79
+"173"	"Fort Collins Rocky Mountain IPA"	"Fort Collins Brewery"	"India Pale Ale (IPA)"	6.2	485	81	49
+"174"	"Fort Collins Z Lager"	"Fort Collins Brewery"	"Smoked"	4.5	376	63	39
+"175"	"French Broad 13 Rebels ESB"	"French Broad Brewing Co."	"Premium Bitter/ESB"	5.2	174	50	52
+"176"	"French Broad Anvil Porter"	"French Broad Brewing Co."	"Porter"	6	60	88	81
+"177"	"French Broad Gateway Kolsch"	"French Broad Brewing Co."	"Kölsch"	5.3	93	54	87
+"178"	"French Broad IPA"	"French Broad Brewing Co."	"India Pale Ale (IPA)"	7	46	91	80
+"179"	"French Broad Rye Hopper"	"French Broad Brewing Co."	"Specialty Grain"	5.9	191	91	95
+"180"	"French Broad Wee Heavy-er Scotch Style Ale"	"French Broad Brewing Co."	"Scotch Ale"	7	201	79	48
+"181"	"Great River 483 Pale Ale"	"Great River Brewery"	"American Pale Ale"	5.4	66	82	80
+"182"	"Great River Organic Farmer Brown Ale"	"Great River Brewery"	"Brown Ale"	6.2	28	64	68
+"183"	"Great River Redband Stout"	"Great River Brewery"	"Stout"	6	97	96	95
+"184"	"Great River Roller Dam Red Ale"	"Great River Brewery"	"Irish Ale"	5.3	47	38	38
+"185"	"Hales 25th Anniversary Ale"	"Hales Ales"	"Abbey Dubbel"	7.1	56	82	76
+"186"	"Hales Aftermath Imperial IPA"	"Hales Ales"	"Imperial/Double IPA"	8.4	168	95	62
+"187"	"Hales Kölsch 45"	"Hales Ales"	"Kölsch"	0	102	41	61
+"188"	"Hales Nut Brown Ale"	"Hales Ales"	"Brown Ale"	4.2	54	45	41
+"189"	"Hales Pale Ale"	"Hales Ales"	"American Pale Ale"	5.2	131	66	50
+"190"	"Hales Pikop Andropovs Rushin Imperial Stout"	"Hales Ales"	"Imperial Stout"	7.5	193	86	24
+"191"	"Hales Troll Porter"	"Hales Ales"	"Porter"	6.9	98	71	46
+"192"	"Hales Wee Heavy Winter Ale"	"Hales Ales"	"Scotch Ale"	6.8	144	90	73
+"193"	"Sugar Hill Golden Ale"	"Harlem Brewing Company"	"Golden Ale/Blond Ale"	5.4	65	20	16
+"194"	"Heretic Evil Cousin"	"Heretic Brewing Company"	"Imperial/Double IPA"	8	159	97	80
+"195"	"Heretic Evil Twin"	"Heretic Brewing Company"	"American Strong Ale"	6.8	92	97	87
+"196"	"Heretic Gramarye"	"Heretic Brewing Company"	"American Pale Ale"	4.4	22	86	86
+"197"	"Heretic Shallow Grave Porter"	"Heretic Brewing Company"	"Porter"	7	76	97	99
+"198"	"Heretic Tartuffe"	"Heretic Brewing Company"	"Berliner Weisse"	4.8	39	58	35
+"199"	"High Noon Annies Amber Ale"	"High Noon Saloon & Brewery"	"Amber Ale"	5.5	26	18	9
+"200"	"High Noon Oregon Trail Raspberry Wheat"	"High Noon Saloon & Brewery"	"Fruit Beer"	4.5	15	37	67
+"201"	"High Noon Tonganoxie Honey Wheat"	"High Noon Saloon & Brewery"	"Wheat Ale"	4.46	12	24	36
+"202"	"Highland Black Mocha Stout"	"Highland Brewing Company"	"Stout"	5.3	490	94	93
+"203"	"Highland Clawhammer Oktoberfest"	"Highland Brewing Company"	"Oktoberfest/Märzen"	5	111	50	78
+"204"	"Highland Gaelic Ale"	"Highland Brewing Company"	"Amber Ale"	5.8	571	82	94
+"205"	"Highland Kashmir IPA"	"Highland Brewing Company"	"India Pale Ale (IPA)"	5.6	418	63	33
+"206"	"Highland Little Hump"	"Highland Brewing Company"	"American Pale Ale"	4.5	82	78	73
+"207"	"Highland Oatmeal Porter"	"Highland Brewing Company"	"Porter"	5.8	641	93	92
+"208"	"Highland Razor Wit"	"Highland Brewing Company"	"Belgian White (Witbier)"	4.5	59	82	94
+"209"	"Highland St. Tereses Pale Ale"	"Highland Brewing Company"	"American Pale Ale"	5.2	343	64	48
+"210"	"Hilliards Amber Ale"	"Hilliards Brewing Company"	"Amber Ale"	5.5	22	62	84
+"211"	"Hilliards Saison"	"Hilliards Brewing Company"	"Saison"	0	26	68	32
+"212"	"Hilliards Scottish Blonde"	"Hilliards Brewing Company"	"Scottish Ale"	0	10	43	32
+"213"	"Hopworks Abominable Winter Ale"	"Hopworks Urban Brewery"	"American Strong Ale"	7.3	131	96	85
+"214"	"Hopworks Deluxe Organic Ale (DOA)"	"Hopworks Urban Brewery"	"American Strong Ale"	6.9	72	83	40
+"215"	"Hopworks HUB Lager"	"Hopworks Urban Brewery"	"Bohemian Pilsener"	5	63	77	95
+"216"	"Hopworks IPA"	"Hopworks Urban Brewery"	"India Pale Ale (IPA)"	6.6	194	96	94
+"217"	"Hopworks Survival 7-Grain Stout"	"Hopworks Urban Brewery"	"Stout"	5.3	151	97	97
+"218"	"Huebert Deep Deuce Porter"	"Huebert Brewing Company"	"Porter"	7	4	NA	NA
+"219"	"Huebert Rasenmaher Kölsch"	"Huebert Brewing Company"	"Kölsch"	0	2	NA	NA
+"220"	"Huebert Tucker Pale Ale"	"Huebert Brewing Company"	"American Pale Ale"	0	4	NA	NA
+"221"	"Huebert Wild Pony Wheat"	"Huebert Brewing Company"	"Wheat Ale"	4.9	2	NA	NA
+"222"	"La Cumbre Elevated IPA"	"La Cumbre Brewing Company"	"India Pale Ale (IPA)"	7.2	112	100	100
+"223"	"Laurelwood Gearhead IPA"	"Laurelwood Public House & Brewery"	"India Pale Ale (IPA)"	6.5	53	86	65
+"224"	"Laurelwood Moose and Squirrel Imperial Stout"	"Laurelwood Public House & Brewery"	"Imperial Stout"	8	30	96	50
+"225"	"Laurelwood Organic Deranger Imperial Red Ale"	"Laurelwood Public House & Brewery"	"American Strong Ale"	8.6	44	96	83
+"226"	"Laurelwood Organic Free Range Red"	"Laurelwood Public House & Brewery"	"Amber Ale"	5.9	111	88	97
+"227"	"Laurelwood Portlandia Pils"	"Laurelwood Public House & Brewery"	"Pilsener"	5.5	14	55	93
+"228"	"Laurelwood Stingy Jack Pumpkin Ale"	"Laurelwood Public House & Brewery"	"Spice/Herb/Vegetable"	7	18	69	79
+"229"	"Laurelwood Vinter Varmer"	"Laurelwood Public House & Brewery"	"American Strong Ale"	6.4	67	91	56
+"230"	"Laurelwood Workhorse IPA"	"Laurelwood Public House & Brewery"	"India Pale Ale (IPA)"	7.5	109	98	98
+"231"	"Lazy Magnolia Gulf Porter"	"Lazy Magnolia Brewing Company"	"Porter"	0	52	76	50
+"232"	"Lazy Magnolia Indian Summer"	"Lazy Magnolia Brewing Company"	"Wheat Ale"	4.8	161	47	82
+"233"	"Lazy Magnolia Jefferson Stout"	"Lazy Magnolia Brewing Company"	"Sweet Stout"	5	105	91	82
+"234"	"Lazy Magnolia Reb Ale"	"Lazy Magnolia Brewing Company"	"American Pale Ale"	5.4	125	43	29
+"235"	"Lazy Magnolia Southern Pecan"	"Lazy Magnolia Brewing Company"	"Brown Ale"	4.5	519	71	76
+"236"	"Left Coast Ale Epeteios Imperial Stout"	"Left Coast/Oggis Pizza and Brewing Company"	"Imperial Stout"	9.5	40	92	37
+"237"	"Left Coast Asylum Belgian-Style Tripel Ale"	"Left Coast/Oggis Pizza and Brewing Company"	"Abbey Tripel"	11.8	184	75	51
+"238"	"Left Coast Boardwalk Saison Ale"	"Left Coast/Oggis Pizza and Brewing Company"	"Saison"	7.8	39	64	28
+"239"	"Left Coast The Wedge"	"Left Coast/Oggis Pizza and Brewing Company"	"Black IPA"	7.2	44	93	65
+"240"	"Left Coast Trestles IPA"	"Left Coast/Oggis Pizza and Brewing Company"	"India Pale Ale (IPA)"	6.8	146	96	94
+"241"	"Left Coast Una Mas"	"Left Coast/Oggis Pizza and Brewing Company"	"Vienna"	6.4	31	47	87
+"242"	"Left Coast Voo Doo American Stout"	"Left Coast/Oggis Pizza and Brewing Company"	"Stout"	8.5	148	97	97
+"243"	"Mad River Jamaica Red Ale"	"Mad River Brewery"	"Amber Ale"	6.5	340	81	94
+"244"	"Mad River Jamaica Sunset IPA"	"Mad River Brewery"	"India Pale Ale (IPA)"	7	333	74	43
+"245"	"Mad River Steelhead Double IPA"	"Mad River Brewery"	"Imperial/Double IPA"	8.6	556	94	54
+"246"	"Mad River Steelhead Extra Pale Ale"	"Mad River Brewery"	"Golden Ale/Blond Ale"	5.6	393	51	82
+"247"	"Mad River Steelhead Extra Stout"	"Mad River Brewery"	"Stout"	6.5	479	97	98
+"248"	"Mad River Steelhead Scotch Porter"	"Mad River Brewery"	"Porter"	6	384	95	96
+"249"	"Madison River Copper John Scotch Ale"	"Madison River Brewing Company"	"Scotch Ale"	7	43	48	20
+"250"	"Madison River Hopper Pale Ale"	"Madison River Brewing Company"	"American Pale Ale"	5.7	55	75	66
+"251"	"Madison River Irresistible Amber Ale"	"Madison River Brewing Company"	"Amber Ale"	5.5	37	31	31
+"252"	"Madison River Salmon Fly Honey Rye"	"Madison River Brewing Company"	"Specialty Grain"	5.6	75	22	18
+"253"	"Marble Bourbon Barrel-Aged Imperial Stout"	"Marble Brewery"	"Imperial Stout"	11	14	96	49
+"254"	"Marble D.I.P.A."	"Marble Brewery"	"Imperial/Double IPA"	8	81	97	76
+"255"	"Marble Double White Ale"	"Marble Brewery"	"Belgian White (Witbier)"	7	50	80	92
+"256"	"Marble Reserve Ale"	"Marble Brewery"	"American Strong Ale"	9	50	97	89
+"257"	"Johns Grocery Generations White Ale"	"Millstream Brewing Company"	"Belgian White (Witbier)"	5.2	265	81	93
+"258"	"Millstream Colony Oatmeal Stout"	"Millstream Brewing Company"	"Sweet Stout"	5.6	192	51	30
+"259"	"Millstream German Pilsner"	"Millstream Brewing Company"	"Classic German Pilsener"	4.5	23	54	95
+"260"	"Millstream Hefe Weissen"	"Millstream Brewing Company"	"German Hefeweizen"	5.2	50	48	69
+"261"	"Millstream Iowa Pale Ale"	"Millstream Brewing Company"	"India Pale Ale (IPA)"	5.7	135	73	42
+"262"	"Millstream Oktoberfest"	"Millstream Brewing Company"	"Oktoberfest/Märzen"	5.4	73	64	90
+"263"	"Millstream Schild Brau Amber"	"Millstream Brewing Company"	"Vienna"	4.9	195	62	94
+"264"	"Millstream Schokolade Bock"	"Millstream Brewing Company"	"Dunkler Bock"	5.7	135	81	93
+"265"	"Millstream Triple Raspberry"	"Millstream Brewing Company"	"Fruit Beer"	9.5	15	62	90
+"266"	"Millstream Windmill Wheat"	"Millstream Brewing Company"	"Wheat Ale"	4.5	134	27	43
+"267"	"Mission Amber Ale"	"Mission Brewery"	"Altbier"	5	59	58	60
+"268"	"Mission Blonde Ale"	"Mission Brewery"	"Kölsch"	5	111	49	82
+"269"	"Mission Dark Seas Imperial Stout"	"Mission Brewery"	"Imperial Stout"	9.8	130	99	81
+"270"	"Mission Hefeweizen"	"Mission Brewery"	"German Hefeweizen"	5.3	71	41	46
+"271"	"Mission IPA"	"Mission Brewery"	"India Pale Ale (IPA)"	6.8	271	94	88
+"272"	"Mission Shipwrecked Double IPA"	"Mission Brewery"	"Imperial/Double IPA"	9.25	244	93	50
+"273"	"Monocacy Riot Rye"	"Monocacy Brewing Company"	"Specialty Grain"	0	6	NA	NA
+"274"	"Mother Road Gold Road Kölsch Style Ale"	"Mother Road Brewing Company"	"Kölsch"	0	6	NA	NA
+"275"	"Mother Road Roadside American Ale"	"Mother Road Brewing Company"	"American Pale Ale"	0	5	NA	NA
+"276"	"Mother Road Twin Arrows Brown Ale"	"Mother Road Brewing Company"	"Brown Ale"	0	6	NA	NA
+"277"	"Moylans Chelsea Moylans Porter"	"Moylans Brewery & Restaurant"	"Porter"	5	126	91	90
+"278"	"Moylans Dannys Irish Style Red Ale"	"Moylans Brewery & Restaurant"	"Irish Ale"	6.5	274	49	66
+"279"	"Moylans Dragoons Dry Irish Stout"	"Moylans Brewery & Restaurant"	"Dry Stout"	5	384	92	96
+"280"	"Moylans Gael-e-bration"	"Moylans Brewery & Restaurant"	"American Pale Ale"	0	6	NA	NA
+"281"	"Moylans Hopsickle Imperial India Pale Ale"	"Moylans Brewery & Restaurant"	"Imperial/Double IPA"	9.2	1116	99	98
+"282"	"Moylans Kilt Lifter Scotch Ale"	"Moylans Brewery & Restaurant"	"Scotch Ale"	8	597	77	47
+"283"	"Moylans Moylander Double IPA"	"Moylans Brewery & Restaurant"	"Imperial/Double IPA"	8.5	777	99	94
+"284"	"Moylans Nor Cal IPA"	"Moylans Brewery & Restaurant"	"India Pale Ale (IPA)"	6.5	180	94	90
+"285"	"Moylans Old Blarney Barley Wine"	"Moylans Brewery & Restaurant"	"Barley Wine"	10	503	97	84
+"286"	"Moylans Orange & Black Congrats Ale!"	"Moylans Brewery & Restaurant"	"Fruit Beer"	6	85	77	94
+"287"	"Moylans Ryan OSullivans Imperial Stout"	"Moylans Brewery & Restaurant"	"Imperial Stout"	10	678	99	84
+"288"	"Moylans Tipperary Pale Ale"	"Moylans Brewery & Restaurant"	"American Pale Ale"	5	318	88	89
+"289"	"Moylans White Christmas Spiced Winter Lager (2008,2009)"	"Moylans Brewery & Restaurant"	"Spice/Herb/Vegetable"	6	104	46	50
+"290"	"Narragansett Bock (Helles)"	"Narragansett Brewing Company"	"Heller Bock"	6.5	33	49	60
+"291"	"Narragansett Cream Ale"	"Narragansett Brewing Company"	"Cream Ale"	5	37	43	79
+"292"	"Narragansett Fest Lager"	"Narragansett Brewing Company"	"Oktoberfest/Märzen"	5.5	51	38	45
+"293"	"Narragansett Lager Beer"	"Narragansett Brewing Company"	"Pale Lager"	5	238	13	85
+"294"	"Narragansett Light"	"Narragansett Brewing Company"	"Pale Lager"	3.8	13	11	79
+"295"	"Narragansett Porter"	"Narragansett Brewing Company"	"Porter"	7	78	59	37
+"296"	"Narragansett Summer Ale"	"Narragansett Brewing Company"	"American Pale Ale"	4.2	64	47	35
+"297"	"Odin Freyas Gold"	"Odin Brewing Company"	"Kölsch"	4.5	36	47	77
+"298"	"Odin Gift Ruby Ale"	"Odin Brewing Company"	"Amber Ale"	5.4	34	77	92
+"299"	"Odin Thors Equinox"	"Odin Brewing Company"	"Belgian Strong Ale"	9	21	85	63
+"300"	"Pale Horse Hillbilly Blonde"	"Pale Horse Brewing Company"	"Golden Ale/Blond Ale"	0	8	NA	NA
+"301"	"Pale Horse Hopyard Dog IPA"	"Pale Horse Brewing Company"	"India Pale Ale (IPA)"	7.2	42	66	35
+"302"	"Pale Horse Mystic Wolf Amber"	"Pale Horse Brewing Company"	"Amber Ale"	6	7	NA	NA
+"303"	"Pale Horse Ravens Roost"	"Pale Horse Brewing Company"	"Imperial/Double IPA"	0	2	NA	NA
+"304"	"Pale Horse Stout"	"Pale Horse Brewing Company"	"Dry Stout"	4.4	10	67	48
+"305"	"Pale Horse Winter Seasonal"	"Pale Horse Brewing Company"	"Scotch Ale"	9	3	NA	NA
+"306"	"Philadelphia Fleur de Lehigh"	"Philadelphia Brewing Company"	"Spice/Herb/Vegetable"	4.2	71	34	39
+"307"	"Philadelphia Joe Coffee Porter"	"Philadelphia Brewing Company"	"Porter"	5	101	84	73
+"308"	"Philadelphia Kenzinger"	"Philadelphia Brewing Company"	"Dortmunder/Helles"	4.5	112	35	71
+"309"	"Philadelphia Kilty Pleasure"	"Philadelphia Brewing Company"	"Scotch Ale"	8	37	77	47
+"310"	"Philadelphia Newbold IPA"	"Philadelphia Brewing Company"	"India Pale Ale (IPA)"	7	118	59	29
+"311"	"Philadelphia Pennsylvania Pale Ale"	"Philadelphia Brewing Company"	"American Pale Ale"	5.25	39	44	30
+"312"	"Philadelphia Rowhouse Red"	"Philadelphia Brewing Company"	"Specialty Grain"	5	74	45	42
+"313"	"Philadelphia Shackamaximum Stout"	"Philadelphia Brewing Company"	"Imperial Stout"	10	67	96	50
+"314"	"Philadelphia Walt Wit"	"Philadelphia Brewing Company"	"Belgian White (Witbier)"	4	113	40	43
+"315"	"Philadelphia Winter Wunder"	"Philadelphia Brewing Company"	"Spice/Herb/Vegetable"	6.5	30	44	48
+"316"	"Port City Downright Pilsner"	"Port City Brewing Company"	"Pilsener"	4.8	28	70	96
+"317"	"Port City Essential Pale Ale"	"Port City Brewing Company"	"American Pale Ale"	5.5	52	69	55
+"318"	"Port City Monumental IPA"	"Port City Brewing Company"	"India Pale Ale (IPA)"	6.3	73	54	25
+"319"	"Port City Optimal Wit"	"Port City Brewing Company"	"Belgian White (Witbier)"	5	53	65	81
+"320"	"Port City Porter"	"Port City Brewing Company"	"Porter"	7.5	93	92	92
+"321"	"Rahr & Sons Blonde Lager"	"Rahr & Sons Brewing"	"Dortmunder/Helles"	4.6	117	24	34
+"322"	"Rahr & Sons Rahrs Red"	"Rahr & Sons Brewing"	"Vienna"	4.7	140	30	55
+"323"	"Rahr & Sons Stormcloud IPA"	"Rahr & Sons Brewing"	"India Pale Ale (IPA)"	6	115	35	6
+"324"	"Rahr & Sons Ugly Pug"	"Rahr & Sons Brewing"	"Schwarzbier"	4.75	198	39	32
+"325"	"Red Lodge Bent Nail IPA"	"Red Lodge Ales"	"India Pale Ale (IPA)"	6.3	51	75	44
+"326"	"Red Lodge Broken Nail Double IPA"	"Red Lodge Ales"	"Imperial/Double IPA"	8.5	9	74	19
+"327"	"Red Lodge Czech Mate Pilsner"	"Red Lodge Ales"	"Pilsener"	5.5	9	39	81
+"328"	"Red Lodge Glacier Ale"	"Red Lodge Ales"	"Altbier"	5.2	39	55	54
+"329"	"Red Lodge Hefeweizen"	"Red Lodge Ales"	"Wheat Ale"	6	25	40	68
+"330"	"Red Lodge Octoberfest"	"Red Lodge Ales"	"Oktoberfest/Märzen"	5.5	7	0	0
+"331"	"Renegade Ryeteous Rye IPA"	"Renegade Brewing Company"	"India Pale Ale (IPA)"	7	25	72	41
+"332"	"Rio Grande Desert Pils"	"Rio Grande Brewing Co. (Sierra Blanca Brewing)"	"Classic German Pilsener"	5.4	32	23	30
+"333"	"Rio Grande India Pale Ale"	"Rio Grande Brewing Co. (Sierra Blanca Brewing)"	"India Pale Ale (IPA)"	5.8	36	45	13
+"334"	"Rio Grande Outlaw Lager"	"Rio Grande Brewing Co. (Sierra Blanca Brewing)"	"California Common"	5.2	53	15	1
+"335"	"Rio Grande Pancho Verde Chile Cerveza"	"Rio Grande Brewing Co. (Sierra Blanca Brewing)"	"Spice/Herb/Vegetable"	4.67	84	12	12
+"336"	"Rivertown Blueberry Lager"	"Rivertown Brewing"	"Fruit Beer"	5.3	27	25	48
+"337"	"Rivertown Bock"	"Rivertown Brewing"	"Dunkler Bock"	7.2	20	45	46
+"338"	"Rivertown Dunkel"	"Rivertown Brewing"	"Dunkel"	5.8	43	53	85
+"339"	"Rivertown Helles Lager"	"Rivertown Brewing"	"Dortmunder/Helles"	5.3	58	44	89
+"340"	"Rivertown Hop Baron Doubledown IPA"	"Rivertown Brewing"	"Imperial/Double IPA"	8.5	59	88	40
+"341"	"Rivertown Hop Bomber Pale Ale"	"Rivertown Brewing"	"American Pale Ale"	5.5	102	65	49
+"342"	"Rivertown Jenneke"	"Rivertown Brewing"	"Belgian White (Witbier)"	6.1	12	39	42
+"343"	"Rivertown Lambic"	"Rivertown Brewing"	"Lambic - Unblended"	6.3	106	96	84
+"344"	"Rivertown Ojos Negros"	"Rivertown Brewing"	"Lambic - Fruit"	6.5	32	95	68
+"345"	"Rivertown Oktoberfest"	"Rivertown Brewing"	"Oktoberfest/Märzen"	6.7	13	45	62
+"346"	"Rivertown Old Sour Cherry Porter"	"Rivertown Brewing"	"Sour Ale/Wild Ale"	9	14	74	23
+"347"	"Rivertown Pumpkin Ale"	"Rivertown Brewing"	"Spice/Herb/Vegetable"	5	41	75	84
+"348"	"Rivertown Roebling Porter"	"Rivertown Brewing"	"Imperial/Strong Porter"	7.8	57	78	17
+"349"	"Rivertown Unit 6 American Hefeweizen"	"Rivertown Brewing"	"Wheat Ale"	5.5	24	33	53
+"350"	"Rivertown Ville De Rivere Geuze"	"Rivertown Brewing"	"Lambic - Gueuze"	6.4	29	92	34
+"351"	"Rivertown Winter Ale"	"Rivertown Brewing"	"Spice/Herb/Vegetable"	0	41	46	50
+"352"	"Rivertown Wit"	"Rivertown Brewing"	"Belgian White (Witbier)"	5.1	40	37	39
+"353"	"Santa Fe Black IPA"	"Santa Fe Brewing Company"	"Black IPA"	7.1	29	81	35
+"354"	"Santa Fe Chicken Killer Barley Wine"	"Santa Fe Brewing Company"	"Barley Wine"	10	328	91	51
+"355"	"Santa Fe Freestyle Pilsner"	"Santa Fe Brewing Company"	"Pilsener"	5.5	34	62	94
+"356"	"Santa Fe Happy Camper IPA"	"Santa Fe Brewing Company"	"India Pale Ale (IPA)"	6.6	160	89	74
+"357"	"Santa Fe Imperial Java Stout"	"Santa Fe Brewing Company"	"Imperial Stout"	8	168	98	70
+"358"	"Santa Fe Kickin Chicken"	"Santa Fe Brewing Company"	"Barley Wine"	12	62	89	48
+"359"	"Santa Fe Nut Brown Ale"	"Santa Fe Brewing Company"	"Brown Ale"	5.2	196	42	36
+"360"	"Santa Fe Oktoberfest"	"Santa Fe Brewing Company"	"Oktoberfest/Märzen"	6	36	49	78
+"361"	"Santa Fe State Pen Porter"	"Santa Fe Brewing Company"	"Porter"	6.4	216	92	90
+"362"	"Sierra Blanca Alien Wheat"	"Sierra Blanca Brewing Co"	"Belgian White (Witbier)"	5	15	26	22
+"363"	"Sierra Blanca Imperial Stout"	"Sierra Blanca Brewing Co"	"Imperial Stout"	7.2	15	61	6
+"364"	"Sierra Blanca Nut Brown Beer"	"Sierra Blanca Brewing Co"	"Brown Ale"	5	67	59	62
+"365"	"Sierra Blanca Pale Ale"	"Sierra Blanca Brewing Co"	"American Pale Ale"	6	41	39	22
+"366"	"Sierra Blanca Roswell Alien Amber Ale"	"Sierra Blanca Brewing Co"	"Amber Ale"	5.2	148	21	14
+"367"	"Six Rivers Bluff Creek Pale Ale"	"Six Rivers Brewery"	"American Pale Ale"	5.5	28	30	11
+"368"	"Six Rivers Chili Pepper Spicy Ale"	"Six Rivers Brewery"	"Spice/Herb/Vegetable"	6	47	31	36
+"369"	"Six Rivers IPA"	"Six Rivers Brewery"	"India Pale Ale (IPA)"	7.2	67	77	45
+"370"	"Six Rivers Moonstone Porter"	"Six Rivers Brewery"	"Porter"	6	47	63	40
+"371"	"Six Rivers Paradise Moon Coffee Porter"	"Six Rivers Brewery"	"Porter"	6	63	81	65
+"372"	"Straight To Ale Monkeynaut IPA"	"Straight To Ale"	"India Pale Ale (IPA)"	7.25	41	91	80
+"373"	"Strike Blonde Ale"	"Strike Brewing Company"	"Golden Ale/Blond Ale"	0	2	NA	NA
+"374"	"Strike Brown Ae"	"Strike Brewing Company"	"Brown Ale"	0	2	NA	NA
+"375"	"Strike Imperial Red"	"Strike Brewing Company"	"Amber Ale"	0	4	NA	NA
+"376"	"Strike IPA"	"Strike Brewing Company"	"India Pale Ale (IPA)"	0	5	NA	NA
+"377"	"Strike Wit"	"Strike Brewing Company"	"Belgian White (Witbier)"	0	1	NA	NA
+"378"	"Telluride Bridal Veil Rye Pale Ale"	"Telluride Brewing Company"	"Specialty Grain"	5.5	8	NA	NA
+"379"	"Terrapin Georgia Theatre Session: Double Feature"	"Terrapin Beer Company"	"Abbey Dubbel"	7.7	69	52	35
+"380"	"Terrapin Hopsecutioner India Pale Ale"	"Terrapin Beer Company"	"India Pale Ale (IPA)"	7.3	586	96	95
+"381"	"Terrapin Rye Pale Ale"	"Terrapin Beer Company"	"American Pale Ale"	5.3	919	92	94
+"382"	"Terrapin Side Project Phlux Capacitor"	"Terrapin Beer Company"	"American Strong Ale"	9.8	104	93	64
+"383"	"Thunderhead Cornstalker Dark Wheat"	"Thunderhead Brewing Company"	"Wheat Ale"	5.2	27	48	84
+"384"	"Thunderhead Golden Fraü"	"Thunderhead Brewing Company"	"Wheat Ale"	7.5	28	31	48
+"385"	"Twisted Pine Big Shot Espresso Stout"	"Twisted Pine Brewing"	"Sweet Stout"	6	169	95	93
+"386"	"Twisted Pine Billys Chilies"	"Twisted Pine Brewing"	"Spice/Herb/Vegetable"	5.1	130	30	34
+"387"	"Twisted Pine Ghost Face Killah"	"Twisted Pine Brewing"	"Spice/Herb/Vegetable"	4.5	175	14	15
+"388"	"Twisted Pine Hoppy Boy IPA"	"Twisted Pine Brewing"	"India Pale Ale (IPA)"	6.2	210	50	21
+"389"	"Twisted Pine Raspberry Wheat Ale"	"Twisted Pine Brewing"	"Fruit Beer"	5.1	80	25	48
+"390"	"Upslope Brown Ale"	"Upslope Brewing Company"	"Brown Ale"	6.7	38	87	93
+"391"	"Upslope Christmas Ale"	"Upslope Brewing Company"	"Spice/Herb/Vegetable"	8.2	13	41	45
+"392"	"Upslope Craft Lager"	"Upslope Brewing Company"	"Premium Lager"	4.8	22	26	63
+"393"	"Upslope India Pale Ale"	"Upslope Brewing Company"	"India Pale Ale (IPA)"	7.2	94	50	21
+"394"	"Upslope Pale Ale"	"Upslope Brewing Company"	"American Pale Ale"	5.8	53	40	24
+"395"	"Voodoo 4 Seasons IPA"	"Voodoo Brewing Co."	"India Pale Ale (IPA)"	0	109	78	46
+"396"	"Voodoo Big Black Voodoo Daddy"	"Voodoo Brewing Co."	"Imperial Stout"	12	241	99	85
+"397"	"Voodoo Gran Met"	"Voodoo Brewing Co."	"Belgian Strong Ale"	9.5	98	55	31
+"398"	"Voodoo Love Child"	"Voodoo Brewing Co."	"Fruit Beer"	9.5	147	69	92
+"399"	"Voodoo White Magick of the Sun"	"Voodoo Brewing Co."	"Belgian White (Witbier)"	6	104	62	78
+"400"	"Voodoo Wynonas Big Brown Ale"	"Voodoo Brewing Co."	"Brown Ale"	7.2	126	91	96
