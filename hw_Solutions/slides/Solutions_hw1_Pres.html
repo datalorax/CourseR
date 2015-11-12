@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Homework 1 Review</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Homework 1 Review">
+  <meta name="author" content="Daniel Anderson">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Homework 1 Review</h1>
+    <h2></h2>
+    <p>Daniel Anderson<br/>CourseR</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Homework Review</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Title, author and date
+
+<ul>
+<li>Use a YAML header in your document to do this</li>
+</ul></li>
+</ul>
+
+<pre><code>---
+title: Example Markdown document
+author: Daniel Anderson
+date: &quot;2015-11-11&quot;
+---
+</code></pre>
+
+<div style='float:left;width:48%;'>
+  
+</div>
+<div style='float:right;width:48%;'>
+  
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Homework Review (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>An R code chunk displaying how to load data into R and store it into an 
+object, along with text explaining  the code.</li>
+</ul>
+
+<p><img src="./assets/img/rCodeChunk.png" alt="rCodeChunk"></p>
+
+<div style='float:left;width:48%;'>
+  
+</div>
+<div style='float:right;width:48%;'>
+  
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <article data-timings="">
+    <p>The following lines of code uses the <code>read.table</code> function, to read the trees
+  data into an object named <code>trees</code>. Columns are separated by a pipe, |, 
+  missing data are coded 999, and, and the column names are Girth, Height, and
+  Volume</p>
+
+<pre><code class="r">trees &lt;- read.table(&quot;./data/trees.txt&quot;, 
+    sep = &quot;|&quot;, na = &quot;999&quot;,
+    col.names = c(&quot;Girth&quot;, &quot;Height&quot;, &quot;Volume&quot;))
+head(trees)
+</code></pre>
+
+<pre><code>##   Girth Height Volume
+## 1   8.3     NA     NA
+## 2    NA     65   10.3
+## 3    NA     63     NA
+## 4  10.5     72   16.4
+## 5  10.7     NA     NA
+## 6  10.8     NA   19.7
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Homework Review (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>A generic ordered or unordered list with at least one level of nesting (could 
+even be a shopping list)</li>
+</ul>
+
+<div style='float:left;width:48%;'>
+  <p><img src="./assets/img/nestedList.png" alt="nestedList"></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <h1>Groceries</h1>
+
+<ul>
+<li>Dairy
+
+<ul>
+<li>Cheese</li>
+<li>Milk</li>
+<li>Yogurt</li>
+</ul></li>
+<li>Meat
+
+<ul>
+<li>Ground beef</li>
+<li>Pork chops</li>
+</ul></li>
+<li>Snacks
+
+<ul>
+<li>Chips</li>
+<li>Crackers</li>
+</ul></li>
+</ul>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Homework Review (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Some R output of some sort</li>
+</ul>
+
+<p><img src="./assets/img/rOutput.png" alt="rOutput"></p>
+
+<p><img src="assets/fig/unnamed-chunk-2-1.png" alt="plot of chunk unnamed-chunk-2"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>Homework Review (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Calculate the mean of a variable, via <code>mean()</code> and display it in text. If 
+there are missing data in the vector that you are trying to calculate the mean
+from, you will also need to include the additional argument <code>na.rm = TRUE</code>. 
+Make some manipulation to the data (e.g., remove a few random cases) and 
+report the mean in text again, using code.</li>
+</ul>
+
+<p><img src="./assets/img/inlineCode.png" alt="inlineCode"></p>
+
+<p>The mean girth of trees in the sample was 13.57. 
+  For trees below 70 feet the mean girth was 
+  12.75.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Homework Review (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Pairs plot</h1>
+
+<pre><code class="r">pairs(trees)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-4-1.png" alt="plot of chunk unnamed-chunk-4"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Homework Review (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Matrices and Vectors</h1>
+
+<p>Create the following matrix (which we created during the first class, if you
+  saved your syntax)
+\[\mathbf{m} = 
+\left [
+  \begin{array}{ccccc}
+    18 & 32 & 11 & 41 & 73 \\\
+    61 & 47 & 22 & 87 & 63 \\\
+    44 & 52 & 23 & 42 & 77 \\\
+    23 & 17 & 5 & 72 & 83
+  \end{array}
+  \right ]
+\]</p>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">m &lt;- matrix(c(18, 32, 11, 41, 73,
+              61, 47, 22, 87, 63,
+              44, 52, 23, 42, 77,
+              23, 17,  5, 72, 83
+              ), 
+            byrow = TRUE, ncol = 5
+)
+m
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><br></p>
+
+<pre><code>##      [,1] [,2] [,3] [,4] [,5]
+## [1,]   18   32   11   41   73
+## [2,]   61   47   22   87   63
+## [3,]   44   52   23   42   77
+## [4,]   23   17    5   72   83
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Homework Review (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>1) Use three different methods to subset the matrix and obtain the following 
+  vector
+\[\mathbf{v} = 
+\left [
+  \begin{array}{ccc}
+    52 & 42 & 77
+  \end{array}
+  \right ]
+\]</p>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">m[3, c(2,4,5)]
+
+m[ ,c(2,4,5)][3, ]
+
+m[3, m[3, ] == 52 |
+     m[3, ] == 42 |
+     m[3, ] == 77 ]
+
+m[3, c(FALSE, TRUE, FALSE, TRUE, TRUE)]
+
+m[3, ][ m[3, ] &gt; 40 &amp;
+        m[3, ] != 44 ]
+
+subset(m, c(FALSE, FALSE, TRUE, FALSE), 
+    select = c(2,4,5), drop = TRUE)
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code>## [1] 52 42 77
+</code></pre>
+
+<pre><code>## [1] 52 42 77
+</code></pre>
+
+<pre><code>## [1] 52 42 77
+</code></pre>
+
+<pre><code>## [1] 52 42 77
+</code></pre>
+
+<pre><code>## [1] 52 42 77
+</code></pre>
+
+<pre><code>## [1] 52 42 77
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Homework Review (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>2) Subset \(\mathbf{m}\) again to get 
+  \(\mathbf{v2} = \left [\begin{array}{cc} 87 & 42 \end{array} \right ]\). Then 
+  create a new matrix using the following steps:</p>
+
+<ul>
+<li>Drop the final column of matrix \(\mathbf{m}\)</li>
+<li>Add \(\mathbf{v2}\) to the second and fourth rows (this will utilize the property 
+of recycling). </li>
+</ul>
+
+<p>One possible method</p>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">v &lt;- m[c(2,3), 4]
+v
+</code></pre>
+
+<pre><code>## [1] 87 42
+</code></pre>
+
+<pre><code class="r">m2 &lt;- m[ ,-5]
+m2[2, ] &lt;-  v + m2[2, ]
+m2[4, ] &lt;-  v + m2[4, ]
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">m2
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   18   32   11   41
+## [2,]  148   89  109  129
+## [3,]   44   52   23   42
+## [4,]  110   59   92  114
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Homework Review (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Render the document</h1>
+
+<div style='float:left;width:48%;'>
+  <h3>Via R Studio</h3>
+
+<p><img src="assets/img/knitRStudio.png" alt="knitRStudio"></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <h3>Via code</h3>
+
+<p>If you don&#39;t have the rmarkdown library installed, first run</p>
+
+<pre><code class="r">install.packages(&quot;rmarkdown&quot;)
+</code></pre>
+
+<p>Then, to render to document</p>
+
+<pre><code class="r">library(rmarkdown)
+render(&quot;yourFile.Rmd&quot;, &quot;html_document&quot;)
+</code></pre>
+
+<p>Note that your working directory must be set to the same location as the .Rmd
+  file, or you can provide a path to the file in the <code>render</code> function.</p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Homework Review'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Homework Review (continued)'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='NA'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Homework Review (continued)'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Homework Review (continued)'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='Homework Review (continued)'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='Homework Review (continued)'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Homework Review (continued)'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='Homework Review (continued)'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Homework Review (continued)'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='Homework Review (continued)'>
+         11
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

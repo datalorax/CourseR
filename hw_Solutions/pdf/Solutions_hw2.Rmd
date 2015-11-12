@@ -1,0 +1,136 @@
+---
+title: Homework 2 Solutions
+output: pdf_document
+---
+
+1. Load data
+
+```{r}
+setwd("/Users/Daniel/Dropbox/Teaching/CourseR/data/")
+d <- read.csv("CollegeScorecard.csv", na = c("NULL", "PrivacySuppressed"))
+```
+2. Process data
+
+```{r}
+d <- d[ ,c("INSTNM", "STABBR", "SAT_AVG_ALL", "GRAD_DEBT_MDN_SUPP", 
+	       "md_earn_wne_p10")]
+names(d) <- c("Institution", "State", "SAT", "Debt", "Earnings")
+
+d$SAT_c <- d$SAT - mean(d$SAT, na.rm = TRUE)
+mean(d$SAT_c, na.rm = TRUE)
+d$Debt_c <- d$Debt - mean(d$Debt, na.rm = TRUE)
+mean(d$Debt_c, na.rm = TRUE)
+```
+
+3. Create plots
+
+```{r, fig.height = 3}
+pairs(d[ ,3:5])
+hist(d[ ,3])
+hist(d[ ,4])
+hist(d[ ,5])
+plot(density(d[ ,3], na.rm = TRUE))
+plot(density(d[ ,4], na.rm = TRUE))
+plot(density(d[ ,5], na.rm = TRUE))
+```
+\newpage
+
+4. Fit preliminary models
+
+```{r}
+mA <- lm(Earnings ~ SAT, data = d)
+summary(mA)
+mB <- lm(Earnings ~ Debt, data = d)
+summary(mB)
+mC <- lm(SAT ~ Debt, data = d)
+summary(mC)
+```
+
+5. Plot regression models
+
+The results of the coefficents are pretty straightforward to interpret. They 
+  represent the expected change in the outcome given a 1 unit increase in the 
+  predictor. Note that the coefficient for `Debt` is very small, because it 
+  represents the expected change in the outcome given a one dollar increase in
+  debt. The intercepts range from difficult to interpret, to impossible. For
+  example, the SAT scale does not go below 200, yet the intercept in Model A 
+  represents the expected earnings for schools with an average SAT score of 0.
+  After centering the variables and refitting the models (code below), the
+  intercepts represent the expected value of the outcome when the school has an
+  average level of the predictor.
+
+
+```{r, fig.height = 3}
+plot(d$Earnings ~ d$SAT)
+abline(coef(mA)[1], coef(mA)[2], col = "blue", lwd = 3, lty = 2)
+plot(d$Earnings ~ d$Debt)
+abline(coef(mB)[1], coef(mB)[2], col = "blue", lwd = 3, lty = 2)
+plot(d$SAT_c ~ d$Debt)
+abline(coef(mC)[1], coef(mC)[2], col = "blue", lwd = 3, lty = 2)
+```
+
+\newpage
+
+```{r}
+mA <- lm(Earnings ~ SAT_c, data = d)
+summary(mA)
+mB <- lm(Earnings ~ Debt_c, data = d)
+summary(mB)
+mC <- lm(SAT_c ~ Debt_c, data = d)
+summary(mC)
+```
+
+6. Fit the multiple regression model
+
+```{r}
+mr <- lm(Earnings ~ SAT_c + Debt_c, data = d)
+summary(mr)
+```
+
+*Extra Credit.* Predictor-residual plot
+
+To compute the predictor residual plot, first predict SAT scores for each
+  observation from their Debt.
+
+```{r}
+predSAT <- coef(mC)[1] + coef(mC)[2]*d$Debt_c
+```
+Next compute the residual - i.e., the difference between the predicted and 
+  observed SAT score.
+
+```{r}
+resSAT <- d$SAT - predSAT
+```
+Finally, plot the relation between the residualized SAT variable and Earnings. 
+  Note that I've added a few additional argument to the plot to put an overall
+  title and label the x and y axes.
+
+```{r}
+plot(resSAT, d$Earnings, 
+	main = "Predictor Residual Plot", 
+	xlab = "Residualized SAT (relative to Debt)",
+	ylab = "Earnings")
+```
+
+The plot above is the relation between `Earnings` and `SAT_c` while controlling
+  for (i.e., residualzing for) `Debt_c`. To actually plot the residualzed line,
+  you'll need to fit one additional model.
+
+```{r}
+resLine <- lm(d$Earnings ~ resSAT)
+```
+Then you can just use `abline()` like normal
+
+```{r, echo = FALSE}
+plot(resSAT, d$Earnings, 
+	main = "Predictor Residual Plot", 
+	xlab = "Residualized SAT (relative to Debt)",
+	ylab = "Earnings")
+abline(coef(resLine)[1], coef(resLine)[2], col = "red", lwd = 3, lty = 2)
+```
+
+```{r, eval = FALSE}
+abline(coef(resLine)[1], coef(resLine)[2], col = "red", lwd = 3, lty = 2)
+```
+
+
