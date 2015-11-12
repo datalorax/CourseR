@@ -13,6 +13,3 @@
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
-
-Solutions/*.pdf
-Solutions/*.Rmd
