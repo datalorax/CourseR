@@ -107,7 +107,7 @@ head(d)
 Use some other arbitrary index
 
 ```{r}
-d$SID <- seq(from = 1e2, 
+d$SID <- seq(from = 100, 
 	length.out = nrow(d), by = 8)
 head(d)
 ```
@@ -415,10 +415,11 @@ plot(m1)
 ## Lab
 
 * Read in the data file `ratebeer_beerjobber.txt`
+* Plot the relation between `abv` (x-axis) and `score.overall` (y-axis)
 * Find the correlation between `abv` and `score.overall`
 * Fit a simple linear regression model, with `abv` predicting `score.overall`
 * Plot the relation between `abv` (x-axis) and `score.overall` (y-axis)
-  + Overlay the regression line
+* Overlay the regression line on the scatterplot
 
 ----
 ## Lab answers
@@ -427,6 +428,14 @@ Read in the data file `ratebeer_beerjobber.txt`
 ```{r}
 d <- read.delim("./data/ratebeer_beerjobber.txt")
 head(d)
+```
+
+----
+## Lab answers
+Plot the relation between `abv` (x-axis) and `score.overall` (y-axis)
+
+```{r, fig.width = 12, fig.height = 6}
+plot(score.overall ~ abv, data = d)
 ```
 
 ----
@@ -445,11 +454,9 @@ display(m2)
 
 ----
 ## Lab answers (continued)
+Overlay the regression line
 
-Plot the relation between `abv` (x-axis) and `score.overall` (y-axis)
-  Overlay the regression line
-
-```{r, fig.height = 6}
+```{r, fig.width = 12, fig.height = 6}
 plot(score.overall ~ abv, data = d)
 abline(a = 27.97, b = 6.17, col = "blue")
 ```

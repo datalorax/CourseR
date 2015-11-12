@@ -1,5 +1,5 @@
 ---
-title       : Data Structures
+title       : Basic plotting and routine functions
 subtitle    : Week 2.2
 author      : Daniel Anderson
 job         : CourseR
@@ -9,991 +9,482 @@ hitheme     : zenburn      #
 widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
----
+--- &twocol
 
-## Today's Agenda (not exactly ordered)
+## Agenda
 
-* Scalars, Vectors, Matrices, Arrays, Data frames
-* Data types: Logical, Integer, Double (numeric), Character
-* Attributes: Names, Dimensions, Custom
-* Coercion 
-
-# Next week
-* A note on matrix algebra vs element-wise algebra
-* Classes
-* Lists
-* Data frames
-
-<br>
-Note that much of this presentation is based off Wickham (2015): 
-  http://adv-r.had.co.nz/Data-structures.html
-
---- 
-## Data structures
-
-
-|Dimensions |Homogenous    |Heterogeneous |
-|:----------|:-------------|:-------------|
-|1          |Atomic Vector |List          |
-|2          |Matrix        |Data frame    |
-|n          |Array         |              |
-<br>
-* Note: Table taken from Wickham (2015)
+# Plotting basics
+* Histograms and density plots
+* Scatter plots
+    + Controls: 
+        - titles
+        - line width, color, and type
+        - point size, color, and type
+        - x and y axis labels
+        
 
 ----
-## Properties of Vectors
+## On to Today... Data: Beer!
 
-# Type 
-* Type of elements stored in the vector
-    - use `typeof()` or `is.character()`, `is.integer()`, etc.
+![beer](./assets/img/beer.jpg)
 
-# Length
-* Number of elements in the vector
-    - use `length()`
-
-# Attributes
-* Arbitrary metadata
-    - use `attributes()` and/or `attr()`
-
----- &twocol
-## Atomic Vectors vs Lists
-
-*** =left
-
-* Atomic
-    - All elements of the same type
-
-* Lists
-    - Element types differ
-
-<br>
-
-We will wait until next class to talk about lists.
-
-*** =right
+----
+## Load data
 
 
 ```r
-atomic <- c(1, 7, 9, 23, 5)
-atomic
+d <- read.delim("./data/ratebeer_beerjobber.txt")
+head(d)
 ```
 
 ```
-## [1]  1  7  9 23  5
-```
-
-```r
-lst <- list("a", 2, TRUE)
-lst
-```
-
-```
-## [[1]]
-## [1] "a"
-## 
-## [[2]]
-## [1] 2
-## 
-## [[3]]
-## [1] TRUE
+##                                  name                 brewer
+## 1                     Abbey Monks Ale Abbey Beverage Company
+## 2                  Abbey Monks Tripel Abbey Beverage Company
+## 3                     Abbey Monks Wit Abbey Beverage Company
+## 4 Alameda Barn Owl Imperial Brown Ale    Alameda Brewing Co.
+## 5         Alameda Black Bear XX Stout    Alameda Brewing Co.
+## 6       Alameda El Torero Organic IPA    Alameda Brewing Co.
+##                     style abv ratings score.overall score.by.style
+## 1             Belgian Ale 5.2      96            50             49
+## 2            Abbey Tripel 8.0       3            NA             NA
+## 3 Belgian White (Witbier) 5.1      46            23             19
+## 4               Brown Ale 7.9      13            74             81
+## 5           Foreign Stout 6.8     172            94             76
+## 6    India Pale Ale (IPA) 7.2      56            74             43
 ```
 
 ---- &twocol
-## Data types
-
-*** =left
-* Double
-    - numeric with arbitrary precision
-* Integer
-    - numeric whole number
-* Logical
-    - true/false
-* Character
-    - string elements
-
-*** =right
-
-
-```r
-dbl <- c(1.357, 2, 4.67)
-int <- c(2L, 5L, 7L, 1L)
-log <- c(TRUE, FALSE, T, F)
-chr <- c("a", "b", "c")
-```
-Note the specific "L" placed after each number on the integer vector to coerce
-  the elements to integer, rather than double.
-
-
-```r
-int
-```
-
-```
-## [1] 2 5 7 1
-```
-
----- &twocol
-## Determining and Testing Types
+## Histograms
+Primary purpose of a histogram: See the distrbution of a variable
 
 *** =left
 
 
 ```r
-typeof(dbl)
+hist(d$abv)
 ```
 
-```
-## [1] "double"
-```
-
-```r
-is.double(dbl)
-```
-
-```
-## [1] TRUE
-```
-
-```r
-is.integer(dbl)
-```
-
-```
-## [1] FALSE
-```
-
-```r
-is.atomic(dbl)
-```
-
-```
-## [1] TRUE
-```
-
+![plot of chunk unnamed-chunk-2](assets/fig/unnamed-chunk-2-1.png) 
 *** =right
-# Be careful of more generic tests
 
 
 ```r
-is.numeric(dbl)
+hist(d$ratings)
 ```
 
-```
-## [1] TRUE
-```
-
-```r
-is.numeric(int)
-```
-
-```
-## [1] TRUE
-```
+![plot of chunk unnamed-chunk-3](assets/fig/unnamed-chunk-3-1.png) 
 
 ----
-## Check in
-* What data types are the following vectors?
+## Look at the documentation 
 
 
 ```r
-w <- c(TRUE, FALSE, FALSE, TRUE)
-x <- c(3, 5, 8, 9, 2.5)
-y <- c("green", "red", "blue")
-z <- c(5L, 7L, 2L, 18L)
+?hist
 ```
-
-----
-## Coercion
-
-# Take a guess: What will the following vectors produce?
-
-
-```r
-w <- c("1", 2, 3)
-x <- c(1, TRUE, FALSE)
-y <- c(3.25, 5L, 7L)
-z <- c("a", "b", 7, TRUE)
-```
+![hist](./assets/img/histDocumentation.png)
 
 ---- &twocol
+## Change the number of break points
 
 *** =left
 
 
 ```r
-c("1", 2, 3); is.character(w)
+hist(d$ratings, breaks = 35)
 ```
 
-```
-## [1] "1" "2" "3"
-```
-
-```
-## [1] TRUE
-```
-
-```r
-c(1, TRUE, FALSE); is.double(x)
-```
-
-```
-## [1] 1 1 0
-```
-
-```
-## [1] TRUE
-```
+![plot of chunk unnamed-chunk-5](assets/fig/unnamed-chunk-5-1.png) 
 
 *** =right
 
 
 ```r
-c(3.25, 5L, 7L); is.double(y)
+hist(d$ratings, breaks = 100)
 ```
 
-```
-## [1] 3.25 5.00 7.00
-```
-
-```
-## [1] TRUE
-```
-
-```r
-c("a", "b", 7, TRUE); is.character(z)
-```
-
-```
-## [1] "a"    "b"    "7"    "TRUE"
-```
-
-```
-## [1] TRUE
-```
-
-----
-## Coercion rules
-Remember: Atomic vectors must contain data of the same type.
-
-* Most flexible: Character
-* Least flexible: Logical
-
-When logical vectors are coerced to be numeric, `TRUE` are coded 1, and `FALSE`
-  are coded 0.
-
-Explicitely coerce via `as.___`.
+![plot of chunk unnamed-chunk-6](assets/fig/unnamed-chunk-6-1.png) 
 
 ---- &twocol
-## Explicit coercion
+## Smooth the distribution
+
+*** =left
+# Standard Histogram
+
+```r
+hist(d$abv)
+```
+
+![plot of chunk unnamed-chunk-7](assets/fig/unnamed-chunk-7-1.png) 
+
+*** =right
+# Density Plots
+
+```r
+dens <- density(d$abv); plot(dens)
+```
+
+![plot of chunk unnamed-chunk-8](assets/fig/unnamed-chunk-8-1.png) 
+
+---- &twocol
+## A momentary detour: What is a density plot?
+
+*** =left
+![densplot](./assets/img/densPlot.pdf)
+
+*** =right
+
+* A density plot is a probability density function
+* The total area under the curve must sum (integrate) to 1. This represents the 
+  total probability.
+* Values on the y-axis represent the density of observations for particular x
+  values. These numbers are largely uninterpretable by themselves. They are
+  determined and constrained based on the total area summing to 1.
+* To determine the probability that any randomly selected observation will fall 
+  within a given x range, compute the area under the curve between those points
+  (i.e., integrate).
+
+---- &twocol
+## Compute probability between two points
 
 *** =left
 
-# Override default coercions
-
-
-```r
-c(FALSE,1,TRUE,0)
-```
-
-```
-## [1] 0 1 1 0
-```
+![plot of chunk unnamed-chunk-9](assets/fig/unnamed-chunk-9-1.png) 
 
 ```r
-as.logical(c(FALSE,1,TRUE,0))
-```
-
-```
-## [1] FALSE  TRUE  TRUE FALSE
-```
-
-```r
-c("1", 2, 3)
-```
-
-```
-## [1] "1" "2" "3"
-```
-
-```r
-as.double(c("1", 2, 3))
-```
-
-```
-## [1] 1 2 3
+dens <- density(d$abv)
 ```
 *** =right
 
-# Convert to specific type
-
 
 ```r
-as.character(1:5)
+library(sfsmisc)
+integrate.xy(dens$x, dens$y)
 ```
 
 ```
-## [1] "1" "2" "3" "4" "5"
-```
-<br>
-# Careful with specific coercsions
-
-
-```r
-c("a", "b", 7, "TRUE")
-```
-
-```
-## [1] "a"    "b"    "7"    "TRUE"
+## [1] 1.000879
 ```
 
 ```r
-as.integer(c("a", "b", 7, "TRUE"))
+abv57 <- cbind(dens$x, dens$y)
+head(abv57, n = 2)
 ```
 
 ```
-## Warning: NAs introduced by coercion
-```
-
-```
-## [1] NA NA  7 NA
-```
-
-----
-## Check in
-* Predict how each vector will be coerced.
-
-
-```r
-c(1, FALSE)
-c("a", TRUE)
-c("b", 1L)
-c(1L, 2)
-```
-
-----
-
-```r
-c(1, FALSE)
-```
-
-```
-## [1] 1 0
+##           [,1]         [,2]
+## [1,] -1.276634 0.0007432923
+## [2,] -1.246588 0.0009135057
 ```
 
 ```r
-c("a", TRUE)
+abv57 <- subset(abv57, abv57[ ,1] >= 5 & 
+                       abv57[ ,1] <= 7)
+integrate.xy(abv57[ ,1], abv57[ ,2])
 ```
 
 ```
-## [1] "a"    "TRUE"
+## [1] 0.4565267
 ```
+
+---- &twocol
+## Density binwidth
+Change the binwidth to control the smoothing fact. The smaller the binwidth,
+  the closer the function will resemble the observed data. The larger the 
+  binwidth, the closer the function will resemble a standard normal.
+
+*** =left
+
 
 ```r
-c("b", 1L)
+dens1 <- density(d$abv, bw = .001)
+plot(dens1)
 ```
 
-```
-## [1] "b" "1"
-```
+![plot of chunk unnamed-chunk-12](assets/fig/unnamed-chunk-12-1.png) 
+
+*** =right
+
 
 ```r
-c(1L, 2)
+dens2 <- density(d$abv, bw = 100)
+plot(dens2)
 ```
 
-```
-## [1] 1 2
-```
+![plot of chunk unnamed-chunk-13](assets/fig/unnamed-chunk-13-1.png) 
 
 ----
 ## Your turn
 
-Create and coerce the following vectors to the specified type
-
-
-```r
-c(0, 0, 1, TRUE) # Logical
-c(1, 5, 3.25, FALSE) # Integer
-c(TRUE, FALSE, FALSE, TRUE) # Double
-c("Male", "Female", 0, 1) # Character
-```
-
-
----- .segue
-# Attributes
-
-----
-## Important attributes
-* `names()`, `colnames()`, `rownames()`
-* Dimensions (used to convert vectors to matrices and arrays)
-* Class: points R to correct functions to execute (e.g., `print()`, `plot()`, 
-  etc.)
-
-What is an attribute? Metadata for an object.
-
----- &twocol
-# `names()`
-
-*** =left
-
-* Names can be assigned to an object in a couple different ways.
-
-
-```r
-y <- c("A" = 1, "B" = 2, "C" = 3)
-y
-```
-
-```
-## A B C 
-## 1 2 3
-```
-
-```r
-names(y)
-```
-
-```
-## [1] "A" "B" "C"
-```
-
-*** =right
-
-
-```r
-z <- 1:3
-z
-```
-
-```
-## [1] 1 2 3
-```
-
-```r
-names(z) <- c("A", "B", "C")
-z
-```
-
-```
-## A B C 
-## 1 2 3
-```
-
-```r
-names(z)
-```
-
-```
-## [1] "A" "B" "C"
-```
-
-----
-## Factors
-* Used to store categorical data
-* Can only store predefined values
-* String variables default to factors when reading in data 
-
-
-```r
-colors <- factor(c("black", "green", "blue", "blue", "black"))
-attributes(colors)
-```
-
-```
-## $levels
-## [1] "black" "blue"  "green"
-## 
-## $class
-## [1] "factor"
-```
-
-```r
-str(colors)
-```
-
-```
-##  Factor w/ 3 levels "black","blue",..: 1 3 2 2 1
-```
-
-----
-## Adding elements to factors
-
-
-```r
-colors[6] <- "blue"
-colors
-```
-
-```
-## [1] black green blue  blue  black blue 
-## Levels: black blue green
-```
-
-```r
-colors[7] <- "purple"
-```
-
-```
-## Warning in `[<-.factor`(`*tmp*`, 7, value = "purple"): invalid factor
-## level, NA generated
-```
-
-```r
-colors
-```
-
-```
-## [1] black green blue  blue  black blue  <NA> 
-## Levels: black blue green
-```
-
----- &twocol
-## Benefits of factors
-*** =left
-* No need for multiple variables to define a categorical variable: internal 
-  dummy-coding
-
-
-```r
-contrasts(colors)
-```
-
-```
-##       blue green
-## black    0     0
-## blue     1     0
-## green    0     1
-```
-*** =right
-
-* Change the reference group by defining a new contrast matrix. For example, we 
-  can set green to the reference group with the following code.
-
-
-```r
-contrasts(colors) <- matrix(
-	c(1, 0,
-	  0, 1,
-	  0, 0),
-byrow = TRUE, ncol = 2)
-```
-
----- &twocol
-# Contrast coding (continued)
-
-Alternatively, use some of the built in functions for defining new contrasts 
-  matrices 
-
-*** =left
-
-
-```r
-contr.helmert(3)
-```
-
-```
-##   [,1] [,2]
-## 1   -1   -1
-## 2    1   -1
-## 3    0    2
-```
-
-```r
-contr.sum(3)
-```
-
-```
-##   [,1] [,2]
-## 1    1    0
-## 2    0    1
-## 3   -1   -1
-```
-<br>
-(see: http://www.ats.ucla.edu/stat/r/library/contrast_coding.htm)
-*** =right
-
-
-```r
-contrasts(colors) <- contr.helmert(3)
-contrasts(colors)
-```
-
-```
-##       [,1] [,2]
-## black   -1   -1
-## blue     1   -1
-## green    0    2
-```
-
-```r
-contrasts(colors) <- contr.sum(3)
-contrasts(colors)
-```
-
-```
-##       [,1] [,2]
-## black    1    0
-## blue     0    1
-## green   -1   -1
-```
-
-----
-## Factors and attributes
-
-* Factors are atomic integer vectors with a "levels" attribute.
-
-
-```r
-is.atomic(colors)
-```
-
-```
-## [1] TRUE
-```
-
-```r
-typeof(colors)
-```
-
-```
-## [1] "integer"
-```
-
-Note: Be careful with `is.vector()`. It only returns `TRUE` if the vector has no
-  attributes outside of names
-
-
-```r
-is.vector(colors)
-```
-
-```
-## [1] FALSE
-```
-
-----
-## Your turn
-
-* Create a factor for free or reduced lunch status that has three levels: free, 
-  reduced, pay. 
-
-* Specify a new contrast matrix using either a custom matrix or a built-in 
-  function
-
-----
-
-```r
-frl <- factor(rep(c("free", "reduced", "pay"), 5))
-frl
-```
-
-```
-##  [1] free    reduced pay     free    reduced pay     free    reduced
-##  [9] pay     free    reduced pay     free    reduced pay    
-## Levels: free pay reduced
-```
-
-```r
-effect_code <- matrix(c(-1, -1,
-						 1, 0,
-						 0, 1),
-					  ncol = 2, byrow = TRUE)
-contrasts(frl) <- effect_code
-contrasts(frl)
-```
-
-```
-##         [,1] [,2]
-## free      -1   -1
-## pay        1    0
-## reduced    0    1
-```
-
-
----- &twocol
-## Dimension attribute
-
-*** =left
-
-The way we have created matrices in the past in through the `matrix` function
-
-
-```r
-m <- matrix(1:12, ncol = 3)
-m
-```
-
-```
-##      [,1] [,2] [,3]
-## [1,]    1    5    9
-## [2,]    2    6   10
-## [3,]    3    7   11
-## [4,]    4    8   12
-```
-
-*** =right
-
-The object `m` is really just an atomic vector with a dimension attribute
-
-
-```r
-attributes(m)
-```
-
-```
-## $dim
-## [1] 4 3
-```
-
-```r
-is.atomic(m)
-```
-
-```
-## [1] TRUE
-```
-
----- &twocol
-## Alternative construction of the same matrix
-
-*** =left
-# Construct matrix
-
-
-```r
-m <- 1:12
-
-dim(m) <- c(4, 3)
-m
-```
-
-```
-##      [,1] [,2] [,3]
-## [1,]    1    5    9
-## [2,]    2    6   10
-## [3,]    3    7   11
-## [4,]    4    8   12
-```
-*** =right
-
-# Add row and column names
-
-
-```r
-rownames(m) <- c("r1", "r2", "r3", "r4")
-m
-```
-
-```
-##    [,1] [,2] [,3]
-## r1    1    5    9
-## r2    2    6   10
-## r3    3    7   11
-## r4    4    8   12
-```
-
-```r
-colnames(m) <- c("c1", "c2", "c3")
-m
-```
-
-```
-##    c1 c2 c3
-## r1  1  5  9
-## r2  2  6 10
-## r3  3  7 11
-## r4  4  8 12
-```
-
-----
-## More on the names attributes
-For atomic vectors, and specifically matrices, `rownames()` and `colnames()` 
-  must be used, rather than `names()`. The `names()` attribute is for individual
-  elements.
-
-
-```r
-names(m)
-```
-
-```
-## NULL
-```
-
-```r
-names(m) <- c("a", "b", "c")
-attr(m, "names")
-```
-
-```
-##  [1] "a" "b" "c" NA  NA  NA  NA  NA  NA  NA  NA  NA
-```
-
----- &twocol
-## Names attributes (continued)
-
-*** =left
-
-After row, column, and element names are assigned, they can be used in 
-  subsetting
-
-
-```r
-m["r1", ]
-```
-
-```
-## c1 c2 c3 
-##  1  5  9
-```
-
-```r
-m["r3","c2"] 
-```
-
-```
-## [1] 7
-```
-
-```r
-m["b"] 
-```
-
-```
-## b 
-## 2
-```
-
-*** =right
-
-You can also specify the row and column names via `dimnames()` and a list of 
-  vectors (ordered by row names, then column names, then the 3rd dimension for 
-  arrays)
-
-
-```r
-dimnames(m) <- list(
-	c("row1", "row2", "row3", "row4"), 
-	c("col1", "col2", "col3")
-					)
-m
-```
-
-```
-##      col1 col2 col3
-## row1    1    5    9
-## row2    2    6   10
-## row3    3    7   11
-## row4    4    8   12
-## attr(,"names")
-##  [1] "a" "b" "c" NA  NA  NA  NA  NA  NA  NA  NA  NA
-```
+* Load the beer dataset
+* Produce a histogram
+* Produce a density plot
+* Change the number of breaks and the binwidth of each
+* Try adding the additional argument `probability = TRUE` to a histogram. What
+  do you notice?
 
 ---- 
-## Adding custom attributes
-
-Occassionally there are instances when it makes sense to add a custom attribute 
-  of some sort. Here are a few examples
+## Scatter plots and controlling lines, colors, axes, etc.
 
 
-```r
-comment(m) <- "Here are some  important things to remember: x, y, z"
-attr(m, "comment")
-```
+![scatter](./assets/img/scatter.pdf)
 
-```
-## [1] "Here are some  important things to remember: x, y, z"
-```
-
-```r
-attr(m, "new_attribute") <- "Just a different comment, but this one shows when m is printed"
-attr(m, "new_attribute")
-```
-
-```
-## [1] "Just a different comment, but this one shows when m is printed"
-```
-
-Remember that you can see all the attributes of an object via `attributes(x)`
+----
+## The `plot()` function
+Generic x-y plotting. Multiple types of plots are possible. From the 
+  documentation:
+![plotTypesDocumentation](./assets/img/plotTypesDocumentation.png)
 
 ---- &twocol
-## Final notes on attributes
+## Plot types
 
 *** =left
 
-When you modify a vector, the attributes are generally lost.
-
-
-```r
-attributes(sum(m))
-```
-
-```
-## NULL
-```
-
-But in some cases you may want to strip the attributes from an object. You can 
-  do this by setting the attributes to `NULL`.
+![plot of chunk unnamed-chunk-15](assets/fig/unnamed-chunk-15-1.png) 
 
 *** =right
 
-To remove the dimension names
+![plot of chunk unnamed-chunk-16](assets/fig/unnamed-chunk-16-1.png) 
+
+---- &twocol
+## Scatter plots
+
+Two specifications
 
 
 ```r
-attr(m, "dimnames") <- NULL
-m
+plot(outcome ~ predictor, data = d) # Just like the lm function
+plot(x-variable, y-variable)
 ```
 
+# Examples
+
+*** =left
+
+
+```r
+plot(score.overall ~ abv, data = d)
 ```
-##      [,1] [,2] [,3]
-## [1,]    1    5    9
-## [2,]    2    6   10
-## [3,]    3    7   11
-## [4,]    4    8   12
-## attr(,"names")
-##  [1] "a" "b" "c" NA  NA  NA  NA  NA  NA  NA  NA  NA 
-## attr(,"new_attribute")
-## [1] "Just a different comment, but this one shows when m is printed"
+
+![plot of chunk unnamed-chunk-18](assets/fig/unnamed-chunk-18-1.png) 
+
+*** =right
+
+
+```r
+plot(d$abv, d$score.overall)
 ```
+
+![plot of chunk unnamed-chunk-19](assets/fig/unnamed-chunk-19-1.png) 
 
 ----
+## Additional arguments
 
-To remove all the attributes, and return to a basic vector
+
+|Argument |Description                                                                      |
+|:--------|:--------------------------------------------------------------------------------|
+|main     |Main title of the Plot                                                           |
+|sub      |Subtitle, added at the bottom of the plot                                        |
+|xlab     |x-axis label                                                                     |
+|ylab     |y-axis lable                                                                     |
+|col      |Color (can be multiple things, depending on call)                                |
+|pch      |Point type                                                                       |
+|xlim     |Limits of x-axis (vector of length 2)                                            |
+|ylim     |Limits of y-axis (vector of length 2)                                            |
+|bg       |Background color (can be multiple things, depending on call)                     |
+|cex      |Size of points                                                                   |
+|cex.SPEC |Specific call to axis/lab/main/sub to change size of those SPEC (specifications) |
+|col.SPEC |Color specific calls                                                             |
+
+---- &twocol
+## Examples: Beer style and overall ratings
+
+*** =left
+
+# Standard Plot
 
 
 ```r
-attributes(m) <- NULL
-m
+plot(d$score.by.style, d$score.overall)
 ```
 
+![plot of chunk unnamed-chunk-21](assets/fig/unnamed-chunk-21-1.png) 
+
+*** =right
+
+# Change axes labels, provide title
+
+
+```r
+plot(d$score.by.style, d$score.overall,
+  main = "Relation Between Style Rating and Overall Rating",
+  xlab = "Beer Style Rating",
+  ylab = "Overall Beer Rating")
 ```
-##  [1]  1  2  3  4  5  6  7  8  9 10 11 12
+
+![plot of chunk unnamed-chunk-22](assets/fig/unnamed-chunk-22-1.png) 
+
+---- &twocol
+## Change point type, color, and size
+
+*** =left
+
+
+```r
+plot(d$score.by.style, d$score.overall,
+  main = "Relation Between Style 
+    Rating and Overall Rating",
+  xlab = "Beer Style Rating",
+  ylab = "Overall Beer Rating",
+  pch = 3,
+  cex = 2,
+  col = "purple")
 ```
+
+*** =right
+
+![plot of chunk unnamed-chunk-24](assets/fig/unnamed-chunk-24-1.png) 
+
+---- 
+## Colors in R
+
+<div align = "left">
+<img src = assets/img/rColorExample.pdf width = 800 height = 800>
+</div>
+
+---- 
+## Point Types
+
+
+```r
+plot(1:20, 1:20, pch = 1:20, cex = 3)
+```
+
+![plot of chunk unnamed-chunk-25](assets/fig/unnamed-chunk-25-1.png) 
+
+---- &twocol
+## Plotting the regression line
+
+*** =left
+
+
+```r
+mod <- 
+  lm(score.overall ~ score.by.style, 
+    data = d)
+
+plot(d$score.by.style, d$score.overall,
+  main = "Relation Between Style 
+    Rating and Overall Rating",
+  xlab = "Beer Style Rating",
+  ylab = "Overall Beer Rating",
+  pch = 3,
+  cex = 2,
+  col = "purple")
+
+abline(coef(mod)[1], coef(mod)[2], 
+  lty = 3, 
+  lwd = 5, 
+  col = "aquamarine3")
+```
+
+*** =right
+
+![plot of chunk unnamed-chunk-27](assets/fig/unnamed-chunk-27-1.png) 
+
+
+----
+## Line types
+
+
+```r
+plot(1:6, 1:6, type = "n")
+for(i in 1:6) abline(i, 0, lty = i, lwd = 3)
+```
+
+![plot of chunk unnamed-chunk-28](assets/fig/unnamed-chunk-28-1.png) 
+
+----
+## Your turn
+Produce the following plot (the colors can be different, but it should not be 
+  black)
+
+![plot of chunk unnamed-chunk-29](assets/fig/unnamed-chunk-29-1.png) 
+
+----
+## Last example: A (sort of) advanced example
+
+Overlay a density plot on a histogram, maintain frequency y-axis
+
+![plot of chunk unnamed-chunk-30](assets/fig/unnamed-chunk-30-1.png) 
+
+---- &twocol
+## Multi-step process
+
+*** =left
+
+First, plot the histogram, suppressing all axes, labels, and plot border
+
+
+```r
+hist(d$abv, 
+  probability = TRUE, 
+  axes = FALSE,
+  main = "", 
+  xlab = "", 
+  ylab = "")
+```
+
+![plot of chunk unnamed-chunk-31](assets/fig/unnamed-chunk-31-1.png) 
+
+*** =right
+
+Next, use `lines` to add the density line
+
+
+```r
+lines(density(d$abv), 
+  col = "darkgray", 
+  lty = 3, 
+  lwd = 3)
+```
+<br>
+<br>
+
+![plot of chunk unnamed-chunk-33](assets/fig/unnamed-chunk-33-1.png) 
+
+---- &twocol
+## (sort of) Advanced example, continued
+
+*** =left
+
+Call a new plot to overaly on the current plot
+
+
+```r
+par(new = TRUE)
+```
+
+Plot the histogram again, labeling the axes how you'd like (note, this process 
+  is neccessary to keep the frequency y-axis)
+
+
+```r
+hist(d$abv, 
+  main = "Distribution of Beer Alcohol 
+            by Volume",
+  xlab = "Alcohol by Volume"
+  )
+```
+
+*** =right
+
+![plot of chunk unnamed-chunk-36](assets/fig/unnamed-chunk-36-1.png) 
 
 ----
 ## Lab
-$$
-\begin{equation*}
-  \textbf{m} = \qquad 
-  \begin{bmatrix}
-    11 & 26\\
-    33 & 11 \\
-    27 &  5 \\
-    91 & 18 \\
-  \end{bmatrix}
-\end{equation*}
-$$
+Produce the following plots. Again, the colors, line types, etc., can be 
+  different, but they should not be the default (where the defaults have been 
+  changed).
 
-* Create the above matrix using two methods, save them into objects m1 and m2
-* Give the dimension names of each matrix using a different method for each
-* Give each matrix one additional (and different) attribute
-* Coerce the vector 
-$ 
-  \begin{bmatrix}
-    T & F\\
-  \end{bmatrix}
-$
-to type double or integer and add it to the third row of the matrix.
-
-
-
+![plot of chunk unnamed-chunk-37](assets/fig/unnamed-chunk-37-1.png) 

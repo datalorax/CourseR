@@ -100,18 +100,21 @@ Upon completion of this course, the successful student will:
        fitted model through visualizations.
 
 ## Course Schedule
+#### Before the first class
+  * Decide on a text editor or IDE for R
+  * Clone course github repository (see git tutorials)
+
 #### Week 1.1: Getting Started Introduction and overview of the R environment  
 * Objectives
-    + Decide on a text editor or IDE for R
-    + Clone course github repository
     + Understand vectors, matrices, and subsetting each
 * Topics
     + Objects in R
-    + Getting help
     + R packages
+    + Getting help
     + Vectors and matrices
-    + Subsetting vectors and matrices
     + The grammar of syntax
+    + Subsetting vectors and matrices
+    
 * Lab
     + Subsetting
 * Readings
@@ -121,11 +124,14 @@ Upon completion of this course, the successful student will:
 
 #### Week 1.2: *R Markdown* and reading/writing data into/from R
 * Topics
-    + Directory management
-    + Reading data into R    
     + Introduction to *R Markdown*
+    + Directory management
+    + Reading data into R
+    + Subsetting data frames
+    + Writing data    
+    
 * Lab
-    + Reading data into R and subsetting
+    + R Markdown, and reading data
 * Readings
     + R Markdown
         - http://RMarkdown.rstudio.com
@@ -135,8 +141,37 @@ Upon completion of this course, the successful student will:
 
 * Homework
     + Creating an *R Markdown* document
+
+#### Week 2.1: A complete, applied example
+* Load and process data
+* Preliminary plots
+* Analyze data
+    + `cor()`
+    + `lm()`
+* Plot the model results
+
+#### Week 2.2: Basic plotting & routine function
+* Histograms and density plots
+* Scatter plots
+    + Controls: 
+        - line width, color, and type
+        - point size, color, and type
+        - x and y axis labels
+        - titles and subtitles
+* Scatter plot matrices
+* routine functions
+    + `rep()`, `seq()`, `:`
+    + `table()`
+    + `c()`, `cbind()`, `rbind()`
+    + `ifelse()`
+    + `rnorm()`, `rbinom()`, `dnorm()`, etc.
+    + `length()`, `nrow()`, `ncol()`
+    + `str()`, `head()`, `tail()`
+    + `summary()`
+    + `with()`, `attach()`
+    + etc.
     
-#### Week 2: Data structures and data types (part 1)
+#### Week 3.1: Data structures and data types 
 Homework 1 Due, Homework 2 Assigned
 
 * Topics
@@ -148,28 +183,32 @@ Homework 1 Due, Homework 2 Assigned
 * Readings
     + Kabacoff: Chapter 2
 
-#### Week 3: Data structures (part 2) & routine functions
+#### Week 3.2: Data structures and classes
 Homework 2 Due, Homework 3 Assigned
 
 * Topics
     + Lists
     + Data frames as a special type of list
     + Recycling
-    + routine functions
-        - `rep()`, `seq()`, `:`
-        - `table()`
-        - `c()`, `cbind()`, `rbind()`
-        - `ifelse()`
-        - `rnorm()`, `rbinom()`, `dnorm()`, etc.
-        - `length()`, `nrow()`, `ncol()`
-        - `str()`, `head()`, `tail()`
-        - `summary()`
-        - `with()`, `attach()`
-        - etc.
 * Lab
     + Working with lists
 * Readings
     + Wickham (http://adv-r.had.co.nz/Data-structures.html)
+
+#### Week 4.1: Transforming & manipulating data
+
+* Topics
+    + Recoding variables
+    + String functions
+        - `grep()`, `substr()`, etc
+    + Merging 
+        - Merging as a tool for producing new variables
+    + Aggregation
+    + Reshaping data
+        - Long to wide and wide to long
+* Lab
+    + Data restrucuring
+
 
 #### Week 4: Loops 
 Homework 3 Due, Homework 4 Assigned
@@ -194,14 +233,11 @@ Homework 4 Due, Homework 5 Assigned
 * Readings
     + Wickham (http://adv-r.had.co.nz/Functions.html)
     + Peng: Functions
-    + Parker: Writing R Packages (http://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/)
 
-#### Week 6: Basic analysis
+#### Week 6: More on linear models
 Homework 5 Due, Homework 6 Assigned
 
 * Topics
-    + Correlation
-        - plotting relations (brief)
     + Linear regression and the `lm()` function
         - adding the regression line to a plot
         - evaluating assumptions with plots
@@ -212,40 +248,16 @@ Homework 5 Due, Homework 6 Assigned
 * Reading
     + Gelman & Hill: Chapter 3
 
-#### Week 7: Transforming & manipulating data
-Homework 6 Due, Homework 7 Assigned
-
-* Topics
-    + Recoding variables
-    + String functions
-        - `grep()`, `substr()`, etc
-    + Merging 
-        - Merging as a tool for producing new variables
-    + Aggregation
-    + Reshaping data
-        - Long to wide and wide to long
-* Lab
-    + Data restrucuring
 
 #### Week 8: Plotting with Base Graphics
 Homework 7 Due, Homework 8 Assigned
 
 * Topics
-    + Scatter plots
-    + Controls: 
-        - line width, color, and type
-        - point size, color, and type
-        - x and y axis labels
-        - titles and subtitles
-    + Scatter plot matrices
-    + Boxplots and extensions (violin plots and bean plots via alternate 
-      packages)
-    + Histograms, density plots
+    + Graphical Parameters: `par()`
+        - `mfrow`, `mfcol`, `mar`, `oma`
     + Low-level functions
        - points, lines, text, axis
     + saving plots
-    + Graphical Parameters: `par()`
-        - `mfrow`, `mfcol`, `mar`, `oma`
 * Lab
     + Overlaying plots
 * Readings 
@@ -263,6 +275,10 @@ Homework 8 Due, Homework 9 Assigned
     + Cluster-level visualizations
 * Readings
     + Wickham (ggplot book): Chapter 2 & 3 (especially 3)
+
+
+#### Week 10: Writing R packages
+* Parker: Writing R Packages (http://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/)
 
 #### Week 10: Basic multilevel models and plotting
 Homework 9 Due

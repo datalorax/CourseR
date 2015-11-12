@@ -205,7 +205,7 @@ Use some other arbitrary index
 
 
 ```r
-d$SID <- seq(from = 1e2, 
+d$SID <- seq(from = 100, 
 	length.out = nrow(d), by = 8)
 head(d)
 ```
@@ -672,10 +672,11 @@ plot(m1)
 ## Lab
 
 * Read in the data file `ratebeer_beerjobber.txt`
+* Plot the relation between `abv` (x-axis) and `score.overall` (y-axis)
 * Find the correlation between `abv` and `score.overall`
 * Fit a simple linear regression model, with `abv` predicting `score.overall`
 * Plot the relation between `abv` (x-axis) and `score.overall` (y-axis)
-  + Overlay the regression line
+* Overlay the regression line on the scatterplot
 
 ----
 ## Lab answers
@@ -703,6 +704,17 @@ head(d)
 ## 5           Foreign Stout 6.8     172            94             76
 ## 6    India Pale Ale (IPA) 7.2      56            74             43
 ```
+
+----
+## Lab answers
+Plot the relation between `abv` (x-axis) and `score.overall` (y-axis)
+
+
+```r
+plot(score.overall ~ abv, data = d)
+```
+
+![plot of chunk unnamed-chunk-40](assets/fig/unnamed-chunk-40-1.png) 
 
 ----
 ## Lab answers (continued)
@@ -736,9 +748,7 @@ display(m2)
 
 ----
 ## Lab answers (continued)
-
-Plot the relation between `abv` (x-axis) and `score.overall` (y-axis)
-  Overlay the regression line
+Overlay the regression line
 
 
 ```r
@@ -746,4 +756,4 @@ plot(score.overall ~ abv, data = d)
 abline(a = 27.97, b = 6.17, col = "blue")
 ```
 
-![plot of chunk unnamed-chunk-42](assets/fig/unnamed-chunk-42-1.png) 
+![plot of chunk unnamed-chunk-43](assets/fig/unnamed-chunk-43-1.png) 

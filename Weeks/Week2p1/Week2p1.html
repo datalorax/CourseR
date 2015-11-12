@@ -271,7 +271,7 @@ head(d)
 
 <p>Use some other arbitrary index</p>
 
-<pre><code class="r">d$SID &lt;- seq(from = 1e2, 
+<pre><code class="r">d$SID &lt;- seq(from = 100, 
     length.out = nrow(d), by = 8)
 head(d)
 </code></pre>
@@ -808,13 +808,11 @@ plot(m1)
   <article data-timings="">
     <ul>
 <li>Read in the data file <code>ratebeer_beerjobber.txt</code></li>
+<li>Plot the relation between <code>abv</code> (x-axis) and <code>score.overall</code> (y-axis)</li>
 <li>Find the correlation between <code>abv</code> and <code>score.overall</code></li>
 <li>Fit a simple linear regression model, with <code>abv</code> predicting <code>score.overall</code></li>
-<li>Plot the relation between <code>abv</code> (x-axis) and <code>score.overall</code> (y-axis)
-
-<ul>
-<li>Overlay the regression line</li>
-</ul></li>
+<li>Plot the relation between <code>abv</code> (x-axis) and <code>score.overall</code> (y-axis)</li>
+<li>Overlay the regression line on the scatterplot</li>
 </ul>
 
   </article>
@@ -854,6 +852,22 @@ head(d)
 
 <slide class="" id="slide-30" style="background:;">
   <hgroup>
+    <h2>Lab answers</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Plot the relation between <code>abv</code> (x-axis) and <code>score.overall</code> (y-axis)</p>
+
+<pre><code class="r">plot(score.overall ~ abv, data = d)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-40-1.png" alt="plot of chunk unnamed-chunk-40"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  <hgroup>
     <h2>Lab answers (continued)</h2>
   </hgroup>
   <article data-timings="">
@@ -884,19 +898,18 @@ display(m2)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-31" style="background:;">
+<slide class="" id="slide-32" style="background:;">
   <hgroup>
     <h2>Lab answers (continued)</h2>
   </hgroup>
   <article data-timings="">
-    <p>Plot the relation between <code>abv</code> (x-axis) and <code>score.overall</code> (y-axis)
-  Overlay the regression line</p>
+    <p>Overlay the regression line</p>
 
 <pre><code class="r">plot(score.overall ~ abv, data = d)
 abline(a = 27.97, b = 6.17, col = &quot;blue&quot;)
 </code></pre>
 
-<p><img src="assets/fig/unnamed-chunk-42-1.png" alt="plot of chunk unnamed-chunk-42"> </p>
+<p><img src="assets/fig/unnamed-chunk-43-1.png" alt="plot of chunk unnamed-chunk-43"> </p>
 
   </article>
   <!-- Presenter Notes -->
@@ -1082,7 +1095,7 @@ abline(a = 27.97, b = 6.17, col = &quot;blue&quot;)
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=30 title='Lab answers (continued)'>
+        data-slide=30 title='Lab answers'>
          30
       </a>
     </li>
@@ -1090,6 +1103,12 @@ abline(a = 27.97, b = 6.17, col = &quot;blue&quot;)
       <a href="#" target="_self" rel='tooltip' 
         data-slide=31 title='Lab answers (continued)'>
          31
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='Lab answers (continued)'>
+         32
       </a>
     </li>
   </ul>

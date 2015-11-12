@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Data Structures</title>
+  <title>Basic plotting and routine functions</title>
   <meta charset="utf-8">
-  <meta name="description" content="Data Structures">
+  <meta name="description" content="Basic plotting and routine functions">
   <meta name="author" content="Daniel Anderson">
   <meta name="generator" content="slidify" />
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -32,7 +32,7 @@
     <!-- LOGO SLIDE -->
         <slide class="title-slide segue nobackground">
   <hgroup class="auto-fadein">
-    <h1>Data Structures</h1>
+    <h1>Basic plotting and routine functions</h1>
     <h2>Week 2.2</h2>
     <p>Daniel Anderson<br/>CourseR</p>
   </hgroup>
@@ -43,67 +43,43 @@
     <!-- SLIDES -->
     <slide class="" id="slide-1" style="background:;">
   <hgroup>
-    <h2>Today&#39;s Agenda (not exactly ordered)</h2>
+    <h2>Agenda</h2>
   </hgroup>
   <article data-timings="">
-    <ul>
-<li>Scalars, Vectors, Matrices, Arrays, Data frames</li>
-<li>Data types: Logical, Integer, Double (numeric), Character</li>
-<li>Attributes: Names, Dimensions, Custom</li>
-<li>Coercion </li>
-</ul>
-
-<h1>Next week</h1>
+    <h1>Plotting basics</h1>
 
 <ul>
-<li>A note on matrix algebra vs element-wise algebra</li>
-<li>Classes</li>
-<li>Lists</li>
-<li>Data frames</li>
+<li>Histograms and density plots</li>
+<li>Scatter plots
+
+<ul>
+<li>Controls: 
+
+<ul>
+<li>titles</li>
+<li>line width, color, and type</li>
+<li>point size, color, and type</li>
+<li>x and y axis labels</li>
+</ul></li>
+</ul></li>
 </ul>
 
-<p><br>
-Note that much of this presentation is based off Wickham (2015): 
-  <a href="http://adv-r.had.co.nz/Data-structures.html">http://adv-r.had.co.nz/Data-structures.html</a></p>
-
+<div style='float:left;width:48%;'>
+  
+</div>
+<div style='float:right;width:48%;'>
+  
+</div>
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="" id="slide-2" style="background:;">
   <hgroup>
-    <h2>Data structures</h2>
+    <h2>On to Today... Data: Beer!</h2>
   </hgroup>
   <article data-timings="">
-    <table><thead>
-<tr>
-<th align="left">Dimensions</th>
-<th align="left">Homogenous</th>
-<th align="left">Heterogeneous</th>
-</tr>
-</thead><tbody>
-<tr>
-<td align="left">1</td>
-<td align="left">Atomic Vector</td>
-<td align="left">List</td>
-</tr>
-<tr>
-<td align="left">2</td>
-<td align="left">Matrix</td>
-<td align="left">Data frame</td>
-</tr>
-<tr>
-<td align="left">n</td>
-<td align="left">Array</td>
-<td align="left"></td>
-</tr>
-</tbody></table>
-
-<p><br></p>
-
-<ul>
-<li>Note: Table taken from Wickham (2015)</li>
-</ul>
+    <p><img src="./assets/img/beer.jpg" alt="beer"></p>
 
   </article>
   <!-- Presenter Notes -->
@@ -111,38 +87,28 @@ Note that much of this presentation is based off Wickham (2015):
 
 <slide class="" id="slide-3" style="background:;">
   <hgroup>
-    <h2>Properties of Vectors</h2>
+    <h2>Load data</h2>
   </hgroup>
   <article data-timings="">
-    <h1>Type</h1>
+    <pre><code class="r">d &lt;- read.delim(&quot;./data/ratebeer_beerjobber.txt&quot;)
+head(d)
+</code></pre>
 
-<ul>
-<li>Type of elements stored in the vector
-
-<ul>
-<li>use <code>typeof()</code> or <code>is.character()</code>, <code>is.integer()</code>, etc.</li>
-</ul></li>
-</ul>
-
-<h1>Length</h1>
-
-<ul>
-<li>Number of elements in the vector
-
-<ul>
-<li>use <code>length()</code></li>
-</ul></li>
-</ul>
-
-<h1>Attributes</h1>
-
-<ul>
-<li>Arbitrary metadata
-
-<ul>
-<li>use <code>attributes()</code> and/or <code>attr()</code></li>
-</ul></li>
-</ul>
+<pre><code>##                                  name                 brewer
+## 1                     Abbey Monks Ale Abbey Beverage Company
+## 2                  Abbey Monks Tripel Abbey Beverage Company
+## 3                     Abbey Monks Wit Abbey Beverage Company
+## 4 Alameda Barn Owl Imperial Brown Ale    Alameda Brewing Co.
+## 5         Alameda Black Bear XX Stout    Alameda Brewing Co.
+## 6       Alameda El Torero Organic IPA    Alameda Brewing Co.
+##                     style abv ratings score.overall score.by.style
+## 1             Belgian Ale 5.2      96            50             49
+## 2            Abbey Tripel 8.0       3            NA             NA
+## 3 Belgian White (Witbier) 5.1      46            23             19
+## 4               Brown Ale 7.9      13            74             81
+## 5           Foreign Stout 6.8     172            94             76
+## 6    India Pale Ale (IPA) 7.2      56            74             43
+</code></pre>
 
   </article>
   <!-- Presenter Notes -->
@@ -150,50 +116,23 @@ Note that much of this presentation is based off Wickham (2015):
 
 <slide class="" id="slide-4" style="background:;">
   <hgroup>
-    <h2>Atomic Vectors vs Lists</h2>
+    <h2>Histograms</h2>
   </hgroup>
   <article data-timings="">
-    
+    <p>Primary purpose of a histogram: See the distrbution of a variable</p>
+
 <div style='float:left;width:48%;'>
-  <ul>
-<li><p>Atomic</p>
+  <pre><code class="r">hist(d$abv)
+</code></pre>
 
-<ul>
-<li>All elements of the same type</li>
-</ul></li>
-<li><p>Lists</p>
-
-<ul>
-<li>Element types differ</li>
-</ul></li>
-</ul>
-
-<p><br></p>
-
-<p>We will wait until next class to talk about lists.</p>
+<p><img src="assets/fig/unnamed-chunk-2-1.png" alt="plot of chunk unnamed-chunk-2"> </p>
 
 </div>
 <div style='float:right;width:48%;'>
-  <pre><code class="r">atomic &lt;- c(1, 7, 9, 23, 5)
-atomic
+  <pre><code class="r">hist(d$ratings)
 </code></pre>
 
-<pre><code>## [1]  1  7  9 23  5
-</code></pre>
-
-<pre><code class="r">lst &lt;- list(&quot;a&quot;, 2, TRUE)
-lst
-</code></pre>
-
-<pre><code>## [[1]]
-## [1] &quot;a&quot;
-## 
-## [[2]]
-## [1] 2
-## 
-## [[3]]
-## [1] TRUE
-</code></pre>
+<p><img src="assets/fig/unnamed-chunk-3-1.png" alt="plot of chunk unnamed-chunk-3"> </p>
 
 </div>
   </article>
@@ -202,102 +141,36 @@ lst
 
 <slide class="" id="slide-5" style="background:;">
   <hgroup>
-    <h2>Data types</h2>
+    <h2>Look at the documentation</h2>
   </hgroup>
   <article data-timings="">
-    
-<div style='float:left;width:48%;'>
-  <ul>
-<li>Double
-
-<ul>
-<li>numeric with arbitrary precision</li>
-</ul></li>
-<li>Integer
-
-<ul>
-<li>numeric whole number</li>
-</ul></li>
-<li>Logical
-
-<ul>
-<li>true/false</li>
-</ul></li>
-<li>Character
-
-<ul>
-<li>string elements</li>
-</ul></li>
-</ul>
-
-</div>
-<div style='float:right;width:48%;'>
-  <pre><code class="r">dbl &lt;- c(1.357, 2, 4.67)
-int &lt;- c(2L, 5L, 7L, 1L)
-log &lt;- c(TRUE, FALSE, T, F)
-chr &lt;- c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)
+    <pre><code class="r">?hist
 </code></pre>
 
-<p>Note the specific &quot;L&quot; placed after each number on the integer vector to coerce
-  the elements to integer, rather than double.</p>
+<p><img src="./assets/img/histDocumentation.png" alt="hist"></p>
 
-<pre><code class="r">int
-</code></pre>
-
-<pre><code>## [1] 2 5 7 1
-</code></pre>
-
-</div>
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="" id="slide-6" style="background:;">
   <hgroup>
-    <h2>Determining and Testing Types</h2>
+    <h2>Change the number of break points</h2>
   </hgroup>
   <article data-timings="">
     
 <div style='float:left;width:48%;'>
-  <pre><code class="r">typeof(dbl)
+  <pre><code class="r">hist(d$ratings, breaks = 35)
 </code></pre>
 
-<pre><code>## [1] &quot;double&quot;
-</code></pre>
-
-<pre><code class="r">is.double(dbl)
-</code></pre>
-
-<pre><code>## [1] TRUE
-</code></pre>
-
-<pre><code class="r">is.integer(dbl)
-</code></pre>
-
-<pre><code>## [1] FALSE
-</code></pre>
-
-<pre><code class="r">is.atomic(dbl)
-</code></pre>
-
-<pre><code>## [1] TRUE
-</code></pre>
+<p><img src="assets/fig/unnamed-chunk-5-1.png" alt="plot of chunk unnamed-chunk-5"> </p>
 
 </div>
 <div style='float:right;width:48%;'>
-  <h1>Be careful of more generic tests</h1>
-
-<pre><code class="r">is.numeric(dbl)
+  <pre><code class="r">hist(d$ratings, breaks = 100)
 </code></pre>
 
-<pre><code>## [1] TRUE
-</code></pre>
-
-<pre><code class="r">is.numeric(int)
-</code></pre>
-
-<pre><code>## [1] TRUE
-</code></pre>
+<p><img src="assets/fig/unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6"> </p>
 
 </div>
   </article>
@@ -306,80 +179,96 @@ chr &lt;- c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)
 
 <slide class="" id="slide-7" style="background:;">
   <hgroup>
-    <h2>Check in</h2>
+    <h2>Smooth the distribution</h2>
   </hgroup>
   <article data-timings="">
-    <ul>
-<li>What data types are the following vectors?</li>
-</ul>
+    
+<div style='float:left;width:48%;'>
+  <h1>Standard Histogram</h1>
 
-<pre><code class="r">w &lt;- c(TRUE, FALSE, FALSE, TRUE)
-x &lt;- c(3, 5, 8, 9, 2.5)
-y &lt;- c(&quot;green&quot;, &quot;red&quot;, &quot;blue&quot;)
-z &lt;- c(5L, 7L, 2L, 18L)
+<pre><code class="r">hist(d$abv)
 </code></pre>
 
+<p><img src="assets/fig/unnamed-chunk-7-1.png" alt="plot of chunk unnamed-chunk-7"> </p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <h1>Density Plots</h1>
+
+<pre><code class="r">dens &lt;- density(d$abv); plot(dens)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-8-1.png" alt="plot of chunk unnamed-chunk-8"> </p>
+
+</div>
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="" id="slide-8" style="background:;">
   <hgroup>
-    <h2>Coercion</h2>
+    <h2>A momentary detour: What is a density plot?</h2>
   </hgroup>
   <article data-timings="">
-    <h1>Take a guess: What will the following vectors produce?</h1>
+    
+<div style='float:left;width:48%;'>
+  <p><img src="./assets/img/densPlot.pdf" alt="densplot"></p>
 
-<pre><code class="r">w &lt;- c(&quot;1&quot;, 2, 3)
-x &lt;- c(1, TRUE, FALSE)
-y &lt;- c(3.25, 5L, 7L)
-z &lt;- c(&quot;a&quot;, &quot;b&quot;, 7, TRUE)
-</code></pre>
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li>A density plot is a probability density function</li>
+<li>The total area under the curve must sum (integrate) to 1. This represents the 
+total probability.</li>
+<li>Values on the y-axis represent the density of observations for particular x
+values. These numbers are largely uninterpretable by themselves. They are
+determined and constrained based on the total area summing to 1.</li>
+<li>To determine the probability that any randomly selected observation will fall 
+within a given x range, compute the area under the curve between those points
+(i.e., integrate).</li>
+</ul>
 
+</div>
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Compute probability between two points</h2>
+  </hgroup>
   <article data-timings="">
     
 <div style='float:left;width:48%;'>
-  <pre><code class="r">c(&quot;1&quot;, 2, 3); is.character(w)
-</code></pre>
+  <p><img src="assets/fig/unnamed-chunk-9-1.png" alt="plot of chunk unnamed-chunk-9"> </p>
 
-<pre><code>## [1] &quot;1&quot; &quot;2&quot; &quot;3&quot;
-</code></pre>
-
-<pre><code>## [1] TRUE
-</code></pre>
-
-<pre><code class="r">c(1, TRUE, FALSE); is.double(x)
-</code></pre>
-
-<pre><code>## [1] 1 1 0
-</code></pre>
-
-<pre><code>## [1] TRUE
+<pre><code class="r">dens &lt;- density(d$abv)
 </code></pre>
 
 </div>
 <div style='float:right;width:48%;'>
-  <pre><code class="r">c(3.25, 5L, 7L); is.double(y)
+  <pre><code class="r">library(sfsmisc)
+integrate.xy(dens$x, dens$y)
 </code></pre>
 
-<pre><code>## [1] 3.25 5.00 7.00
+<pre><code>## [1] 1.000879
 </code></pre>
 
-<pre><code>## [1] TRUE
+<pre><code class="r">abv57 &lt;- cbind(dens$x, dens$y)
+head(abv57, n = 2)
 </code></pre>
 
-<pre><code class="r">c(&quot;a&quot;, &quot;b&quot;, 7, TRUE); is.character(z)
+<pre><code>##           [,1]         [,2]
+## [1,] -1.276634 0.0007432923
+## [2,] -1.246588 0.0009135057
 </code></pre>
 
-<pre><code>## [1] &quot;a&quot;    &quot;b&quot;    &quot;7&quot;    &quot;TRUE&quot;
+<pre><code class="r">abv57 &lt;- subset(abv57, abv57[ ,1] &gt;= 5 &amp; 
+                       abv57[ ,1] &lt;= 7)
+integrate.xy(abv57[ ,1], abv57[ ,2])
 </code></pre>
 
-<pre><code>## [1] TRUE
+<pre><code>## [1] 0.4565267
 </code></pre>
 
 </div>
@@ -389,136 +278,70 @@ z &lt;- c(&quot;a&quot;, &quot;b&quot;, 7, TRUE)
 
 <slide class="" id="slide-10" style="background:;">
   <hgroup>
-    <h2>Coercion rules</h2>
+    <h2>Density binwidth</h2>
   </hgroup>
   <article data-timings="">
-    <p>Remember: Atomic vectors must contain data of the same type.</p>
+    <p>Change the binwidth to control the smoothing fact. The smaller the binwidth,
+  the closer the function will resemble the observed data. The larger the 
+  binwidth, the closer the function will resemble a standard normal.</p>
 
-<ul>
-<li>Most flexible: Character</li>
-<li>Least flexible: Logical</li>
-</ul>
+<div style='float:left;width:48%;'>
+  <pre><code class="r">dens1 &lt;- density(d$abv, bw = .001)
+plot(dens1)
+</code></pre>
 
-<p>When logical vectors are coerced to be numeric, <code>TRUE</code> are coded 1, and <code>FALSE</code>
-  are coded 0.</p>
+<p><img src="assets/fig/unnamed-chunk-12-1.png" alt="plot of chunk unnamed-chunk-12"> </p>
 
-<p>Explicitely coerce via <code>as.___</code>.</p>
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">dens2 &lt;- density(d$abv, bw = 100)
+plot(dens2)
+</code></pre>
 
+<p><img src="assets/fig/unnamed-chunk-13-1.png" alt="plot of chunk unnamed-chunk-13"> </p>
+
+</div>
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="" id="slide-11" style="background:;">
   <hgroup>
-    <h2>Explicit coercion</h2>
+    <h2>Your turn</h2>
   </hgroup>
   <article data-timings="">
-    
-<div style='float:left;width:48%;'>
-  <h1>Override default coercions</h1>
+    <ul>
+<li>Load the beer dataset</li>
+<li>Produce a histogram</li>
+<li>Produce a density plot</li>
+<li>Change the number of breaks and the binwidth of each</li>
+<li>Try adding the additional argument <code>probability = TRUE</code> to a histogram. What
+do you notice?</li>
+</ul>
 
-<pre><code class="r">c(FALSE,1,TRUE,0)
-</code></pre>
-
-<pre><code>## [1] 0 1 1 0
-</code></pre>
-
-<pre><code class="r">as.logical(c(FALSE,1,TRUE,0))
-</code></pre>
-
-<pre><code>## [1] FALSE  TRUE  TRUE FALSE
-</code></pre>
-
-<pre><code class="r">c(&quot;1&quot;, 2, 3)
-</code></pre>
-
-<pre><code>## [1] &quot;1&quot; &quot;2&quot; &quot;3&quot;
-</code></pre>
-
-<pre><code class="r">as.double(c(&quot;1&quot;, 2, 3))
-</code></pre>
-
-<pre><code>## [1] 1 2 3
-</code></pre>
-
-</div>
-<div style='float:right;width:48%;'>
-  <h1>Convert to specific type</h1>
-
-<pre><code class="r">as.character(1:5)
-</code></pre>
-
-<pre><code>## [1] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; &quot;5&quot;
-</code></pre>
-
-<p><br></p>
-
-<h1>Careful with specific coercsions</h1>
-
-<pre><code class="r">c(&quot;a&quot;, &quot;b&quot;, 7, &quot;TRUE&quot;)
-</code></pre>
-
-<pre><code>## [1] &quot;a&quot;    &quot;b&quot;    &quot;7&quot;    &quot;TRUE&quot;
-</code></pre>
-
-<pre><code class="r">as.integer(c(&quot;a&quot;, &quot;b&quot;, 7, &quot;TRUE&quot;))
-</code></pre>
-
-<pre><code>## Warning: NAs introduced by coercion
-</code></pre>
-
-<pre><code>## [1] NA NA  7 NA
-</code></pre>
-
-</div>
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="" id="slide-12" style="background:;">
   <hgroup>
-    <h2>Check in</h2>
+    <h2>Scatter plots and controlling lines, colors, axes, etc.</h2>
   </hgroup>
   <article data-timings="">
-    <ul>
-<li>Predict how each vector will be coerced.</li>
-</ul>
-
-<pre><code class="r">c(1, FALSE)
-c(&quot;a&quot;, TRUE)
-c(&quot;b&quot;, 1L)
-c(1L, 2)
-</code></pre>
+    <p><img src="./assets/img/scatter.pdf" alt="scatter"></p>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>The <code>plot()</code> function</h2>
+  </hgroup>
   <article data-timings="">
-    <pre><code class="r">c(1, FALSE)
-</code></pre>
-
-<pre><code>## [1] 1 0
-</code></pre>
-
-<pre><code class="r">c(&quot;a&quot;, TRUE)
-</code></pre>
-
-<pre><code>## [1] &quot;a&quot;    &quot;TRUE&quot;
-</code></pre>
-
-<pre><code class="r">c(&quot;b&quot;, 1L)
-</code></pre>
-
-<pre><code>## [1] &quot;b&quot; &quot;1&quot;
-</code></pre>
-
-<pre><code class="r">c(1L, 2)
-</code></pre>
-
-<pre><code>## [1] 1 2
-</code></pre>
+    <p>Generic x-y plotting. Multiple types of plots are possible. From the 
+  documentation:
+<img src="./assets/img/plotTypesDocumentation.png" alt="plotTypesDocumentation"></p>
 
   </article>
   <!-- Presenter Notes -->
@@ -526,44 +349,113 @@ c(1L, 2)
 
 <slide class="" id="slide-14" style="background:;">
   <hgroup>
-    <h2>Your turn</h2>
+    <h2>Plot types</h2>
   </hgroup>
   <article data-timings="">
-    <p>Create and coerce the following vectors to the specified type</p>
+    
+<div style='float:left;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-15-1.png" alt="plot of chunk unnamed-chunk-15"> </p>
 
-<pre><code class="r">c(0, 0, 1, TRUE) # Logical
-c(1, 5, 3.25, FALSE) # Integer
-c(TRUE, FALSE, FALSE, TRUE) # Double
-c(&quot;Male&quot;, &quot;Female&quot;, 0, 1) # Character
-</code></pre>
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-16-1.png" alt="plot of chunk unnamed-chunk-16"> </p>
 
+</div>
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="segue" id="slide-15" style="background:;">
+<slide class="" id="slide-15" style="background:;">
   <hgroup>
-    <h1>Attributes</h1>
+    <h2>Scatter plots</h2>
   </hgroup>
   <article data-timings="">
-    
+    <p>Two specifications</p>
+
+<pre><code class="r">plot(outcome ~ predictor, data = d) # Just like the lm function
+plot(x-variable, y-variable)
+</code></pre>
+
+<h1>Examples</h1>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">plot(score.overall ~ abv, data = d)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-18-1.png" alt="plot of chunk unnamed-chunk-18"> </p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">plot(d$abv, d$score.overall)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-19-1.png" alt="plot of chunk unnamed-chunk-19"> </p>
+
+</div>
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="" id="slide-16" style="background:;">
   <hgroup>
-    <h2>Important attributes</h2>
+    <h2>Additional arguments</h2>
   </hgroup>
   <article data-timings="">
-    <ul>
-<li><code>names()</code>, <code>colnames()</code>, <code>rownames()</code></li>
-<li>Dimensions (used to convert vectors to matrices and arrays)</li>
-<li>Class: points R to correct functions to execute (e.g., <code>print()</code>, <code>plot()</code>, 
-etc.)</li>
-</ul>
-
-<p>What is an attribute? Metadata for an object.</p>
+    <table><thead>
+<tr>
+<th align="left">Argument</th>
+<th align="left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">main</td>
+<td align="left">Main title of the Plot</td>
+</tr>
+<tr>
+<td align="left">sub</td>
+<td align="left">Subtitle, added at the bottom of the plot</td>
+</tr>
+<tr>
+<td align="left">xlab</td>
+<td align="left">x-axis label</td>
+</tr>
+<tr>
+<td align="left">ylab</td>
+<td align="left">y-axis lable</td>
+</tr>
+<tr>
+<td align="left">col</td>
+<td align="left">Color (can be multiple things, depending on call)</td>
+</tr>
+<tr>
+<td align="left">pch</td>
+<td align="left">Point type</td>
+</tr>
+<tr>
+<td align="left">xlim</td>
+<td align="left">Limits of x-axis (vector of length 2)</td>
+</tr>
+<tr>
+<td align="left">ylim</td>
+<td align="left">Limits of y-axis (vector of length 2)</td>
+</tr>
+<tr>
+<td align="left">bg</td>
+<td align="left">Background color (can be multiple things, depending on call)</td>
+</tr>
+<tr>
+<td align="left">cex</td>
+<td align="left">Size of points</td>
+</tr>
+<tr>
+<td align="left">cex.SPEC</td>
+<td align="left">Specific call to axis/lab/main/sub to change size of those SPEC (specifications)</td>
+</tr>
+<tr>
+<td align="left">col.SPEC</td>
+<td align="left">Color specific calls</td>
+</tr>
+</tbody></table>
 
   </article>
   <!-- Presenter Notes -->
@@ -571,51 +463,29 @@ etc.)</li>
 
 <slide class="" id="slide-17" style="background:;">
   <hgroup>
-    <h1><code>names()</code></h1>
+    <h2>Examples: Beer style and overall ratings</h2>
   </hgroup>
   <article data-timings="">
     
 <div style='float:left;width:48%;'>
-  <ul>
-<li>Names can be assigned to an object in a couple different ways.</li>
-</ul>
+  <h1>Standard Plot</h1>
 
-<pre><code class="r">y &lt;- c(&quot;A&quot; = 1, &quot;B&quot; = 2, &quot;C&quot; = 3)
-y
+<pre><code class="r">plot(d$score.by.style, d$score.overall)
 </code></pre>
 
-<pre><code>## A B C 
-## 1 2 3
-</code></pre>
-
-<pre><code class="r">names(y)
-</code></pre>
-
-<pre><code>## [1] &quot;A&quot; &quot;B&quot; &quot;C&quot;
-</code></pre>
+<p><img src="assets/fig/unnamed-chunk-21-1.png" alt="plot of chunk unnamed-chunk-21"> </p>
 
 </div>
 <div style='float:right;width:48%;'>
-  <pre><code class="r">z &lt;- 1:3
-z
+  <h1>Change axes labels, provide title</h1>
+
+<pre><code class="r">plot(d$score.by.style, d$score.overall,
+  main = &quot;Relation Between Style Rating and Overall Rating&quot;,
+  xlab = &quot;Beer Style Rating&quot;,
+  ylab = &quot;Overall Beer Rating&quot;)
 </code></pre>
 
-<pre><code>## [1] 1 2 3
-</code></pre>
-
-<pre><code class="r">names(z) &lt;- c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
-z
-</code></pre>
-
-<pre><code>## A B C 
-## 1 2 3
-</code></pre>
-
-<pre><code class="r">names(z)
-</code></pre>
-
-<pre><code>## [1] &quot;A&quot; &quot;B&quot; &quot;C&quot;
-</code></pre>
+<p><img src="assets/fig/unnamed-chunk-22-1.png" alt="plot of chunk unnamed-chunk-22"> </p>
 
 </div>
   </article>
@@ -624,62 +494,38 @@ z
 
 <slide class="" id="slide-18" style="background:;">
   <hgroup>
-    <h2>Factors</h2>
+    <h2>Change point type, color, and size</h2>
   </hgroup>
   <article data-timings="">
-    <ul>
-<li>Used to store categorical data</li>
-<li>Can only store predefined values</li>
-<li>String variables default to factors when reading in data </li>
-</ul>
-
-<pre><code class="r">colors &lt;- factor(c(&quot;black&quot;, &quot;green&quot;, &quot;blue&quot;, &quot;blue&quot;, &quot;black&quot;))
-attributes(colors)
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">plot(d$score.by.style, d$score.overall,
+  main = &quot;Relation Between Style 
+    Rating and Overall Rating&quot;,
+  xlab = &quot;Beer Style Rating&quot;,
+  ylab = &quot;Overall Beer Rating&quot;,
+  pch = 3,
+  cex = 2,
+  col = &quot;purple&quot;)
 </code></pre>
 
-<pre><code>## $levels
-## [1] &quot;black&quot; &quot;blue&quot;  &quot;green&quot;
-## 
-## $class
-## [1] &quot;factor&quot;
-</code></pre>
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-24-1.png" alt="plot of chunk unnamed-chunk-24"> </p>
 
-<pre><code class="r">str(colors)
-</code></pre>
-
-<pre><code>##  Factor w/ 3 levels &quot;black&quot;,&quot;blue&quot;,..: 1 3 2 2 1
-</code></pre>
-
+</div>
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="" id="slide-19" style="background:;">
   <hgroup>
-    <h2>Adding elements to factors</h2>
+    <h2>Colors in R</h2>
   </hgroup>
   <article data-timings="">
-    <pre><code class="r">colors[6] &lt;- &quot;blue&quot;
-colors
-</code></pre>
-
-<pre><code>## [1] black green blue  blue  black blue 
-## Levels: black blue green
-</code></pre>
-
-<pre><code class="r">colors[7] &lt;- &quot;purple&quot;
-</code></pre>
-
-<pre><code>## Warning in `[&lt;-.factor`(`*tmp*`, 7, value = &quot;purple&quot;): invalid factor
-## level, NA generated
-</code></pre>
-
-<pre><code class="r">colors
-</code></pre>
-
-<pre><code>## [1] black green blue  blue  black blue  &lt;NA&gt; 
-## Levels: black blue green
-</code></pre>
+    <div align = "left">
+<img src = assets/img/rColorExample.pdf width = 800 height = 800>
+</div>
 
   </article>
   <!-- Presenter Notes -->
@@ -687,95 +533,47 @@ colors
 
 <slide class="" id="slide-20" style="background:;">
   <hgroup>
-    <h2>Benefits of factors</h2>
+    <h2>Point Types</h2>
   </hgroup>
   <article data-timings="">
-    
-<div style='float:left;width:48%;'>
-  <ul>
-<li>No need for multiple variables to define a categorical variable: internal 
-dummy-coding</li>
-</ul>
-
-<pre><code class="r">contrasts(colors)
+    <pre><code class="r">plot(1:20, 1:20, pch = 1:20, cex = 3)
 </code></pre>
 
-<pre><code>##       blue green
-## black    0     0
-## blue     1     0
-## green    0     1
-</code></pre>
+<p><img src="assets/fig/unnamed-chunk-25-1.png" alt="plot of chunk unnamed-chunk-25"> </p>
 
-</div>
-<div style='float:right;width:48%;'>
-  <ul>
-<li>Change the reference group by defining a new contrast matrix. For example, we 
-can set green to the reference group with the following code.</li>
-</ul>
-
-<pre><code class="r">contrasts(colors) &lt;- matrix(
-    c(1, 0,
-      0, 1,
-      0, 0),
-byrow = TRUE, ncol = 2)
-</code></pre>
-
-</div>
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="" id="slide-21" style="background:;">
   <hgroup>
-    <h1>Contrast coding (continued)</h1>
+    <h2>Plotting the regression line</h2>
   </hgroup>
   <article data-timings="">
-    <p>Alternatively, use some of the built in functions for defining new contrasts 
-  matrices </p>
-
+    
 <div style='float:left;width:48%;'>
-  <pre><code class="r">contr.helmert(3)
-</code></pre>
+  <pre><code class="r">mod &lt;- 
+  lm(score.overall ~ score.by.style, 
+    data = d)
 
-<pre><code>##   [,1] [,2]
-## 1   -1   -1
-## 2    1   -1
-## 3    0    2
-</code></pre>
+plot(d$score.by.style, d$score.overall,
+  main = &quot;Relation Between Style 
+    Rating and Overall Rating&quot;,
+  xlab = &quot;Beer Style Rating&quot;,
+  ylab = &quot;Overall Beer Rating&quot;,
+  pch = 3,
+  cex = 2,
+  col = &quot;purple&quot;)
 
-<pre><code class="r">contr.sum(3)
+abline(coef(mod)[1], coef(mod)[2], 
+  lty = 3, 
+  lwd = 5, 
+  col = &quot;aquamarine3&quot;)
 </code></pre>
-
-<pre><code>##   [,1] [,2]
-## 1    1    0
-## 2    0    1
-## 3   -1   -1
-</code></pre>
-
-<p><br>
-(see: <a href="http://www.ats.ucla.edu/stat/r/library/contrast_coding.htm">http://www.ats.ucla.edu/stat/r/library/contrast_coding.htm</a>)</p>
 
 </div>
 <div style='float:right;width:48%;'>
-  <pre><code class="r">contrasts(colors) &lt;- contr.helmert(3)
-contrasts(colors)
-</code></pre>
-
-<pre><code>##       [,1] [,2]
-## black   -1   -1
-## blue     1   -1
-## green    0    2
-</code></pre>
-
-<pre><code class="r">contrasts(colors) &lt;- contr.sum(3)
-contrasts(colors)
-</code></pre>
-
-<pre><code>##       [,1] [,2]
-## black    1    0
-## blue     0    1
-## green   -1   -1
-</code></pre>
+  <p><img src="assets/fig/unnamed-chunk-27-1.png" alt="plot of chunk unnamed-chunk-27"> </p>
 
 </div>
   </article>
@@ -784,33 +582,14 @@ contrasts(colors)
 
 <slide class="" id="slide-22" style="background:;">
   <hgroup>
-    <h2>Factors and attributes</h2>
+    <h2>Line types</h2>
   </hgroup>
   <article data-timings="">
-    <ul>
-<li>Factors are atomic integer vectors with a &quot;levels&quot; attribute.</li>
-</ul>
-
-<pre><code class="r">is.atomic(colors)
+    <pre><code class="r">plot(1:6, 1:6, type = &quot;n&quot;)
+for(i in 1:6) abline(i, 0, lty = i, lwd = 3)
 </code></pre>
 
-<pre><code>## [1] TRUE
-</code></pre>
-
-<pre><code class="r">typeof(colors)
-</code></pre>
-
-<pre><code>## [1] &quot;integer&quot;
-</code></pre>
-
-<p>Note: Be careful with <code>is.vector()</code>. It only returns <code>TRUE</code> if the vector has no
-  attributes outside of names</p>
-
-<pre><code class="r">is.vector(colors)
-</code></pre>
-
-<pre><code>## [1] FALSE
-</code></pre>
+<p><img src="assets/fig/unnamed-chunk-28-1.png" alt="plot of chunk unnamed-chunk-28"> </p>
 
   </article>
   <!-- Presenter Notes -->
@@ -821,41 +600,23 @@ contrasts(colors)
     <h2>Your turn</h2>
   </hgroup>
   <article data-timings="">
-    <ul>
-<li><p>Create a factor for free or reduced lunch status that has three levels: free, 
-reduced, pay. </p></li>
-<li><p>Specify a new contrast matrix using either a custom matrix or a built-in 
-function</p></li>
-</ul>
+    <p>Produce the following plot (the colors can be different, but it should not be 
+  black)</p>
+
+<p><img src="assets/fig/unnamed-chunk-29-1.png" alt="plot of chunk unnamed-chunk-29"> </p>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="" id="slide-24" style="background:;">
+  <hgroup>
+    <h2>Last example: A (sort of) advanced example</h2>
+  </hgroup>
   <article data-timings="">
-    <pre><code class="r">frl &lt;- factor(rep(c(&quot;free&quot;, &quot;reduced&quot;, &quot;pay&quot;), 5))
-frl
-</code></pre>
+    <p>Overlay a density plot on a histogram, maintain frequency y-axis</p>
 
-<pre><code>##  [1] free    reduced pay     free    reduced pay     free    reduced
-##  [9] pay     free    reduced pay     free    reduced pay    
-## Levels: free pay reduced
-</code></pre>
-
-<pre><code class="r">effect_code &lt;- matrix(c(-1, -1,
-                         1, 0,
-                         0, 1),
-                      ncol = 2, byrow = TRUE)
-contrasts(frl) &lt;- effect_code
-contrasts(frl)
-</code></pre>
-
-<pre><code>##         [,1] [,2]
-## free      -1   -1
-## pay        1    0
-## reduced    0    1
-</code></pre>
+<p><img src="assets/fig/unnamed-chunk-30-1.png" alt="plot of chunk unnamed-chunk-30"> </p>
 
   </article>
   <!-- Presenter Notes -->
@@ -863,40 +624,37 @@ contrasts(frl)
 
 <slide class="" id="slide-25" style="background:;">
   <hgroup>
-    <h2>Dimension attribute</h2>
+    <h2>Multi-step process</h2>
   </hgroup>
   <article data-timings="">
     
 <div style='float:left;width:48%;'>
-  <p>The way we have created matrices in the past in through the <code>matrix</code> function</p>
+  <p>First, plot the histogram, suppressing all axes, labels, and plot border</p>
 
-<pre><code class="r">m &lt;- matrix(1:12, ncol = 3)
-m
+<pre><code class="r">hist(d$abv, 
+  probability = TRUE, 
+  axes = FALSE,
+  main = &quot;&quot;, 
+  xlab = &quot;&quot;, 
+  ylab = &quot;&quot;)
 </code></pre>
 
-<pre><code>##      [,1] [,2] [,3]
-## [1,]    1    5    9
-## [2,]    2    6   10
-## [3,]    3    7   11
-## [4,]    4    8   12
-</code></pre>
+<p><img src="assets/fig/unnamed-chunk-31-1.png" alt="plot of chunk unnamed-chunk-31"> </p>
 
 </div>
 <div style='float:right;width:48%;'>
-  <p>The object <code>m</code> is really just an atomic vector with a dimension attribute</p>
+  <p>Next, use <code>lines</code> to add the density line</p>
 
-<pre><code class="r">attributes(m)
+<pre><code class="r">lines(density(d$abv), 
+  col = &quot;darkgray&quot;, 
+  lty = 3, 
+  lwd = 3)
 </code></pre>
 
-<pre><code>## $dim
-## [1] 4 3
-</code></pre>
+<p><br>
+<br></p>
 
-<pre><code class="r">is.atomic(m)
-</code></pre>
-
-<pre><code>## [1] TRUE
-</code></pre>
+<p><img src="assets/fig/unnamed-chunk-33-1.png" alt="plot of chunk unnamed-chunk-33"> </p>
 
 </div>
   </article>
@@ -905,51 +663,29 @@ m
 
 <slide class="" id="slide-26" style="background:;">
   <hgroup>
-    <h2>Alternative construction of the same matrix</h2>
+    <h2>(sort of) Advanced example, continued</h2>
   </hgroup>
   <article data-timings="">
     
 <div style='float:left;width:48%;'>
-  <h1>Construct matrix</h1>
+  <p>Call a new plot to overaly on the current plot</p>
 
-<pre><code class="r">m &lt;- 1:12
-
-dim(m) &lt;- c(4, 3)
-m
+<pre><code class="r">par(new = TRUE)
 </code></pre>
 
-<pre><code>##      [,1] [,2] [,3]
-## [1,]    1    5    9
-## [2,]    2    6   10
-## [3,]    3    7   11
-## [4,]    4    8   12
+<p>Plot the histogram again, labeling the axes how you&#39;d like (note, this process 
+  is neccessary to keep the frequency y-axis)</p>
+
+<pre><code class="r">hist(d$abv, 
+  main = &quot;Distribution of Beer Alcohol 
+            by Volume&quot;,
+  xlab = &quot;Alcohol by Volume&quot;
+  )
 </code></pre>
 
 </div>
 <div style='float:right;width:48%;'>
-  <h1>Add row and column names</h1>
-
-<pre><code class="r">rownames(m) &lt;- c(&quot;r1&quot;, &quot;r2&quot;, &quot;r3&quot;, &quot;r4&quot;)
-m
-</code></pre>
-
-<pre><code>##    [,1] [,2] [,3]
-## r1    1    5    9
-## r2    2    6   10
-## r3    3    7   11
-## r4    4    8   12
-</code></pre>
-
-<pre><code class="r">colnames(m) &lt;- c(&quot;c1&quot;, &quot;c2&quot;, &quot;c3&quot;)
-m
-</code></pre>
-
-<pre><code>##    c1 c2 c3
-## r1  1  5  9
-## r2  2  6 10
-## r3  3  7 11
-## r4  4  8 12
-</code></pre>
+  <p><img src="assets/fig/unnamed-chunk-36-1.png" alt="plot of chunk unnamed-chunk-36"> </p>
 
 </div>
   </article>
@@ -958,201 +694,14 @@ m
 
 <slide class="" id="slide-27" style="background:;">
   <hgroup>
-    <h2>More on the names attributes</h2>
-  </hgroup>
-  <article data-timings="">
-    <p>For atomic vectors, and specifically matrices, <code>rownames()</code> and <code>colnames()</code> 
-  must be used, rather than <code>names()</code>. The <code>names()</code> attribute is for individual
-  elements.</p>
-
-<pre><code class="r">names(m)
-</code></pre>
-
-<pre><code>## NULL
-</code></pre>
-
-<pre><code class="r">names(m) &lt;- c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)
-attr(m, &quot;names&quot;)
-</code></pre>
-
-<pre><code>##  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; NA  NA  NA  NA  NA  NA  NA  NA  NA
-</code></pre>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-28" style="background:;">
-  <hgroup>
-    <h2>Names attributes (continued)</h2>
-  </hgroup>
-  <article data-timings="">
-    
-<div style='float:left;width:48%;'>
-  <p>After row, column, and element names are assigned, they can be used in 
-  subsetting</p>
-
-<pre><code class="r">m[&quot;r1&quot;, ]
-</code></pre>
-
-<pre><code>## c1 c2 c3 
-##  1  5  9
-</code></pre>
-
-<pre><code class="r">m[&quot;r3&quot;,&quot;c2&quot;] 
-</code></pre>
-
-<pre><code>## [1] 7
-</code></pre>
-
-<pre><code class="r">m[&quot;b&quot;] 
-</code></pre>
-
-<pre><code>## b 
-## 2
-</code></pre>
-
-</div>
-<div style='float:right;width:48%;'>
-  <p>You can also specify the row and column names via <code>dimnames()</code> and a list of 
-  vectors (ordered by row names, then column names, then the 3rd dimension for 
-  arrays)</p>
-
-<pre><code class="r">dimnames(m) &lt;- list(
-    c(&quot;row1&quot;, &quot;row2&quot;, &quot;row3&quot;, &quot;row4&quot;), 
-    c(&quot;col1&quot;, &quot;col2&quot;, &quot;col3&quot;)
-                    )
-m
-</code></pre>
-
-<pre><code>##      col1 col2 col3
-## row1    1    5    9
-## row2    2    6   10
-## row3    3    7   11
-## row4    4    8   12
-## attr(,&quot;names&quot;)
-##  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; NA  NA  NA  NA  NA  NA  NA  NA  NA
-</code></pre>
-
-</div>
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-29" style="background:;">
-  <hgroup>
-    <h2>Adding custom attributes</h2>
-  </hgroup>
-  <article data-timings="">
-    <p>Occassionally there are instances when it makes sense to add a custom attribute 
-  of some sort. Here are a few examples</p>
-
-<pre><code class="r">comment(m) &lt;- &quot;Here are some  important things to remember: x, y, z&quot;
-attr(m, &quot;comment&quot;)
-</code></pre>
-
-<pre><code>## [1] &quot;Here are some  important things to remember: x, y, z&quot;
-</code></pre>
-
-<pre><code class="r">attr(m, &quot;new_attribute&quot;) &lt;- &quot;Just a different comment, but this one shows when m is printed&quot;
-attr(m, &quot;new_attribute&quot;)
-</code></pre>
-
-<pre><code>## [1] &quot;Just a different comment, but this one shows when m is printed&quot;
-</code></pre>
-
-<p>Remember that you can see all the attributes of an object via <code>attributes(x)</code></p>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-30" style="background:;">
-  <hgroup>
-    <h2>Final notes on attributes</h2>
-  </hgroup>
-  <article data-timings="">
-    
-<div style='float:left;width:48%;'>
-  <p>When you modify a vector, the attributes are generally lost.</p>
-
-<pre><code class="r">attributes(sum(m))
-</code></pre>
-
-<pre><code>## NULL
-</code></pre>
-
-<p>But in some cases you may want to strip the attributes from an object. You can 
-  do this by setting the attributes to <code>NULL</code>.</p>
-
-</div>
-<div style='float:right;width:48%;'>
-  <p>To remove the dimension names</p>
-
-<pre><code class="r">attr(m, &quot;dimnames&quot;) &lt;- NULL
-m
-</code></pre>
-
-<pre><code>##      [,1] [,2] [,3]
-## [1,]    1    5    9
-## [2,]    2    6   10
-## [3,]    3    7   11
-## [4,]    4    8   12
-## attr(,&quot;names&quot;)
-##  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; NA  NA  NA  NA  NA  NA  NA  NA  NA 
-## attr(,&quot;new_attribute&quot;)
-## [1] &quot;Just a different comment, but this one shows when m is printed&quot;
-</code></pre>
-
-</div>
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-31" style="background:;">
-  <article data-timings="">
-    <p>To remove all the attributes, and return to a basic vector</p>
-
-<pre><code class="r">attributes(m) &lt;- NULL
-m
-</code></pre>
-
-<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10 11 12
-</code></pre>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-32" style="background:;">
-  <hgroup>
     <h2>Lab</h2>
   </hgroup>
   <article data-timings="">
-    <p>\[
-\begin{equation*}
-  \textbf{m} = \qquad 
-  \begin{bmatrix}
-    11 & 26\\
-    33 & 11 \\
-    27 &  5 \\
-    91 & 18 \\
-  \end{bmatrix}
-\end{equation*}
-\]</p>
+    <p>Produce the following plots. Again, the colors, line types, etc., can be 
+  different, but they should not be the default (where the defaults have been 
+  changed).</p>
 
-<ul>
-<li>Create the above matrix using two methods, save them into objects m1 and m2</li>
-<li>Give the dimension names of each matrix using a different method for each</li>
-<li>Give each matrix one additional (and different) attribute</li>
-<li>Coerce the vector 
-$ 
-\begin{bmatrix}
-T &amp; F\
-\end{bmatrix}
-$
-to type double or integer and add it to the third row of the matrix.</li>
-</ul>
+<p><img src="assets/fig/unnamed-chunk-37-1.png" alt="plot of chunk unnamed-chunk-37"> </p>
 
   </article>
   <!-- Presenter Notes -->
@@ -1164,133 +713,133 @@ to type double or integer and add it to the third row of the matrix.</li>
     <ul>
       <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=1 title='Today&#39;s Agenda (not exactly ordered)'>
+        data-slide=1 title='Agenda'>
          1
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=2 title='Data structures'>
+        data-slide=2 title='On to Today... Data: Beer!'>
          2
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=3 title='Properties of Vectors'>
+        data-slide=3 title='Load data'>
          3
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=4 title='Atomic Vectors vs Lists'>
+        data-slide=4 title='Histograms'>
          4
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=5 title='Data types'>
+        data-slide=5 title='Look at the documentation'>
          5
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=6 title='Determining and Testing Types'>
+        data-slide=6 title='Change the number of break points'>
          6
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=7 title='Check in'>
+        data-slide=7 title='Smooth the distribution'>
          7
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=8 title='Coercion'>
+        data-slide=8 title='A momentary detour: What is a density plot?'>
          8
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=9 title='NA'>
+        data-slide=9 title='Compute probability between two points'>
          9
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=10 title='Coercion rules'>
+        data-slide=10 title='Density binwidth'>
          10
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=11 title='Explicit coercion'>
+        data-slide=11 title='Your turn'>
          11
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=12 title='Check in'>
+        data-slide=12 title='Scatter plots and controlling lines, colors, axes, etc.'>
          12
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=13 title='NA'>
+        data-slide=13 title='The <code>plot()</code> function'>
          13
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=14 title='Your turn'>
+        data-slide=14 title='Plot types'>
          14
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=15 title='Attributes'>
+        data-slide=15 title='Scatter plots'>
          15
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=16 title='Important attributes'>
+        data-slide=16 title='Additional arguments'>
          16
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=17 title='<code>names()</code>'>
+        data-slide=17 title='Examples: Beer style and overall ratings'>
          17
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=18 title='Factors'>
+        data-slide=18 title='Change point type, color, and size'>
          18
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=19 title='Adding elements to factors'>
+        data-slide=19 title='Colors in R'>
          19
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=20 title='Benefits of factors'>
+        data-slide=20 title='Point Types'>
          20
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=21 title='Contrast coding (continued)'>
+        data-slide=21 title='Plotting the regression line'>
          21
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=22 title='Factors and attributes'>
+        data-slide=22 title='Line types'>
          22
       </a>
     </li>
@@ -1302,56 +851,26 @@ to type double or integer and add it to the third row of the matrix.</li>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=24 title='NA'>
+        data-slide=24 title='Last example: A (sort of) advanced example'>
          24
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=25 title='Dimension attribute'>
+        data-slide=25 title='Multi-step process'>
          25
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=26 title='Alternative construction of the same matrix'>
+        data-slide=26 title='(sort of) Advanced example, continued'>
          26
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=27 title='More on the names attributes'>
+        data-slide=27 title='Lab'>
          27
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=28 title='Names attributes (continued)'>
-         28
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=29 title='Adding custom attributes'>
-         29
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=30 title='Final notes on attributes'>
-         30
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=31 title='NA'>
-         31
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=32 title='Lab'>
-         32
       </a>
     </li>
   </ul>
