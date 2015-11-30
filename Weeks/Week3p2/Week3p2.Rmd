@@ -1,0 +1,244 @@
+---
+title       : Data Structures
+subtitle    : Week 3.2
+author      : Daniel Anderson
+job         : CourseR
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
+```
+## Today's Agenda
+* A note on matrix algebra vs element-wise algebra
+* Lists
+* Data frames
+* Classes
+
+
+--- &twocol
+
+## Matrix Multiplication Versus Element-wise
+
+Multiplication of matrices in R is completed element-wise, not with matrix
+  algebra.
+
+*** =left
+
+```{r}
+m1 <- matrix(round(rnorm(12, 10, 3)),
+		ncol = 4)
+m1
+m2 <- matrix(round(rnorm(12, 10, 3)),
+		ncol = 3)
+m2
+```
+
+*** =right
+
+```{r}
+m1 * m2
+m1 %*% m2
+```
+
+----
+## Matrix algebra
+
+<div align = "center">
+<img src = assets/img/matrixMultDiag.png width = 500 height = 500>
+</div>
+
+----
+## Marix product rules
+<br>
+<div align = "center">
+<img src = assets/img/matrixMulti.png width = 500 height = 300>
+</div>
+
+---- &twocol
+## One more example
+
+*** =left
+
+```{r}
+m1 <- matrix(1:16, ncol = 4)
+m1
+m2 <- matrix(21:36, ncol = 4)
+m2
+```
+
+*** =right
+
+```{r}
+m1 * m2
+m1 %*% m2
+```
+
+---- &twocol
+## Lists
+Elements of lists can be of any type, including lists
+
+*** =left
+
+```{r}
+l <- list(
+	c("a", "b", "c"),
+	1:5,
+	rep(c(T,F), 7),
+	rnorm(3, 100, 25)
+		  )
+```
+
+*** =right
+
+```{r}
+l
+```
+
+---- &twocol
+## Accessing List Elements
+* List elements can be accessed in two methods: Using the `$` with the element 
+  names, or through indexing with a double bracket `[[]]`.
+* If a single bracket index is used, `[]`, the element will be returned, but of 
+  type list.
+
+*** =left
+
+```{r}
+typeof(l)
+typeof(l[1])
+typeof(l[[1]])
+```
+
+*** =right
+
+```{r}
+l[1]
+l[[1]]
+```
+
+----
+## Access list elements via names
+
+# Provide element names
+
+```{r}
+names(l) <- c("letters", "numbers", "logical", "double")
+str(l)
+```
+<br>
+
+# Access element
+
+```{r}
+l$letters
+```
+
+----
+## Lists returned by functions
+* We'll talk about this more when we get into functions, but many functions 
+  return a list of objects. For example: `lm`.
+
+```{r}
+data(mtcars)
+mod <- lm(hp ~ mpg, data = mtcars)
+str(mod)
+```
+
+----
+You can access the elements through the list
+
+```{r}
+mod$coefficients
+```
+
+Note that some times there are more efficient methods
+
+```{r}
+coef(mod)
+```
+In this case the methods are roughly equivalent, but sometimes it can make a
+  difference (IRT)
+
+----
+## Other functions will transform data into lists
+
+```{r}
+lst <- split(mtcars, mtcars$cyl)
+str(lst)
+```
+
+----
+## More on lists
+* Note that previously slide looked like a nested list (list of lists). This is 
+  because data frames are lists, where each element is the same length.
+* lists are tremendously useful and flexible, but essentially require at least a 
+  basic understanding of functions and loops.
+
+For example: 
+
+```{r}
+sapply(lst, function(x) cor(x$mpg, x$hp))
+```
+(Note `tapply` is a more efficent method for doing the same thing as above 
+  without spliting the data frame first)
+
+---- &twocol
+# Lists and data frames
+
+*** =left
+
+```{r}
+l <- list(
+	lets = letters[1:5],
+	ints = 9:5,
+	dbl = rnorm(5, 12, 0.75)
+	)
+str(l)
+as.data.frame(l)
+```
+
+*** =right
+
+Or equivalently
+
+```{r}
+dframe <- data.frame(
+	lets = letters[1:5],
+	ints = 9:5,
+	dbl = rnorm(5, 12, 0.75)
+	)
+dframe
+```
+
+----
+## Your turn
+
+
+
+----
+
+```{r}
+d <- read.csv("./data/CamdenBoroughs.csv", 
+	na = c("Not applicable", "999"), 
+	stringsAsFactors = FALSE)
+
+d$Area <- substr(d$Middle.Super.Output.Area, 
+				1,
+				nchar(d$Middle.Super.Output.Area) - 4
+				)
+d$Area <- as.factor(d$Area)
+contrasts(d$Area)
+
+d$FRL <- substr(d$Percentage.Claiming.Free.School.Meals, 
+			1, 
+			nchar(d$Percentage.Claiming.Free.School.Meals) - 1)
+d$FRL <- as.numeric(d$FRL)
+mod <- lm(FRL ~ Area, data = d)
+```
+
+

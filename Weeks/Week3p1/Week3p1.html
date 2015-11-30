@@ -47,10 +47,10 @@
   </hgroup>
   <article data-timings="">
     <ul>
-<li>Scalars, Vectors, Matrices, Arrays, Data frames</li>
+<li>Vectors, Matrices and (breifly) arrays</li>
 <li>Data types: Logical, Integer, Double (numeric), Character</li>
-<li>Attributes: Names, Dimensions, Custom</li>
 <li>Coercion </li>
+<li>Attributes: Names, Dimensions, Custom</li>
 </ul>
 
 <h1>Next week</h1>
@@ -141,6 +141,11 @@ Note that much of this presentation is based off Wickham (2015):
 
 <ul>
 <li>use <code>attributes()</code> and/or <code>attr()</code></li>
+</ul></li>
+<li>What&#39;s metadata
+
+<ul>
+<li>data about the data (i.e., information that describes the data)</li>
 </ul></li>
 </ul>
 
@@ -490,6 +495,10 @@ c(&quot;b&quot;, 1L)
 c(1L, 2)
 </code></pre>
 
+<hr>
+
+<h1>Why does this all matter?</h1>
+
   </article>
   <!-- Presenter Notes -->
 </slide>
@@ -535,23 +544,72 @@ c(1L, 2)
 c(1, 5, 3.25, FALSE) # Integer
 c(TRUE, FALSE, FALSE, TRUE) # Double
 c(&quot;Male&quot;, &quot;Female&quot;, 0, 1) # Character
+c(TRUE, TRUE, FALSE, TRUE) # Character
+c(2.3, 2.5, 2.999999, 3.01) # Integer
 </code></pre>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="segue" id="slide-15" style="background:;">
-  <hgroup>
-    <h1>Attributes</h1>
-  </hgroup>
+<slide class="" id="slide-15" style="background:;">
   <article data-timings="">
     
+<div style='float:left;width:48%;'>
+  <pre><code class="r">as.logical(c(0, 0, 1, TRUE))
+</code></pre>
+
+<pre><code>## [1] FALSE FALSE  TRUE  TRUE
+</code></pre>
+
+<pre><code class="r">as.integer(c(1, 5, 3.25, FALSE))
+</code></pre>
+
+<pre><code>## [1] 1 5 3 0
+</code></pre>
+
+<pre><code class="r">as.double(c(TRUE, FALSE, FALSE, TRUE))
+</code></pre>
+
+<pre><code>## [1] 1 0 0 1
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">c(&quot;Male&quot;, &quot;Female&quot;, 0, 1)
+</code></pre>
+
+<pre><code>## [1] &quot;Male&quot;   &quot;Female&quot; &quot;0&quot;      &quot;1&quot;
+</code></pre>
+
+<pre><code class="r">as.character(c(TRUE, TRUE, FALSE, TRUE))
+</code></pre>
+
+<pre><code>## [1] &quot;TRUE&quot;  &quot;TRUE&quot;  &quot;FALSE&quot; &quot;TRUE&quot;
+</code></pre>
+
+<pre><code class="r">as.integer(c(2.3, 2.999999, 2.49, 3.01))
+</code></pre>
+
+<pre><code>## [1] 2 2 2 3
+</code></pre>
+
+</div>
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-16" style="background:;">
+<slide class="segue" id="slide-16" style="background:;">
+  <article data-timings="">
+    <p><img src="./assets/img/bikeAttr.png" alt="bikeAttr"></p>
+
+<h1>Attributes</h1>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
   <hgroup>
     <h2>Important attributes</h2>
   </hgroup>
@@ -563,13 +621,13 @@ c(&quot;Male&quot;, &quot;Female&quot;, 0, 1) # Character
 etc.)</li>
 </ul>
 
-<p>What is an attribute? Metadata for an object.</p>
+<p>What is an attribute? Metadata (data about the data) for an object.</p>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-17" style="background:;">
+<slide class="" id="slide-18" style="background:;">
   <hgroup>
     <h1><code>names()</code></h1>
   </hgroup>
@@ -622,7 +680,7 @@ z
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-18" style="background:;">
+<slide class="" id="slide-19" style="background:;">
   <hgroup>
     <h2>Factors</h2>
   </hgroup>
@@ -654,7 +712,7 @@ attributes(colors)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-19" style="background:;">
+<slide class="" id="slide-20" style="background:;">
   <hgroup>
     <h2>Adding elements to factors</h2>
   </hgroup>
@@ -685,7 +743,7 @@ colors
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-20" style="background:;">
+<slide class="" id="slide-21" style="background:;">
   <hgroup>
     <h2>Benefits of factors</h2>
   </hgroup>
@@ -725,7 +783,7 @@ byrow = TRUE, ncol = 2)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-21" style="background:;">
+<slide class="" id="slide-22" style="background:;">
   <hgroup>
     <h1>Contrast coding (continued)</h1>
   </hgroup>
@@ -782,7 +840,7 @@ contrasts(colors)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-22" style="background:;">
+<slide class="" id="slide-23" style="background:;">
   <hgroup>
     <h2>Factors and attributes</h2>
   </hgroup>
@@ -816,37 +874,43 @@ contrasts(colors)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-23" style="background:;">
+<slide class="" id="slide-24" style="background:;">
   <hgroup>
-    <h2>Your turn</h2>
+    <h2>Your turn (15 minutes)</h2>
   </hgroup>
   <article data-timings="">
-    <ul>
-<li><p>Create a factor for free or reduced lunch status that has three levels: free, 
-reduced, pay. </p></li>
-<li><p>Specify a new contrast matrix using either a custom matrix or a built-in 
-function</p></li>
+    <h1>Sort of tricky: Will require you do some searching on your own</h1>
+
+<ul>
+<li><p>Create a factor for free or reduced lunch status, of length 150, that has
+three levels: free, reduced, pay. (hint: use/look at the documentation for 
+<code>rep</code>)</p></li>
+<li><p>Specify a new contrast matrix using a custom matrix (you can use dummy-coding
+still, but just change the reference group).</p></li>
+<li><p>Create a random variable with <code>rnorm()</code> of the same length, with a mean of 
+100 and standard deviation of 15. (hint: look at the documentation for <code>rnorm</code>
+)</p></li>
+<li><p>Fit a linear regression model with the factor predicting the random variable</p></li>
 </ul>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-24" style="background:;">
+<slide class="" id="slide-25" style="background:;">
   <article data-timings="">
-    <pre><code class="r">frl &lt;- factor(rep(c(&quot;free&quot;, &quot;reduced&quot;, &quot;pay&quot;), 5))
-frl
-</code></pre>
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">frl &lt;- factor(rep(
+  c(&quot;free&quot;, &quot;reduced&quot;, &quot;pay&quot;), 
+  50)
+)
 
-<pre><code>##  [1] free    reduced pay     free    reduced pay     free    reduced
-##  [9] pay     free    reduced pay     free    reduced pay    
-## Levels: free pay reduced
-</code></pre>
-
-<pre><code class="r">effect_code &lt;- matrix(c(-1, -1,
+effect_code &lt;- matrix(c(-1, -1,
                          1, 0,
                          0, 1),
-                      ncol = 2, byrow = TRUE)
+                      ncol = 2, 
+            byrow = TRUE)
 contrasts(frl) &lt;- effect_code
 contrasts(frl)
 </code></pre>
@@ -857,11 +921,42 @@ contrasts(frl)
 ## reduced    0    1
 </code></pre>
 
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">set.seed(38)
+outcome &lt;- rnorm(150, 100, 15)
+mod &lt;- lm(outcome ~ frl)
+library(arm)
+display(mod, detail = TRUE)
+</code></pre>
+
+<pre><code>## lm(formula = outcome ~ frl)
+##             coef.est coef.se t value Pr(&gt;|t|)
+## (Intercept) 100.15     1.15   87.21    0.00  
+## frl1         -3.50     1.62   -2.15    0.03  
+## frl2          3.15     1.62    1.94    0.05  
+## ---
+## n = 150, k = 3
+## residual sd = 14.06, R-Squared = 0.04
+</code></pre>
+
+</div>
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-25" style="background:;">
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h2>What&#39;s going on here? Plot the data to find out!</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="assets/fig/unnamed-chunk-32-1.png" alt="plot of chunk unnamed-chunk-32"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
   <hgroup>
     <h2>Dimension attribute</h2>
   </hgroup>
@@ -903,7 +998,7 @@ m
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-26" style="background:;">
+<slide class="" id="slide-28" style="background:;">
   <hgroup>
     <h2>Alternative construction of the same matrix</h2>
   </hgroup>
@@ -913,8 +1008,13 @@ m
   <h1>Construct matrix</h1>
 
 <pre><code class="r">m &lt;- 1:12
+m
+</code></pre>
 
-dim(m) &lt;- c(4, 3)
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10 11 12
+</code></pre>
+
+<pre><code class="r">dim(m) &lt;- c(4, 3)
 m
 </code></pre>
 
@@ -956,7 +1056,180 @@ m
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-27" style="background:;">
+<slide class="" id="slide-29" style="background:;">
+  <hgroup>
+    <h2>Construct matrix, but fill by row</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <h1>Construct the transpose of the matrix</h1>
+
+<pre><code class="r">m &lt;- 1:12
+dim(m) &lt;- c(3, 4)
+m
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    1    4    7   10
+## [2,]    2    5    8   11
+## [3,]    3    6    9   12
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <h1>Transpose the matrix</h1>
+
+<pre><code class="r">m &lt;- t(m)
+m
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    2    3
+## [2,]    4    5    6
+## [3,]    7    8    9
+## [4,]   10   11   12
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  <hgroup>
+    <h2>Arrays: &quot;Layered&quot; Matrices</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">a &lt;- 1:16
+dim(a) &lt;- c(2, 2, 4)
+a
+</code></pre>
+
+<p>This is a 3-dimensional array, but more dimensions are possible</p>
+
+<div style='float:left;width:48%;'>
+  <pre><code>## , , 1
+## 
+##      [1,] [2,]
+## [1,]    1    3
+## [2,]    2    4
+## 
+## , , 2
+## 
+##      [1,] [2,]
+## [1,]    5    7
+## [2,]    6    8
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code>## , , 3
+## 
+##      [1,] [2,]
+## [1,]    9   11
+## [2,]   10   12
+## 
+## , , 4
+## 
+##      [1,] [2,]
+## [1,]   13   15
+## [2,]   14   16
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  <hgroup>
+    <h2>When would you use arrays?</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>One example: Differential item functioning</h1>
+
+<div style='float:left;width:48%;'>
+  <pre><code>## , , Score = 0
+## 
+##           Male Female
+## Incorrect   53     51
+## Correct     42     34
+## 
+## , , Score = 1
+## 
+##           Male Female
+## Incorrect   40     65
+## Correct     50     20
+## 
+## , , Score = 2
+## 
+##           Male Female
+## Incorrect   16     24
+## Correct     46     34
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code>## , , Score = 3
+## 
+##           Male Female
+## Incorrect   64     24
+## Correct     61     48
+## 
+## , , Score = 4
+## 
+##           Male Female
+## Incorrect   34     65
+## Correct     53     66
+## 
+## , , Score = 5
+## 
+##           Male Female
+## Incorrect   32     48
+## Correct     42     30
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-32" style="background:;">
+  <hgroup>
+    <h2>Let&#39;s try</h2>
+  </hgroup>
+  <article data-timings="">
+    <ol>
+<li><p>Create the following vector
+\[
+\begin{equation*}
+\textbf{vect} = \qquad 
+\begin{bmatrix}
+23 & 41 & 18 & 27 & 16 & 11 & 72 & 29 & 18 & 51 & 32 & 63
+\end{bmatrix}
+\end{equation*}
+\]</p></li>
+<li><p>Use attributes to transform it to the following matrix
+\[
+\begin{equation*}
+\textbf{mat} = \qquad 
+\begin{bmatrix}
+23 & 27 & 72 & 51 \\
+41 & 16 & 29 & 32 \\ 
+18 & 11 & 18 & 63
+\end{bmatrix}
+\end{equation*}
+\]</p></li>
+<li><p>Provide some arbitrary row and column names</p></li>
+<li><p>Use attributes to transform \(\textbf{vect}\) into a \(3 * 2 * 2\) array</p></li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-33" style="background:;">
   <hgroup>
     <h2>More on the names attributes</h2>
   </hgroup>
@@ -982,7 +1255,7 @@ attr(m, &quot;names&quot;)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-28" style="background:;">
+<slide class="" id="slide-34" style="background:;">
   <hgroup>
     <h2>Names attributes (continued)</h2>
   </hgroup>
@@ -995,21 +1268,20 @@ attr(m, &quot;names&quot;)
 <pre><code class="r">m[&quot;r1&quot;, ]
 </code></pre>
 
-<pre><code>## c1 c2 c3 
-##  1  5  9
+<pre><code>## Error in m[&quot;r1&quot;, ]: no &#39;dimnames&#39; attribute for array
 </code></pre>
 
 <pre><code class="r">m[&quot;r3&quot;,&quot;c2&quot;] 
 </code></pre>
 
-<pre><code>## [1] 7
+<pre><code>## Error in m[&quot;r3&quot;, &quot;c2&quot;]: no &#39;dimnames&#39; attribute for array
 </code></pre>
 
 <pre><code class="r">m[&quot;b&quot;] 
 </code></pre>
 
 <pre><code>## b 
-## 2
+## 4
 </code></pre>
 
 </div>
@@ -1026,10 +1298,10 @@ m
 </code></pre>
 
 <pre><code>##      col1 col2 col3
-## row1    1    5    9
-## row2    2    6   10
-## row3    3    7   11
-## row4    4    8   12
+## row1    1    2    3
+## row2    4    5    6
+## row3    7    8    9
+## row4   10   11   12
 ## attr(,&quot;names&quot;)
 ##  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; NA  NA  NA  NA  NA  NA  NA  NA  NA
 </code></pre>
@@ -1039,7 +1311,7 @@ m
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-29" style="background:;">
+<slide class="" id="slide-35" style="background:;">
   <hgroup>
     <h2>Adding custom attributes</h2>
   </hgroup>
@@ -1067,7 +1339,7 @@ attr(m, &quot;new_attribute&quot;)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-30" style="background:;">
+<slide class="" id="slide-36" style="background:;">
   <hgroup>
     <h2>Final notes on attributes</h2>
   </hgroup>
@@ -1094,10 +1366,10 @@ m
 </code></pre>
 
 <pre><code>##      [,1] [,2] [,3]
-## [1,]    1    5    9
-## [2,]    2    6   10
-## [3,]    3    7   11
-## [4,]    4    8   12
+## [1,]    1    2    3
+## [2,]    4    5    6
+## [3,]    7    8    9
+## [4,]   10   11   12
 ## attr(,&quot;names&quot;)
 ##  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; NA  NA  NA  NA  NA  NA  NA  NA  NA 
 ## attr(,&quot;new_attribute&quot;)
@@ -1109,7 +1381,7 @@ m
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-31" style="background:;">
+<slide class="" id="slide-37" style="background:;">
   <article data-timings="">
     <p>To remove all the attributes, and return to a basic vector</p>
 
@@ -1117,14 +1389,14 @@ m
 m
 </code></pre>
 
-<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10 11 12
+<pre><code>##  [1]  1  4  7 10  2  5  8 11  3  6  9 12
 </code></pre>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-32" style="background:;">
+<slide class="" id="slide-38" style="background:;">
   <hgroup>
     <h2>Lab</h2>
   </hgroup>
@@ -1248,110 +1520,146 @@ to type double or integer and add it to the third row of the matrix.</li>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=15 title='Attributes'>
+        data-slide=15 title='NA'>
          15
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=16 title='Important attributes'>
+        data-slide=16 title='NA'>
          16
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=17 title='<code>names()</code>'>
+        data-slide=17 title='Important attributes'>
          17
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=18 title='Factors'>
+        data-slide=18 title='<code>names()</code>'>
          18
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=19 title='Adding elements to factors'>
+        data-slide=19 title='Factors'>
          19
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=20 title='Benefits of factors'>
+        data-slide=20 title='Adding elements to factors'>
          20
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=21 title='Contrast coding (continued)'>
+        data-slide=21 title='Benefits of factors'>
          21
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=22 title='Factors and attributes'>
+        data-slide=22 title='Contrast coding (continued)'>
          22
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=23 title='Your turn'>
+        data-slide=23 title='Factors and attributes'>
          23
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=24 title='NA'>
+        data-slide=24 title='Your turn (15 minutes)'>
          24
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=25 title='Dimension attribute'>
+        data-slide=25 title='NA'>
          25
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=26 title='Alternative construction of the same matrix'>
+        data-slide=26 title='What&#39;s going on here? Plot the data to find out!'>
          26
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=27 title='More on the names attributes'>
+        data-slide=27 title='Dimension attribute'>
          27
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=28 title='Names attributes (continued)'>
+        data-slide=28 title='Alternative construction of the same matrix'>
          28
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=29 title='Adding custom attributes'>
+        data-slide=29 title='Construct matrix, but fill by row'>
          29
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=30 title='Final notes on attributes'>
+        data-slide=30 title='Arrays: &quot;Layered&quot; Matrices'>
          30
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=31 title='NA'>
+        data-slide=31 title='When would you use arrays?'>
          31
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=32 title='Lab'>
+        data-slide=32 title='Let&#39;s try'>
          32
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='More on the names attributes'>
+         33
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=34 title='Names attributes (continued)'>
+         34
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=35 title='Adding custom attributes'>
+         35
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=36 title='Final notes on attributes'>
+         36
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=37 title='NA'>
+         37
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=38 title='Lab'>
+         38
       </a>
     </li>
   </ul>

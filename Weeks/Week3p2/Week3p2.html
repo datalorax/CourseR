@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Data Structures</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Data Structures">
+  <meta name="author" content="Daniel Anderson">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Data Structures</h1>
+    <h2>Week 3.2</h2>
+    <p>Daniel Anderson<br/>CourseR</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Today&#39;s Agenda</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>A note on matrix algebra vs element-wise algebra</li>
+<li>Lists</li>
+<li>Data frames</li>
+<li>Classes</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Matrix Multiplication Versus Element-wise</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Multiplication of matrices in R is completed element-wise, not with matrix
+  algebra.</p>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">m1 &lt;- matrix(round(rnorm(12, 10, 3)),
+        ncol = 4)
+m1
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   11    3    7   14
+## [2,]    8    6    6   11
+## [3,]   13   11   12   14
+</code></pre>
+
+<pre><code class="r">m2 &lt;- matrix(round(rnorm(12, 10, 3)),
+        ncol = 3)
+m2
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3]
+## [1,]   14    8    7
+## [2,]   11   11   10
+## [3,]    8    8    9
+## [4,]    7    6   13
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">m1 * m2
+</code></pre>
+
+<pre><code>## Error in m1 * m2: non-conformable arrays
+</code></pre>
+
+<pre><code class="r">m1 %*% m2
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3]
+## [1,]  341  261  352
+## [2,]  303  244  313
+## [3,]  497  405  491
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Matrix algebra</h2>
+  </hgroup>
+  <article data-timings="">
+    <div align = "center">
+<img src = assets/img/matrixMultDiag.png width = 500 height = 500>
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Marix product rules</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><br></p>
+
+<div align = "center">
+<img src = assets/img/matrixMulti.png width = 500 height = 300>
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>One more example</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">m1 &lt;- matrix(1:16, ncol = 4)
+m1
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    1    5    9   13
+## [2,]    2    6   10   14
+## [3,]    3    7   11   15
+## [4,]    4    8   12   16
+</code></pre>
+
+<pre><code class="r">m2 &lt;- matrix(21:36, ncol = 4)
+m2
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   21   25   29   33
+## [2,]   22   26   30   34
+## [3,]   23   27   31   35
+## [4,]   24   28   32   36
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">m1 * m2
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   21  125  261  429
+## [2,]   44  156  300  476
+## [3,]   69  189  341  525
+## [4,]   96  224  384  576
+</code></pre>
+
+<pre><code class="r">m1 %*% m2
+</code></pre>
+
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]  650  762  874  986
+## [2,]  740  868  996 1124
+## [3,]  830  974 1118 1262
+## [4,]  920 1080 1240 1400
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>Lists</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Elements of lists can be of any type, including lists</p>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">l &lt;- list(
+    c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;),
+    1:5,
+    rep(c(T,F), 7),
+    rnorm(3, 100, 25)
+          )
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">l
+</code></pre>
+
+<pre><code>## [[1]]
+## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;
+## 
+## [[2]]
+## [1] 1 2 3 4 5
+## 
+## [[3]]
+##  [1]  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE
+## [12] FALSE  TRUE FALSE
+## 
+## [[4]]
+## [1]  84.25054  92.20372 115.32656
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Accessing List Elements</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>List elements can be accessed in two methods: Using the <code>$</code> with the element 
+names, or through indexing with a double bracket <code>[[]]</code>.</li>
+<li>If a single bracket index is used, <code>[]</code>, the element will be returned, but of 
+type list.</li>
+</ul>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">typeof(l)
+</code></pre>
+
+<pre><code>## [1] &quot;list&quot;
+</code></pre>
+
+<pre><code class="r">typeof(l[1])
+</code></pre>
+
+<pre><code>## [1] &quot;list&quot;
+</code></pre>
+
+<pre><code class="r">typeof(l[[1]])
+</code></pre>
+
+<pre><code>## [1] &quot;character&quot;
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">l[1]
+</code></pre>
+
+<pre><code>## [[1]]
+## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;
+</code></pre>
+
+<pre><code class="r">l[[1]]
+</code></pre>
+
+<pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Access list elements via names</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Provide element names</h1>
+
+<pre><code class="r">names(l) &lt;- c(&quot;letters&quot;, &quot;numbers&quot;, &quot;logical&quot;, &quot;double&quot;)
+str(l)
+</code></pre>
+
+<pre><code>## List of 4
+##  $ letters: chr [1:3] &quot;a&quot; &quot;b&quot; &quot;c&quot;
+##  $ numbers: int [1:5] 1 2 3 4 5
+##  $ logical: logi [1:14] TRUE FALSE TRUE FALSE TRUE FALSE ...
+##  $ double : num [1:3] 84.3 92.2 115.3
+</code></pre>
+
+<p><br></p>
+
+<h1>Access element</h1>
+
+<pre><code class="r">l$letters
+</code></pre>
+
+<pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Lists returned by functions</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>We&#39;ll talk about this more when we get into functions, but many functions 
+return a list of objects. For example: <code>lm</code>.</li>
+</ul>
+
+<pre><code class="r">data(mtcars)
+mod &lt;- lm(hp ~ mpg, data = mtcars)
+str(mod)
+</code></pre>
+
+<pre><code>## List of 12
+##  $ coefficients : Named num [1:2] 324.08 -8.83
+##   ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;(Intercept)&quot; &quot;mpg&quot;
+##  $ residuals    : Named num [1:32] -28.7 -28.7 -29.8 -25.1 16 ...
+##   ..- attr(*, &quot;names&quot;)= chr [1:32] &quot;Mazda RX4&quot; &quot;Mazda RX4 Wag&quot; &quot;Datsun 710&quot; &quot;Hornet 4 Drive&quot; ...
+##  $ effects      : Named num [1:32] -829.8 296.3 -23.6 -20 19.3 ...
+##   ..- attr(*, &quot;names&quot;)= chr [1:32] &quot;(Intercept)&quot; &quot;mpg&quot; &quot;&quot; &quot;&quot; ...
+##  $ rank         : int 2
+##  $ fitted.values: Named num [1:32] 139 139 123 135 159 ...
+##   ..- attr(*, &quot;names&quot;)= chr [1:32] &quot;Mazda RX4&quot; &quot;Mazda RX4 Wag&quot; &quot;Datsun 710&quot; &quot;Hornet 4 Drive&quot; ...
+##  $ assign       : int [1:2] 0 1
+##  $ qr           :List of 5
+##   ..$ qr   : num [1:32, 1:2] -5.657 0.177 0.177 0.177 0.177 ...
+##   .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. ..$ : chr [1:32] &quot;Mazda RX4&quot; &quot;Mazda RX4 Wag&quot; &quot;Datsun 710&quot; &quot;Hornet 4 Drive&quot; ...
+##   .. .. ..$ : chr [1:2] &quot;(Intercept)&quot; &quot;mpg&quot;
+##   .. ..- attr(*, &quot;assign&quot;)= int [1:2] 0 1
+##   ..$ qraux: num [1:2] 1.18 1.02
+##   ..$ pivot: int [1:2] 1 2
+##   ..$ tol  : num 1e-07
+##   ..$ rank : int 2
+##   ..- attr(*, &quot;class&quot;)= chr &quot;qr&quot;
+##  $ df.residual  : int 30
+##  $ xlevels      : Named list()
+##  $ call         : language lm(formula = hp ~ mpg, data = mtcars)
+##  $ terms        :Classes &#39;terms&#39;, &#39;formula&#39; length 3 hp ~ mpg
+##   .. ..- attr(*, &quot;variables&quot;)= language list(hp, mpg)
+##   .. ..- attr(*, &quot;factors&quot;)= int [1:2, 1] 0 1
+##   .. .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. .. ..$ : chr [1:2] &quot;hp&quot; &quot;mpg&quot;
+##   .. .. .. ..$ : chr &quot;mpg&quot;
+##   .. ..- attr(*, &quot;term.labels&quot;)= chr &quot;mpg&quot;
+##   .. ..- attr(*, &quot;order&quot;)= int 1
+##   .. ..- attr(*, &quot;intercept&quot;)= int 1
+##   .. ..- attr(*, &quot;response&quot;)= int 1
+##   .. ..- attr(*, &quot;.Environment&quot;)=&lt;environment: R_GlobalEnv&gt; 
+##   .. ..- attr(*, &quot;predvars&quot;)= language list(hp, mpg)
+##   .. ..- attr(*, &quot;dataClasses&quot;)= Named chr [1:2] &quot;numeric&quot; &quot;numeric&quot;
+##   .. .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;hp&quot; &quot;mpg&quot;
+##  $ model        :&#39;data.frame&#39;:   32 obs. of  2 variables:
+##   ..$ hp : num [1:32] 110 110 93 110 175 105 245 62 95 123 ...
+##   ..$ mpg: num [1:32] 21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...
+##   ..- attr(*, &quot;terms&quot;)=Classes &#39;terms&#39;, &#39;formula&#39; length 3 hp ~ mpg
+##   .. .. ..- attr(*, &quot;variables&quot;)= language list(hp, mpg)
+##   .. .. ..- attr(*, &quot;factors&quot;)= int [1:2, 1] 0 1
+##   .. .. .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. .. .. ..$ : chr [1:2] &quot;hp&quot; &quot;mpg&quot;
+##   .. .. .. .. ..$ : chr &quot;mpg&quot;
+##   .. .. ..- attr(*, &quot;term.labels&quot;)= chr &quot;mpg&quot;
+##   .. .. ..- attr(*, &quot;order&quot;)= int 1
+##   .. .. ..- attr(*, &quot;intercept&quot;)= int 1
+##   .. .. ..- attr(*, &quot;response&quot;)= int 1
+##   .. .. ..- attr(*, &quot;.Environment&quot;)=&lt;environment: R_GlobalEnv&gt; 
+##   .. .. ..- attr(*, &quot;predvars&quot;)= language list(hp, mpg)
+##   .. .. ..- attr(*, &quot;dataClasses&quot;)= Named chr [1:2] &quot;numeric&quot; &quot;numeric&quot;
+##   .. .. .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;hp&quot; &quot;mpg&quot;
+##  - attr(*, &quot;class&quot;)= chr &quot;lm&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <article data-timings="">
+    <p>You can access the elements through the list</p>
+
+<pre><code class="r">mod$coefficients
+</code></pre>
+
+<pre><code>## (Intercept)         mpg 
+##  324.082314   -8.829731
+</code></pre>
+
+<p>Note that some times there are more efficient methods</p>
+
+<pre><code class="r">coef(mod)
+</code></pre>
+
+<pre><code>## (Intercept)         mpg 
+##  324.082314   -8.829731
+</code></pre>
+
+<p>In this case the methods are roughly equivalent, but sometimes it can make a
+  difference (IRT)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Other functions will transform data into lists</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">lst &lt;- split(mtcars, mtcars$cyl)
+str(lst)
+</code></pre>
+
+<pre><code>## List of 3
+##  $ 4:&#39;data.frame&#39;:   11 obs. of  11 variables:
+##   ..$ mpg : num [1:11] 22.8 24.4 22.8 32.4 30.4 33.9 21.5 27.3 26 30.4 ...
+##   ..$ cyl : num [1:11] 4 4 4 4 4 4 4 4 4 4 ...
+##   ..$ disp: num [1:11] 108 146.7 140.8 78.7 75.7 ...
+##   ..$ hp  : num [1:11] 93 62 95 66 52 65 97 66 91 113 ...
+##   ..$ drat: num [1:11] 3.85 3.69 3.92 4.08 4.93 4.22 3.7 4.08 4.43 3.77 ...
+##   ..$ wt  : num [1:11] 2.32 3.19 3.15 2.2 1.61 ...
+##   ..$ qsec: num [1:11] 18.6 20 22.9 19.5 18.5 ...
+##   ..$ vs  : num [1:11] 1 1 1 1 1 1 1 1 0 1 ...
+##   ..$ am  : num [1:11] 1 0 0 1 1 1 0 1 1 1 ...
+##   ..$ gear: num [1:11] 4 4 4 4 4 4 3 4 5 5 ...
+##   ..$ carb: num [1:11] 1 2 2 1 2 1 1 1 2 2 ...
+##  $ 6:&#39;data.frame&#39;:   7 obs. of  11 variables:
+##   ..$ mpg : num [1:7] 21 21 21.4 18.1 19.2 17.8 19.7
+##   ..$ cyl : num [1:7] 6 6 6 6 6 6 6
+##   ..$ disp: num [1:7] 160 160 258 225 168 ...
+##   ..$ hp  : num [1:7] 110 110 110 105 123 123 175
+##   ..$ drat: num [1:7] 3.9 3.9 3.08 2.76 3.92 3.92 3.62
+##   ..$ wt  : num [1:7] 2.62 2.88 3.21 3.46 3.44 ...
+##   ..$ qsec: num [1:7] 16.5 17 19.4 20.2 18.3 ...
+##   ..$ vs  : num [1:7] 0 0 1 1 1 1 0
+##   ..$ am  : num [1:7] 1 1 0 0 0 0 1
+##   ..$ gear: num [1:7] 4 4 3 3 4 4 5
+##   ..$ carb: num [1:7] 4 4 1 1 4 4 6
+##  $ 8:&#39;data.frame&#39;:   14 obs. of  11 variables:
+##   ..$ mpg : num [1:14] 18.7 14.3 16.4 17.3 15.2 10.4 10.4 14.7 15.5 15.2 ...
+##   ..$ cyl : num [1:14] 8 8 8 8 8 8 8 8 8 8 ...
+##   ..$ disp: num [1:14] 360 360 276 276 276 ...
+##   ..$ hp  : num [1:14] 175 245 180 180 180 205 215 230 150 150 ...
+##   ..$ drat: num [1:14] 3.15 3.21 3.07 3.07 3.07 2.93 3 3.23 2.76 3.15 ...
+##   ..$ wt  : num [1:14] 3.44 3.57 4.07 3.73 3.78 ...
+##   ..$ qsec: num [1:14] 17 15.8 17.4 17.6 18 ...
+##   ..$ vs  : num [1:14] 0 0 0 0 0 0 0 0 0 0 ...
+##   ..$ am  : num [1:14] 0 0 0 0 0 0 0 0 0 0 ...
+##   ..$ gear: num [1:14] 3 3 3 3 3 3 3 3 3 3 ...
+##   ..$ carb: num [1:14] 2 4 3 3 3 4 4 4 2 2 ...
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>More on lists</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Note that previously slide looked like a nested list (list of lists). This is 
+because data frames are lists, where each element is the same length.</li>
+<li>lists are tremendously useful and flexible, but essentially require at least a 
+basic understanding of functions and loops.</li>
+</ul>
+
+<p>For example: </p>
+
+<pre><code class="r">sapply(lst, function(x) cor(x$mpg, x$hp))
+</code></pre>
+
+<pre><code>##          4          6          8 
+## -0.5235034 -0.1270678 -0.2836357
+</code></pre>
+
+<p>(Note <code>tapply</code> is a more efficent method for doing the same thing as above 
+  without spliting the data frame first)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h1>Lists and data frames</h1>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">l &lt;- list(
+    lets = letters[1:5],
+    ints = 9:5,
+    dbl = rnorm(5, 12, 0.75)
+    )
+str(l)
+</code></pre>
+
+<pre><code>## List of 3
+##  $ lets: chr [1:5] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...
+##  $ ints: int [1:5] 9 8 7 6 5
+##  $ dbl : num [1:5] 11.3 12.3 13 12.7 12.7
+</code></pre>
+
+<pre><code class="r">as.data.frame(l)
+</code></pre>
+
+<pre><code>##   lets ints      dbl
+## 1    a    9 11.30182
+## 2    b    8 12.32591
+## 3    c    7 13.01539
+## 4    d    6 12.65257
+## 5    e    5 12.72735
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p>Or equivalently</p>
+
+<pre><code class="r">dframe &lt;- data.frame(
+    lets = letters[1:5],
+    ints = 9:5,
+    dbl = rnorm(5, 12, 0.75)
+    )
+dframe
+</code></pre>
+
+<pre><code>##   lets ints      dbl
+## 1    a    9 11.70672
+## 2    b    8 12.58865
+## 3    c    7 11.87292
+## 4    d    6 11.74504
+## 5    e    5 13.05823
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Your turn</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">d &lt;- read.csv(&quot;./data/CamdenBoroughs.csv&quot;, 
+    na = c(&quot;Not applicable&quot;, &quot;999&quot;), 
+    stringsAsFactors = FALSE)
+</code></pre>
+
+<pre><code>## Warning in file(file, &quot;rt&quot;): cannot open file &#39;./data/CamdenBoroughs.csv&#39;:
+## No such file or directory
+</code></pre>
+
+<pre><code>## Error in file(file, &quot;rt&quot;): cannot open the connection
+</code></pre>
+
+<pre><code class="r">d$Area &lt;- substr(d$Middle.Super.Output.Area, 
+                1,
+                nchar(d$Middle.Super.Output.Area) - 4
+                )
+</code></pre>
+
+<pre><code>## Error in substr(d$Middle.Super.Output.Area, 1, nchar(d$Middle.Super.Output.Area) - : cannot open file &#39;/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb&#39;: No such file or directory
+</code></pre>
+
+<pre><code class="r">d$Area &lt;- as.factor(d$Area)
+</code></pre>
+
+<pre><code>## Warning in is.factor(x): restarting interrupted promise evaluation
+</code></pre>
+
+<pre><code>## Error in is.factor(x): cannot open file &#39;/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb&#39;: No such file or directory
+</code></pre>
+
+<pre><code class="r">contrasts(d$Area)
+</code></pre>
+
+<pre><code>## Warning in contrasts(d$Area): restarting interrupted promise evaluation
+</code></pre>
+
+<pre><code>## Error in contrasts(d$Area): cannot open file &#39;/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb&#39;: No such file or directory
+</code></pre>
+
+<pre><code class="r">d$FRL &lt;- substr(d$Percentage.Claiming.Free.School.Meals, 
+            1, 
+            nchar(d$Percentage.Claiming.Free.School.Meals) - 1)
+</code></pre>
+
+<pre><code>## Warning in substr(d$Percentage.Claiming.Free.School.Meals, 1, nchar(d
+## $Percentage.Claiming.Free.School.Meals) - : restarting interrupted promise
+## evaluation
+</code></pre>
+
+<pre><code>## Error in substr(d$Percentage.Claiming.Free.School.Meals, 1, nchar(d$Percentage.Claiming.Free.School.Meals) - : cannot open file &#39;/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb&#39;: No such file or directory
+</code></pre>
+
+<pre><code class="r">d$FRL &lt;- as.numeric(d$FRL)
+</code></pre>
+
+<pre><code>## Warning: restarting interrupted promise evaluation
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): cannot open file &#39;/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb&#39;: No such file or directory
+</code></pre>
+
+<pre><code class="r">mod &lt;- lm(FRL ~ Area, data = d)
+</code></pre>
+
+<pre><code>## Warning in is.data.frame(data): restarting interrupted promise evaluation
+</code></pre>
+
+<pre><code>## Error in is.data.frame(data): cannot open file &#39;/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb&#39;: No such file or directory
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Today&#39;s Agenda'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Matrix Multiplication Versus Element-wise'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Matrix algebra'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Marix product rules'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='One more example'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='Lists'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='Accessing List Elements'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Access list elements via names'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='Lists returned by functions'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='NA'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='Other functions will transform data into lists'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='More on lists'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Lists and data frames'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='Your turn'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='NA'>
+         15
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

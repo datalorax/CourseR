@@ -13,10 +13,10 @@ knit        : slidify::knit2slides
 
 ## Today's Agenda (not exactly ordered)
 
-* Scalars, Vectors, Matrices, Arrays, Data frames
+* Vectors, Matrices and (breifly) arrays
 * Data types: Logical, Integer, Double (numeric), Character
-* Attributes: Names, Dimensions, Custom
 * Coercion 
+* Attributes: Names, Dimensions, Custom
 
 # Next week
 * A note on matrix algebra vs element-wise algebra
@@ -54,6 +54,8 @@ Note that much of this presentation is based off Wickham (2015):
 # Attributes
 * Arbitrary metadata
     - use `attributes()` and/or `attr()`
+* What's metadata
+    - data about the data (i.e., information that describes the data)
 
 ---- &twocol
 ## Atomic Vectors vs Lists
@@ -369,6 +371,8 @@ c("a", TRUE)
 c("b", 1L)
 c(1L, 2)
 ```
+----
+# Why does this all matter?
 
 ----
 
@@ -415,11 +419,70 @@ c(0, 0, 1, TRUE) # Logical
 c(1, 5, 3.25, FALSE) # Integer
 c(TRUE, FALSE, FALSE, TRUE) # Double
 c("Male", "Female", 0, 1) # Character
+c(TRUE, TRUE, FALSE, TRUE) # Character
+c(2.3, 2.5, 2.999999, 3.01) # Integer
 ```
 
+---- &twocol
+
+*** =left
+
+
+```r
+as.logical(c(0, 0, 1, TRUE))
+```
+
+```
+## [1] FALSE FALSE  TRUE  TRUE
+```
+
+```r
+as.integer(c(1, 5, 3.25, FALSE))
+```
+
+```
+## [1] 1 5 3 0
+```
+
+```r
+as.double(c(TRUE, FALSE, FALSE, TRUE))
+```
+
+```
+## [1] 1 0 0 1
+```
+
+*** =right
+
+
+```r
+c("Male", "Female", 0, 1)
+```
+
+```
+## [1] "Male"   "Female" "0"      "1"
+```
+
+```r
+as.character(c(TRUE, TRUE, FALSE, TRUE))
+```
+
+```
+## [1] "TRUE"  "TRUE"  "FALSE" "TRUE"
+```
+
+```r
+as.integer(c(2.3, 2.999999, 2.49, 3.01))
+```
+
+```
+## [1] 2 2 2 3
+```
 
 ---- .segue
+![bikeAttr](./assets/img/bikeAttr.png)
 # Attributes
+
 
 ----
 ## Important attributes
@@ -428,7 +491,7 @@ c("Male", "Female", 0, 1) # Character
 * Class: points R to correct functions to execute (e.g., `print()`, `plot()`, 
   etc.)
 
-What is an attribute? Metadata for an object.
+What is an attribute? Metadata (data about the data) for an object.
 
 ---- &twocol
 # `names()`
@@ -671,32 +734,39 @@ is.vector(colors)
 ```
 
 ----
-## Your turn
+## Your turn (15 minutes)
 
-* Create a factor for free or reduced lunch status that has three levels: free, 
-  reduced, pay. 
+# Sort of tricky: Will require you do some searching on your own
 
-* Specify a new contrast matrix using either a custom matrix or a built-in 
-  function
+* Create a factor for free or reduced lunch status, of length 150, that has
+  three levels: free, reduced, pay. (hint: use/look at the documentation for 
+  `rep`)
 
-----
+* Specify a new contrast matrix using a custom matrix (you can use dummy-coding
+  still, but just change the reference group).
+
+* Create a random variable with `rnorm()` of the same length, with a mean of 
+  100 and standard deviation of 15. (hint: look at the documentation for `rnorm`
+  )
+
+* Fit a linear regression model with the factor predicting the random variable
+
+---- &twocol
+
+*** =left
+
 
 ```r
-frl <- factor(rep(c("free", "reduced", "pay"), 5))
-frl
-```
+frl <- factor(rep(
+  c("free", "reduced", "pay"), 
+  50)
+)
 
-```
-##  [1] free    reduced pay     free    reduced pay     free    reduced
-##  [9] pay     free    reduced pay     free    reduced pay    
-## Levels: free pay reduced
-```
-
-```r
 effect_code <- matrix(c(-1, -1,
 						 1, 0,
 						 0, 1),
-					  ncol = 2, byrow = TRUE)
+					  ncol = 2, 
+            byrow = TRUE)
 contrasts(frl) <- effect_code
 contrasts(frl)
 ```
@@ -707,6 +777,34 @@ contrasts(frl)
 ## pay        1    0
 ## reduced    0    1
 ```
+*** =right
+
+
+
+
+```r
+set.seed(38)
+outcome <- rnorm(150, 100, 15)
+mod <- lm(outcome ~ frl)
+library(arm)
+display(mod, detail = TRUE)
+```
+
+```
+## lm(formula = outcome ~ frl)
+##             coef.est coef.se t value Pr(>|t|)
+## (Intercept) 100.15     1.15   87.21    0.00  
+## frl1         -3.50     1.62   -2.15    0.03  
+## frl2          3.15     1.62    1.94    0.05  
+## ---
+## n = 150, k = 3
+## residual sd = 14.06, R-Squared = 0.04
+```
+
+---- 
+## What's going on here? Plot the data to find out!
+
+![plot of chunk unnamed-chunk-32](assets/fig/unnamed-chunk-32-1.png) 
 
 
 ---- &twocol
@@ -761,7 +859,14 @@ is.atomic(m)
 
 ```r
 m <- 1:12
+m
+```
 
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10 11 12
+```
+
+```r
 dim(m) <- c(4, 3)
 m
 ```
@@ -804,6 +909,163 @@ m
 ## r4  4  8 12
 ```
 
+---- &twocol
+## Construct matrix, but fill by row
+
+*** =left
+# Construct the transpose of the matrix
+
+```r
+m <- 1:12
+dim(m) <- c(3, 4)
+m
+```
+
+```
+##      [,1] [,2] [,3] [,4]
+## [1,]    1    4    7   10
+## [2,]    2    5    8   11
+## [3,]    3    6    9   12
+```
+
+*** =right
+# Transpose the matrix
+
+```r
+m <- t(m)
+m
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,]    1    2    3
+## [2,]    4    5    6
+## [3,]    7    8    9
+## [4,]   10   11   12
+```
+
+---- &twocol
+## Arrays: "Layered" Matrices
+
+
+```r
+a <- 1:16
+dim(a) <- c(2, 2, 4)
+a
+```
+
+This is a 3-dimensional array, but more dimensions are possible
+*** =left
+
+
+```
+## , , 1
+## 
+##      [1,] [2,]
+## [1,]    1    3
+## [2,]    2    4
+## 
+## , , 2
+## 
+##      [1,] [2,]
+## [1,]    5    7
+## [2,]    6    8
+```
+
+*** =right
+
+
+```
+## , , 3
+## 
+##      [1,] [2,]
+## [1,]    9   11
+## [2,]   10   12
+## 
+## , , 4
+## 
+##      [1,] [2,]
+## [1,]   13   15
+## [2,]   14   16
+```
+
+---- &twocol
+## When would you use arrays?
+# One example: Differential item functioning
+
+*** =left
+
+
+```
+## , , Score = 0
+## 
+##           Male Female
+## Incorrect   53     51
+## Correct     42     34
+## 
+## , , Score = 1
+## 
+##           Male Female
+## Incorrect   40     65
+## Correct     50     20
+## 
+## , , Score = 2
+## 
+##           Male Female
+## Incorrect   16     24
+## Correct     46     34
+```
+
+*** =right
+
+
+```
+## , , Score = 3
+## 
+##           Male Female
+## Incorrect   64     24
+## Correct     61     48
+## 
+## , , Score = 4
+## 
+##           Male Female
+## Incorrect   34     65
+## Correct     53     66
+## 
+## , , Score = 5
+## 
+##           Male Female
+## Incorrect   32     48
+## Correct     42     30
+```
+
+----
+## Let's try
+
+1. Create the following vector
+$$
+\begin{equation*}
+  \textbf{vect} = \qquad 
+  \begin{bmatrix}
+    23 & 41 & 18 & 27 & 16 & 11 & 72 & 29 & 18 & 51 & 32 & 63
+  \end{bmatrix}
+\end{equation*}
+$$
+
+2. Use attributes to transform it to the following matrix
+$$
+\begin{equation*}
+  \textbf{mat} = \qquad 
+  \begin{bmatrix}
+    23 & 27 & 72 & 51 \\
+    41 & 16 & 29 & 32 \\ 
+    18 & 11 & 18 & 63
+  \end{bmatrix}
+\end{equation*}
+$$
+3. Provide some arbitrary row and column names
+4. Use attributes to transform $\textbf{vect}$ into a $3 * 2 * 2$ array
+
 ----
 ## More on the names attributes
 For atomic vectors, and specifically matrices, `rownames()` and `colnames()` 
@@ -842,8 +1104,7 @@ m["r1", ]
 ```
 
 ```
-## c1 c2 c3 
-##  1  5  9
+## Error in m["r1", ]: no 'dimnames' attribute for array
 ```
 
 ```r
@@ -851,7 +1112,7 @@ m["r3","c2"]
 ```
 
 ```
-## [1] 7
+## Error in m["r3", "c2"]: no 'dimnames' attribute for array
 ```
 
 ```r
@@ -860,7 +1121,7 @@ m["b"]
 
 ```
 ## b 
-## 2
+## 4
 ```
 
 *** =right
@@ -880,10 +1141,10 @@ m
 
 ```
 ##      col1 col2 col3
-## row1    1    5    9
-## row2    2    6   10
-## row3    3    7   11
-## row4    4    8   12
+## row1    1    2    3
+## row2    4    5    6
+## row3    7    8    9
+## row4   10   11   12
 ## attr(,"names")
 ##  [1] "a" "b" "c" NA  NA  NA  NA  NA  NA  NA  NA  NA
 ```
@@ -946,10 +1207,10 @@ m
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]    1    5    9
-## [2,]    2    6   10
-## [3,]    3    7   11
-## [4,]    4    8   12
+## [1,]    1    2    3
+## [2,]    4    5    6
+## [3,]    7    8    9
+## [4,]   10   11   12
 ## attr(,"names")
 ##  [1] "a" "b" "c" NA  NA  NA  NA  NA  NA  NA  NA  NA 
 ## attr(,"new_attribute")
@@ -967,7 +1228,7 @@ m
 ```
 
 ```
-##  [1]  1  2  3  4  5  6  7  8  9 10 11 12
+##  [1]  1  4  7 10  2  5  8 11  3  6  9 12
 ```
 
 ----
