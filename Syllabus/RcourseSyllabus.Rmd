@@ -37,7 +37,7 @@ Prior to the first class you should have the latest version of R downloaded and
   * Peng, R. D. (2015). *R Programming for Data Science*. Victoria, BC: Lean 
       Publishing.
   * Sanchez, G. (2013). *Handling and Processing Strings in R.* Trowchez
-  	  Editions: Berkely. (http://www.gastonsanchez.com/Handling and Processing Strings in R.pdf)
+  	  Editions: Berkely. (http://www.gastonsanchez.com/Handling_and_Processing_Strings_in_R.pdf)
   * Wickham, H. (2015). *Advanced R*. Available online at http://adv-r.had.co.nz
   * Wickham, H. (2010). *ggplot2*. New York, NY: Springer.
   
