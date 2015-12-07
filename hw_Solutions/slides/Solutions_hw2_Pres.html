@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Homework 2 Review</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Homework 2 Review">
+  <meta name="author" content="Daniel Anderson">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Homework 2 Review</h1>
+    <h2></h2>
+    <p>Daniel Anderson<br/>CourseR</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>1. Load data</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">setwd(&quot;/Users/Daniel/Dropbox/Teaching/CourseR/data/&quot;)
+d &lt;- read.csv(&quot;CollegeScorecard.csv&quot;, na = c(&quot;NULL&quot;, &quot;PrivacySuppressed&quot;))
+</code></pre>
+
+<p>Note the use of the <code>na</code> vector, rather than an individual argument</p>
+
+<div style='float:left;width:48%;'>
+  
+</div>
+<div style='float:right;width:48%;'>
+  
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>2. Process data</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Select appropriate columns and rename variables</h1>
+
+<pre><code class="r">d &lt;- d[ ,c(&quot;INSTNM&quot;, &quot;STABBR&quot;, &quot;SAT_AVG_ALL&quot;, &quot;GRAD_DEBT_MDN_SUPP&quot;, &quot;md_earn_wne_p10&quot;)]
+names(d) &lt;- c(&quot;Institution&quot;, &quot;State&quot;, &quot;SAT&quot;, &quot;Debt&quot;, &quot;Earnings&quot;)
+</code></pre>
+
+<p><br></p>
+
+<h1>Create centered variables</h1>
+
+<pre><code class="r">d$SAT_c &lt;- d$SAT - mean(d$SAT, na.rm = TRUE)
+mean(d$SAT_c, na.rm = TRUE)
+</code></pre>
+
+<pre><code>## [1] -0.000000000000009
+</code></pre>
+
+<pre><code class="r">d$Debt_c &lt;- d$Debt - mean(d$Debt, na.rm = TRUE)
+mean(d$Debt_c, na.rm = TRUE)
+</code></pre>
+
+<pre><code>## [1] -0.0000000000017
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>3. Create plots</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">d[5:6, ]
+</code></pre>
+
+<pre><code>##                 Institution State  SAT  Debt Earnings SAT_c Debt_c
+## 5  Alabama State University    AL  830 33452    27800  -232  16405
+## 6 The University of Alabama    AL 1171 24000    42400   109   6953
+</code></pre>
+
+<pre><code class="r">pairs(d[ ,3:5])
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-5-1.png" alt="plot of chunk unnamed-chunk-5"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">par(mfcol = c(3, 1))
+hist(d[ ,3]) # SAT
+hist(d[ ,4]) # Debt
+hist(d[ ,5]) # Earnings
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6"> </p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">par(mfcol = c(3, 1))
+plot(density(d[ ,3], na.rm = TRUE))
+plot(density(d[ ,4], na.rm = TRUE))
+plot(density(d[ ,5], na.rm = TRUE))
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-7-1.png" alt="plot of chunk unnamed-chunk-7"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <article data-timings="">
+    <ol>
+<li>Fit preliminary models</li>
+</ol>
+
+<pre><code class="r">library(arm)
+mA &lt;- lm(Earnings ~ SAT, data = d)
+display(mA, detail = TRUE)
+</code></pre>
+
+<pre><code>## lm(formula = Earnings ~ SAT, data = d)
+##             coef.est coef.se  t value  Pr(&gt;|t|)
+## (Intercept) -9181.28  1667.70    -5.51     0.00
+## SAT            49.04     1.56    31.42     0.00
+## ---
+## n = 1475, k = 2
+## residual sd = 7791.29, R-Squared = 0.40
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">mB &lt;- lm(Earnings ~ Debt, data = d)
+display(mB, detail = TRUE)
+</code></pre>
+
+<pre><code>## lm(formula = Earnings ~ Debt, data = d)
+##             coef.est coef.se  t value  Pr(&gt;|t|)
+## (Intercept) 21624.71   361.12    59.88     0.00
+## Debt            0.68     0.02    37.75     0.00
+## ---
+## n = 5052, k = 2
+## residual sd = 11187.05, R-Squared = 0.22
+</code></pre>
+
+<pre><code class="r">mC &lt;- lm(SAT ~ Debt, data = d)
+display(mC, detail = TRUE)
+</code></pre>
+
+<pre><code>## lm(formula = SAT ~ Debt, data = d)
+##             coef.est coef.se t value Pr(&gt;|t|)
+## (Intercept) 1197.35    16.95   70.62    0.00 
+## Debt          -0.01     0.00   -8.06    0.00 
+## ---
+## n = 1502, k = 2
+## residual sd = 126.70, R-Squared = 0.04
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h1>5. Regression model results</h1>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Coefficents represent the expected change in the outcome given a 1 unit
+increase in the predictor. </li>
+<li>Coefficient for <code>Debt</code> is very small, because it represents the expected 
+change in the outcome given a one dollar increase in debt. </li>
+<li>Intercepts range from difficult to interpret, to impossible. For example, the
+SAT scale does not go below 200, yet the intercept in Model A represents the expected earnings for schools with an average SAT score of 0. After centering the variables and refitting the models (code below), the intercepts represent the expected value of the outcome when the school has an average level of the predictor.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h1>Regression plots</h1>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">par(mfcol = c(3,1))
+
+plot(d$Earnings ~ d$SAT)
+abline(coef(mA)[1], coef(mA)[2], 
+  col = &quot;blue&quot;, lwd = 3, lty = 2)
+
+plot(d$Earnings ~ d$Debt)
+abline(coef(mB)[1], coef(mB)[2], 
+  col = &quot;blue&quot;, lwd = 3, lty = 2)
+
+plot(d$SAT ~ d$Debt)
+abline(coef(mC)[1], coef(mC)[2], 
+  col = &quot;blue&quot;, lwd = 3, lty = 2)
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-12-1.png" alt="plot of chunk unnamed-chunk-12"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h1>Refit models with centered variables</h1>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">mAc &lt;- lm(Earnings ~ SAT_c, data = d)
+display(mAc, detail = TRUE)
+</code></pre>
+
+<pre><code>## lm(formula = Earnings ~ SAT_c, data = d)
+##             coef.est coef.se  t value  Pr(&gt;|t|)
+## (Intercept) 42885.13   202.88   211.39     0.00
+## SAT_c          49.04     1.56    31.42     0.00
+## ---
+## n = 1475, k = 2
+## residual sd = 7791.29, R-Squared = 0.40
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">mBc &lt;- lm(Earnings ~ Debt_c, data = d)
+display(mBc, detail = TRUE)
+</code></pre>
+
+<pre><code>## lm(formula = Earnings ~ Debt_c, data = d)
+##             coef.est coef.se  t value  Pr(&gt;|t|)
+## (Intercept) 33263.84   158.27   210.17     0.00
+## Debt_c          0.68     0.02    37.75     0.00
+## ---
+## n = 5052, k = 2
+## residual sd = 11187.05, R-Squared = 0.22
+</code></pre>
+
+<pre><code class="r">mCc &lt;- lm(SAT_c ~ Debt_c, data = d)
+display(mCc, detail = TRUE)
+</code></pre>
+
+<pre><code>## lm(formula = SAT_c ~ Debt_c, data = d)
+##             coef.est coef.se t value Pr(&gt;|t|)
+## (Intercept) 38.77     5.65    6.87    0.00   
+## Debt_c      -0.01     0.00   -8.06    0.00   
+## ---
+## n = 1502, k = 2
+## residual sd = 126.70, R-Squared = 0.04
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>6. Fit the multiple regression model</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">mr &lt;- lm(Earnings ~ SAT_c + Debt_c, data = d)
+display(mr, detail = TRUE)
+</code></pre>
+
+<pre><code>## lm(formula = Earnings ~ SAT_c + Debt_c, data = d)
+##             coef.est coef.se  t value  Pr(&gt;|t|)
+## (Intercept) 42308.84   365.64   115.71     0.00
+## SAT_c          49.72     1.61    30.86     0.00
+## Debt_c          0.09     0.05     1.99     0.05
+## ---
+## n = 1455, k = 3
+## residual sd = 7783.43, R-Squared = 0.40
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>Extra Credit</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Predictor-residual plot</h1>
+
+<p>One of the best ways to visualize multiple regression models is through a
+  predictor residual plot, which displays the relation between one of the variables and the outcome after partialing common variance with the other predictor. In the case of a model with two predictors, you would</p>
+
+<ul>
+<li>Fit a model with one predictor as the <code>Y</code> (outcome) and one as the <code>X</code> 
+(predictor). For example, Model C.</li>
+<li>Use this model to compute predicted scores for each observation</li>
+<li>Use the predicted scores to compute residuals (i.e., the relation between <code>X1</code> 
+partialed from <code>X2</code>, or vice-versa)</li>
+<li>Plot the relation between the computed residual and the outcome</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <article data-timings="">
+    <ul>
+<li>Fit a model with one predictor as the <code>Y</code> (outcome) and one as the <code>X</code> 
+(predictor). For example, Model C.</li>
+<li>Use this model to compute predicted scores for each observation</li>
+</ul>
+
+<pre><code class="r">mCc &lt;- lm(SAT_c ~ Debt_c, data = d)
+predSAT &lt;- coef(mCc)[1] + coef(mCc)[2]*d$Debt_c
+</code></pre>
+
+<ul>
+<li>Use the predicted scores to compute residuals (i.e., the relation between <code>X1</code> 
+partialed from <code>X2</code>, or vice-versa)</li>
+</ul>
+
+<pre><code class="r">resSAT &lt;- d$SAT_c - predSAT
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <article data-timings="">
+    <ul>
+<li>Plot the relation between the computed residual and the outcome</li>
+</ul>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">plot(resSAT, d$Earnings, 
+  main = &quot;Predictor Residual Plot&quot;, 
+  xlab = &quot;Residualized SAT 
+    (relative to Debt)&quot;,
+  ylab = &quot;Earnings&quot;)
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-19-1.png" alt="plot of chunk unnamed-chunk-19"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <article data-timings="">
+    <p>The previous plot displays the relation between <code>Earnings</code> and <code>SAT_c</code> while
+  accounting for (i.e., residualzing for) <code>Debt_c</code>. To actually plot the residualzed line, you&#39;ll need to fit one additional model.</p>
+
+<pre><code class="r">resLine &lt;- lm(d$Earnings ~ resSAT)
+coef(resLine)
+</code></pre>
+
+<pre><code>## (Intercept)      resSAT 
+##       47806          50
+</code></pre>
+
+<p><br></p>
+
+<p>Note that the coefficient for the above model is essentially equivalent to the 
+  multiple regression coefficient, and if there were no missing data would be identical (though the intercept does change, because of meaning of a value of 0 on the residualized predictor).</p>
+
+<pre><code class="r">coef(mr)
+</code></pre>
+
+<pre><code>## (Intercept)       SAT_c      Debt_c 
+##   42308.842      49.719       0.092
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  <article data-timings="">
+    <p>To add the regression line, just use <code>abline()</code> like normal</p>
+
+<p><img src="assets/fig/unnamed-chunk-22-1.png" alt="plot of chunk unnamed-chunk-22"> </p>
+
+<pre><code class="r">abline(coef(resLine)[1], coef(resLine)[2], col = &quot;red&quot;, lwd = 3, lty = 2)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>Quick extension: View the other predictor residual plot</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">mDc &lt;- lm(Debt_c ~ SAT_c, data = d)
+predDebt &lt;- coef(mDc)[1] + 
+            coef(mDc)[2]*d$SAT_c
+resDebt &lt;- d$Debt_c - predDebt
+resDebtLine &lt;- lm(d$Earnings ~ resDebt)
+
+plot(resSAT, d$Earnings, 
+  main = &quot;Predictor Residual Plot&quot;, 
+  xlab = &quot;Residualized Debt 
+    (relative to SAT)&quot;,
+  ylab = &quot;Earnings&quot;)
+
+abline(coef(resDebtLine)[1], 
+       coef(resDebtLine)[2], 
+  col = &quot;purple&quot;, lwd = 3, lty = 2)
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-25-1.png" alt="plot of chunk unnamed-chunk-25"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>Final note: Use a package</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">install.packages(&quot;visreg&quot;)
+library(visreg)
+par(mfrow = c(2,1))
+visreg(mr)
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-27-1.png" alt="plot of chunk unnamed-chunk-27"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
+  <hgroup>
+    <h2>Or a 3d plot</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">visreg2d(mr, &quot;SAT_c&quot;, &quot;Debt_c&quot;, plot.type = &quot;persp&quot;)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-28-1.png" alt="plot of chunk unnamed-chunk-28"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  <hgroup>
+    <h1>Example with a crazy model</h1>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">fit &lt;- lm(Ozone ~ Solar.R + Wind + 
+  Temp + I(Wind^2) + I(Temp^2) + 
+  I(Wind * Temp) + I(Wind*Temp^2) + 
+  I(Temp*Wind^2) + I(Temp^2 * Wind^2),
+  data = airquality)
+
+visreg2d(fit, &quot;Wind&quot;, &quot;Temp&quot;, 
+  plot.type = &quot;persp&quot;, col = &quot;green&quot;)
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-30-1.png" alt="plot of chunk unnamed-chunk-30"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='1. Load data'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='2. Process data'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='3. Create plots'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='NA'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='NA'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='NA'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='5. Regression model results'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Regression plots'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='Refit models with centered variables'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='NA'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='6. Fit the multiple regression model'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='Extra Credit'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='NA'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='NA'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='NA'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='NA'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='Quick extension: View the other predictor residual plot'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='Final note: Use a package'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='Or a 3d plot'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='Example with a crazy model'>
+         20
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

@@ -1,0 +1,362 @@
+---
+title       : Homework 2 Review
+subtitle    : 
+author      : Daniel Anderson
+job         : CourseR
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+--- &twocol
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
+
+```
+## 1. Load data
+
+```{r}
+setwd("/Users/Daniel/Dropbox/Teaching/CourseR/data/")
+d <- read.csv("CollegeScorecard.csv", na = c("NULL", "PrivacySuppressed"))
+```
+
+Note the use of the `na` vector, rather than an individual argument
+
+---- 
+## 2. Process data
+
+
+
+# Select appropriate columns and rename variables
+```{r}
+d <- d[ ,c("INSTNM", "STABBR", "SAT_AVG_ALL", "GRAD_DEBT_MDN_SUPP", "md_earn_wne_p10")]
+names(d) <- c("Institution", "State", "SAT", "Debt", "Earnings")
+```
+
+<br>
+
+# Create centered variables
+```{r}
+d$SAT_c <- d$SAT - mean(d$SAT, na.rm = TRUE)
+mean(d$SAT_c, na.rm = TRUE)
+d$Debt_c <- d$Debt - mean(d$Debt, na.rm = TRUE)
+mean(d$Debt_c, na.rm = TRUE)
+```
+
+---- 
+## 3. Create plots
+
+```{r}
+d[5:6, ]
+```
+
+```{r, fig.height = 4}
+pairs(d[ ,3:5])
+```
+
+---- &twocol
+
+*** =left
+
+```{r}
+par(mfcol = c(3, 1))
+hist(d[ ,3]) # SAT
+hist(d[ ,4]) # Debt
+hist(d[ ,5]) # Earnings
+```
+
+*** =right
+
+```{r}
+par(mfcol = c(3, 1))
+plot(density(d[ ,3], na.rm = TRUE))
+plot(density(d[ ,4], na.rm = TRUE))
+plot(density(d[ ,5], na.rm = TRUE))
+```
+
+----
+
+4. Fit preliminary models
+
+```{r, echo = FALSE, message = FALSE}
+library(arm)
+options(scipen = 999, digits = 2)
+```
+
+```{r}
+library(arm)
+mA <- lm(Earnings ~ SAT, data = d)
+display(mA, detail = TRUE)
+```
+
+----
+
+```{r}
+mB <- lm(Earnings ~ Debt, data = d)
+display(mB, detail = TRUE)
+mC <- lm(SAT ~ Debt, data = d)
+display(mC, detail = TRUE)
+```
+
+----
+
+# 5. Regression model results
+
+* Coefficents represent the expected change in the outcome given a 1 unit
+  increase in the predictor. 
+* Coefficient for `Debt` is very small, because it represents the expected 
+  change in the outcome given a one dollar increase in debt. 
+* Intercepts range from difficult to interpret, to impossible. For example, the
+  SAT scale does not go below 200, yet the intercept in Model A represents the expected earnings for schools with an average SAT score of 0. After centering the variables and refitting the models (code below), the intercepts represent the expected value of the outcome when the school has an average level of the predictor.
+
+---- &twocol
+# Regression plots
+
+*** =left
+
+```{r, eval = FALSE}
+par(mfcol = c(3,1))
+
+plot(d$Earnings ~ d$SAT)
+abline(coef(mA)[1], coef(mA)[2], 
+  col = "blue", lwd = 3, lty = 2)
+
+plot(d$Earnings ~ d$Debt)
+abline(coef(mB)[1], coef(mB)[2], 
+  col = "blue", lwd = 3, lty = 2)
+
+plot(d$SAT ~ d$Debt)
+abline(coef(mC)[1], coef(mC)[2], 
+  col = "blue", lwd = 3, lty = 2)
+```
+
+*** =right
+
+```{r, echo = FALSE}
+par(mfcol = c(3,1))
+plot(d$Earnings ~ d$SAT)
+abline(coef(mA)[1], coef(mA)[2], 
+  col = "blue", lwd = 3, lty = 2)
+
+plot(d$Earnings ~ d$Debt)
+abline(coef(mB)[1], coef(mB)[2], 
+  col = "blue", lwd = 3, lty = 2)
+
+plot(d$SAT ~ d$Debt)
+abline(a = coef(mC)[1], b = coef(mC)[2], 
+  col = "blue", lwd = 3, lty = 2)
+```
+
+----
+# Refit models with centered variables
+
+
+```{r}
+mAc <- lm(Earnings ~ SAT_c, data = d)
+display(mAc, detail = TRUE)
+```
+
+----
+
+```{r}
+mBc <- lm(Earnings ~ Debt_c, data = d)
+display(mBc, detail = TRUE)
+mCc <- lm(SAT_c ~ Debt_c, data = d)
+display(mCc, detail = TRUE)
+```
+
+----
+
+## 6. Fit the multiple regression model
+
+```{r}
+mr <- lm(Earnings ~ SAT_c + Debt_c, data = d)
+display(mr, detail = TRUE)
+```
+
+----
+
+## Extra Credit 
+# Predictor-residual plot
+
+One of the best ways to visualize multiple regression models is through a
+  predictor residual plot, which displays the relation between one of the variables and the outcome after partialing common variance with the other predictor. In the case of a model with two predictors, you would
+
+* Fit a model with one predictor as the `Y` (outcome) and one as the `X` 
+  (predictor). For example, Model C.
+* Use this model to compute predicted scores for each observation
+* Use the predicted scores to compute residuals (i.e., the relation between `X1` 
+  partialed from `X2`, or vice-versa)
+* Plot the relation between the computed residual and the outcome
+
+----
+* Fit a model with one predictor as the `Y` (outcome) and one as the `X` 
+  (predictor). For example, Model C.
+* Use this model to compute predicted scores for each observation
+
+```{r}
+mCc <- lm(SAT_c ~ Debt_c, data = d)
+predSAT <- coef(mCc)[1] + coef(mCc)[2]*d$Debt_c
+```
+
+* Use the predicted scores to compute residuals (i.e., the relation between `X1` 
+  partialed from `X2`, or vice-versa)
+
+```{r}
+resSAT <- d$SAT_c - predSAT
+```
+
+---- &twocol
+
+* Plot the relation between the computed residual and the outcome
+
+*** =left
+
+```{r, eval = FALSE}
+plot(resSAT, d$Earnings, 
+  main = "Predictor Residual Plot", 
+  xlab = "Residualized SAT 
+    (relative to Debt)",
+  ylab = "Earnings")
+```
+
+*** =right
+
+```{r, echo = FALSE}
+plot(resSAT, d$Earnings, 
+  main = "Predictor Residual Plot", 
+  xlab = "Residualized SAT (relative to Debt)",
+  ylab = "Earnings")
+```
+
+
+----
+
+The previous plot displays the relation between `Earnings` and `SAT_c` while
+  accounting for (i.e., residualzing for) `Debt_c`. To actually plot the residualzed line, you'll need to fit one additional model.
+
+```{r}
+resLine <- lm(d$Earnings ~ resSAT)
+coef(resLine)
+```
+
+<br>
+
+Note that the coefficient for the above model is essentially equivalent to the 
+  multiple regression coefficient, and if there were no missing data would be identical (though the intercept does change, because of meaning of a value of 0 on the residualized predictor).
+
+```{r}
+coef(mr)
+```
+
+----
+
+To add the regression line, just use `abline()` like normal
+
+```{r, echo = FALSE}
+plot(resSAT, d$Earnings, 
+  main = "Predictor Residual Plot", 
+  xlab = "Residualized SAT (relative to Debt)",
+  ylab = "Earnings")
+abline(coef(resLine)[1], coef(resLine)[2], col = "red", lwd = 3, lty = 2)
+```
+
+```{r, eval = FALSE}
+abline(coef(resLine)[1], coef(resLine)[2], col = "red", lwd = 3, lty = 2)
+```
+
+---- &twocol
+
+## Quick extension: View the other predictor residual plot
+
+*** =left
+
+```{r, eval = FALSE}
+mDc <- lm(Debt_c ~ SAT_c, data = d)
+predDebt <- coef(mDc)[1] + 
+            coef(mDc)[2]*d$SAT_c
+resDebt <- d$Debt_c - predDebt
+resDebtLine <- lm(d$Earnings ~ resDebt)
+
+plot(resSAT, d$Earnings, 
+  main = "Predictor Residual Plot", 
+  xlab = "Residualized Debt 
+    (relative to SAT)",
+  ylab = "Earnings")
+
+abline(coef(resDebtLine)[1], 
+       coef(resDebtLine)[2], 
+  col = "purple", lwd = 3, lty = 2)
+```
+
+*** =right
+
+```{r, echo = FALSE}
+mDc <- lm(Debt_c ~ SAT_c, data = d)
+predDebt <- coef(mDc)[1] + coef(mDc)[2]*d$SAT_c
+resDebt <- d$Debt_c - predDebt
+resDebtLine <- lm(d$Earnings ~ resDebt)
+
+plot(resSAT, d$Earnings, 
+  main = "Predictor Residual Plot", 
+  xlab = "Residualized Debt (relative to SAT)",
+  ylab = "Earnings")
+abline(coef(resDebtLine)[1], coef(resDebtLine)[2], 
+  col = "purple", lwd = 3, lty = 2)
+```
+
+---- &twocol
+## Final note: Use a package
+
+*** =left
+
+```{r, eval = FALSE}
+install.packages("visreg")
+library(visreg)
+par(mfrow = c(2,1))
+visreg(mr)
+```
+
+*** =right
+
+```{r, echo = FALSE}
+library(visreg)
+par(mfrow = c(2,1))
+visreg(mr)
+```
+
+----
+## Or a 3d plot
+
+```{r}
+visreg2d(mr, "SAT_c", "Debt_c", plot.type = "persp")
+```
+
+---- &twocol
+# Example with a crazy model
+
+*** =left
+
+```{r, eval = FALSE}
+fit <- lm(Ozone ~ Solar.R + Wind + 
+  Temp + I(Wind^2) + I(Temp^2) + 
+  I(Wind * Temp) + I(Wind*Temp^2) + 
+  I(Temp*Wind^2) + I(Temp^2 * Wind^2),
+  data = airquality)
+
+visreg2d(fit, "Wind", "Temp", 
+  plot.type = "persp", col = "green")
+```
+
+*** =right
+
+```{r, echo = FALSE}
+fit <- lm(Ozone ~ Solar.R + Wind + Temp + 
+      I(Wind^2) + I(Temp^2) + 
+      I(Wind * Temp) + I(Wind*Temp^2) + 
+      I(Temp*Wind^2) + I(Temp^2 * Wind^2),
+  data = airquality)
+visreg2d(fit, "Wind", "Temp", 
+  plot.type = "persp", col = "green")
+```
