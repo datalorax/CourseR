@@ -217,11 +217,20 @@ dframe
 
 ----
 ## Your turn
+* Create a 2 by 2 matrix and a 2 by 4 matrix with random normal numbers with a 
+  mean of 10 and standard deviation of 2. 
 
 
 
 ----
+```{r}
+m1 <- matrix(rnorm(4, 10, 2), ncol = 2)
+m2 <- matrix(rnorm(8, 10, 2), ncol = 4)
+m1 * m2
+```
 
+
+----
 ```{r}
 d <- read.csv("./data/CamdenBoroughs.csv", 
 	na = c("Not applicable", "999"), 
