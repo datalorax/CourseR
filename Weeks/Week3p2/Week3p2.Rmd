@@ -24,8 +24,8 @@ knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
 
 ## Matrix Multiplication Versus Element-wise
 
-Multiplication of matrices in R is completed element-wise, not with matrix
-  algebra.
+To compute the product of two matrices, you have to use the matrix
+  multiplication operator, `%*%`, rather than `*`. 
 
 *** =left
 
@@ -62,12 +62,15 @@ m1 %*% m2
 ---- &twocol
 ## One more example
 
+If you try to multiply two square matrices, the procedure will be conducted
+  element-wise, unless you use the correct command for matrix multiplication.
+
 *** =left
 
 ```{r}
-m1 <- matrix(1:16, ncol = 4)
+m1 <- matrix(1:9, ncol = 3)
 m1
-m2 <- matrix(21:36, ncol = 4)
+m2 <- matrix(21:29, ncol = 3)
 m2
 ```
 
@@ -76,6 +79,34 @@ m2
 ```{r}
 m1 * m2
 m1 %*% m2
+```
+
+----
+## Your turn
+* Create a 2 by 2 matrix and a 2 by 4 matrix with random normal numbers with a 
+  mean of 10 and standard deviation of 2. Note, if you'd like your results to match mine, first run `set.seed(101)`.
+* Multiply the matrices together
+* Predict the dimensions of product matrix for each of the following
+	+ 3*5 * 5*7
+	+ 4*2 * 2*4
+	+ 2*4 * 4*2
+	+ 4*3 * 4*3
+	+ 3*5 * 5*2
+
+
+----
+```{r}
+set.seed(101)
+m1 <- matrix(rnorm(4, 10, 2), ncol = 2)
+m2 <- matrix(rnorm(8, 10, 2), ncol = 4)
+m1 %*% m2
+```
+<br>
+# Predictions
+```{r, echo = FALSE}
+Matrices <- c("3*5 * 5*7", "4*2 * 2*4", "2*4 * 4*2", "4*3 * 4*3", "3*5 * 5*2")
+Result <- c("3*7", "4*4", "2*2", NA, "3*2")
+knitr::kable(as.data.frame(cbind(Matrices, Result)))
 ```
 
 ---- &twocol
@@ -138,13 +169,46 @@ str(l)
 l$letters
 ```
 
+---- &twocol
+## Naming lists versus vectors
+
+*** =left
+
+# Lists
+```{r}
+lst <- list(1:5, letters[1:15])
+str(lst)
+names(lst) <- c("Numbers", "Letters")
+str(lst)
+```
+
+*** =right
+
+# Vectors
+```{r}
+v <- lst[[1]]
+names(v) <- c("One", "Two", 
+	"Three", "Four", "Five")
+v
+```
+
+----
+```{r}
+names(lst$Numbers) <- c("One", "Two", "Three", "Four", "Five")
+lst
+```
+<br>
+# Subsetting
+```{r}
+lst$Numbers["Three"]
+```
+
 ----
 ## Lists returned by functions
-* We'll talk about this more when we get into functions, but many functions 
-  return a list of objects. For example: `lm`.
+* We'll talk about this more when we get into functions (next week), but many
+  functions return a list of objects. For example: `lm`.
 
 ```{r}
-data(mtcars)
 mod <- lm(hp ~ mpg, data = mtcars)
 str(mod)
 ```
@@ -168,21 +232,25 @@ In this case the methods are roughly equivalent, but sometimes it can make a
 ## Other functions will transform data into lists
 
 ```{r}
-lst <- split(mtcars, mtcars$cyl)
-str(lst)
+cyls <- split(mtcars, mtcars$cyl)
+str(cyls)
 ```
 
 ----
 ## More on lists
-* Note that previously slide looked like a nested list (list of lists). This is 
-  because data frames are lists, where each element is the same length.
+* Note that previously slide looked like a nested list (list inside a list). 
+  This is because data frames are lists, where each element of the list is a vector of the same length.
 * lists are tremendously useful and flexible, but essentially require at least a 
-  basic understanding of functions and loops.
+  basic understanding of functions and/or loops. 
+  	+ Functions because lists are often used to return output from a function 
+  	  (as discussed previously). 
+  	+ Loops because you often want to loop through a list and apply a function
+  	  to each element of the list.
 
 For example: 
 
 ```{r}
-sapply(lst, function(x) cor(x$mpg, x$hp))
+sapply(cyls, function(x) cor(x$mpg, x$hp))
 ```
 (Note `tapply` is a more efficent method for doing the same thing as above 
   without spliting the data frame first)
@@ -216,38 +284,223 @@ dframe
 ```
 
 ----
+## More on data frames
+Because data frames are actually lists, you can use the same subsetting 
+  procedures you can with lists. 
+
+```{r}
+dframe[2]
+dframe[[2]]
+```
+
+----
 ## Your turn
-* Create a 2 by 2 matrix and a 2 by 4 matrix with random normal numbers with a 
-  mean of 10 and standard deviation of 2. 
+* Create a list consisting of a character vector, an integer vector, and a 
+  factor, all of the same length
+* Provide names for each element.
+* Provide names for each element of the integer vector.
+* Subset the list using names to select one element of the integer vector.
+* Subset the list to select the same element using indexing.
+* Convert the list into a data frame
 
+----
+
+* Create a list consisting of a character vector, an integer vector, and a 
+  factor, all of the same length
+* Provide names for each element.
+
+```{r}
+l <- list(Lets = letters[1:7], 
+		  Ints = 1:7,
+		  fact = factor(
+		  			c(rep(c("red", "green", "blue"), 2), "red")
+		  			)
+		  )
+l
+```
+
+----
+* Provide names for each element of the integer vector.
+
+```{r}
+names(l[["Ints"]]) <- letters[11:17]
+l
+```
+
+----
+* Subset the list using names to select one element of the integer vector.
+
+```{r}
+l$Ints["p"]
+```
+
+* Subset the list to select the same element using indexing.
+
+```{r}
+l[[2]][6]
+```
+
+----
+
+* Convert the list into a data frame
+
+```{r}
+d <- as.data.frame(l)
+d
+```
+
+---- .segue
+# Common/Routine Functions (very briefly)
+
+----
+# Resources
+Plenty of helpful sheets for common/routine functions in R. For example: 
+* https://cran.r-project.org/doc/contrib/Short-refcard.pdf
+* http://www.columbia.edu/~cjd11/charles_dimaggio/DIRE/resources/R/rFunctionsList.pdf
+
+![image](./assets/img/refCard.png)
 
 
 ----
-```{r}
-m1 <- matrix(rnorm(4, 10, 2), ncol = 2)
-m2 <- matrix(rnorm(8, 10, 2), ncol = 4)
-m1 * m2
-```
+## Big picture
+There are lots of functions that you will use and need as you get deeper into 
+  programming with R. Gaining fluency with these functions is one of the keys to taking the "next step" with R and truly being comfortable with it. Some examples of functions I use routinely include the following:
 
+* `rep()` repeats an element or vector a specified number of times
+* `seq()` creates a sequence of numbers from `x` to `y`
+* `:` creates an integer index that changes by 1
+* `table()` creates a summary of the number of times an element occurs in a
+   vector (similar to Frequencies in SPSS)
+* `c()` creates a vector
+* `cbind()` binds vectors, matrices, or data frames together column-wise
+* `rbind()` binds vectors, matrices, or data frames together row-wise
 
 ----
+## Common functions (continued)
+* `ifelse()` vectorized operator for conditional recoding of a vector. Takes
+   three arguments: If condition == TRUE, then carry out an operation, else carry out a different operation.
+* `rnorm()`, `rbinom()`, `rpois()`, etc., create randomly generated data from 
+   the specified distribution (with the specified distributional properties).
+* `dnorm()`, `dbinom()`, `dpois()`, etc, calculate the likelihood of specific
+   data occurring from the specified distribution (with the specified distributional properties).
+* `str()` provides the basic structure of the object (most useful for lists and
+   data frames).
+* `head()` and `tail()` display the first 6 (head) and the last 6 (tail) rows
+   of a given data frame.
+* `summary()` provides statistical summary information on vectors
+* `sample()` randomly select `n` observations from a vector
+
+---- 
+## Additional arguments
+
+While the basics of most of these functions are relatively straightforward, 
+  most also include additional arguments that make them more flexible.
+
+For example: 
+
 ```{r}
-d <- read.csv("./data/CamdenBoroughs.csv", 
-	na = c("Not applicable", "999"), 
-	stringsAsFactors = FALSE)
-
-d$Area <- substr(d$Middle.Super.Output.Area, 
-				1,
-				nchar(d$Middle.Super.Output.Area) - 4
-				)
-d$Area <- as.factor(d$Area)
-contrasts(d$Area)
-
-d$FRL <- substr(d$Percentage.Claiming.Free.School.Meals, 
-			1, 
-			nchar(d$Percentage.Claiming.Free.School.Meals) - 1)
-d$FRL <- as.numeric(d$FRL)
-mod <- lm(FRL ~ Area, data = d)
+rep(c(3,5), 7) # typical application
+rep(c(3, 5), each = 2, length.out = 7) # additional arguments
 ```
 
+---- &twocol
+## `dnorm()` etc. arguments
 
+These functions can be used in ML estimation but are also commonly useful in plotting.
+
+*** =left
+
+```{r, eval = FALSE}
+plot(x = 101:200,  
+	y = seq(0, 0.1, length.out = 100), 
+	type = "n", 
+	ylab = "Density", main = "Normals")
+abline(v = 150, lty = 3, col = "gray")
+
+lines(101:200, dnorm(101:200, 150, 5), 
+	col = "blue")
+lines(101:200, dnorm(101:200, 150, 10), 
+	col = "red")
+lines(101:200, dnorm(101:200, 150, 15), 
+	col = "green")
+lines(101:200, dnorm(101:200, 150, 20), 
+	col = "purple")
+lines(101:200, dnorm(101:200, 150, 25), 
+	col = "orange")
+lines(101:200, dnorm(101:200, 150, 30), 
+	col = "black")
+```
+
+*** =right
+
+```{r, echo = FALSE}
+plot(x = 101:200,  
+	 y = seq(0, 0.1, length.out = 100), 
+	type = "n", 
+	ylab = "Density", main = "Normals")
+abline(v = 150, lty = 3, col = "gray")
+
+lines(101:200, dnorm(101:200, 150, 5), 
+	col = "blue")
+lines(101:200, dnorm(101:200, 150, 10), 
+	col = "red")
+lines(101:200, dnorm(101:200, 150, 15), 
+	col = "green")
+lines(101:200, dnorm(101:200, 150, 20), 
+	col = "purple")
+lines(101:200, dnorm(101:200, 150, 25), 
+	col = "orange")
+lines(101:200, dnorm(101:200, 150, 30), 
+	col = "black")
+```
+
+----
+## Your Turn (probably fairly tough)
+# Use some of the common/routine functions to do the following:
+* Create a sequence vector from 100 to 237 that is of length 1000.
+* Randomly order the vector
+* Compute the likelihood of each point occurring from a normal distribution
+  with $\mu$ = 178.32 and $\sigma$ = 15.67. Store the result in a new vector.
+* Form a 1000 by 2 matrix that is composed of the sequence vector and
+  the likelihood vector.
+* Use the matrix to plot the relation between the sequence vector and the
+  likelihood of each point.
+
+----
+* Create a sequence vector from 100 to 237 that is of length 10,000.
+
+```{r}
+v <- seq(100, 237, length.out = 1e4)
+head(v)
+```
+
+* Randomly order the vector
+
+```{r}
+v <- sample(v, length(v))
+head(v)
+```
+
+----
+* Compute the likelihood of each point, and store the result in a new vector
+
+```{r}
+lik <- dnorm(v, 178.32, 15.67)
+head(lik)
+```
+
+* Form a 1000 by 2 matrix that is composed of the sequence vector and
+  the likelihood vector.
+
+```{r}
+m <- cbind(v, lik)
+head(m)
+```
+
+----
+* Use the matrix to plot the relation between the sequence vector and the
+  likelihood of each point.
+
+```{r}
+plot(m[ ,1], m[ ,2])
+```

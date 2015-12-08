@@ -22,8 +22,8 @@ knit        : slidify::knit2slides
 
 ## Matrix Multiplication Versus Element-wise
 
-Multiplication of matrices in R is completed element-wise, not with matrix
-  algebra.
+To compute the product of two matrices, you have to use the matrix
+  multiplication operator, `%*%`, rather than `*`. 
 
 *** =left
 
@@ -36,9 +36,9 @@ m1
 
 ```
 ##      [,1] [,2] [,3] [,4]
-## [1,]   11    3    7   14
-## [2,]    8    6    6   11
-## [3,]   13   11   12   14
+## [1,]    6   11   11   14
+## [2,]   11   11   13    8
+## [3,]   10   13    4   11
 ```
 
 ```r
@@ -49,10 +49,10 @@ m2
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   14    8    7
-## [2,]   11   11   10
-## [3,]    8    8    9
-## [4,]    7    6   13
+## [1,]   13   12   11
+## [2,]    5    3   12
+## [3,]   11    9    8
+## [4,]   11    7    9
 ```
 
 *** =right
@@ -72,9 +72,9 @@ m1 %*% m2
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]  341  261  352
-## [2,]  303  244  313
-## [3,]  497  405  491
+## [1,]  408  302  412
+## [2,]  429  338  429
+## [3,]  360  272  397
 ```
 
 ----
@@ -94,33 +94,34 @@ m1 %*% m2
 ---- &twocol
 ## One more example
 
+If you try to multiply two square matrices, the procedure will be conducted
+  element-wise, unless you use the correct command for matrix multiplication.
+
 *** =left
 
 
 ```r
-m1 <- matrix(1:16, ncol = 4)
+m1 <- matrix(1:9, ncol = 3)
 m1
 ```
 
 ```
-##      [,1] [,2] [,3] [,4]
-## [1,]    1    5    9   13
-## [2,]    2    6   10   14
-## [3,]    3    7   11   15
-## [4,]    4    8   12   16
+##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9
 ```
 
 ```r
-m2 <- matrix(21:36, ncol = 4)
+m2 <- matrix(21:29, ncol = 3)
 m2
 ```
 
 ```
-##      [,1] [,2] [,3] [,4]
-## [1,]   21   25   29   33
-## [2,]   22   26   30   34
-## [3,]   23   27   31   35
-## [4,]   24   28   32   36
+##      [,1] [,2] [,3]
+## [1,]   21   24   27
+## [2,]   22   25   28
+## [3,]   23   26   29
 ```
 
 *** =right
@@ -131,11 +132,10 @@ m1 * m2
 ```
 
 ```
-##      [,1] [,2] [,3] [,4]
-## [1,]   21  125  261  429
-## [2,]   44  156  300  476
-## [3,]   69  189  341  525
-## [4,]   96  224  384  576
+##      [,1] [,2] [,3]
+## [1,]   21   96  189
+## [2,]   44  125  224
+## [3,]   69  156  261
 ```
 
 ```r
@@ -143,12 +143,49 @@ m1 %*% m2
 ```
 
 ```
-##      [,1] [,2] [,3] [,4]
-## [1,]  650  762  874  986
-## [2,]  740  868  996 1124
-## [3,]  830  974 1118 1262
-## [4,]  920 1080 1240 1400
+##      [,1] [,2] [,3]
+## [1,]  270  306  342
+## [2,]  336  381  426
+## [3,]  402  456  510
 ```
+
+----
+## Your turn
+* Create a 2 by 2 matrix and a 2 by 4 matrix with random normal numbers with a 
+  mean of 10 and standard deviation of 2. Note, if you'd like your results to match mine, first run `set.seed(101)`.
+* Multiply the matrices together
+* Predict the dimensions of product matrix for each of the following
+	+ 3*5 * 5*7
+	+ 4*2 * 2*4
+	+ 2*4 * 4*2
+	+ 4*3 * 4*3
+	+ 3*5 * 5*2
+
+
+----
+
+```r
+set.seed(101)
+m1 <- matrix(rnorm(4, 10, 2), ncol = 2)
+m2 <- matrix(rnorm(8, 10, 2), ncol = 4)
+m1 %*% m2
+```
+
+```
+##          [,1]     [,2]     [,3]     [,4]
+## [1,] 206.1004 189.5989 193.2626 176.0718
+## [2,] 246.7245 226.7283 231.0469 210.4503
+```
+<br>
+# Predictions
+
+|Matrices  |Result |
+|:---------|:------|
+|3*5 * 5*7 |3*7    |
+|4*2 * 2*4 |4*4    |
+|2*4 * 4*2 |2*2    |
+|4*3 * 4*3 |NA     |
+|3*5 * 5*2 |3*2    |
 
 ---- &twocol
 ## Lists
@@ -185,7 +222,7 @@ l
 ## [12] FALSE  TRUE FALSE
 ## 
 ## [[4]]
-## [1]  84.25054  92.20372 115.32656
+## [1] 135.69389  63.32951  94.08292
 ```
 
 ---- &twocol
@@ -258,7 +295,7 @@ str(l)
 ##  $ letters: chr [1:3] "a" "b" "c"
 ##  $ numbers: int [1:5] 1 2 3 4 5
 ##  $ logical: logi [1:14] TRUE FALSE TRUE FALSE TRUE FALSE ...
-##  $ double : num [1:3] 84.3 92.2 115.3
+##  $ double : num [1:3] 135.7 63.3 94.1
 ```
 <br>
 
@@ -273,14 +310,85 @@ l$letters
 ## [1] "a" "b" "c"
 ```
 
+---- &twocol
+## Naming lists versus vectors
+
+*** =left
+
+# Lists
+
+```r
+lst <- list(1:5, letters[1:15])
+str(lst)
+```
+
+```
+## List of 2
+##  $ : int [1:5] 1 2 3 4 5
+##  $ : chr [1:15] "a" "b" "c" "d" ...
+```
+
+```r
+names(lst) <- c("Numbers", "Letters")
+str(lst)
+```
+
+```
+## List of 2
+##  $ Numbers: int [1:5] 1 2 3 4 5
+##  $ Letters: chr [1:15] "a" "b" "c" "d" ...
+```
+
+*** =right
+
+# Vectors
+
+```r
+v <- lst[[1]]
+names(v) <- c("One", "Two", 
+	"Three", "Four", "Five")
+v
+```
+
+```
+##   One   Two Three  Four  Five 
+##     1     2     3     4     5
+```
+
+----
+
+```r
+names(lst$Numbers) <- c("One", "Two", "Three", "Four", "Five")
+lst
+```
+
+```
+## $Numbers
+##   One   Two Three  Four  Five 
+##     1     2     3     4     5 
+## 
+## $Letters
+##  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o"
+```
+<br>
+# Subsetting
+
+```r
+lst$Numbers["Three"]
+```
+
+```
+## Three 
+##     3
+```
+
 ----
 ## Lists returned by functions
-* We'll talk about this more when we get into functions, but many functions 
-  return a list of objects. For example: `lm`.
+* We'll talk about this more when we get into functions (next week), but many
+  functions return a list of objects. For example: `lm`.
 
 
 ```r
-data(mtcars)
 mod <- lm(hp ~ mpg, data = mtcars)
 str(mod)
 ```
@@ -305,7 +413,7 @@ str(mod)
 ##   .. ..- attr(*, "assign")= int [1:2] 0 1
 ##   ..$ qraux: num [1:2] 1.18 1.02
 ##   ..$ pivot: int [1:2] 1 2
-##   ..$ tol  : num 1e-07
+##   ..$ tol  : num 0.0000001
 ##   ..$ rank : int 2
 ##   ..- attr(*, "class")= chr "qr"
 ##  $ df.residual  : int 30
@@ -377,8 +485,8 @@ In this case the methods are roughly equivalent, but sometimes it can make a
 
 
 ```r
-lst <- split(mtcars, mtcars$cyl)
-str(lst)
+cyls <- split(mtcars, mtcars$cyl)
+str(cyls)
 ```
 
 ```
@@ -423,16 +531,20 @@ str(lst)
 
 ----
 ## More on lists
-* Note that previously slide looked like a nested list (list of lists). This is 
-  because data frames are lists, where each element is the same length.
+* Note that previously slide looked like a nested list (list inside a list). 
+  This is because data frames are lists, where each element of the list is a vector of the same length.
 * lists are tremendously useful and flexible, but essentially require at least a 
-  basic understanding of functions and loops.
+  basic understanding of functions and/or loops. 
+  	+ Functions because lists are often used to return output from a function 
+  	  (as discussed previously). 
+  	+ Loops because you often want to loop through a list and apply a function
+  	  to each element of the list.
 
 For example: 
 
 
 ```r
-sapply(lst, function(x) cor(x$mpg, x$hp))
+sapply(cyls, function(x) cor(x$mpg, x$hp))
 ```
 
 ```
@@ -461,7 +573,7 @@ str(l)
 ## List of 3
 ##  $ lets: chr [1:5] "a" "b" "c" "d" ...
 ##  $ ints: int [1:5] 9 8 7 6 5
-##  $ dbl : num [1:5] 11.3 12.3 13 12.7 12.7
+##  $ dbl : num [1:5] 11.9 11.4 12 11.4 10.5
 ```
 
 ```r
@@ -470,11 +582,11 @@ as.data.frame(l)
 
 ```
 ##   lets ints      dbl
-## 1    a    9 11.30182
-## 2    b    8 12.32591
-## 3    c    7 13.01539
-## 4    d    6 12.65257
-## 5    e    5 12.72735
+## 1    a    9 11.85500
+## 2    b    8 11.36268
+## 3    c    7 12.04385
+## 4    d    6 11.38675
+## 5    e    5 10.46227
 ```
 
 *** =right
@@ -493,109 +605,323 @@ dframe
 
 ```
 ##   lets ints      dbl
-## 1    a    9 11.70672
-## 2    b    8 12.58865
-## 3    c    7 11.87292
-## 4    d    6 11.74504
-## 5    e    5 13.05823
+## 1    a    9 11.87718
+## 2    b    8 12.53139
+## 3    c    7 11.79901
+## 4    d    6 10.90206
+## 5    e    5 12.55833
+```
+
+----
+## More on data frames
+Because data frames are actually lists, you can use the same subsetting 
+  procedures you can with lists. 
+
+
+```r
+dframe[2]
+```
+
+```
+##   ints
+## 1    9
+## 2    8
+## 3    7
+## 4    6
+## 5    5
+```
+
+```r
+dframe[[2]]
+```
+
+```
+## [1] 9 8 7 6 5
 ```
 
 ----
 ## Your turn
-
-
+* Create a list consisting of a character vector, an integer vector, and a 
+  factor, all of the same length
+* Provide names for each element.
+* Provide names for each element of the integer vector.
+* Subset the list using names to select one element of the integer vector.
+* Subset the list to select the same element using indexing.
+* Convert the list into a data frame
 
 ----
 
+* Create a list consisting of a character vector, an integer vector, and a 
+  factor, all of the same length
+* Provide names for each element.
+
 
 ```r
-d <- read.csv("./data/CamdenBoroughs.csv", 
-	na = c("Not applicable", "999"), 
-	stringsAsFactors = FALSE)
+l <- list(Lets = letters[1:7], 
+		  Ints = 1:7,
+		  fact = factor(
+		  			c(rep(c("red", "green", "blue"), 2), "red")
+		  			)
+		  )
+l
 ```
 
 ```
-## Warning in file(file, "rt"): cannot open file './data/CamdenBoroughs.csv':
-## No such file or directory
+## $Lets
+## [1] "a" "b" "c" "d" "e" "f" "g"
+## 
+## $Ints
+## [1] 1 2 3 4 5 6 7
+## 
+## $fact
+## [1] red   green blue  red   green blue  red  
+## Levels: blue green red
+```
+
+----
+* Provide names for each element of the integer vector.
+
+
+```r
+names(l[["Ints"]]) <- letters[11:17]
+l
 ```
 
 ```
-## Error in file(file, "rt"): cannot open the connection
+## $Lets
+## [1] "a" "b" "c" "d" "e" "f" "g"
+## 
+## $Ints
+## k l m n o p q 
+## 1 2 3 4 5 6 7 
+## 
+## $fact
+## [1] red   green blue  red   green blue  red  
+## Levels: blue green red
+```
+
+----
+* Subset the list using names to select one element of the integer vector.
+
+
+```r
+l$Ints["p"]
+```
+
+```
+## p 
+## 6
+```
+
+* Subset the list to select the same element using indexing.
+
+
+```r
+l[[2]][6]
+```
+
+```
+## p 
+## 6
+```
+
+----
+
+* Convert the list into a data frame
+
+
+```r
+d <- as.data.frame(l)
+d
+```
+
+```
+##   Lets Ints  fact
+## k    a    1   red
+## l    b    2 green
+## m    c    3  blue
+## n    d    4   red
+## o    e    5 green
+## p    f    6  blue
+## q    g    7   red
+```
+
+---- .segue
+# Common/Routine Functions (very briefly)
+
+----
+# Resources
+Plenty of helpful sheets for common/routine functions in R. For example: 
+* https://cran.r-project.org/doc/contrib/Short-refcard.pdf
+* http://www.columbia.edu/~cjd11/charles_dimaggio/DIRE/resources/R/rFunctionsList.pdf
+
+![image](./assets/img/refCard.png)
+
+
+----
+## Big picture
+There are lots of functions that you will use and need as you get deeper into 
+  programming with R. Gaining fluency with these functions is one of the keys to taking the "next step" with R and truly being comfortable with it. Some examples of functions I use routinely include the following:
+
+* `rep()` repeats an element or vector a specified number of times
+* `seq()` creates a sequence of numbers from `x` to `y`
+* `:` creates an integer index that changes by 1
+* `table()` creates a summary of the number of times an element occurs in a
+   vector (similar to Frequencies in SPSS)
+* `c()` creates a vector
+* `cbind()` binds vectors, matrices, or data frames together column-wise
+* `rbind()` binds vectors, matrices, or data frames together row-wise
+
+----
+## Common functions (continued)
+* `ifelse()` vectorized operator for conditional recoding of a vector. Takes
+   three arguments: If condition == TRUE, then carry out an operation, else carry out a different operation.
+* `rnorm()`, `rbinom()`, `rpois()`, etc., create randomly generated data from 
+   the specified distribution (with the specified distributional properties).
+* `dnorm()`, `dbinom()`, `dpois()`, etc, calculate the likelihood of specific
+   data occurring from the specified distribution (with the specified distributional properties).
+* `str()` provides the basic structure of the object (most useful for lists and
+   data frames).
+* `head()` and `tail()` display the first 6 (head) and the last 6 (tail) rows
+   of a given data frame.
+* `summary()` provides statistical summary information on vectors
+* `sample()` randomly select `n` observations from a vector
+
+---- 
+## Additional arguments
+
+While the basics of most of these functions are relatively straightforward, 
+  most also include additional arguments that make them more flexible.
+
+For example: 
+
+
+```r
+rep(c(3,5), 7) # typical application
+```
+
+```
+##  [1] 3 5 3 5 3 5 3 5 3 5 3 5 3 5
 ```
 
 ```r
-d$Area <- substr(d$Middle.Super.Output.Area, 
-				1,
-				nchar(d$Middle.Super.Output.Area) - 4
-				)
+rep(c(3, 5), each = 2, length.out = 7) # additional arguments
 ```
 
 ```
-## Error in substr(d$Middle.Super.Output.Area, 1, nchar(d$Middle.Super.Output.Area) - : cannot open file '/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb': No such file or directory
+## [1] 3 3 5 5 3 3 5
 ```
+
+---- &twocol
+## `dnorm()` etc. arguments
+
+These functions can be used in ML estimation but are also commonly useful in plotting.
+
+*** =left
+
 
 ```r
-d$Area <- as.factor(d$Area)
+plot(x = 101:200,  
+	y = seq(0, 0.1, length.out = 100), 
+	type = "n", 
+	ylab = "Density", main = "Normals")
+abline(v = 150, lty = 3, col = "gray")
+
+lines(101:200, dnorm(101:200, 150, 5), 
+	col = "blue")
+lines(101:200, dnorm(101:200, 150, 10), 
+	col = "red")
+lines(101:200, dnorm(101:200, 150, 15), 
+	col = "green")
+lines(101:200, dnorm(101:200, 150, 20), 
+	col = "purple")
+lines(101:200, dnorm(101:200, 150, 25), 
+	col = "orange")
+lines(101:200, dnorm(101:200, 150, 30), 
+	col = "black")
 ```
 
-```
-## Warning in is.factor(x): restarting interrupted promise evaluation
-```
+*** =right
 
-```
-## Error in is.factor(x): cannot open file '/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb': No such file or directory
-```
+![plot of chunk unnamed-chunk-32](assets/fig/unnamed-chunk-32-1.png) 
+
+----
+## Your Turn (probably fairly tough)
+# Use some of the common/routine functions to do the following:
+* Create a sequence vector from 100 to 237 that is of length 1000.
+* Randomly order the vector
+* Compute the likelihood of each point occurring from a normal distribution
+  with $\mu$ = 178.32 and $\sigma$ = 15.67. Store the result in a new vector.
+* Form a 1000 by 2 matrix that is composed of the sequence vector and
+  the likelihood vector.
+* Use the matrix to plot the relation between the sequence vector and the
+  likelihood of each point.
+
+----
+* Create a sequence vector from 100 to 237 that is of length 10,000.
+
 
 ```r
-contrasts(d$Area)
+v <- seq(100, 237, length.out = 1e4)
+head(v)
 ```
 
 ```
-## Warning in contrasts(d$Area): restarting interrupted promise evaluation
+## [1] 100.0000 100.0137 100.0274 100.0411 100.0548 100.0685
 ```
 
-```
-## Error in contrasts(d$Area): cannot open file '/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb': No such file or directory
-```
+* Randomly order the vector
+
 
 ```r
-d$FRL <- substr(d$Percentage.Claiming.Free.School.Meals, 
-			1, 
-			nchar(d$Percentage.Claiming.Free.School.Meals) - 1)
+v <- sample(v, length(v))
+head(v)
 ```
 
 ```
-## Warning in substr(d$Percentage.Claiming.Free.School.Meals, 1, nchar(d
-## $Percentage.Claiming.Free.School.Meals) - : restarting interrupted promise
-## evaluation
+## [1] 110.8515 159.4365 193.1145 200.5818 161.9713 207.3228
 ```
 
-```
-## Error in substr(d$Percentage.Claiming.Free.School.Meals, 1, nchar(d$Percentage.Claiming.Free.School.Meals) - : cannot open file '/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb': No such file or directory
-```
+----
+* Compute the likelihood of each point, and store the result in a new vector
+
 
 ```r
-d$FRL <- as.numeric(d$FRL)
+lik <- dnorm(v, 178.32, 15.67)
+head(lik)
 ```
 
 ```
-## Warning: restarting interrupted promise evaluation
+## [1] 0.000002400779 0.012316885312 0.016303475424 0.009280633627
+## [5] 0.014773255270 0.004591672415
 ```
 
-```
-## Error in eval(expr, envir, enclos): cannot open file '/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb': No such file or directory
-```
+* Form a 1000 by 2 matrix that is composed of the sequence vector and
+  the likelihood vector.
+
 
 ```r
-mod <- lm(FRL ~ Area, data = d)
+m <- cbind(v, lik)
+head(m)
 ```
 
 ```
-## Warning in is.data.frame(data): restarting interrupted promise evaluation
+##             v            lik
+## [1,] 110.8515 0.000002400779
+## [2,] 159.4365 0.012316885312
+## [3,] 193.1145 0.016303475424
+## [4,] 200.5818 0.009280633627
+## [5,] 161.9713 0.014773255270
+## [6,] 207.3228 0.004591672415
 ```
 
-```
-## Error in is.data.frame(data): cannot open file '/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb': No such file or directory
-```
+----
+* Use the matrix to plot the relation between the sequence vector and the
+  likelihood of each point.
 
 
+```r
+plot(m[ ,1], m[ ,2])
+```
+
+![plot of chunk unnamed-chunk-37](assets/fig/unnamed-chunk-37-1.png) 

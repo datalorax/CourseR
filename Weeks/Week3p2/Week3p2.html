@@ -62,8 +62,8 @@
     <h2>Matrix Multiplication Versus Element-wise</h2>
   </hgroup>
   <article data-timings="">
-    <p>Multiplication of matrices in R is completed element-wise, not with matrix
-  algebra.</p>
+    <p>To compute the product of two matrices, you have to use the matrix
+  multiplication operator, <code>%*%</code>, rather than <code>*</code>. </p>
 
 <div style='float:left;width:48%;'>
   <pre><code class="r">m1 &lt;- matrix(round(rnorm(12, 10, 3)),
@@ -72,9 +72,9 @@ m1
 </code></pre>
 
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]   11    3    7   14
-## [2,]    8    6    6   11
-## [3,]   13   11   12   14
+## [1,]    6   11   11   14
+## [2,]   11   11   13    8
+## [3,]   10   13    4   11
 </code></pre>
 
 <pre><code class="r">m2 &lt;- matrix(round(rnorm(12, 10, 3)),
@@ -83,10 +83,10 @@ m2
 </code></pre>
 
 <pre><code>##      [,1] [,2] [,3]
-## [1,]   14    8    7
-## [2,]   11   11   10
-## [3,]    8    8    9
-## [4,]    7    6   13
+## [1,]   13   12   11
+## [2,]    5    3   12
+## [3,]   11    9    8
+## [4,]   11    7    9
 </code></pre>
 
 </div>
@@ -101,9 +101,9 @@ m2
 </code></pre>
 
 <pre><code>##      [,1] [,2] [,3]
-## [1,]  341  261  352
-## [2,]  303  244  313
-## [3,]  497  405  491
+## [1,]  408  302  412
+## [2,]  429  338  429
+## [3,]  360  272  397
 </code></pre>
 
 </div>
@@ -144,28 +144,28 @@ m2
     <h2>One more example</h2>
   </hgroup>
   <article data-timings="">
-    
+    <p>If you try to multiply two square matrices, the procedure will be conducted
+  element-wise, unless you use the correct command for matrix multiplication.</p>
+
 <div style='float:left;width:48%;'>
-  <pre><code class="r">m1 &lt;- matrix(1:16, ncol = 4)
+  <pre><code class="r">m1 &lt;- matrix(1:9, ncol = 3)
 m1
 </code></pre>
 
-<pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]    1    5    9   13
-## [2,]    2    6   10   14
-## [3,]    3    7   11   15
-## [4,]    4    8   12   16
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9
 </code></pre>
 
-<pre><code class="r">m2 &lt;- matrix(21:36, ncol = 4)
+<pre><code class="r">m2 &lt;- matrix(21:29, ncol = 3)
 m2
 </code></pre>
 
-<pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]   21   25   29   33
-## [2,]   22   26   30   34
-## [3,]   23   27   31   35
-## [4,]   24   28   32   36
+<pre><code>##      [,1] [,2] [,3]
+## [1,]   21   24   27
+## [2,]   22   25   28
+## [3,]   23   26   29
 </code></pre>
 
 </div>
@@ -173,21 +173,19 @@ m2
   <pre><code class="r">m1 * m2
 </code></pre>
 
-<pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]   21  125  261  429
-## [2,]   44  156  300  476
-## [3,]   69  189  341  525
-## [4,]   96  224  384  576
+<pre><code>##      [,1] [,2] [,3]
+## [1,]   21   96  189
+## [2,]   44  125  224
+## [3,]   69  156  261
 </code></pre>
 
 <pre><code class="r">m1 %*% m2
 </code></pre>
 
-<pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]  650  762  874  986
-## [2,]  740  868  996 1124
-## [3,]  830  974 1118 1262
-## [4,]  920 1080 1240 1400
+<pre><code>##      [,1] [,2] [,3]
+## [1,]  270  306  342
+## [2,]  336  381  426
+## [3,]  402  456  510
 </code></pre>
 
 </div>
@@ -196,6 +194,79 @@ m2
 </slide>
 
 <slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>Your turn</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Create a 2 by 2 matrix and a 2 by 4 matrix with random normal numbers with a 
+mean of 10 and standard deviation of 2. Note, if you&#39;d like your results to match mine, first run <code>set.seed(101)</code>.</li>
+<li>Multiply the matrices together</li>
+<li>Predict the dimensions of product matrix for each of the following
+
+<ul>
+<li>3*5 * 5*7</li>
+<li>4*2 * 2*4</li>
+<li>2*4 * 4*2</li>
+<li>4*3 * 4*3</li>
+<li>3*5 * 5*2</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">set.seed(101)
+m1 &lt;- matrix(rnorm(4, 10, 2), ncol = 2)
+m2 &lt;- matrix(rnorm(8, 10, 2), ncol = 4)
+m1 %*% m2
+</code></pre>
+
+<pre><code>##          [,1]     [,2]     [,3]     [,4]
+## [1,] 206.1004 189.5989 193.2626 176.0718
+## [2,] 246.7245 226.7283 231.0469 210.4503
+</code></pre>
+
+<p><br></p>
+
+<h1>Predictions</h1>
+
+<table><thead>
+<tr>
+<th align="left">Matrices</th>
+<th align="left">Result</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">3*5 * 5*7</td>
+<td align="left">3*7</td>
+</tr>
+<tr>
+<td align="left">4*2 * 2*4</td>
+<td align="left">4*4</td>
+</tr>
+<tr>
+<td align="left">2*4 * 4*2</td>
+<td align="left">2*2</td>
+</tr>
+<tr>
+<td align="left">4*3 * 4*3</td>
+<td align="left">NA</td>
+</tr>
+<tr>
+<td align="left">3*5 * 5*2</td>
+<td align="left">3*2</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
   <hgroup>
     <h2>Lists</h2>
   </hgroup>
@@ -227,7 +298,7 @@ m2
 ## [12] FALSE  TRUE FALSE
 ## 
 ## [[4]]
-## [1]  84.25054  92.20372 115.32656
+## [1] 135.69389  63.32951  94.08292
 </code></pre>
 
 </div>
@@ -235,7 +306,7 @@ m2
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-7" style="background:;">
+<slide class="" id="slide-9" style="background:;">
   <hgroup>
     <h2>Accessing List Elements</h2>
   </hgroup>
@@ -286,7 +357,7 @@ type list.</li>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-8" style="background:;">
+<slide class="" id="slide-10" style="background:;">
   <hgroup>
     <h2>Access list elements via names</h2>
   </hgroup>
@@ -301,7 +372,7 @@ str(l)
 ##  $ letters: chr [1:3] &quot;a&quot; &quot;b&quot; &quot;c&quot;
 ##  $ numbers: int [1:5] 1 2 3 4 5
 ##  $ logical: logi [1:14] TRUE FALSE TRUE FALSE TRUE FALSE ...
-##  $ double : num [1:3] 84.3 92.2 115.3
+##  $ double : num [1:3] 135.7 63.3 94.1
 </code></pre>
 
 <p><br></p>
@@ -318,18 +389,92 @@ str(l)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-9" style="background:;">
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Naming lists versus vectors</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <h1>Lists</h1>
+
+<pre><code class="r">lst &lt;- list(1:5, letters[1:15])
+str(lst)
+</code></pre>
+
+<pre><code>## List of 2
+##  $ : int [1:5] 1 2 3 4 5
+##  $ : chr [1:15] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...
+</code></pre>
+
+<pre><code class="r">names(lst) &lt;- c(&quot;Numbers&quot;, &quot;Letters&quot;)
+str(lst)
+</code></pre>
+
+<pre><code>## List of 2
+##  $ Numbers: int [1:5] 1 2 3 4 5
+##  $ Letters: chr [1:15] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <h1>Vectors</h1>
+
+<pre><code class="r">v &lt;- lst[[1]]
+names(v) &lt;- c(&quot;One&quot;, &quot;Two&quot;, 
+    &quot;Three&quot;, &quot;Four&quot;, &quot;Five&quot;)
+v
+</code></pre>
+
+<pre><code>##   One   Two Three  Four  Five 
+##     1     2     3     4     5
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">names(lst$Numbers) &lt;- c(&quot;One&quot;, &quot;Two&quot;, &quot;Three&quot;, &quot;Four&quot;, &quot;Five&quot;)
+lst
+</code></pre>
+
+<pre><code>## $Numbers
+##   One   Two Three  Four  Five 
+##     1     2     3     4     5 
+## 
+## $Letters
+##  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;k&quot; &quot;l&quot; &quot;m&quot; &quot;n&quot; &quot;o&quot;
+</code></pre>
+
+<p><br></p>
+
+<h1>Subsetting</h1>
+
+<pre><code class="r">lst$Numbers[&quot;Three&quot;]
+</code></pre>
+
+<pre><code>## Three 
+##     3
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
   <hgroup>
     <h2>Lists returned by functions</h2>
   </hgroup>
   <article data-timings="">
     <ul>
-<li>We&#39;ll talk about this more when we get into functions, but many functions 
-return a list of objects. For example: <code>lm</code>.</li>
+<li>We&#39;ll talk about this more when we get into functions (next week), but many
+functions return a list of objects. For example: <code>lm</code>.</li>
 </ul>
 
-<pre><code class="r">data(mtcars)
-mod &lt;- lm(hp ~ mpg, data = mtcars)
+<pre><code class="r">mod &lt;- lm(hp ~ mpg, data = mtcars)
 str(mod)
 </code></pre>
 
@@ -352,7 +497,7 @@ str(mod)
 ##   .. ..- attr(*, &quot;assign&quot;)= int [1:2] 0 1
 ##   ..$ qraux: num [1:2] 1.18 1.02
 ##   ..$ pivot: int [1:2] 1 2
-##   ..$ tol  : num 1e-07
+##   ..$ tol  : num 0.0000001
 ##   ..$ rank : int 2
 ##   ..- attr(*, &quot;class&quot;)= chr &quot;qr&quot;
 ##  $ df.residual  : int 30
@@ -396,7 +541,7 @@ str(mod)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-10" style="background:;">
+<slide class="" id="slide-14" style="background:;">
   <article data-timings="">
     <p>You can access the elements through the list</p>
 
@@ -423,13 +568,13 @@ str(mod)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-11" style="background:;">
+<slide class="" id="slide-15" style="background:;">
   <hgroup>
     <h2>Other functions will transform data into lists</h2>
   </hgroup>
   <article data-timings="">
-    <pre><code class="r">lst &lt;- split(mtcars, mtcars$cyl)
-str(lst)
+    <pre><code class="r">cyls &lt;- split(mtcars, mtcars$cyl)
+str(cyls)
 </code></pre>
 
 <pre><code>## List of 3
@@ -475,21 +620,28 @@ str(lst)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-12" style="background:;">
+<slide class="" id="slide-16" style="background:;">
   <hgroup>
     <h2>More on lists</h2>
   </hgroup>
   <article data-timings="">
     <ul>
-<li>Note that previously slide looked like a nested list (list of lists). This is 
-because data frames are lists, where each element is the same length.</li>
+<li>Note that previously slide looked like a nested list (list inside a list). 
+This is because data frames are lists, where each element of the list is a vector of the same length.</li>
 <li>lists are tremendously useful and flexible, but essentially require at least a 
-basic understanding of functions and loops.</li>
+basic understanding of functions and/or loops. 
+
+<ul>
+<li>Functions because lists are often used to return output from a function 
+(as discussed previously). </li>
+<li>Loops because you often want to loop through a list and apply a function
+to each element of the list.</li>
+</ul></li>
 </ul>
 
 <p>For example: </p>
 
-<pre><code class="r">sapply(lst, function(x) cor(x$mpg, x$hp))
+<pre><code class="r">sapply(cyls, function(x) cor(x$mpg, x$hp))
 </code></pre>
 
 <pre><code>##          4          6          8 
@@ -503,7 +655,7 @@ basic understanding of functions and loops.</li>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-13" style="background:;">
+<slide class="" id="slide-17" style="background:;">
   <hgroup>
     <h1>Lists and data frames</h1>
   </hgroup>
@@ -521,18 +673,18 @@ str(l)
 <pre><code>## List of 3
 ##  $ lets: chr [1:5] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; ...
 ##  $ ints: int [1:5] 9 8 7 6 5
-##  $ dbl : num [1:5] 11.3 12.3 13 12.7 12.7
+##  $ dbl : num [1:5] 11.9 11.4 12 11.4 10.5
 </code></pre>
 
 <pre><code class="r">as.data.frame(l)
 </code></pre>
 
 <pre><code>##   lets ints      dbl
-## 1    a    9 11.30182
-## 2    b    8 12.32591
-## 3    c    7 13.01539
-## 4    d    6 12.65257
-## 5    e    5 12.72735
+## 1    a    9 11.85500
+## 2    b    8 11.36268
+## 3    c    7 12.04385
+## 4    d    6 11.38675
+## 5    e    5 10.46227
 </code></pre>
 
 </div>
@@ -548,11 +700,11 @@ dframe
 </code></pre>
 
 <pre><code>##   lets ints      dbl
-## 1    a    9 11.70672
-## 2    b    8 12.58865
-## 3    c    7 11.87292
-## 4    d    6 11.74504
-## 5    e    5 13.05823
+## 1    a    9 11.87718
+## 2    b    8 12.53139
+## 3    c    7 11.79901
+## 4    d    6 10.90206
+## 5    e    5 12.55833
 </code></pre>
 
 </div>
@@ -560,9 +712,167 @@ dframe
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-14" style="background:;">
+<slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>More on data frames</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Because data frames are actually lists, you can use the same subsetting 
+  procedures you can with lists. </p>
+
+<pre><code class="r">dframe[2]
+</code></pre>
+
+<pre><code>##   ints
+## 1    9
+## 2    8
+## 3    7
+## 4    6
+## 5    5
+</code></pre>
+
+<pre><code class="r">dframe[[2]]
+</code></pre>
+
+<pre><code>## [1] 9 8 7 6 5
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
   <hgroup>
     <h2>Your turn</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Create a list consisting of a character vector, an integer vector, and a 
+factor, all of the same length</li>
+<li>Provide names for each element.</li>
+<li>Provide names for each element of the integer vector.</li>
+<li>Subset the list using names to select one element of the integer vector.</li>
+<li>Subset the list to select the same element using indexing.</li>
+<li>Convert the list into a data frame</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  <article data-timings="">
+    <ul>
+<li>Create a list consisting of a character vector, an integer vector, and a 
+factor, all of the same length</li>
+<li>Provide names for each element.</li>
+</ul>
+
+<pre><code class="r">l &lt;- list(Lets = letters[1:7], 
+          Ints = 1:7,
+          fact = factor(
+                    c(rep(c(&quot;red&quot;, &quot;green&quot;, &quot;blue&quot;), 2), &quot;red&quot;)
+                    )
+          )
+l
+</code></pre>
+
+<pre><code>## $Lets
+## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot;
+## 
+## $Ints
+## [1] 1 2 3 4 5 6 7
+## 
+## $fact
+## [1] red   green blue  red   green blue  red  
+## Levels: blue green red
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  <article data-timings="">
+    <ul>
+<li>Provide names for each element of the integer vector.</li>
+</ul>
+
+<pre><code class="r">names(l[[&quot;Ints&quot;]]) &lt;- letters[11:17]
+l
+</code></pre>
+
+<pre><code>## $Lets
+## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot;
+## 
+## $Ints
+## k l m n o p q 
+## 1 2 3 4 5 6 7 
+## 
+## $fact
+## [1] red   green blue  red   green blue  red  
+## Levels: blue green red
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  <article data-timings="">
+    <ul>
+<li>Subset the list using names to select one element of the integer vector.</li>
+</ul>
+
+<pre><code class="r">l$Ints[&quot;p&quot;]
+</code></pre>
+
+<pre><code>## p 
+## 6
+</code></pre>
+
+<ul>
+<li>Subset the list to select the same element using indexing.</li>
+</ul>
+
+<pre><code class="r">l[[2]][6]
+</code></pre>
+
+<pre><code>## p 
+## 6
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  <article data-timings="">
+    <ul>
+<li>Convert the list into a data frame</li>
+</ul>
+
+<pre><code class="r">d &lt;- as.data.frame(l)
+d
+</code></pre>
+
+<pre><code>##   Lets Ints  fact
+## k    a    1   red
+## l    b    2 green
+## m    c    3  blue
+## n    d    4   red
+## o    e    5 green
+## p    f    6  blue
+## q    g    7   red
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="segue" id="slide-24" style="background:;">
+  <hgroup>
+    <h1>Common/Routine Functions (very briefly)</h1>
   </hgroup>
   <article data-timings="">
     
@@ -570,77 +880,231 @@ dframe
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-15" style="background:;">
+<slide class="" id="slide-25" style="background:;">
+  <hgroup>
+    <h1>Resources</h1>
+  </hgroup>
   <article data-timings="">
-    <pre><code class="r">d &lt;- read.csv(&quot;./data/CamdenBoroughs.csv&quot;, 
-    na = c(&quot;Not applicable&quot;, &quot;999&quot;), 
-    stringsAsFactors = FALSE)
+    <p>Plenty of helpful sheets for common/routine functions in R. For example: </p>
+
+<ul>
+<li><a href="https://cran.r-project.org/doc/contrib/Short-refcard.pdf">https://cran.r-project.org/doc/contrib/Short-refcard.pdf</a></li>
+<li><a href="http://www.columbia.edu/%7Ecjd11/charles_dimaggio/DIRE/resources/R/rFunctionsList.pdf">http://www.columbia.edu/~cjd11/charles_dimaggio/DIRE/resources/R/rFunctionsList.pdf</a></li>
+</ul>
+
+<p><img src="./assets/img/refCard.png" alt="image"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h2>Big picture</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>There are lots of functions that you will use and need as you get deeper into 
+  programming with R. Gaining fluency with these functions is one of the keys to taking the &quot;next step&quot; with R and truly being comfortable with it. Some examples of functions I use routinely include the following:</p>
+
+<ul>
+<li><code>rep()</code> repeats an element or vector a specified number of times</li>
+<li><code>seq()</code> creates a sequence of numbers from <code>x</code> to <code>y</code></li>
+<li><code>:</code> creates an integer index that changes by 1</li>
+<li><code>table()</code> creates a summary of the number of times an element occurs in a
+vector (similar to Frequencies in SPSS)</li>
+<li><code>c()</code> creates a vector</li>
+<li><code>cbind()</code> binds vectors, matrices, or data frames together column-wise</li>
+<li><code>rbind()</code> binds vectors, matrices, or data frames together row-wise</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <hgroup>
+    <h2>Common functions (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><code>ifelse()</code> vectorized operator for conditional recoding of a vector. Takes
+three arguments: If condition == TRUE, then carry out an operation, else carry out a different operation.</li>
+<li><code>rnorm()</code>, <code>rbinom()</code>, <code>rpois()</code>, etc., create randomly generated data from 
+the specified distribution (with the specified distributional properties).</li>
+<li><code>dnorm()</code>, <code>dbinom()</code>, <code>dpois()</code>, etc, calculate the likelihood of specific
+data occurring from the specified distribution (with the specified distributional properties).</li>
+<li><code>str()</code> provides the basic structure of the object (most useful for lists and
+data frames).</li>
+<li><code>head()</code> and <code>tail()</code> display the first 6 (head) and the last 6 (tail) rows
+of a given data frame.</li>
+<li><code>summary()</code> provides statistical summary information on vectors</li>
+<li><code>sample()</code> randomly select <code>n</code> observations from a vector</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  <hgroup>
+    <h2>Additional arguments</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>While the basics of most of these functions are relatively straightforward, 
+  most also include additional arguments that make them more flexible.</p>
+
+<p>For example: </p>
+
+<pre><code class="r">rep(c(3,5), 7) # typical application
 </code></pre>
 
-<pre><code>## Warning in file(file, &quot;rt&quot;): cannot open file &#39;./data/CamdenBoroughs.csv&#39;:
-## No such file or directory
+<pre><code>##  [1] 3 5 3 5 3 5 3 5 3 5 3 5 3 5
 </code></pre>
 
-<pre><code>## Error in file(file, &quot;rt&quot;): cannot open the connection
+<pre><code class="r">rep(c(3, 5), each = 2, length.out = 7) # additional arguments
 </code></pre>
 
-<pre><code class="r">d$Area &lt;- substr(d$Middle.Super.Output.Area, 
-                1,
-                nchar(d$Middle.Super.Output.Area) - 4
-                )
+<pre><code>## [1] 3 3 5 5 3 3 5
 </code></pre>
 
-<pre><code>## Error in substr(d$Middle.Super.Output.Area, 1, nchar(d$Middle.Super.Output.Area) - : cannot open file &#39;/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb&#39;: No such file or directory
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-29" style="background:;">
+  <hgroup>
+    <h2><code>dnorm()</code> etc. arguments</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>These functions can be used in ML estimation but are also commonly useful in plotting.</p>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">plot(x = 101:200,  
+    y = seq(0, 0.1, length.out = 100), 
+    type = &quot;n&quot;, 
+    ylab = &quot;Density&quot;, main = &quot;Normals&quot;)
+abline(v = 150, lty = 3, col = &quot;gray&quot;)
+
+lines(101:200, dnorm(101:200, 150, 5), 
+    col = &quot;blue&quot;)
+lines(101:200, dnorm(101:200, 150, 10), 
+    col = &quot;red&quot;)
+lines(101:200, dnorm(101:200, 150, 15), 
+    col = &quot;green&quot;)
+lines(101:200, dnorm(101:200, 150, 20), 
+    col = &quot;purple&quot;)
+lines(101:200, dnorm(101:200, 150, 25), 
+    col = &quot;orange&quot;)
+lines(101:200, dnorm(101:200, 150, 30), 
+    col = &quot;black&quot;)
 </code></pre>
 
-<pre><code class="r">d$Area &lt;- as.factor(d$Area)
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-32-1.png" alt="plot of chunk unnamed-chunk-32"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  <hgroup>
+    <h2>Your Turn (probably fairly tough)</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Use some of the common/routine functions to do the following:</h1>
+
+<ul>
+<li>Create a sequence vector from 100 to 237 that is of length 1000.</li>
+<li>Randomly order the vector</li>
+<li>Compute the likelihood of each point occurring from a normal distribution
+with \(\mu\) = 178.32 and \(\sigma\) = 15.67. Store the result in a new vector.</li>
+<li>Form a 1000 by 2 matrix that is composed of the sequence vector and
+the likelihood vector.</li>
+<li>Use the matrix to plot the relation between the sequence vector and the
+likelihood of each point.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  <article data-timings="">
+    <ul>
+<li>Create a sequence vector from 100 to 237 that is of length 10,000.</li>
+</ul>
+
+<pre><code class="r">v &lt;- seq(100, 237, length.out = 1e4)
+head(v)
 </code></pre>
 
-<pre><code>## Warning in is.factor(x): restarting interrupted promise evaluation
+<pre><code>## [1] 100.0000 100.0137 100.0274 100.0411 100.0548 100.0685
 </code></pre>
 
-<pre><code>## Error in is.factor(x): cannot open file &#39;/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb&#39;: No such file or directory
+<ul>
+<li>Randomly order the vector</li>
+</ul>
+
+<pre><code class="r">v &lt;- sample(v, length(v))
+head(v)
 </code></pre>
 
-<pre><code class="r">contrasts(d$Area)
+<pre><code>## [1] 110.8515 159.4365 193.1145 200.5818 161.9713 207.3228
 </code></pre>
 
-<pre><code>## Warning in contrasts(d$Area): restarting interrupted promise evaluation
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-32" style="background:;">
+  <article data-timings="">
+    <ul>
+<li>Compute the likelihood of each point, and store the result in a new vector</li>
+</ul>
+
+<pre><code class="r">lik &lt;- dnorm(v, 178.32, 15.67)
+head(lik)
 </code></pre>
 
-<pre><code>## Error in contrasts(d$Area): cannot open file &#39;/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb&#39;: No such file or directory
+<pre><code>## [1] 0.000002400779 0.012316885312 0.016303475424 0.009280633627
+## [5] 0.014773255270 0.004591672415
 </code></pre>
 
-<pre><code class="r">d$FRL &lt;- substr(d$Percentage.Claiming.Free.School.Meals, 
-            1, 
-            nchar(d$Percentage.Claiming.Free.School.Meals) - 1)
+<ul>
+<li>Form a 1000 by 2 matrix that is composed of the sequence vector and
+the likelihood vector.</li>
+</ul>
+
+<pre><code class="r">m &lt;- cbind(v, lik)
+head(m)
 </code></pre>
 
-<pre><code>## Warning in substr(d$Percentage.Claiming.Free.School.Meals, 1, nchar(d
-## $Percentage.Claiming.Free.School.Meals) - : restarting interrupted promise
-## evaluation
+<pre><code>##             v            lik
+## [1,] 110.8515 0.000002400779
+## [2,] 159.4365 0.012316885312
+## [3,] 193.1145 0.016303475424
+## [4,] 200.5818 0.009280633627
+## [5,] 161.9713 0.014773255270
+## [6,] 207.3228 0.004591672415
 </code></pre>
 
-<pre><code>## Error in substr(d$Percentage.Claiming.Free.School.Meals, 1, nchar(d$Percentage.Claiming.Free.School.Meals) - : cannot open file &#39;/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb&#39;: No such file or directory
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-33" style="background:;">
+  <article data-timings="">
+    <ul>
+<li>Use the matrix to plot the relation between the sequence vector and the
+likelihood of each point.</li>
+</ul>
+
+<pre><code class="r">plot(m[ ,1], m[ ,2])
 </code></pre>
 
-<pre><code class="r">d$FRL &lt;- as.numeric(d$FRL)
-</code></pre>
-
-<pre><code>## Warning: restarting interrupted promise evaluation
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): cannot open file &#39;/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb&#39;: No such file or directory
-</code></pre>
-
-<pre><code class="r">mod &lt;- lm(FRL ~ Area, data = d)
-</code></pre>
-
-<pre><code>## Warning in is.data.frame(data): restarting interrupted promise evaluation
-</code></pre>
-
-<pre><code>## Error in is.data.frame(data): cannot open file &#39;/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week3p2/.cache/unnamed-chunk-16_6c94227c2b34d402ee4019852388bfc5.rdb&#39;: No such file or directory
-</code></pre>
+<p><img src="assets/fig/unnamed-chunk-37-1.png" alt="plot of chunk unnamed-chunk-37"> </p>
 
   </article>
   <!-- Presenter Notes -->
@@ -682,62 +1146,170 @@ dframe
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=6 title='Lists'>
+        data-slide=6 title='Your turn'>
          6
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=7 title='Accessing List Elements'>
+        data-slide=7 title='NA'>
          7
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=8 title='Access list elements via names'>
+        data-slide=8 title='Lists'>
          8
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=9 title='Lists returned by functions'>
+        data-slide=9 title='Accessing List Elements'>
          9
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=10 title='NA'>
+        data-slide=10 title='Access list elements via names'>
          10
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=11 title='Other functions will transform data into lists'>
+        data-slide=11 title='Naming lists versus vectors'>
          11
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=12 title='More on lists'>
+        data-slide=12 title='NA'>
          12
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=13 title='Lists and data frames'>
+        data-slide=13 title='Lists returned by functions'>
          13
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=14 title='Your turn'>
+        data-slide=14 title='NA'>
          14
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=15 title='NA'>
+        data-slide=15 title='Other functions will transform data into lists'>
          15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='More on lists'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='Lists and data frames'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='More on data frames'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='Your turn'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='NA'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='NA'>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='NA'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='NA'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='Common/Routine Functions (very briefly)'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='Resources'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='Big picture'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='Common functions (continued)'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='Additional arguments'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='<code>dnorm()</code> etc. arguments'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='Your Turn (probably fairly tough)'>
+         30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='NA'>
+         31
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='NA'>
+         32
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='NA'>
+         33
       </a>
     </li>
   </ul>
