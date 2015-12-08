@@ -1,6 +1,8 @@
 ---
-title: Homework 2 Solutions
-output: pdf_document
+title: "Homework 2 Solutions"
+output:
+  pdf_document:
+    highlight: zenburn
 ---
 
 1. Load data
@@ -65,7 +67,7 @@ plot(d$Earnings ~ d$SAT)
 abline(coef(mA)[1], coef(mA)[2], col = "blue", lwd = 3, lty = 2)
 plot(d$Earnings ~ d$Debt)
 abline(coef(mB)[1], coef(mB)[2], col = "blue", lwd = 3, lty = 2)
-plot(d$SAT_c ~ d$Debt)
+plot(d$SAT ~ d$Debt)
 abline(coef(mC)[1], coef(mC)[2], col = "blue", lwd = 3, lty = 2)
 ```
 

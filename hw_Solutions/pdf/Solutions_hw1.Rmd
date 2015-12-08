@@ -1,7 +1,10 @@
 ---
-title: Homework 1 Solutions
-output: pdf_document
---- 
+title: "Homework 1 Solutions"
+output:
+  pdf_document:
+    highlight: zenburn
+---
+
 ```{r setup, include = FALSE}
 knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
 knitr::opts_knit$set(cache=FALSE)

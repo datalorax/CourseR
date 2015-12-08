@@ -22,9 +22,8 @@ knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
 
 # Next week
 * A note on matrix algebra vs element-wise algebra
-* Classes
 * Lists
-* Data frames
+* Common/Routine functions
 
 <br>
 Note that much of this presentation is based off Wickham (2015): 

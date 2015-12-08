@@ -20,9 +20,8 @@ knit        : slidify::knit2slides
 
 # Next week
 * A note on matrix algebra vs element-wise algebra
-* Classes
 * Lists
-* Data frames
+* Common/Routine functions
 
 <br>
 Note that much of this presentation is based off Wickham (2015): 
