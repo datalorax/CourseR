@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Homework 3 Review</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Homework 3 Review">
+  <meta name="author" content="Daniel Anderson">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Homework 3 Review</h1>
+    <h2></h2>
+    <p>Daniel Anderson<br/>CourseR</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>1. Load the Camden Boroughs dataset</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">setwd(&quot;/Users/Daniel/Dropbox/Teaching/CourseR/&quot;)
+d &lt;- read.csv(&quot;./data/CamdenBoroughs.csv&quot;, na.strings = c(&quot;Not applicable&quot;, 
+       &quot;Unknown&quot;, &quot;999&quot;, &quot;NA&quot;, &quot;&quot;))
+head(d)
+</code></pre>
+
+<pre><code>##   Unique.Reference.Number Local.Authority.Code Local.Authority.Name
+## 1                  100007                  202               Camden
+## 2                  100052                  202               Camden
+## 3                  100029                  202               Camden
+## 4                  100406                  206            Islington
+## 5                  100027                  202               Camden
+## 6                  100428                  206            Islington
+##   Establishment.Number                 Establishment.Name
+## 1                 1101 Camden Primary Pupil Referral Unit
+## 2                 4275                   Hampstead School
+## 3                 3327               Christ Church School
+## 4                 2261             Grafton Primary School
+## 5                 2841      Eleanor Palmer Primary School
+## 6                 2646              Winton Primary School
+##    Type.Of.Establishment Establishment.Status Reason.Establishment.Opened
+## 1    Pupil Referral Unit                 Open                        &lt;NA&gt;
+## 2       Community School                 Open                        &lt;NA&gt;
+## 3 Voluntary Aided School                 Open                        &lt;NA&gt;
+## 4       Community School                 Open                        &lt;NA&gt;
+## 5       Community School                 Open                        &lt;NA&gt;
+## 6       Community School                 Open                        &lt;NA&gt;
+##   Open.Date Reason.Establishment.Closed Close.Date Phase.Of.Education
+## 1      &lt;NA&gt;                          NA         NA               &lt;NA&gt;
+## 2      &lt;NA&gt;                          NA         NA          Secondary
+## 3      &lt;NA&gt;                          NA         NA            Primary
+## 4      &lt;NA&gt;                          NA         NA            Primary
+## 5      &lt;NA&gt;                          NA         NA            Primary
+## 6      &lt;NA&gt;                          NA         NA            Primary
+##   Statutory.Low.Age Statutory.High.Age    Boarders
+## 1                 5                 11 No Boarders
+## 2                11                 18 No Boarders
+## 3                 3                 11 No Boarders
+## 4                 3                 11 No Boarders
+## 5                 3                 11 No Boarders
+## 6                 3                 11 No Boarders
+##          Official.Sixth.Form Gender Religious.Character           Diocese
+## 1                       &lt;NA&gt;  Mixed      Does not apply              &lt;NA&gt;
+## 2           Has a sixth form  Mixed      Does not apply              &lt;NA&gt;
+## 3 Does not have a sixth form  Mixed   Church of England Diocese of London
+## 4 Does not have a sixth form  Mixed      Does not apply              &lt;NA&gt;
+## 5 Does not have a sixth form  Mixed      Does not apply              &lt;NA&gt;
+## 6 Does not have a sixth form  Mixed      Does not apply              &lt;NA&gt;
+##   Admissions.Policy School.Capacity    Special.Classes Census.Date
+## 1              &lt;NA&gt;              20               &lt;NA&gt;  16/01/2014
+## 2     Comprehensive            1302 No Special Classes  16/01/2014
+## 3              &lt;NA&gt;             210 No Special Classes  16/01/2014
+## 4              &lt;NA&gt;             393 No Special Classes  16/01/2014
+## 5              &lt;NA&gt;             210 No Special Classes  16/01/2014
+## 6              &lt;NA&gt;             315 No Special Classes  16/01/2014
+##   Number.Of.Pupils Number.Of.Boys Number.Of.Girls
+## 1               12             10              NA
+## 2             1259            710             550
+## 3              228            120             110
+## 4              519            270             250
+## 5              237            125             115
+## 6              194            110              85
+##   Percentage.Claiming.Free.School.Meals Trust.School Trust.Name
+## 1                                  &lt;NA&gt;         &lt;NA&gt;       &lt;NA&gt;
+## 2                                 29.6%         &lt;NA&gt;       &lt;NA&gt;
+## 3                                 27.2%         &lt;NA&gt;       &lt;NA&gt;
+## 4                                 43.2%         &lt;NA&gt;       &lt;NA&gt;
+## 5                                 12.2%         &lt;NA&gt;       &lt;NA&gt;
+## 6                                 54.3%         &lt;NA&gt;       &lt;NA&gt;
+##   School.Sponsored School.Sponsor             Federation Federation.Name
+## 1             &lt;NA&gt;           &lt;NA&gt;                   &lt;NA&gt;            &lt;NA&gt;
+## 2             &lt;NA&gt;           &lt;NA&gt; Not under a federation            &lt;NA&gt;
+## 3             &lt;NA&gt;           &lt;NA&gt; Not under a federation            &lt;NA&gt;
+## 4             &lt;NA&gt;           &lt;NA&gt; Not under a federation            &lt;NA&gt;
+## 5             &lt;NA&gt;           &lt;NA&gt; Not under a federation            &lt;NA&gt;
+## 6             &lt;NA&gt;           &lt;NA&gt; Not under a federation            &lt;NA&gt;
+##   Unique.Property.Reference.Number Further.Higher.Education.Identifier
+## 1                               NA                                  NA
+## 2                         10002876                                  NA
+## 3                               NA                                  NA
+## 4                               NA                                  NA
+## 5                               NA                                  NA
+## 6                               NA                                  NA
+##   Further.Education.Type Ofsted.Last.Inspected Ofsted.Special.Measures
+## 1                   &lt;NA&gt;            26/03/2015 Not in special measures
+## 2                   &lt;NA&gt;            01/02/2012 Not in special measures
+## 3                   &lt;NA&gt;            19/01/2012 Not in special measures
+## 4                   &lt;NA&gt;            13/11/2008 Not in special measures
+## 5                   &lt;NA&gt;            18/10/2011 Not in special measures
+## 6                   &lt;NA&gt;            11/03/2014 Not in special measures
+##   Last.Changed.Date                           Street         Locality
+## 1        02/06/2015 Robson House, 74 Stanhope Street             &lt;NA&gt;
+## 2        18/06/2014                    Westbere Road        Hampstead
+## 3        18/06/2014                   Redhill Street           Camden
+## 4        18/06/2014                      Eburne Road         Holloway
+## 5        18/06/2014                    Lupton Street             &lt;NA&gt;
+## 6        18/06/2014                   Killick Street Pentonville Road
+##   Address.3   Town County Postcode                                 Website
+## 1      &lt;NA&gt; London   &lt;NA&gt;  NW1 3EX     http://www.robsonhouse.org.uk/main/
+## 2      &lt;NA&gt; London   &lt;NA&gt;  NW2 3RT      http://www.hampsteadschool.org.uk/
+## 3      &lt;NA&gt; London   &lt;NA&gt;  NW1 4BD     http://www.cchurchnw1.camden.sch.uk
+## 4      &lt;NA&gt; London   &lt;NA&gt;   N7 6AR                                    &lt;NA&gt;
+## 5      &lt;NA&gt; London   &lt;NA&gt;  NW5 2JA http://www.eleanorpalmer.camden.sch.uk/
+## 6      &lt;NA&gt; London   &lt;NA&gt;   N1 9AZ      http://www.wintonprimaryschool.com
+##   Telephone.Number Head.Title Head.First.Name Head.Last.Name Head.Honours
+## 1       2037720370         Mr          Andrew        Herbert         &lt;NA&gt;
+## 2       2077948133         Mr         Jacques  Szemalikowski         &lt;NA&gt;
+## 3       2073877881         Ms           Paula         Walker         &lt;NA&gt;
+## 4       2072723284         Ms               T       Sergides         &lt;NA&gt;
+## 5       2074852155        Mrs            Kate          Frood         &lt;NA&gt;
+## 6       2078376096         Mr          Andrew          Rigby         &lt;NA&gt;
+##   Head.Preferred.Job.Title Teen.Mothers Teen.Mothers.Places
+## 1          Head of Service         &lt;NA&gt;                  NA
+## 2                     Head         &lt;NA&gt;                  NA
+## 3              Headteacher         &lt;NA&gt;                  NA
+## 4              Headteacher         &lt;NA&gt;                  NA
+## 5              Headteacher         &lt;NA&gt;                  NA
+## 6              Headteacher         &lt;NA&gt;                  NA
+##   Child.Care.Facilities Special.Education.Needs.Pupil.Referral.Unit
+## 1                  &lt;NA&gt;             PRU Does have Provision for SEN
+## 2                  &lt;NA&gt;                                        &lt;NA&gt;
+## 3                  &lt;NA&gt;                                        &lt;NA&gt;
+## 4                  &lt;NA&gt;                                        &lt;NA&gt;
+## 5                  &lt;NA&gt;                                        &lt;NA&gt;
+## 6                  &lt;NA&gt;                                        &lt;NA&gt;
+##   Emotional.Behavioural.Difficulties                Full.Time.Provision
+## 1        PRU Does have EBD provision PRU does offer full time provision
+## 2                               &lt;NA&gt;                               &lt;NA&gt;
+## 3                               &lt;NA&gt;                               &lt;NA&gt;
+## 4                               &lt;NA&gt;                               &lt;NA&gt;
+## 5                               &lt;NA&gt;                               &lt;NA&gt;
+## 6                               &lt;NA&gt;                               &lt;NA&gt;
+##   Education.By.Other Section.41.Approved
+## 1               &lt;NA&gt;                &lt;NA&gt;
+## 2               &lt;NA&gt;                &lt;NA&gt;
+## 3               &lt;NA&gt;                &lt;NA&gt;
+## 4               &lt;NA&gt;                &lt;NA&gt;
+## 5               &lt;NA&gt;                &lt;NA&gt;
+## 6               &lt;NA&gt;                &lt;NA&gt;
+##                    Special.Education.Needs.1 Special.Education.Needs.2
+## 1 SEMH - Social, Emotional and Mental Health                      &lt;NA&gt;
+## 2                   PD - Physical Disability                      &lt;NA&gt;
+## 3                                       &lt;NA&gt;                      &lt;NA&gt;
+## 4                                       &lt;NA&gt;                      &lt;NA&gt;
+## 5                                       &lt;NA&gt;                      &lt;NA&gt;
+## 6                                       &lt;NA&gt;                      &lt;NA&gt;
+##   Region Administrative.Ward   Parliamentary.Constituency
+## 1 London       Regent&#39;s Park      Holborn and St. Pancras
+## 2 London       Fortune Green        Hampstead and Kilburn
+## 3 London       Regent&#39;s Park      Holborn and St. Pancras
+## 4 London       Finsbury Park              Islington North
+## 5 London        Kentish Town      Holborn and St. Pancras
+## 6 London          Caledonian Islington South and Finsbury
+##                 Urban.Rural GSSLA.Code Easting Northing
+## 1 Urban &gt; 10k - less sparse  E09000007  529076   182495
+## 2 Urban &gt; 10k - less sparse  E09000007  524402   185633
+## 3 Urban &gt; 10k - less sparse  E09000007  528821   182991
+## 4 Urban &gt; 10k - less sparse  E09000019  530483   186145
+## 5 Urban &gt; 10k - less sparse  E09000007  529117   185613
+## 6 Urban &gt; 10k - less sparse  E09000019  530634   183172
+##   Middle.Super.Output.Area Lower.Super.Output.Area Boarding.Establishment
+## 1               Camden 023             Camden 023B                   &lt;NA&gt;
+## 2               Camden 005             Camden 005A                   &lt;NA&gt;
+## 3               Camden 021             Camden 021B                   &lt;NA&gt;
+## 4            Islington 007          Islington 007B                   &lt;NA&gt;
+## 5               Camden 003             Camden 003C                   &lt;NA&gt;
+## 6            Islington 021          Islington 021B                   &lt;NA&gt;
+##   Previous.Local.Authority.Code Previous.Local.Authority.Name
+## 1                            NA                          &lt;NA&gt;
+## 2                            NA                          &lt;NA&gt;
+## 3                            NA                          &lt;NA&gt;
+## 4                            NA                          &lt;NA&gt;
+## 5                            NA                          &lt;NA&gt;
+## 6                            NA                          &lt;NA&gt;
+##   Previous.Establishment.Number Longitude Latitude Spatial.Accuracy
+## 1                            NA     -0.14       52               NA
+## 2                            NA     -0.21       52               NA
+## 3                            NA     -0.14       52               NA
+## 4                            NA     -0.12       52               NA
+## 5                            NA     -0.14       52               NA
+## 6                            NA     -0.12       52               NA
+##   Last.Uploaded               Location Socrata.ID
+## 1    24/09/2015 (51.526635, -0.140758)          7
+## 2    24/09/2015  (51.555884, -0.20699)         50
+## 3    24/09/2015  (51.53115, -0.144251)         27
+## 4    24/09/2015 (51.559113, -0.119136)         97
+## 5    24/09/2015 (51.554646, -0.139025)         25
+## 6    24/09/2015 (51.532361, -0.118062)        106
+</code></pre>
+
+<div style='float:left;width:48%;'>
+  
+</div>
+<div style='float:right;width:48%;'>
+  
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>2. Create numeric version of <code>frl</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">d$frl &lt;- as.numeric(
+            sub(&quot;%&quot;, &quot;&quot;, d$Percentage.Claiming.Free.School.Meals)
+        )
+
+head(d$frl)
+</code></pre>
+
+<pre><code>## [1] NA 30 27 43 12 54
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>3. Notched boxplot</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">se &lt;- function(x) {
+    sqrt(
+        var(x, na.rm = TRUE) /
+        length(na.omit(x))
+    )
+}
+
+par(las = 3, cex.axis = 0.75)
+
+plot(d$Town, d$frl, notch = TRUE)
+
+abline(h = mean(d$frl, na.rm = TRUE), 
+    col = &quot;blue&quot;, lty = 2)
+abline(h = mean(d$frl, na.rm = TRUE) + 
+    1.96*se(d$frl),
+    col = &quot;gray&quot;, lty = 2)
+abline(h = mean(d$frl, na.rm = TRUE) - 
+    1.96*se(d$frl),
+    col = &quot;gray&quot;, lty = 2)
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-4-1.png" alt="plot of chunk unnamed-chunk-4"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>4. Briefly interpret the plot.</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><em>London pretty clearly seems to dominate the data, given that the grand mean
+  aligns almost perfectly with the median in London, and the median in all other towns is below the grand mean, with the exception of Camden. Indeed, 593 of the 664 observations, or 89% are from London, while 4 of the towns had only one observation. However, of the groups with more than one observation, the proportion of students eligible for free or reduced price lunch was reliably lower than the grand mean, as the upper-bound of the 95% confidence interval around the median for each group was below the grand mean. Outside of London, Edgware had the most variability.</em></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>5. List of data frames by <code>Statutory.Low.Age</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">l &lt;- split(d, d$Statutory.Low.Age)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <article data-timings="">
+    <ul>
+<li><p>Use the list to produce the same plot for schools in which the 
+<code>Statutory.Low.Age</code> is 11.</p></li>
+<li><p>Produce a boxplot for <code>frl</code> by <code>Local.Authority.Name</code> for only schools in 
+which the <code>Statutory.Low.Age</code> is 3.</p></li>
+</ul>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">plot(frl ~ Local.Authority.Name, 
+    data = l[[&quot;3&quot;]], 
+    notch = TRUE,
+    main = &quot;Statutory Low Age = 3&quot;)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6"> </p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">plot(frl ~ Local.Authority.Name, 
+    data = l[[&quot;11&quot;]], 
+    notch = TRUE,
+    main = &quot;Statutory Low Age = 11&quot;)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-7-1.png" alt="plot of chunk unnamed-chunk-7"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>6. Multiple Regression Model</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><p>Fit a model for schools in which the Statutory Low Age is 3, with 
+<code>Number.Of.Boys</code> and <code>Local.Authority.Name</code> modeled as predictors of <code>frl</code>. </p></li>
+<li><p>Compute predictor-residual plots for the model (<em>hint: use a package</em>).</p></li>
+</ul>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">mod &lt;- lm(frl ~ Number.Of.Boys + 
+                Local.Authority.Name, 
+        data = d)
+library(visreg)
+par(mfrow = c(2,1))
+visreg(mod)
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-9-1.png" alt="plot of chunk unnamed-chunk-9"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>7. Plot Density and Overlay Likelihood</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">dens &lt;- density(d$frl, na.rm = TRUE)
+plot(dens, main = &quot;Density of FRL&quot;)
+lines(dens$x, 
+      dnorm(dens$x, 
+        mean(d$frl, na.rm = TRUE), 
+        sd(d$frl, na.rm = TRUE)), 
+      col = &quot;blue&quot;, 
+      lty = 2)
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-11-1.png" alt="plot of chunk unnamed-chunk-11"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h1>Do the data appear to have been generated by such a distribution? Why or why not?</h1>
+  </hgroup>
+  <article data-timings="">
+    <p><br></p>
+
+<p>It&#39;s difficult to say for sure if the data were generated by the specified
+  normal distribution, but it appears somewhat unlikely. The empirical density function has a spike around 0 that is not present in the normal distribution, and the peak of the normal is well above the empirical density function.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='1. Load the Camden Boroughs dataset'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='2. Create numeric version of <code>frl</code>'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='3. Notched boxplot'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='4. Briefly interpret the plot.'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='5. List of data frames by <code>Statutory.Low.Age</code>'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='NA'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='6. Multiple Regression Model'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='7. Plot Density and Overlay Likelihood'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='Do the data appear to have been generated by such a distribution? Why or why not?'>
+         9
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
