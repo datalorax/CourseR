@@ -164,20 +164,18 @@ Upon completion of this course, the successful student will:
 #### Week 3.2: Data structures, classes, and routine functions
 * Topics
 	+ Matrix algebra versus element-wise algebra
-    + Lists
-    + Data frames
-    + Classes and methods (object-oriented programming)
-    + routine functions
-	    - `rep()`, `seq()`, `:`
-	    - `table()`
-	    - `c()`, `cbind()`, `rbind()`
-	    - `ifelse()`
-	    - `rnorm()`, `rbinom()`, `dnorm()`, etc.
-	    - `length()`, `nrow()`, `ncol()`
-	    - `str()`, `head()`, `tail()`
-	    - `summary()`
-	    - `with()`, `attach()`
-	    - etc.
+  + Lists  
+  + routine functions
+    - `rep()`, `seq()`, `:`
+    - `table()`
+    - `c()`, `cbind()`, `rbind()`
+    - `ifelse()`
+    - `rnorm()`, `rbinom()`, `dnorm()`, etc.
+    - `length()`, `nrow()`, `ncol()`
+    - `str()`, `head()`, `tail()`
+    - `summary()`
+    - `with()`, `attach()`
+    - etc.
 * Lab
     + Applying routine functions and working with lists
 * Readings
@@ -191,6 +189,7 @@ Upon completion of this course, the successful student will:
 
 #### Week 4.1: Functions, part 1
 * Topics
+    + Classes and methods (object-oriented programming)
     + Function components
     + Primitive functions
     + Basics on writing functions
