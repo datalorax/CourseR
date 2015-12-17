@@ -1,0 +1,885 @@
+---
+title       : "Functions, part 1"
+subtitle    : Week 4.1
+author      : Daniel Anderson
+job         : CourseR
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
+```
+## Today's Agenda
+* Overview of functions
+* Function components
+* Primitive functions
+* Basics on writing functions
+* Using functions with plotting
+* Classes and methods (object-oriented programming)
+* Storing and applying functions with `source()`
+
+----
+## A reminder: The R learning curve
+
+```{r, echo = FALSE}
+curve(x^3, from = -50, to = 50, lty = 3, col = "cadetblue3", lwd = 3,
+	axes = FALSE, xlab = "Time", ylab = "Learning", 
+	main = "The R Learning Curve (as I see it)")
+axis(1, at = seq(-50, 50, 10),  labels = seq(0, 100, 10))
+axis(2, at = seq(-1e5, 1e5, 2e4),  labels = seq(0, 101, 10))
+arrows(10, 2e4, 18, 1e4, col = "gray", length = 0.1)
+text(-10, 22e3, "Where we are now", col = "gray", cex = 1.5)
+points(19.2, 7500, pch = 21, col = "black", bg = "gray")
+```
+
+----
+## Functions
+Anything that carries out an operation in R is a function. For example
+
+```{r}
+3 + 5 + 7
+```
+Could also be written
+
+```{r}
+`+`(3, `+`(5, 7))
+```
+In other words, the `+` operator is itself a function that takes two arguments (both numeric), which it sums. The `+` operator is an example of an infix function, which we'll discuss more later today.
+
+----
+Similarly, the following are the same
+
+```{r}
+a <- 7
+a
+`<-`(a, 7)
+a
+```
+
+----
+## Functions are also objects
+
+```{r}
+a <- lm
+data(mtcars)
+summary( a(hp ~ drat + wt, data = mtcars) )
+```
+
+----
+## Function components
+# Functions have three components
+* `body()`
+* `formals()`
+
+![bodyFormals](./assets/img/bodyFormals.png)
+
+
+* `environment()`
+	+ A bit more complicated: Deals with scoping, which we'll discuss next 
+	  class
+
+----
+## Primitive functions
+* The one exception to the rule of functions having 3 components, are
+  primitive functions, which call C code directly to increase efficiency.
+
+```{r}
+names(methods:::.BasicFunsList) # 198 primitive functions total
+```
+
+---- &twocol
+## Writing functions: A basic example
+
+*** =left
+
+```{r}
+pol <- function(x, power) {
+	z <- x^power
+return(z)
+}
+```
+This function takes two arguments: `x` and `power`, with `x` being a generic
+  numeric vector (could be a scalar), and power being the power to which the number or vector will be raised (could also be a vector).
+
+While the function appears (and is) simple, it is actually quite flexible.
+
+```{r}
+pol(x = 2, power = 3)
+```
+
+*** =right
+
+```{r}
+pol(c(3, 5, 7), 9)
+pol(c(7, 1, -5, 8), c(2, 3))
+pol(c(8, 5), c(3, 5))
+pol(8, c(5, 3, 2))
+```
+
+---- &twocol
+## Function components
+You can extract the body, formals, or environment from a function, by using
+  the corresponding function.
+
+*** =left
+
+```{r}
+body(pol)
+formals(pol)
+```
+
+*** =right
+
+```{r}
+environment(pol)
+environment(lm)
+formals(lm)
+```
+
+----
+## Function components
+Note that these calls will return `NULL` for primitive functions.
+
+```{r}
+formals(sum)
+body(sum)
+environment(sum)
+```
+
+----
+## More on formals
+Functions do not neccessarily have to have formal arguments, but they must have a body.
+
+```{r}
+
+a <- 7; b <- 5
+
+f <- function() {
+	x <- 7 + a^2
+return(x/b)
+}
+
+formals(f)
+f()
+```
+Note: Scoping (next class) is important here.
+
+----
+## Another basic example
+
+# Just for practice, let's create a new standard deviation function. 
+
+<br>
+
+$$\sigma = \sqrt{\frac{\Sigma(x_i - \bar{x})^2}{(n-1)}}$$
+
+```{r}
+stDev <- function(x) {	
+	num <- sum( (x - mean(x))^2 )
+	denom <- length(x) - 1
+
+	std <- sqrt(num / denom)
+return(std)
+}
+```
+
+This function takes one formal argument, `x`, which must be a numeric vector. The body of the function is the equation, and the standard deviation is returned.
+
+---- &twocol
+## Does it work?
+# Compare to the base function `sd()`
+
+```{r}
+data(mtcars)
+sd(mtcars$mpg); stDev(mtcars$mpg)
+sd(mtcars$drat); stDev(mtcars$drat)
+```
+
+----
+## Your turn
+The formula for calculating the mean is
+
+$$\bar{x} = \frac{\Sigma x_i}{n}$$
+
+* Write a function that calculates the sample mean, $\bar{x}$. Name the
+  function `xbar`. The function must be written without using the base function `mean()`.
+* Compare the results of your function with `mean()`. Do the results match?
+* What are the formals and body of this function? Describe each.
+* How could you modify the function to account for missing data? (we haven't 
+  talked about this yet, so don't worry if you are having trouble with it)
+
+---- &twocol
+* Write a function that calculates the sample mean, $\bar{x}$. Name the
+  function `xbar`. The function must be written without using the base function `mean()`.
+
+```{r}
+xbar <- function(x) {
+	myMean <- sum(x)/length(x)
+return(myMean)
+}
+```
+
+* Compare the results of your function with `mean()`. Do the results match?
+
+*** =left
+
+```{r}
+xbar(mtcars$mpg); mean(mtcars$mpg)
+```
+
+*** =right
+
+```{r}
+xbar(mtcars$drat); mean(mtcars$drat)
+```
+
+----
+* What are the formals and body of this function?
+
+Formals = `x`: a generic numeric vector
+
+<br>
+
+Body = `myMean <- sum(x)/length(x)`, sums the generic numeric vector and
+  divides the result by the number of elements in the vector.
+
+---- &twocol
+
+* How could you modify the function to account for missing data?
+
+*** =left
+
+There are a few different options here. First, you could modify the function
+  so it automatically calculates the mean from only the observed data.
+
+```{r}
+xbar2 <- function(x) {
+	y <- na.omit(x)
+	myMean <- sum(y)/length(y)
+return(myMean)
+}
+```
+To test this, we could set some values to missing and then run the function.
+
+```{r}
+v <- mtcars$mpg
+
+# Randomly set 10 values to missing
+set.seed(101) # Seed for replicability
+v[sample(v, 10)] <- NA
+```
+
+*** =right
+
+```{r}
+v
+mean(v, na.rm = TRUE)
+xbar2(v)
+```
+
+---- &twocol
+# Alternatively, add a condition, and make missing data a formal argument
+
+```{r}
+xbar3 <- function(x, miss = FALSE) {
+	if(miss == FALSE) {
+		myMean <- sum(x)/length(x)
+	}
+	else {
+		y <- na.omit(x)
+		myMean <- sum(y)/length(y)
+	}
+return(myMean)
+}
+```
+This function has two formal arguments, `x`, and `miss`. Notice that `miss`
+  defaults to `FALSE`. This means the argument does not have to be explicitly called in the function, but it can still handle missing data, if they are present.
+
+*** =left
+
+```{r}
+xbar3(mtcars$mpg)
+```
+
+*** =right
+
+```{r}
+xbar3(v, miss = TRUE)
+```
+
+---- &twocol
+Because `else {}` was used, rather than `if() {}`, any argument other than 
+  `FALSE` supplied to `miss` will result in that portion of the function being evaluated.
+
+```{r}
+xbar3(v, 3)
+```
+
+You may, or may not, want this type of behavior. If not, just use multiple 
+  `if() {}` statements.
+
+*** =left
+
+```{r}
+xbar3 <- function(x, miss = FALSE) {
+	if(miss == FALSE) {
+		myMean <- sum(x)/length(x)
+	}
+	if(miss == TRUE) {
+		y <- na.omit(x)
+		myMean <- sum(y)/length(y)
+	}
+return(myMean)
+}
+```
+
+*** =right
+
+```{r}
+xbar3(v, 3)
+```
+
+---- &twocol
+## More on `return()`
+The `return()` function does not neccessarily need to be used within functions (although it can make it a little more clear). If `return()` is not used, the function will output the final expression from the function. For example, the following two functions are equivalent.
+
+*** =left
+
+```{r}
+pol <- function(x, power) {
+	z <- x^power
+return(z)
+}
+```
+```{r}
+pol(3, 4)
+```
+
+
+*** =right
+
+```{r}
+pol2 <- function(x, power) {
+	x^power
+}
+```
+```{r}
+pol2(3, 4)
+```
+
+----
+## Even more compact
+If the entire function only takes one line of code, you can eliminate the brackets.
+
+```{r}
+pol <- function(x, power) x^power
+```
+```{r}
+pol(3,4)
+```
+
+---- &twocol
+## Embedding Messages, Returning Errors
+Note that this is not close to the most important part of learning to write 
+  functions, but it can be helpful in de-bugging (especially when you start writing functions that call functions). It is also imperitive when you start writing packages, where other people are using your functions. You need to give the user some breadcrumbs so they understand why the function is not working.
+
+# Warning messages
+Let's modify `xbar2` to report a warning if missing data are removed.
+
+*** =left 
+
+```{r}
+xbar2 <- function(x) {
+	y <- na.omit(x)
+	
+	if(length(y) != length(x)) {
+		warning("Missing data removed")
+	}
+
+	myMean <- sum(y)/length(y)
+return(myMean)
+}
+```
+
+*** =right 
+
+```{r}
+xbar2(v)
+```
+
+---- &twocol
+## Error Messages
+
+Lets modify the original `xbar` function to report an error, rather than `NA`,
+  if missing data are present.
+
+*** =left
+
+```{r}
+xbar <- function(x) {
+	if(any(is.na(x))) {
+		stop("Missing data present")
+	}
+	myMean <- sum(x)/length(x)
+return(myMean)
+}
+```
+
+*** =right
+
+```{r}
+xbar(v)
+xbar(na.omit(v))
+```
+
+----
+## Your turn again (may be a bit tricky)
+
+* Write a function, `catMean`, that takes a generic numeric vector, `x`, and a
+  binary vector, `bin`, and reports the mean of the numeric vector for each of the two categories. Use your `xbar` function you wrote previously to calculate the means.
+  	+ <span style="color:gray" > Hint: You may want to use `split()`. </span>
+* The two vectors must be of the same length. Embed an error message if this
+  is not the case.
+* Run your code with the `mtcars` data, calculating the mean of `mpg` by `vs`,
+  and the mean of `disp` by `am`. Then run the following two lines of code to see if the results match: 
+
+```{r, eval = FALSE}
+tapply(mtcars$mpg, mtcars$vs, mean)
+tapply(mtcars$disp, mtcars$am, mean)
+```
+
+* For extra participation credit, make the names of the return meaningful.
+  Test this out by calculating the means of a factor.
+
+---- &twocol
+
+```{r}
+catMean <- function(x, bin) {
+	if(length(x) != length(bin)) {
+		stop("Vectors are of different lengths")
+	}
+
+	l <- split(x, bin)
+	means <- c(xbar(l[[1]]), xbar(l[[2]]))
+	names(means) <- names(l)
+return(means)
+}
+```
+
+*** =left
+
+```{r}
+catMean(mtcars$mpg, mtcars$vs)
+tapply(mtcars$mpg, mtcars$vs, mean)
+```
+
+*** =right
+
+```{r}
+catMean(mtcars$disp, mtcars$am)
+tapply(mtcars$disp, mtcars$am, mean)
+```
+
+----
+# Checking on error message
+
+```{r}
+catMean(mtcars$disp, rep(c(0,1), 100))
+```
+
+----
+# Checking on `names` of returned vector
+
+```{r}
+fact <- as.factor(rep(
+					c(rep("red", 3), "blue"), 
+				  length.out = nrow(mtcars))
+			)
+catMean(mtcars$mpg, fact)
+tapply(mtcars$mpg, fact, mean)
+```
+
+---- &twocol
+## Using Functions in Plotting
+
+One of the best ways to get started with functions is by using them to plot
+  more efficiently. For, example, let's write a function that produces a bivariate scatterplot with the regression line superimposed.
+
+*** =left
+
+```{r}
+regPlot <- function(x, y, ...) {
+	plot(x, y, ...)
+	mod <- lm(y ~ x)
+	abline(coef(mod)[1], coef(mod)[2], 
+		col = "blue", lwd = 2, lty = 3)
+}
+```
+Now we can feed the function any two vectors and have the regression plot
+  produced automatically. For example, let's explore the relation between car weight and horsepower.
+
+*** =right
+
+```{r, fig.height = 5.5}
+regPlot(mtcars$wt, mtcars$hp)
+```
+
+--- &twocol
+## Digging a bit deeper
+```{r}
+regPlot <- function(x, y, ...) {
+	plot(x, y, ...)
+	mod <- lm(y ~ x)
+	abline(coef(mod)[1], coef(mod)[2], 
+		col = "blue", lwd = 2, lty = 3)
+}
+```
+Note the use of `...`, which is a convention used to pass additional arguments into the function. For example, here, `regPlot` only has three formal arguments, but any of the `plot` arguments can be called through `...` 
+
+*** =left
+
+```{r, eval = FALSE}
+regPlot(mtcars$wt, mtcars$hp,
+	xlim = c(0,7),
+	ylim = c(0,350),
+	xlab = "Weight",
+	ylab = "Horsepower",
+	main = "Regression Plot"
+	)
+```
+
+*** =right
+
+```{r, echo = FALSE, fig.height = 3.5}
+regPlot(mtcars$wt, mtcars$hp,
+	xlim = c(0,7),
+	ylim = c(0,350),
+	xlab = "Weight",
+	ylab = "Horsepower",
+	main = "Regression Plot"
+	)
+```
+
+----
+## Extending the example
+# LSAT theta data
+
+```{r}
+d <- read.csv("./data/LSAT_theta.csv")
+head(d)
+```
+We will compute the raw score for each student, and compare the difference
+  between students' raw score and theta estimates from a two-parameter logistic item response theory model. In this dataset, theta values are stored in the column labeled `z1`.
+
+----
+## Calculate raw scores
+
+```{r}
+d$raw <- rowSums(d[ ,1:5])
+head(d)
+```
+
+----
+## Basic relation
+
+```{r}
+regPlot(d$raw, d$z1)
+```
+
+---- &twocol
+## Plot theta distributions by raw score
+
+*** =left
+
+First, we'll write a function to calculate the mean and 95% bounds of
+  the distribution (assuming a normal distribution).
+
+```{r}
+mean_CI <- function(x) {
+return(
+	data.frame(mean = mean(x), 
+		 	   lower = mean(x) 
+		 	     	- 1.96*sd(x),
+		 	   upper = mean(x) 
+		 	     	+ 1.96*sd(x)
+		 	   )
+	)
+}
+```
+
+*** =right
+
+Next, we'll write a function to combine all the estimates into a single data 
+  frame. 
+
+```{r}
+all_CI <- function() {
+	l <- split(d, d$raw)
+return(
+	rbind(mean_CI(l[[1]]$z1),
+		  mean_CI(l[[2]]$z1),
+		  mean_CI(l[[3]]$z1),
+		  mean_CI(l[[4]]$z1),
+		  mean_CI(l[[5]]$z1),
+		  mean_CI(l[[6]]$z1)
+		)
+	)	
+}
+```
+
+---- &twocol
+## Quick digression
+
+The `all_CI()` function is not really neccessary. We could do the same thing through the use of a loop (with `sapply()`). We'll discuss loops beginning the class after next. But quickly
+
+*** =left
+
+```{r}
+l <- split(d, d$raw)
+
+means <- sapply(l, function(x) { 
+	mean_CI(x$z1)
+})
+means
+```
+
+*** =right
+
+```{r}
+means <- t(sapply(l, function(x) {
+	mean_CI(x$z1)
+}))
+means
+```
+
+---- &twocol
+## Combine estimates, produce empty plot
+
+First, calculate means
+
+```{r}
+means <- all_CI()
+means
+```
+
+---- &twocol
+## Next, produce a plot, with no points
+
+*** =left
+
+```{r, eval = FALSE}
+regPlot(d$raw, d$z1, 
+	type = "n",
+	main = "Theta Distributions by 
+		Raw Score",
+	xlab = "Raw",
+	ylab = expression(theta), 
+	cex.lab = 1.5)
+
+```
+
+*** =right
+
+```{r, echo = FALSE}
+regPlot(d$raw, d$z1, 
+	type = "n",
+	main = "Theta Distributions by Raw Score",
+	xlab = "Raw",
+	ylab = expression(theta), 
+	cex.lab = 1.5)
+
+```
+
+---- &twocol
+## Add vertical distribution bars
+
+*** =left
+
+```{r, eval = FALSE}
+segments(x0 = 0:5, y0 = means$lower, 
+	     x1 = 0:5, y1 = means$upper,
+	     lwd = 1.5)
+```
+
+*** =right
+
+```{r, echo = FALSE}
+regPlot(d$raw, d$z1, 
+	type = "n",
+	main = "Theta Distributions by Raw Score",
+	xlab = "Raw",
+	ylab = expression(theta), 
+	cex.lab = 1.5)
+segments(x0 = 0:5, y0 = means$lower, 
+	     x1 = 0:5, y1 = means$upper,
+	     lwd = 1.5)
+```
+
+
+---- &twocol
+## Add portion of distribution bars
+
+*** =left
+
+```{r, eval = FALSE}
+width <- 0.03
+segments(x0 = 0:5 - width, 
+			y0 = means$lower, 
+	     x1 = 0:5 + width, 
+	     	y1 = means$lower)
+segments(x0 = 0:5 - width, 
+			y0 = means$upper, 
+		 x1 = 0:5 + width, 
+		 	y1 = means$upper)
+```
+
+*** =right
+
+```{r, echo = FALSE}
+regPlot(d$raw, d$z1, 
+	type = "n",
+	main = "Theta Distributions by Raw Score",
+	xlab = "Raw",
+	ylab = expression(theta), 
+	cex.lab = 1.5)
+
+segments(x0 = 0:5, y0 = means$lower, 
+	     x1 = 0:5, y1 = means$upper,
+	     lwd = 1.5)
+
+width <- 0.03
+segments(0:5 - width, means$lower, 0:5 + width, means$lower)
+segments(0:5 - width, means$upper, 0:5 + width, means$upper)
+```
+
+---- &twocol
+## Add points (mean theta estimates)
+
+*** =left
+
+```{r, eval = FALSE}
+points(x = 0:5, y = means$mean, 
+	   pch = 21, 
+	   bg = "aquamarine3", 
+	   cex = 1.2)
+```
+
+*** =right
+
+```{r, echo = FALSE}
+regPlot(d$raw, d$z1, 
+	type = "n",
+	main = "Theta Distributions by Raw Score",
+	xlab = "Raw",
+	ylab = expression(theta), 
+	cex.lab = 1.5)
+
+segments(x0 = 0:5, y0 = means$lower, 
+	     x1 = 0:5, y1 = means$upper,
+	     lwd = 1.5)
+
+width <- 0.03
+segments(0:5 - width, means$lower, 0:5 + width, means$lower)
+segments(0:5 - width, means$upper, 0:5 + width, means$upper)
+points(x = 0:5, y = means$mean, pch = 21, bg = "aquamarine3", cex = 1.2)
+```
+
+----
+## Lab
+* Write a generic function that takes a numeric vector, `x`, and returns a
+  factor with 5 levels: Quintile1, Quintile2, Quintile3, Quintile4, and Quintile5. As the names of the levels suggest, you are essentially splitting the the continuous variable into quintiles. Hint: You will likely want to use the `quantile()` and `ifelse()` functions.
+* Load the `cars` data, and create quintile variables for `mpg`, `hp`, and 
+  `drat`.
+* Calculate a categorical `mpg` variable by `cyl` (be careful about your
+  variable naming conventions so you can distinguish them).
+
+
+----
+## Write the function
+
+```{r}
+catQ <- function(x) {
+	qs <- quantile(x, seq(.2, .8, .2))
+
+	q1 <- ifelse(x <= qs[1], 1, 0) # less or equal to 20th ptile
+	q2 <- ifelse(x > qs[1] & x <= qs[2], 2, 0) # > 20th, <= 40th 
+	q3 <- ifelse(x > qs[2] & x <= qs[3], 3, 0) # > 40th, <= 60th
+	q4 <- ifelse(x > qs[3] & x <= qs[4], 4, 0) # > 60th, <= 80th
+	q5 <- ifelse(x > qs[4] , 5, 0) # > 80th
+	
+	m <- cbind(q1, q2, q3, q4, q5)
+
+	f <- factor(rowSums(m), 
+			levels = 1:5, 
+			labels =  paste0("Quintile", 1:5))
+return(f)
+}
+```
+
+----
+## How does this function work
+# Run code one line at a time
+
+```{r}
+d <- read.csv("./data/cars.csv")
+	qs <- quantile(d$mpg, seq(.2, .8, .2))
+qs
+	q1 <- ifelse(d$mpg <= qs[1], 1, 0)
+	q2 <- ifelse(d$mpg > qs[1] & d$mpg <= qs[2], 2, 0)
+	q3 <- ifelse(d$mpg > qs[2] & d$mpg <= qs[3], 3, 0)
+	q4 <- ifelse(d$mpg > qs[3] & d$mpg <= qs[4], 4, 0)
+	q5 <- ifelse(d$mpg > qs[4] , 5, 0)
+````
+
+----
+```{r}
+	m <- cbind(q1, q2, q3, q4, q5)
+head(m)
+	f <- factor(rowSums(m), 
+			levels = 1:5, 
+			labels =  paste0("Quintile", 1:5))
+head(f)
+```
+
+----
+## Create quintile variables
+
+```{r}
+
+d$mpg_q <- catQ(d$mpg)
+d$hp_q <- catQ(d$hp)
+d$drat_q <- catQ(d$drat)
+head(d)
+```
+
+---- 
+## Categorical variables by `cyl`
+
+# How I'd expect you to approach this
+```{r}
+l <- split(d, d$cyl)
+l[[1]]$mpg_qBYcyl <- catQ(l[[1]]$mpg)
+l[[2]]$mpg_qBYcyl <- catQ(l[[2]]$mpg)
+l[[3]]$mpg_qBYcyl <- catQ(l[[3]]$mpg)
+
+d2 <- rbind(l[[1]], l[[2]], l[[3]])
+head(d2)
+```
+
+---- 
+## Categorical variables by `cyl`
+# Better way (that we haven't learned yet)
+
+```{r}
+d$mpg_qBYcyl <- unlist(
+					sapply(
+						split(d, d$cyl), function(x) catQ(x$mpg)
+						)
+					)
+head(d)
+```
+

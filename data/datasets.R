@@ -13,10 +13,18 @@ write.table(trees, file = "./data/trees.txt", sep = "|", na = "999",
 	row.names = FALSE, col.names = FALSE)
 
 data(USArrests)
-write.csv(USArrests, file = "USViolentActs.csv")
+write.csv(USArrests, file = "./data/USViolentActs.csv")
 
 data(longley)
 write.csv(longley.csv)
 
 data(attitude)
-write.table(attitude, file = "attitude.txt", sep = "\t", row.names = FALSE)
+write.table(attitude, file = "./data/attitude.txt", 
+	sep = "\t", row.names = FALSE)
+
+
+library(ltm)
+data(LSAT)
+m <- ltm(LSAT ~ z1)
+theta <- factor.scores(m, resp.patterns = LSAT)
+write.csv(theta[[1]], file = "./data/LSAT_theta.csv", row.names = FALSE)

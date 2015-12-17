@@ -43,7 +43,7 @@ mean(d$SAT_c, na.rm = TRUE)
 ```
 
 ```
-## [1] -0.000000000000009
+## [1] -9.040443e-15
 ```
 
 ```r
@@ -52,7 +52,7 @@ mean(d$Debt_c, na.rm = TRUE)
 ```
 
 ```
-## [1] -0.0000000000017
+## [1] -1.710248e-12
 ```
 
 ---- 
@@ -64,9 +64,9 @@ d[5:6, ]
 ```
 
 ```
-##                 Institution State  SAT  Debt Earnings SAT_c Debt_c
-## 5  Alabama State University    AL  830 33452    27800  -232  16405
-## 6 The University of Alabama    AL 1171 24000    42400   109   6953
+##                 Institution State  SAT  Debt Earnings     SAT_c    Debt_c
+## 5  Alabama State University    AL  830 33452    27800 -231.6277 16405.389
+## 6 The University of Alabama    AL 1171 24000    42400  109.3723  6953.389
 ```
 
 

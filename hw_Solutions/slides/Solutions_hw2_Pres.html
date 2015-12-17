@@ -80,14 +80,14 @@ names(d) &lt;- c(&quot;Institution&quot;, &quot;State&quot;, &quot;SAT&quot;, &q
 mean(d$SAT_c, na.rm = TRUE)
 </code></pre>
 
-<pre><code>## [1] -0.000000000000009
+<pre><code>## [1] -9.040443e-15
 </code></pre>
 
 <pre><code class="r">d$Debt_c &lt;- d$Debt - mean(d$Debt, na.rm = TRUE)
 mean(d$Debt_c, na.rm = TRUE)
 </code></pre>
 
-<pre><code>## [1] -0.0000000000017
+<pre><code>## [1] -1.710248e-12
 </code></pre>
 
   </article>
@@ -102,9 +102,9 @@ mean(d$Debt_c, na.rm = TRUE)
     <pre><code class="r">d[5:6, ]
 </code></pre>
 
-<pre><code>##                 Institution State  SAT  Debt Earnings SAT_c Debt_c
-## 5  Alabama State University    AL  830 33452    27800  -232  16405
-## 6 The University of Alabama    AL 1171 24000    42400   109   6953
+<pre><code>##                 Institution State  SAT  Debt Earnings     SAT_c    Debt_c
+## 5  Alabama State University    AL  830 33452    27800 -231.6277 16405.389
+## 6 The University of Alabama    AL 1171 24000    42400  109.3723  6953.389
 </code></pre>
 
 <pre><code class="r">pairs(d[ ,3:5])

@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Functions, part 1</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Functions, part 1">
+  <meta name="author" content="Daniel Anderson">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Functions, part 1</h1>
+    <h2>Week 4.1</h2>
+    <p>Daniel Anderson<br/>CourseR</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Today&#39;s Agenda</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Overview of functions</li>
+<li>Function components</li>
+<li>Primitive functions</li>
+<li>Basics on writing functions</li>
+<li>Using functions with plotting</li>
+<li>Classes and methods (object-oriented programming)</li>
+<li>Storing and applying functions with <code>source()</code></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>A reminder: The R learning curve</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="assets/fig/unnamed-chunk-1-1.png" alt="plot of chunk unnamed-chunk-1"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Functions</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Anything that carries out an operation in R is a function. For example</p>
+
+<pre><code class="r">3 + 5 + 7
+</code></pre>
+
+<pre><code>## [1] 15
+</code></pre>
+
+<p>Could also be written</p>
+
+<pre><code class="r">`+`(3, `+`(5, 7))
+</code></pre>
+
+<pre><code>## [1] 15
+</code></pre>
+
+<p>In other words, the <code>+</code> operator is itself a function that takes two arguments (both numeric), which it sums. The <code>+</code> operator is an example of an infix function, which we&#39;ll discuss more later today.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <article data-timings="">
+    <p>Similarly, the following are the same</p>
+
+<pre><code class="r">a &lt;- 7
+a
+</code></pre>
+
+<pre><code>## [1] 7
+</code></pre>
+
+<pre><code class="r">`&lt;-`(a, 7)
+a
+</code></pre>
+
+<pre><code>## [1] 7
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Functions are also objects</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">a &lt;- lm
+data(mtcars)
+summary( a(hp ~ drat + wt, data = mtcars) )
+</code></pre>
+
+<pre><code>## 
+## Call:
+## a(formula = hp ~ drat + wt, data = mtcars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -83.873 -33.910 -12.853   9.585 171.597 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept)  -27.782    127.992  -0.217  0.82968   
+## drat           5.354     25.511   0.210  0.83524   
+## wt            48.244     13.940   3.461  0.00169 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 53.29 on 29 degrees of freedom
+## Multiple R-squared:  0.4348, Adjusted R-squared:  0.3958 
+## F-statistic: 11.15 on 2 and 29 DF,  p-value: 0.0002552
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>Function components</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Functions have three components</h1>
+
+<ul>
+<li><code>body()</code></li>
+<li><code>formals()</code></li>
+</ul>
+
+<p><img src="./assets/img/bodyFormals.png" alt="bodyFormals"></p>
+
+<ul>
+<li><code>environment()</code>
+
+<ul>
+<li>A bit more complicated: Deals with scoping, which we&#39;ll discuss next 
+class</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Primitive functions</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>The one exception to the rule of functions having 3 components, are
+primitive functions, which call C code directly to increase efficiency.</li>
+</ul>
+
+<pre><code class="r">names(methods:::.BasicFunsList) # 198 primitive functions total
+</code></pre>
+
+<pre><code>##   [1] &quot;$&quot;                    &quot;$&lt;-&quot;                  &quot;[&quot;                   
+##   [4] &quot;[&lt;-&quot;                  &quot;[[&quot;                   &quot;[[&lt;-&quot;                
+##   [7] &quot;%*%&quot;                  &quot;xtfrm&quot;                &quot;c&quot;                   
+##  [10] &quot;all&quot;                  &quot;any&quot;                  &quot;sum&quot;                 
+##  [13] &quot;prod&quot;                 &quot;max&quot;                  &quot;min&quot;                 
+##  [16] &quot;range&quot;                &quot;is.matrix&quot;            &quot;&gt;=&quot;                  
+##  [19] &quot;cosh&quot;                 &quot;cummax&quot;               &quot;dimnames&lt;-&quot;          
+##  [22] &quot;as.raw&quot;               &quot;log2&quot;                 &quot;tan&quot;                 
+##  [25] &quot;dim&quot;                  &quot;as.logical&quot;           &quot;^&quot;                   
+##  [28] &quot;is.finite&quot;            &quot;sinh&quot;                 &quot;log10&quot;               
+##  [31] &quot;as.numeric&quot;           &quot;dim&lt;-&quot;                &quot;is.array&quot;            
+##  [34] &quot;tanpi&quot;                &quot;gamma&quot;                &quot;atan&quot;                
+##  [37] &quot;as.integer&quot;           &quot;Arg&quot;                  &quot;signif&quot;              
+##  [40] &quot;cumprod&quot;              &quot;cos&quot;                  &quot;length&quot;              
+##  [43] &quot;!=&quot;                   &quot;digamma&quot;              &quot;exp&quot;                 
+##  [46] &quot;floor&quot;                &quot;acos&quot;                 &quot;seq.int&quot;             
+##  [49] &quot;abs&quot;                  &quot;length&lt;-&quot;             &quot;sqrt&quot;                
+##  [52] &quot;!&quot;                    &quot;acosh&quot;                &quot;is.nan&quot;              
+##  [55] &quot;Re&quot;                   &quot;tanh&quot;                 &quot;names&quot;               
+##  [58] &quot;cospi&quot;                &quot;&amp;&quot;                    &quot;anyNA&quot;               
+##  [61] &quot;trunc&quot;                &quot;cummin&quot;               &quot;levels&lt;-&quot;            
+##  [64] &quot;*&quot;                    &quot;Mod&quot;                  &quot;|&quot;                   
+##  [67] &quot;names&lt;-&quot;              &quot;+&quot;                    &quot;log&quot;                 
+##  [70] &quot;lgamma&quot;               &quot;as.complex&quot;           &quot;asinh&quot;               
+##  [73] &quot;-&quot;                    &quot;sin&quot;                  &quot;/&quot;                   
+##  [76] &quot;as.environment&quot;       &quot;&lt;=&quot;                   &quot;as.double&quot;           
+##  [79] &quot;is.infinite&quot;          &quot;is.numeric&quot;           &quot;rep&quot;                 
+##  [82] &quot;round&quot;                &quot;sinpi&quot;                &quot;dimnames&quot;            
+##  [85] &quot;asin&quot;                 &quot;as.character&quot;         &quot;%/%&quot;                 
+##  [88] &quot;is.na&quot;                &quot;&lt;&quot;                    &quot;&gt;&quot;                   
+##  [91] &quot;Im&quot;                   &quot;%%&quot;                   &quot;trigamma&quot;            
+##  [94] &quot;==&quot;                   &quot;cumsum&quot;               &quot;atanh&quot;               
+##  [97] &quot;sign&quot;                 &quot;ceiling&quot;              &quot;Conj&quot;                
+## [100] &quot;log1p&quot;                &quot;expm1&quot;                &quot;(&quot;                   
+## [103] &quot;is.list&quot;              &quot;switch&quot;               &quot;:&quot;                   
+## [106] &quot;=&quot;                    &quot;@&quot;                    &quot;{&quot;                   
+## [109] &quot;~&quot;                    &quot;class&quot;                &quot;class&lt;-&quot;             
+## [112] &quot;is.function&quot;          &quot;repeat&quot;               &quot;UseMethod&quot;           
+## [115] &quot;untracemem&quot;           &quot;return&quot;               &quot;forceAndCall&quot;        
+## [118] &quot;lazyLoadDBfetch&quot;      &quot;nargs&quot;                &quot;proc.time&quot;           
+## [121] &quot;attr&quot;                 &quot;&amp;&amp;&quot;                   &quot;next&quot;                
+## [124] &quot;pos.to.env&quot;           &quot;nzchar&quot;               &quot;standardGeneric&quot;     
+## [127] &quot;.C&quot;                   &quot;is.logical&quot;           &quot;is.single&quot;           
+## [130] &quot;@&lt;-&quot;                  &quot;&lt;-&quot;                   &quot;browser&quot;             
+## [133] &quot;.Call.graphics&quot;       &quot;break&quot;                &quot;oldClass&lt;-&quot;          
+## [136] &quot;is.atomic&quot;            &quot;attributes&quot;           &quot;storage.mode&lt;-&quot;      
+## [139] &quot;emptyenv&quot;             &quot;is.integer&quot;           &quot;.primTrace&quot;          
+## [142] &quot;.External.graphics&quot;   &quot;substitute&quot;           &quot;is.object&quot;           
+## [145] &quot;list&quot;                 &quot;tracemem&quot;             &quot;invisible&quot;           
+## [148] &quot;.Primitive&quot;           &quot;if&quot;                   &quot;enc2native&quot;          
+## [151] &quot;unclass&quot;              &quot;is.name&quot;              &quot;is.symbol&quot;           
+## [154] &quot;baseenv&quot;              &quot;||&quot;                   &quot;seq_len&quot;             
+## [157] &quot;is.character&quot;         &quot;function&quot;             &quot;is.call&quot;             
+## [160] &quot;is.expression&quot;        &quot;is.pairlist&quot;          &quot;.primUntrace&quot;        
+## [163] &quot;as.call&quot;              &quot;missing&quot;              &quot;is.language&quot;         
+## [166] &quot;gc.time&quot;              &quot;quote&quot;                &quot;is.recursive&quot;        
+## [169] &quot;.subset2&quot;             &quot;attr&lt;-&quot;               &quot;interactive&quot;         
+## [172] &quot;.Internal&quot;            &quot;is.complex&quot;           &quot;retracemem&quot;          
+## [175] &quot;.External2&quot;           &quot;is.null&quot;              &quot;.isMethodsDispatchOn&quot;
+## [178] &quot;is.environment&quot;       &quot;while&quot;                &quot;is.double&quot;           
+## [181] &quot;for&quot;                  &quot;.cache_class&quot;         &quot;enc2utf8&quot;            
+## [184] &quot;environment&lt;-&quot;        &quot;seq_along&quot;            &quot;expression&quot;          
+## [187] &quot;is.raw&quot;               &quot;globalenv&quot;            &quot;on.exit&quot;             
+## [190] &quot;isS4&quot;                 &quot;oldClass&quot;             &quot;.External&quot;           
+## [193] &quot;call&quot;                 &quot;.subset&quot;              &quot;.Fortran&quot;            
+## [196] &quot;attributes&lt;-&quot;         &quot;&lt;&lt;-&quot;                  &quot;.Call&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Writing functions: A basic example</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">pol &lt;- function(x, power) {
+    z &lt;- x^power
+return(z)
+}
+</code></pre>
+
+<p>This function takes two arguments: <code>x</code> and <code>power</code>, with <code>x</code> being a generic
+  numeric vector (could be a scalar), and power being the power to which the number or vector will be raised (could also be a vector).</p>
+
+<p>While the function appears (and is) simple, it is actually quite flexible.</p>
+
+<pre><code class="r">pol(x = 2, power = 3)
+</code></pre>
+
+<pre><code>## [1] 8
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">pol(c(3, 5, 7), 9)
+</code></pre>
+
+<pre><code>## [1]    19683  1953125 40353607
+</code></pre>
+
+<pre><code class="r">pol(c(7, 1, -5, 8), c(2, 3))
+</code></pre>
+
+<pre><code>## [1]  49   1  25 512
+</code></pre>
+
+<pre><code class="r">pol(c(8, 5), c(3, 5))
+</code></pre>
+
+<pre><code>## [1]  512 3125
+</code></pre>
+
+<pre><code class="r">pol(8, c(5, 3, 2))
+</code></pre>
+
+<pre><code>## [1] 32768   512    64
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Function components</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>You can extract the body, formals, or environment from a function, by using
+  the corresponding function.</p>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">body(pol)
+</code></pre>
+
+<pre><code>## {
+##     z &lt;- x^power
+##     return(z)
+## }
+</code></pre>
+
+<pre><code class="r">formals(pol)
+</code></pre>
+
+<pre><code>## $x
+## 
+## 
+## $power
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">environment(pol)
+</code></pre>
+
+<pre><code>## &lt;environment: R_GlobalEnv&gt;
+</code></pre>
+
+<pre><code class="r">environment(lm)
+</code></pre>
+
+<pre><code>## &lt;environment: namespace:stats&gt;
+</code></pre>
+
+<pre><code class="r">formals(lm)
+</code></pre>
+
+<pre><code>## $formula
+## 
+## 
+## $data
+## 
+## 
+## $subset
+## 
+## 
+## $weights
+## 
+## 
+## $na.action
+## 
+## 
+## $method
+## [1] &quot;qr&quot;
+## 
+## $model
+## [1] TRUE
+## 
+## $x
+## [1] FALSE
+## 
+## $y
+## [1] FALSE
+## 
+## $qr
+## [1] TRUE
+## 
+## $singular.ok
+## [1] TRUE
+## 
+## $contrasts
+## NULL
+## 
+## $offset
+## 
+## 
+## $...
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Function components</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Note that these calls will return <code>NULL</code> for primitive functions.</p>
+
+<pre><code class="r">formals(sum)
+</code></pre>
+
+<pre><code>## NULL
+</code></pre>
+
+<pre><code class="r">body(sum)
+</code></pre>
+
+<pre><code>## NULL
+</code></pre>
+
+<pre><code class="r">environment(sum)
+</code></pre>
+
+<pre><code>## NULL
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>More on formals</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Functions do not neccessarily have to have formal arguments, but they must have a body.</p>
+
+<pre><code class="r">a &lt;- 7; b &lt;- 5
+
+f &lt;- function() {
+    x &lt;- 7 + a^2
+return(x/b)
+}
+
+formals(f)
+</code></pre>
+
+<pre><code>## NULL
+</code></pre>
+
+<pre><code class="r">f()
+</code></pre>
+
+<pre><code>## [1] 11.2
+</code></pre>
+
+<p>Note: Scoping (next class) is important here.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>Another basic example</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Just for practice, let&#39;s create a new standard deviation function.</h1>
+
+<p><br></p>
+
+<p>\[\sigma = \sqrt{\frac{\Sigma(x_i - \bar{x})^2}{(n-1)}}\]</p>
+
+<pre><code class="r">stDev &lt;- function(x) {  
+    num &lt;- sum( (x - mean(x))^2 )
+    denom &lt;- length(x) - 1
+
+    std &lt;- sqrt(num / denom)
+return(std)
+}
+</code></pre>
+
+<p>This function takes one formal argument, <code>x</code>, which must be a numeric vector. The body of the function is the equation, and the standard deviation is returned.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Does it work?</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Compare to the base function <code>sd()</code></h1>
+
+<pre><code class="r">data(mtcars)
+sd(mtcars$mpg); stDev(mtcars$mpg)
+</code></pre>
+
+<pre><code>## [1] 6.026948
+</code></pre>
+
+<pre><code>## [1] 6.026948
+</code></pre>
+
+<pre><code class="r">sd(mtcars$drat); stDev(mtcars$drat)
+</code></pre>
+
+<pre><code>## [1] 0.5346787
+</code></pre>
+
+<pre><code>## [1] 0.5346787
+</code></pre>
+
+<div style='float:left;width:48%;'>
+  
+</div>
+<div style='float:right;width:48%;'>
+  
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Your turn</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The formula for calculating the mean is</p>
+
+<p>\[\bar{x} = \frac{\Sigma x_i}{n}\]</p>
+
+<ul>
+<li>Write a function that calculates the sample mean, \(\bar{x}\). Name the
+function <code>xbar</code>. The function must be written without using the base function <code>mean()</code>.</li>
+<li>Compare the results of your function with <code>mean()</code>. Do the results match?</li>
+<li>What are the formals and body of this function? Describe each.</li>
+<li>How could you modify the function to account for missing data? (we haven&#39;t 
+talked about this yet, so don&#39;t worry if you are having trouble with it)</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <article data-timings="">
+    <ul>
+<li>Write a function that calculates the sample mean, \(\bar{x}\). Name the
+function <code>xbar</code>. The function must be written without using the base function <code>mean()</code>.</li>
+</ul>
+
+<pre><code class="r">xbar &lt;- function(x) {
+    myMean &lt;- sum(x)/length(x)
+return(myMean)
+}
+</code></pre>
+
+<ul>
+<li>Compare the results of your function with <code>mean()</code>. Do the results match?</li>
+</ul>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">xbar(mtcars$mpg); mean(mtcars$mpg)
+</code></pre>
+
+<pre><code>## [1] 20.09062
+</code></pre>
+
+<pre><code>## [1] 20.09062
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">xbar(mtcars$drat); mean(mtcars$drat)
+</code></pre>
+
+<pre><code>## [1] 3.596563
+</code></pre>
+
+<pre><code>## [1] 3.596563
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  <article data-timings="">
+    <ul>
+<li>What are the formals and body of this function?</li>
+</ul>
+
+<p>Formals = <code>x</code>: a generic numeric vector</p>
+
+<p><br></p>
+
+<p>Body = <code>myMean &lt;- sum(x)/length(x)</code>, sums the generic numeric vector and
+  divides the result by the number of elements in the vector.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <article data-timings="">
+    <ul>
+<li>How could you modify the function to account for missing data?</li>
+</ul>
+
+<div style='float:left;width:48%;'>
+  <p>There are a few different options here. First, you could modify the function
+  so it automatically calculates the mean from only the observed data.</p>
+
+<pre><code class="r">xbar2 &lt;- function(x) {
+    y &lt;- na.omit(x)
+    myMean &lt;- sum(y)/length(y)
+return(myMean)
+}
+</code></pre>
+
+<p>To test this, we could set some values to missing and then run the function.</p>
+
+<pre><code class="r">v &lt;- mtcars$mpg
+
+# Randomly set 10 values to missing
+set.seed(101) # Seed for replicability
+v[sample(v, 10)] &lt;- NA
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">v
+</code></pre>
+
+<pre><code>##  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8   NA 17.8 16.4 17.3   NA
+## [15]   NA   NA   NA 32.4 30.4 33.9   NA   NA 15.2 13.3 19.2   NA 26.0 30.4
+## [29] 15.8 19.7 15.0 21.4   NA
+</code></pre>
+
+<pre><code class="r">mean(v, na.rm = TRUE)
+</code></pre>
+
+<pre><code>## [1] 21.19583
+</code></pre>
+
+<pre><code class="r">xbar2(v)
+</code></pre>
+
+<pre><code>## [1] 21.19583
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h1>Alternatively, add a condition, and make missing data a formal argument</h1>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">xbar3 &lt;- function(x, miss = FALSE) {
+    if(miss == FALSE) {
+        myMean &lt;- sum(x)/length(x)
+    }
+    else {
+        y &lt;- na.omit(x)
+        myMean &lt;- sum(y)/length(y)
+    }
+return(myMean)
+}
+</code></pre>
+
+<p>This function has two formal arguments, <code>x</code>, and <code>miss</code>. Notice that <code>miss</code>
+  defaults to <code>FALSE</code>. This means the argument does not have to be explicitly called in the function, but it can still handle missing data, if they are present.</p>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">xbar3(mtcars$mpg)
+</code></pre>
+
+<pre><code>## [1] 20.09062
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">xbar3(v, miss = TRUE)
+</code></pre>
+
+<pre><code>## [1] 21.19583
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
+  <article data-timings="">
+    <p>Because <code>else {}</code> was used, rather than <code>if() {}</code>, any argument other than 
+  <code>FALSE</code> supplied to <code>miss</code> will result in that portion of the function being evaluated.</p>
+
+<pre><code class="r">xbar3(v, 3)
+</code></pre>
+
+<pre><code>## [1] 21.19583
+</code></pre>
+
+<p>You may, or may not, want this type of behavior. If not, just use multiple 
+  <code>if() {}</code> statements.</p>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">xbar3 &lt;- function(x, miss = FALSE) {
+    if(miss == FALSE) {
+        myMean &lt;- sum(x)/length(x)
+    }
+    if(miss == TRUE) {
+        y &lt;- na.omit(x)
+        myMean &lt;- sum(y)/length(y)
+    }
+return(myMean)
+}
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">xbar3(v, 3)
+</code></pre>
+
+<pre><code>## Error in xbar3(v, 3): object &#39;myMean&#39; not found
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  <hgroup>
+    <h2>More on <code>return()</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The <code>return()</code> function does not neccessarily need to be used within functions (although it can make it a little more clear). If <code>return()</code> is not used, the function will output the final expression from the function. For example, the following two functions are equivalent.</p>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">pol &lt;- function(x, power) {
+    z &lt;- x^power
+return(z)
+}
+</code></pre>
+
+<pre><code class="r">pol(3, 4)
+</code></pre>
+
+<pre><code>## [1] 81
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">pol2 &lt;- function(x, power) {
+    x^power
+}
+</code></pre>
+
+<pre><code class="r">pol2(3, 4)
+</code></pre>
+
+<pre><code>## [1] 81
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  <hgroup>
+    <h2>Even more compact</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>If the entire function only takes one line of code, you can eliminate the brackets.</p>
+
+<pre><code class="r">pol &lt;- function(x, power) x^power
+</code></pre>
+
+<pre><code class="r">pol(3,4)
+</code></pre>
+
+<pre><code>## [1] 81
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  <hgroup>
+    <h2>Embedding Messages, Returning Errors</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Note that this is not close to the most important part of learning to write 
+  functions, but it can be helpful in de-bugging (especially when you start writing functions that call functions). It is also imperitive when you start writing packages, where other people are using your functions. You need to give the user some breadcrumbs so they understand why the function is not working.</p>
+
+<h1>Warning messages</h1>
+
+<p>Let&#39;s modify <code>xbar2</code> to report a warning if missing data are removed.</p>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">xbar2 &lt;- function(x) {
+    y &lt;- na.omit(x)
+
+    if(length(y) != length(x)) {
+        warning(&quot;Missing data removed&quot;)
+    }
+
+    myMean &lt;- sum(y)/length(y)
+return(myMean)
+}
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">xbar2(v)
+</code></pre>
+
+<pre><code>## Warning in xbar2(v): Missing data removed
+</code></pre>
+
+<pre><code>## [1] 21.19583
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  <hgroup>
+    <h2>Error Messages</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Lets modify the original <code>xbar</code> function to report an error, rather than <code>NA</code>,
+  if missing data are present.</p>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">xbar &lt;- function(x) {
+    if(any(is.na(x))) {
+        stop(&quot;Missing data present&quot;)
+    }
+    myMean &lt;- sum(x)/length(x)
+return(myMean)
+}
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">xbar(v)
+</code></pre>
+
+<pre><code>## Error in xbar(v): Missing data present
+</code></pre>
+
+<pre><code class="r">xbar(na.omit(v))
+</code></pre>
+
+<pre><code>## [1] 21.19583
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-24" style="background:;">
+  <hgroup>
+    <h2>Your turn again (may be a bit tricky)</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Write a function, <code>catMean</code>, that takes a generic numeric vector, <code>x</code>, and a
+binary vector, <code>bin</code>, and reports the mean of the numeric vector for each of the two categories. Use your <code>xbar</code> function you wrote previously to calculate the means.
+
+<ul>
+<li><span style="color:gray" > Hint: You may want to use <code>split()</code>. </span></li>
+</ul></li>
+<li>The two vectors must be of the same length. Embed an error message if this
+is not the case.</li>
+<li>Run your code with the <code>mtcars</code> data, calculating the mean of <code>mpg</code> by <code>vs</code>,
+and the mean of <code>disp</code> by <code>am</code>. Then run the following two lines of code to see if the results match: </li>
+</ul>
+
+<pre><code class="r">tapply(mtcars$mpg, mtcars$vs, mean)
+tapply(mtcars$disp, mtcars$am, mean)
+</code></pre>
+
+<ul>
+<li>For extra participation credit, make the names of the return meaningful.
+Test this out by calculating the means of a factor.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">catMean &lt;- function(x, bin) {
+    if(length(x) != length(bin)) {
+        stop(&quot;Vectors are of different lengths&quot;)
+    }
+
+    l &lt;- split(x, bin)
+    means &lt;- c(xbar(l[[1]]), xbar(l[[2]]))
+    names(means) &lt;- names(l)
+return(means)
+}
+</code></pre>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">catMean(mtcars$mpg, mtcars$vs)
+</code></pre>
+
+<pre><code>##        0        1 
+## 16.61667 24.55714
+</code></pre>
+
+<pre><code class="r">tapply(mtcars$mpg, mtcars$vs, mean)
+</code></pre>
+
+<pre><code>##        0        1 
+## 16.61667 24.55714
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">catMean(mtcars$disp, mtcars$am)
+</code></pre>
+
+<pre><code>##        0        1 
+## 290.3789 143.5308
+</code></pre>
+
+<pre><code class="r">tapply(mtcars$disp, mtcars$am, mean)
+</code></pre>
+
+<pre><code>##        0        1 
+## 290.3789 143.5308
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h1>Checking on error message</h1>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">catMean(mtcars$disp, rep(c(0,1), 100))
+</code></pre>
+
+<pre><code>## Error in catMean(mtcars$disp, rep(c(0, 1), 100)): Vectors are of different lengths
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <hgroup>
+    <h1>Checking on <code>names</code> of returned vector</h1>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">fact &lt;- as.factor(rep(
+                    c(rep(&quot;red&quot;, 3), &quot;blue&quot;), 
+                  length.out = nrow(mtcars))
+            )
+catMean(mtcars$mpg, fact)
+</code></pre>
+
+<pre><code>##    blue     red 
+## 21.4500 19.6375
+</code></pre>
+
+<pre><code class="r">tapply(mtcars$mpg, fact, mean)
+</code></pre>
+
+<pre><code>##    blue     red 
+## 21.4500 19.6375
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  <hgroup>
+    <h2>Using Functions in Plotting</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>One of the best ways to get started with functions is by using them to plot
+  more efficiently. For, example, let&#39;s write a function that produces a bivariate scatterplot with the regression line superimposed.</p>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">regPlot &lt;- function(x, y, ...) {
+    plot(x, y, ...)
+    mod &lt;- lm(y ~ x)
+    abline(coef(mod)[1], coef(mod)[2], 
+        col = &quot;blue&quot;, lwd = 2, lty = 3)
+}
+</code></pre>
+
+<p>Now we can feed the function any two vectors and have the regression plot
+  produced automatically. For example, let&#39;s explore the relation between car weight and horsepower.</p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">regPlot(mtcars$wt, mtcars$hp)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-45-1.png" alt="plot of chunk unnamed-chunk-45"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-29" style="background:;">
+  <hgroup>
+    <h2>Digging a bit deeper</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">regPlot &lt;- function(x, y, ...) {
+    plot(x, y, ...)
+    mod &lt;- lm(y ~ x)
+    abline(coef(mod)[1], coef(mod)[2], 
+        col = &quot;blue&quot;, lwd = 2, lty = 3)
+}
+</code></pre>
+
+<p>Note the use of <code>...</code>, which is a convention used to pass additional arguments into the function. For example, here, <code>regPlot</code> only has three formal arguments, but any of the <code>plot</code> arguments can be called through <code>...</code> </p>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">regPlot(mtcars$wt, mtcars$hp,
+    xlim = c(0,7),
+    ylim = c(0,350),
+    xlab = &quot;Weight&quot;,
+    ylab = &quot;Horsepower&quot;,
+    main = &quot;Regression Plot&quot;
+    )
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-48-1.png" alt="plot of chunk unnamed-chunk-48"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  <hgroup>
+    <h2>Extending the example</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>LSAT theta data</h1>
+
+<pre><code class="r">d &lt;- read.csv(&quot;./data/LSAT_theta.csv&quot;)
+head(d)
+</code></pre>
+
+<pre><code>##   Item.1 Item.2 Item.3 Item.4 Item.5 Obs      Exp        z1     se.z1
+## 1      0      0      0      0      0   3 2.277412 -1.895344 0.7954828
+## 2      0      0      0      0      0   3 2.277412 -1.895344 0.7954828
+## 3      0      0      0      0      0   3 2.277412 -1.895344 0.7954828
+## 4      0      0      0      0      1   6 5.860769 -1.479314 0.7960948
+## 5      0      0      0      0      1   6 5.860769 -1.479314 0.7960948
+## 6      0      0      0      0      1   6 5.860769 -1.479314 0.7960948
+</code></pre>
+
+<p>We will compute the raw score for each student, and compare the difference
+  between students&#39; raw score and theta estimates from a two-parameter logistic item response theory model. In this dataset, theta values are stored in the column labeled <code>z1</code>.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  <hgroup>
+    <h2>Calculate raw scores</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">d$raw &lt;- rowSums(d[ ,1:5])
+head(d)
+</code></pre>
+
+<pre><code>##   Item.1 Item.2 Item.3 Item.4 Item.5 Obs      Exp        z1     se.z1 raw
+## 1      0      0      0      0      0   3 2.277412 -1.895344 0.7954828   0
+## 2      0      0      0      0      0   3 2.277412 -1.895344 0.7954828   0
+## 3      0      0      0      0      0   3 2.277412 -1.895344 0.7954828   0
+## 4      0      0      0      0      1   6 5.860769 -1.479314 0.7960948   1
+## 5      0      0      0      0      1   6 5.860769 -1.479314 0.7960948   1
+## 6      0      0      0      0      1   6 5.860769 -1.479314 0.7960948   1
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-32" style="background:;">
+  <hgroup>
+    <h2>Basic relation</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">regPlot(d$raw, d$z1)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-51-1.png" alt="plot of chunk unnamed-chunk-51"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-33" style="background:;">
+  <hgroup>
+    <h2>Plot theta distributions by raw score</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <p>First, we&#39;ll write a function to calculate the mean and 95% bounds of
+  the distribution (assuming a normal distribution).</p>
+
+<pre><code class="r">mean_CI &lt;- function(x) {
+return(
+    data.frame(mean = mean(x), 
+               lower = mean(x) 
+                    - 1.96*sd(x),
+               upper = mean(x) 
+                    + 1.96*sd(x)
+               )
+    )
+}
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p>Next, we&#39;ll write a function to combine all the estimates into a single data 
+  frame. </p>
+
+<pre><code class="r">all_CI &lt;- function() {
+    l &lt;- split(d, d$raw)
+return(
+    rbind(mean_CI(l[[1]]$z1),
+          mean_CI(l[[2]]$z1),
+          mean_CI(l[[3]]$z1),
+          mean_CI(l[[4]]$z1),
+          mean_CI(l[[5]]$z1),
+          mean_CI(l[[6]]$z1)
+        )
+    )   
+}
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-34" style="background:;">
+  <hgroup>
+    <h2>Quick digression</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The <code>all_CI()</code> function is not really neccessary. We could do the same thing through the use of a loop (with <code>sapply()</code>). We&#39;ll discuss loops beginning the class after next. But quickly</p>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">l &lt;- split(d, d$raw)
+
+means &lt;- sapply(l, function(x) { 
+    mean_CI(x$z1)
+})
+means
+</code></pre>
+
+<pre><code>##       0         1         2          3          4          5        
+## mean  -1.895344 -1.414632 -0.9516479 -0.4654806 0.04203435 0.6063524
+## lower -1.895344 -1.519195 -1.055081  -0.5919605 -0.0863043 0.6063524
+## upper -1.895344 -1.310069 -0.8482147 -0.3390007 0.170373   0.6063524
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">means &lt;- t(sapply(l, function(x) {
+    mean_CI(x$z1)
+}))
+means
+</code></pre>
+
+<pre><code>##   mean       lower      upper     
+## 0 -1.895344  -1.895344  -1.895344 
+## 1 -1.414632  -1.519195  -1.310069 
+## 2 -0.9516479 -1.055081  -0.8482147
+## 3 -0.4654806 -0.5919605 -0.3390007
+## 4 0.04203435 -0.0863043 0.170373  
+## 5 0.6063524  0.6063524  0.6063524
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-35" style="background:;">
+  <hgroup>
+    <h2>Combine estimates, produce empty plot</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>First, calculate means</p>
+
+<pre><code class="r">means &lt;- all_CI()
+means
+</code></pre>
+
+<pre><code>##          mean      lower      upper
+## 1 -1.89534389 -1.8953439 -1.8953439
+## 2 -1.41463210 -1.5191948 -1.3100694
+## 3 -0.95164795 -1.0550812 -0.8482147
+## 4 -0.46548058 -0.5919605 -0.3390007
+## 5  0.04203435 -0.0863043  0.1703730
+## 6  0.60635243  0.6063524  0.6063524
+</code></pre>
+
+<div style='float:left;width:48%;'>
+  
+</div>
+<div style='float:right;width:48%;'>
+  
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-36" style="background:;">
+  <hgroup>
+    <h2>Next, produce a plot, with no points</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">regPlot(d$raw, d$z1, 
+    type = &quot;n&quot;,
+    main = &quot;Theta Distributions by 
+        Raw Score&quot;,
+    xlab = &quot;Raw&quot;,
+    ylab = expression(theta), 
+    cex.lab = 1.5)
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-58-1.png" alt="plot of chunk unnamed-chunk-58"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-37" style="background:;">
+  <hgroup>
+    <h2>Add vertical distribution bars</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">segments(x0 = 0:5, y0 = means$lower, 
+         x1 = 0:5, y1 = means$upper,
+         lwd = 1.5)
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-60-1.png" alt="plot of chunk unnamed-chunk-60"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-38" style="background:;">
+  <hgroup>
+    <h2>Add portion of distribution bars</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">width &lt;- 0.03
+segments(x0 = 0:5 - width, 
+            y0 = means$lower, 
+         x1 = 0:5 + width, 
+            y1 = means$lower)
+segments(x0 = 0:5 - width, 
+            y0 = means$upper, 
+         x1 = 0:5 + width, 
+            y1 = means$upper)
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-62-1.png" alt="plot of chunk unnamed-chunk-62"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-39" style="background:;">
+  <hgroup>
+    <h2>Add points (mean theta estimates)</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">points(x = 0:5, y = means$mean, 
+       pch = 21, 
+       bg = &quot;aquamarine3&quot;, 
+       cex = 1.2)
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-64-1.png" alt="plot of chunk unnamed-chunk-64"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-40" style="background:;">
+  <hgroup>
+    <h2>Lab</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Write a generic function that takes a numeric vector, <code>x</code>, and returns a
+factor with 5 levels: Quintile1, Quintile2, Quintile3, Quintile4, and Quintile5. As the names of the levels suggest, you are essentially splitting the the continuous variable into quintiles. Hint: You will likely want to use the <code>quantile()</code> and <code>ifelse()</code> functions.</li>
+<li>Load the <code>cars</code> data, and create quintile variables for <code>mpg</code>, <code>hp</code>, and 
+<code>drat</code>.</li>
+<li>Calculate a categorical <code>mpg</code> variable by <code>cyl</code> (be careful about your
+variable naming conventions so you can distinguish them).</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-41" style="background:;">
+  <hgroup>
+    <h2>Write the function</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">catQ &lt;- function(x) {
+    qs &lt;- quantile(x, seq(.2, .8, .2))
+
+    q1 &lt;- ifelse(x &lt;= qs[1], 1, 0) # less or equal to 20th ptile
+    q2 &lt;- ifelse(x &gt; qs[1] &amp; x &lt;= qs[2], 2, 0) # &gt; 20th, &lt;= 40th 
+    q3 &lt;- ifelse(x &gt; qs[2] &amp; x &lt;= qs[3], 3, 0) # &gt; 40th, &lt;= 60th
+    q4 &lt;- ifelse(x &gt; qs[3] &amp; x &lt;= qs[4], 4, 0) # &gt; 60th, &lt;= 80th
+    q5 &lt;- ifelse(x &gt; qs[4] , 5, 0) # &gt; 80th
+
+    m &lt;- cbind(q1, q2, q3, q4, q5)
+
+    f &lt;- factor(rowSums(m), 
+            levels = 1:5, 
+            labels =  paste0(&quot;Quintile&quot;, 1:5))
+return(f)
+}
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-42" style="background:;">
+  <hgroup>
+    <h2>How does this function work</h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Run code one line at a time</h1>
+
+<pre><code class="r">d &lt;- read.csv(&quot;./data/cars.csv&quot;)
+    qs &lt;- quantile(d$mpg, seq(.2, .8, .2))
+qs
+</code></pre>
+
+<pre><code>##   20%   40%   60%   80% 
+## 15.20 17.92 21.00 24.08
+</code></pre>
+
+<pre><code class="r">    q1 &lt;- ifelse(d$mpg &lt;= qs[1], 1, 0)
+    q2 &lt;- ifelse(d$mpg &gt; qs[1] &amp; d$mpg &lt;= qs[2], 2, 0)
+    q3 &lt;- ifelse(d$mpg &gt; qs[2] &amp; d$mpg &lt;= qs[3], 3, 0)
+    q4 &lt;- ifelse(d$mpg &gt; qs[3] &amp; d$mpg &lt;= qs[4], 4, 0)
+    q5 &lt;- ifelse(d$mpg &gt; qs[4] , 5, 0)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-43" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">    m &lt;- cbind(q1, q2, q3, q4, q5)
+head(m)
+</code></pre>
+
+<pre><code>##      q1 q2 q3 q4 q5
+## [1,]  0  0  3  0  0
+## [2,]  0  0  3  0  0
+## [3,]  0  0  0  4  0
+## [4,]  0  0  0  4  0
+## [5,]  0  0  3  0  0
+## [6,]  0  0  3  0  0
+</code></pre>
+
+<pre><code class="r">    f &lt;- factor(rowSums(m), 
+            levels = 1:5, 
+            labels =  paste0(&quot;Quintile&quot;, 1:5))
+head(f)
+</code></pre>
+
+<pre><code>## [1] Quintile3 Quintile3 Quintile4 Quintile4 Quintile3 Quintile3
+## Levels: Quintile1 Quintile2 Quintile3 Quintile4 Quintile5
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-44" style="background:;">
+  <hgroup>
+    <h2>Create quintile variables</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">d$mpg_q &lt;- catQ(d$mpg)
+d$hp_q &lt;- catQ(d$hp)
+d$drat_q &lt;- catQ(d$drat)
+head(d)
+</code></pre>
+
+<pre><code>##               model  mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## 1         Mazda RX4 21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## 2     Mazda RX4 Wag 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## 3        Datsun 710 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## 4    Hornet 4 Drive 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## 5 Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## 6           Valiant 18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+##       mpg_q      hp_q    drat_q
+## 1 Quintile3 Quintile2 Quintile4
+## 2 Quintile3 Quintile2 Quintile4
+## 3 Quintile4 Quintile1 Quintile4
+## 4 Quintile4 Quintile2 Quintile2
+## 5 Quintile3 Quintile4 Quintile2
+## 6 Quintile3 Quintile2 Quintile1
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-45" style="background:;">
+  <hgroup>
+    <h2>Categorical variables by <code>cyl</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>How I&#39;d expect you to approach this</h1>
+
+<pre><code class="r">l &lt;- split(d, d$cyl)
+l[[1]]$mpg_qBYcyl &lt;- catQ(l[[1]]$mpg)
+l[[2]]$mpg_qBYcyl &lt;- catQ(l[[2]]$mpg)
+l[[3]]$mpg_qBYcyl &lt;- catQ(l[[3]]$mpg)
+
+d2 &lt;- rbind(l[[1]], l[[2]], l[[3]])
+head(d2)
+</code></pre>
+
+<pre><code>##             model  mpg cyl  disp hp drat    wt  qsec vs am gear carb
+## 3      Datsun 710 22.8   4 108.0 93 3.85 2.320 18.61  1  1    4    1
+## 8       Merc 240D 24.4   4 146.7 62 3.69 3.190 20.00  1  0    4    2
+## 9        Merc 230 22.8   4 140.8 95 3.92 3.150 22.90  1  0    4    2
+## 18       Fiat 128 32.4   4  78.7 66 4.08 2.200 19.47  1  1    4    1
+## 19    Honda Civic 30.4   4  75.7 52 4.93 1.615 18.52  1  1    4    2
+## 20 Toyota Corolla 33.9   4  71.1 65 4.22 1.835 19.90  1  1    4    1
+##        mpg_q      hp_q    drat_q mpg_qBYcyl
+## 3  Quintile4 Quintile1 Quintile4  Quintile1
+## 8  Quintile5 Quintile1 Quintile3  Quintile2
+## 9  Quintile4 Quintile2 Quintile4  Quintile1
+## 18 Quintile5 Quintile1 Quintile5  Quintile5
+## 19 Quintile5 Quintile1 Quintile5  Quintile4
+## 20 Quintile5 Quintile1 Quintile5  Quintile5
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-46" style="background:;">
+  <hgroup>
+    <h2>Categorical variables by <code>cyl</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Better way (that we haven&#39;t learned yet)</h1>
+
+<pre><code class="r">d$mpg_qBYcyl &lt;- unlist(
+                    sapply(
+                        split(d, d$cyl), function(x) catQ(x$mpg)
+                        )
+                    )
+head(d)
+</code></pre>
+
+<pre><code>##               model  mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## 1         Mazda RX4 21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## 2     Mazda RX4 Wag 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## 3        Datsun 710 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## 4    Hornet 4 Drive 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## 5 Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## 6           Valiant 18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+##       mpg_q      hp_q    drat_q mpg_qBYcyl
+## 1 Quintile3 Quintile2 Quintile4  Quintile1
+## 2 Quintile3 Quintile2 Quintile4  Quintile2
+## 3 Quintile4 Quintile1 Quintile4  Quintile1
+## 4 Quintile4 Quintile2 Quintile2  Quintile5
+## 5 Quintile3 Quintile4 Quintile2  Quintile4
+## 6 Quintile3 Quintile2 Quintile1  Quintile5
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Today&#39;s Agenda'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='A reminder: The R learning curve'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Functions'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='NA'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Functions are also objects'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='Function components'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='Primitive functions'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Writing functions: A basic example'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='Function components'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Function components'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='More on formals'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='Another basic example'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Does it work?'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='Your turn'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='NA'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='NA'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='NA'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='Alternatively, add a condition, and make missing data a formal argument'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='NA'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='More on <code>return()</code>'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='Even more compact'>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='Embedding Messages, Returning Errors'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='Error Messages'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='Your turn again (may be a bit tricky)'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='NA'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='Checking on error message'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='Checking on <code>names</code> of returned vector'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='Using Functions in Plotting'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='Digging a bit deeper'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='Extending the example'>
+         30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='Calculate raw scores'>
+         31
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='Basic relation'>
+         32
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='Plot theta distributions by raw score'>
+         33
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=34 title='Quick digression'>
+         34
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=35 title='Combine estimates, produce empty plot'>
+         35
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=36 title='Next, produce a plot, with no points'>
+         36
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=37 title='Add vertical distribution bars'>
+         37
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=38 title='Add portion of distribution bars'>
+         38
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=39 title='Add points (mean theta estimates)'>
+         39
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=40 title='Lab'>
+         40
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=41 title='Write the function'>
+         41
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=42 title='How does this function work'>
+         42
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=43 title='NA'>
+         43
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=44 title='Create quintile variables'>
+         44
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=45 title='Categorical variables by <code>cyl</code>'>
+         45
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=46 title='Categorical variables by <code>cyl</code>'>
+         46
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
