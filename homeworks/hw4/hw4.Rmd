@@ -1,0 +1,25 @@
+---
+title: Homework 4
+output: pdf_document
+---
+
+This homework is focused on writing and applying custom functions.
+
+1. Write a function that reports the mean, median, standard deviation,
+   minimum, and maximum values for a generic numeric vector, `x`. You can use the base functions. Make sure the function can handle missing data. Embed a message that reports if any missing data were removed. If the vector fed to the function is non-numeric, coerce it to be so, and embed a message stating that coercion occurred. Round the output to 3 decimal places
+
+2. Load the `ratebeer_beerjobber.txt` dataset, and apply the function to each
+   of the final five columns. Bind these results together into a single data frame or matrix, with the row names indicating the variable.
+
+3. Write a function to calculate the median of a generic vector, `x`.
+   Compare the results of your function to the base call. Again make sure the function can handle missing data, and embed a warning if missing data are removed.
+
+4. Write a function that takes a generic numeric vector, `x`, and produces a
+   plot of the histogram with the density overlayed. Make sure the y-axis still refers to frequencies, rather than densities. Make the function generic enough that other arguments can be passed to `plot()`. Use the function to produce a plot of `abv`, with the line color changed, and modified x-axis label and title.
+
+5. *Extra Credit*: Write a function that simulates dice being rolled. The
+   function should take 3 formal arguments: `nsides`, `nrolls`, and `ndice`, corresponding to the number of sides of the die or dice, number of rolls of the die or dice, and the number of dice in each roll. The output should be an *n* by *p* matrix, where *n* is the number of rolls and *p* is the number of dice. 
+   + Use the function to simulate rolling 3 dice, each with 8 sides, 100,000
+     times. Compute the sum for each roll and summarize this sum with a histogram. Annotate the histogram by including vertical lines denoting the mean, and 1 standard deviation above and below the mean.
+   + Compute the probability of the second and third dice rolled being 1
+     greater than the previous (e.g., 5, 6, 7, or 1, 2, 3, etc.).
