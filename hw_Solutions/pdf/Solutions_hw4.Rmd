@@ -1,6 +1,8 @@
 ---
 title: Homework 4 Solutions
-output: pdf_document
+output:
+  pdf_document:
+    highlight: zenburn
 ---
 
 
