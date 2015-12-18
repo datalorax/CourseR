@@ -19,8 +19,7 @@ knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
 * Primitive functions
 * Basics on writing functions
 * Using functions with plotting
-* Classes and methods (object-oriented programming)
-* Storing and applying functions with `source()`
+
 
 ----
 ## A reminder: The R learning curve

@@ -189,12 +189,11 @@ Upon completion of this course, the successful student will:
 
 #### Week 4.1: Functions, part 1
 * Topics
-    + Classes and methods (object-oriented programming)
-    + Function components
-    + Primitive functions
-    + Basics on writing functions
-    + Using functions with plotting
-    + Storing and applying functions with `source()`
+    + Overview of functions
+	+ Function components
+	+ Primitive functions
+	+ Basics on writing functions
+	+ Using functions with plotting    
 * Lab
     + Writing custom functions
 * Readings
@@ -205,6 +204,8 @@ Upon completion of this course, the successful student will:
 
 #### Week 4.2: Functions, part 2
 * Topics
+	+ Classes and methods (object-oriented programming)
+	+ Storing and applying functions with `source()`
 	+ Functional programming
     + Scoping
     + Infix functions (and every operator as a function)
