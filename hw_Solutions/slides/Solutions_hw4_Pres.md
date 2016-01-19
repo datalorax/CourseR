@@ -28,12 +28,11 @@ smry <- function(x) {
 	
 	if(length(x) != length(na.omit(x))) {
 		warning("Missing data removed")
-	}
-	
+	}	
 	stats <- c(mn, md, stDev, minm, maxm)
 	names(stats) <- c("Mean", "Median", "Standard Deviation", "Minimum", 
 		"Maximum")
-return(round(stats, 3))
+return(structure(round(stats, 3), class = "smry"))
 }
 ```
 
@@ -44,7 +43,17 @@ return(round(stats, 3))
 ```r
 setwd("/Users/Daniel/Dropbox/Teaching/CourseR/")
 beer <- read.delim("./data/ratebeer_beerjobber.txt")
+str
+```
 
+```
+## function (object, ...) 
+## UseMethod("str")
+## <bytecode: 0x7fe00d746380>
+## <environment: namespace:utils>
+```
+
+```r
 Style <- smry(beer$style)
 ```
 
@@ -85,6 +94,64 @@ rbind(Style, ABV, Ratings, Overall_Score, Style_Score)
 ## Overall_Score  65.850   71.0             24.224       0   100.0
 ## Style_Score    60.872   62.0             26.877       0   100.0
 ```
+
+----
+# Produce a default plot for objects of type `smry`.
+
+
+```r
+plot.smry <- function(ob) {
+	plot(1:5, seq(ob["Minimum"], ob["Maximum"], length.out = 5), 
+		type = "n", 
+		xlab = "Summary Statistic",
+		ylab = "Value",
+		main = "Summary",
+		xlim = c(0, 6))
+	text(1:5, ob, names(ob))
+}
+```
+
+---- &twocol
+# Plot examples
+
+*** =left
+
+
+```r
+plot(Style)
+```
+
+![plot of chunk unnamed-chunk-5](assets/fig/unnamed-chunk-5-1.png) 
+
+*** =right
+
+
+```r
+plot(ABV)
+```
+
+![plot of chunk unnamed-chunk-6](assets/fig/unnamed-chunk-6-1.png) 
+
+---- &twocol
+# Plot examples
+
+*** =left
+
+
+```r
+plot(Ratings)
+```
+
+![plot of chunk unnamed-chunk-7](assets/fig/unnamed-chunk-7-1.png) 
+
+*** =right
+
+
+```r
+plot(Overall_Score)
+```
+
+![plot of chunk unnamed-chunk-8](assets/fig/unnamed-chunk-8-1.png) 
 
 ----
 # Function for Median
@@ -210,68 +277,4 @@ histDens(beer$abv, lineCol = "blue",
 	xlab = "ABV")
 ```
 
-![plot of chunk unnamed-chunk-8](assets/fig/unnamed-chunk-8-1.png) 
-
-----
-# Simulating Rolling Dice
-
-
-```r
-dice <- function(nsides, nrolls, ndice) {
-	t(replicate(nrolls, sample(1:nsides, ndice, replace = TRUE)))
-
-} 
-```
-Simulate rolling 3 dice, each with 8 sides, 100,000
-     times.
-
-
-```r
-experiment <- dice(8, 1e5, 3)
-head(experiment)
-```
-
-```
-##      [,1] [,2] [,3]
-## [1,]    1    4    1
-## [2,]    1    5    1
-## [3,]    1    2    4
-## [4,]    3    5    5
-## [5,]    3    6    6
-## [6,]    1    3    1
-```
-
-----
-# Compute sum for each roll, produce annotated histogram
-
-
-```r
-tot <- rowSums(experiment)
-
-hist(tot, 
-	main = "Histogram of Simulated Rolls (3 dice, 8 sides)",
-	xlab = "Sum of Roll")
-abline(v = mean(tot), col = "red", lwd = 3)
-abline(v = mean(tot) - sd(tot), col = "gray", lwd = 2, lty = 2)
-abline(v = mean(tot) + sd(tot), col = "gray", lwd = 2, lty = 2)
-```
-
-![plot of chunk unnamed-chunk-11](assets/fig/unnamed-chunk-11-1.png) 
-
-----
-# Compute probability of second/third dice being 1 greater than  previous
-
-
-```r
-(table(experiment[ ,2] == experiment[ ,1] + 1 & 
-	  experiment[ ,3] == experiment[ ,2] + 1) / 1e5) * 100
-```
-
-```
-## 
-##  FALSE   TRUE 
-## 98.759  1.241
-```
-<br>
-There is approximately a 1.163% chance of the second and third dice each being
-  one greater than the previous. 
+![plot of chunk unnamed-chunk-13](assets/fig/unnamed-chunk-13-1.png) 

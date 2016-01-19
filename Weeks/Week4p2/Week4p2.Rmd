@@ -1,0 +1,554 @@
+---
+title       : "Functions, part 2"
+subtitle    : Week 4.2
+author      : Daniel Anderson
+job         : CourseR
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
+```
+<style>
+em {
+  font-style: italic
+}
+</style>
+
+<style>
+strong {
+  font-weight: bold;
+}
+</style>
+
+## Today's Agenda
+* Classes and methods (object oriented programming)
+* Scoping
+* Infix functions
+* Storing and applying functions with `source()`
+
+----
+## Objects 
+* Every object has a *class* and a *method*. This is generally true of all 
+  object-oriented (OO) programming, and not specific to R.
+* R has 3 systems, which differ in the way classes and methods are
+  implemented: S3, S4, and Reference Classes (RC).
+* S3 is the is simplest and most widely used OO system. This is where we will
+  focus most of our attention.
+
+<br>
+<span style="color:gray" > Note that a lot of this section is based on Wickham (2014), Chapter 7. Available online at http://adv-r.had.co.nz/OO-essentials.html </span>
+
+---- &twocol
+## Classes
+
+*** =left
+
+* Use `class()` to determine the class
+
+```{r}
+d <- read.csv("./data/longley.csv")
+mod <- lm(Employed ~ Population, 
+			data = d)
+class(mod)
+print(mod)
+```
+
+*** =right
+
+* Redefine the class
+
+```{r}
+class(mod) <- "data.frame"
+print(mod)
+```
+
+* The `print()` function now tries to use the `data.frame` method for the
+  generic `print()` function, rather thant the `lm` method for `print()`.
+
+----
+However, note that the data are still there (the generic function calls are
+  just using the `data.frame` class, rather than the `lm` class).
+
+```{r}
+mod$coefficients
+```
+
+----
+## Our function for today
+# Simulating dice rolls with the `sample()` function
+
+```{r, eval = FALSE}
+?sample
+# x = numbers of the die
+# size = number of dice
+# replace = can a number be sampled more than once?
+```
+![sampleHelp](./assets/img/sampleHelp.png)
+
+----
+## Roll two dice with six sides
+
+```{r}
+sample(x = 1:6, size = 2, replace = TRUE)
+```
+
+----
+## Replicate the roll 100 times
+
+```{r}
+replicate(100, sample(x = 1:6, size = 2, replace = TRUE))
+```
+
+----
+## Transpose the output for nicer output
+
+```{r}
+t(replicate(100, sample(x = 1:6, size = 2, replace = TRUE)))
+```
+
+----
+## Wrap it in a function
+
+# What should the formals be?
+```{r, eval = FALSE}
+t(replicate(100, sample(x = 1:6, size = 2, replace = TRUE)))
+```
+
+----
+## `dice()` function
+
+```{r}
+dice <- function(nsides, nrolls, ndice) {
+	experiment <- t(replicate(nrolls, sample(1:nsides, ndice, replace = TRUE)))
+
+return(experiment)
+}
+```
+
+Test it out
+
+```{r}
+rolls <- dice(4, 1e5, 3)
+rolls
+```
+
+----
+## Back to classes
+# Defining class for the `dice()` function
+
+```{r}
+dice <- function(nsides, nrolls, ndice) {
+	experiment <- t(replicate(nrolls, sample(1:nsides, ndice, replace = TRUE)))
+
+return(structure(experiment, class = "dice"))
+}
+
+rolls <- dice(4, 1e5, 3)
+class(rolls)
+```
+
+----
+## Defining methods
+Now, because we have a class, we can define a method. Let's define a generic
+  plot function for objects of class "dice"
+
+```{r}
+plot.dice <- function(x) {
+	tot <- rowSums(x)
+	
+	par(mfrow = c(2, 1), 
+		oma = c(5, 4, 1, 0), # outer margins
+		mar = c(0, 0, 1, 1)) # margins for each plot
+	hist(tot, 
+		main = "Histogram of Sum of Simulated Dice Rolls", 
+		xlab = "Sum of each roll")
+			abline(v = mean(tot), col = "red", lwd = 3)
+			abline(v = mean(tot) - sd(tot), col = "gray", lwd = 2, lty = 2)
+			abline(v = mean(tot) + sd(tot), col = "gray", lwd = 2, lty = 2)
+	boxplot(tot, horizontal = TRUE, frame = FALSE)
+}
+```
+
+----
+```{r}
+plot(rolls)
+```
+
+----
+## Set generic summary method for class "dice"
+
+```{r}
+summary.dice <- function(x) {
+	cat("First 6 Rolls", "", sep = "\n")
+	print(x[1:6, ])
+
+	cat("", "Frequencies of Sums", sep = "\n")
+	print(table(rowSums(x)))
+
+	cat("", "Frequency of Roll Patterns", sep = "\n")
+	
+	print(table(apply(x, 1, paste0, collapse = "")))
+	
+
+return(invisible(list(
+			SumFrequencies = table(rowSums(x)), 
+			PatternFrequencies = table(apply(x, 1, paste0, collapse = ""))
+			)
+		)
+	)
+}
+```
+
+----
+```{r}
+smmry <- summary(rolls)
+```
+
+----
+```{r}
+str(smmry)
+```
+
+----
+## Other options
+For the S3 system, there are other (potentially better) ways to set classes
+  and generic functions. For example
+
+```{r}
+dice <- function(nsides, nrolls, ndice) UseMethod("dice")
+
+dice.default <- function(nsides, nrolls, ndice) {
+	experiment <- t(replicate(nrolls, sample(1:nsides, ndice, replace = TRUE)))
+
+return(structure(experiment, class = "dice"))
+}
+dice(8, 5, 4)
+```
+
+----
+## Dice game
+
+```{r}
+dice.game <- function(x) {
+	roll <- as.vector(dice.default(6, 1, x))
+	fives <- (roll == 5) * 50
+	ones <- (roll == 1) * 100
+	if(sum(table(roll) == 3) > 0) {
+		threeKind <- (table(roll) == 3)[table(roll) == 3] * 
+				(as.numeric(names(table(roll)))[table(roll) == 3] * 100)
+		return(sum(fives, ones, threeKind))
+	}
+	else {
+		return(sum(fives, ones))
+	}
+} 
+
+trial <- 6
+class(trial) <- "game"
+dice(trial)
+```
+
+----
+## Methods
+You can view the methods of any function using `methods()`
+
+```{r}
+methods(plot)
+```
+
+----
+## Summary: Classes and Methods
+* Class is metadata that defines the type of object
+* Method is a specific function linked to the class, often constructed through
+  generic functions.
+* Having an understanding of classes and methods can be really helpful when
+  writing packages (although there are packages that make writing packages easier).
+* You may want to think about some default plot, print, or summary methods for
+  your functions, especially if you're applying them regularly.
+
+---- .segue
+# Lexical Scoping
+![nestingDolls](./assets/img/nestingDolls.jpg)
+
+----
+## Lexical scoping 
+* Search for symbols (objects) based on the nesting of how they were 
+  *created*, not how they were *called*.
+* You can generally determine how a value is being called by inspecting the
+  function.
+
+
+---- &twocol
+## Name masking
+
+*** =left
+R will look within the current environment when objects are called. If it can't find them, it will look one level "up".
+
+```{r}
+y <- 7
+
+foo <- function(x) {
+	x + y
+}
+foo(3); foo(5)
+```
+*** =right
+
+```{r}
+foo2 <- function(x) {
+	y <- rnorm(10, 100, 5)
+	x + y
+} 
+foo2(3)
+```
+
+---- &twocol
+## More on name masking
+
+*** =left
+
+```{r}
+z <- 1e9
+b <- function(x) {
+	y <- rnorm(length(x), 100, 10)
+	
+	lm <- function(x) {
+		z <- 2
+		(-1*x)/z
+	}
+	lm(y)
+}
+
+b(1:3)
+```
+
+*** =right
+
+```{r}
+a <- function(x) x^2
+
+f <- function(x) {
+	a <- function(y) {
+		z <- rnorm(length(y), 
+				    mean(y, na.rm = TRUE), 
+				    sd(y, na.rm = TRUE)
+				    )
+		x + z
+	}
+return(4 + a(x))
+}
+f(2:4)
+```
+
+---- .segue
+# Infix operators
+
+----
+## What is an infix operator?
+
+Infix operators are functions that do not require the name of the function precedes the arguments. Infix operators come between two arguments. 
+
+# Built-in infix functions
+There are numerous built-in infix operators (see http://bxhorn.com/data-infix-operators-in-r/)
+
+![infixOperators](./assets/img/infixOperators.png)
+
+----
+## Create your own infix functions
+Let's create an infix operator that returns a logical vector corresponding to whether a given value (within a vector) is within the range of a different vector.
+
+```{r}
+`%w%` <- function(x, vector) {
+	x >= min(vector, na.rm = TRUE) & x <= max(vector, na.rm = TRUE)
+}
+
+5:10 %w% 8:70
+8:70 %w% 5:10
+```
+
+----
+## Another example
+Now we'll create an infix operator that returns summary information on the relation between two vectors.
+
+```{r}
+`%smry%` <- function(x, y) {
+	if(length(x) != length(y)) {
+		stop("Vectors must be of the same length")
+	}
+	cat(
+		paste("Covariance =", cov(x, y, use = "complete.obs")),
+		paste("Correlation =", cor(x, y, use = "complete.obs")),
+		paste("Proportion x cases above Mean of y =", 
+			(table(x > mean(y, na.rm = TRUE)) / length(x))[2] ),
+		paste("Proportion x cases within the range of y =", 
+			(table(x %w% y) / length(x))[2] ),
+		sep = "\n")
+} 
+```
+
+---- &twocol
+## Example continued
+
+*** =left
+
+```{r}
+a <- rnorm(1e5, 100, 5)
+b <- rnorm(1e5, 105, 5)
+
+a %smry% b
+b %smry% a
+```
+
+*** =right
+
+```{r}
+a[1:100] %smry% b[1:100]
+```
+<br>
+
+```{r}
+a[1:100] %smry% b
+```
+
+
+
+
+---- .segue
+![efficiency](./assets/img/efficiency.png)
+
+# Using `source()` with functions
+
+----
+## Next best thing to a package: `source()`
+
+When you have a function, or set of function to apply, but you want to keep
+  your code tidy, you can store just the function in a separate script and access it via `source()`. This is most helpful when you have a function that you apply regularly across multiple scripts. 
+
+```{r, eval = FALSE}
+?source
+```
+![source](./assets/img/sourceHelp.png)
+
+----
+## Function for source file
+
+1. Write a function
+    * Below is a function I apply regularly to batch load a set of csv files
+      into a list.
+2. Save it as a separate R script
+
+```{r}
+readFiles <- function(dir, ...) {
+	oldDir <- getwd() # Get current working directory
+	setwd(as.character(dir)) # Change directory to where data are stored
+	
+	files <- list.files(...) # List all the files in the directory
+	dl <- sapply(1:length(files), function(i) read.csv(files[i])) # Read data
+	names(dl) <- substr(files, 1, nchar(files) - 4) # Name the elements of the list according to the filename
+
+on.exit(setwd(oldDir)) # Reset the working directory
+return(dl) # Return the data list
+}
+```
+
+----
+## Example with `source()`
+
+```{r}
+source("/Users/Daniel/BRT/Code/R/readFiles.R")
+l <- readFiles("./data", pattern = ".csv")
+names(l)
+str(l)
+```
+
+----
+## Lab (requires using last skills from last week)
+* Load the **longley** dataset (from ./data)
+* Write a function that fits 3 simple linear regression models, with `GNP`, 
+  `Armed.Forces`, and `Population` as predictors of `Employed`. Return the output from each in a list, of class `mods`. Run the function and store the output in an object, `regs`.
+* Write a default plot method for objects of class `mods`, which displays
+  three scatter plots (using `par(mfrow = c(3,1))` and the regression line for each). Execute the function then run `plot(regs)`. If you do not get the three regression plots, you have an error.
+* Write an infix function that tests whether the mean of one vector is within
+  a standard deviation of the mean of the second vector. Test the function with `Unemployed` and `Armed.Forces`.
+
+----
+## Load **longley** dataset, write regression function and store results in 
+  `regs`.
+
+```{r}
+long <- read.csv("./data/longley.csv")
+
+mods <- function(d) {
+	gnp <- lm(Employed ~ GNP, data = d)
+	af <- lm(Employed ~ Armed.Forces, data = d)
+	pop <- lm(Employed ~ Population, data = d)
+
+	l <- list(GNP = gnp, ArmedForces = af, Population = pop)
+return(structure(l, class = "mods")) 
+}
+regs <- mods(long)
+str(regs[[1]])
+```
+
+----
+## Produce default plot for class `mods`.
+
+```{r}
+plot.mods <- function(modList) {
+	regPlot <- function(mod) {
+		plot(mod$model[[2]], mod$model[[1]])
+		abline(coef(mod)[1], coef(mod)[2], lwd = 2, col = "blue", lty = 2)
+	}
+
+	par(mfrow = c(3, 1))
+	regPlot(modList[[1]])
+	regPlot(modList[[2]])
+	regPlot(modList[[3]])
+}
+```
+
+---- &twocol
+
+*** =left
+# Issues with this plot
+* x-axes differ, y-axes could (though they don't appear to here)
+* Labels are not very informative
+* Doesn't display any uncertainty of the regression line
+* Others?
+
+*** =right
+
+```{r}
+plot(regs)
+```
+
+----
+## Infix function
+
+```{r}
+`%/>%` <- function(x, y) {
+	mx <- mean(x, na.rm = TRUE)
+	my <- mean(y, na.rm = TRUE)
+	sdy <- sd(y, na.rm = TRUE)
+
+	mx >= my - sdy & mx <= my + sdy
+}
+```
+
+----
+
+```{r}
+mean(longley$Unemployed)
+mean(longley$Armed.Forces) - sd(longley$Armed.Forces)
+mean(longley$Armed.Forces) + sd(longley$Armed.Forces)
+```
+<br>
+---
+```{r}
+longley$Unemployed %/>% longley$Armed.Forces
+```

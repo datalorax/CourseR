@@ -1,16 +1,20 @@
 ---
-title: Homework 4 Solutions
+title: "Homework 4 Solutions"
 output:
   pdf_document:
     highlight: zenburn
 ---
 
-
-1. Write a function that reports the mean, median, standard deviation, and
-   minimum and maximum values for a generic numeric vector, `x`.
+1. Write a function that reports the mean, median, standard deviation,
+   minimum, and maximum values for a generic numeric vector, `x`. You can use the base functions. 
+   * Make sure the function can handle missing data. Embed a message that 
+     reports if any missing data were removed. 
+   * If the vector fed to the function is non-numeric, coerce it to be so, and 
+     embed a message stating that coercion occurred. 
+   * Make the class of the output `smry`.
+   * Round the output to 3 decimal places.
 
 ```{r}
-
 smry <- function(x) {
 	if(is.numeric(x) == FALSE) {
 		warning("Vector coerced to numeric")
@@ -30,18 +34,17 @@ smry <- function(x) {
 	names(stats) <- c("Mean", "Median", "Standard Deviation", "Minimum", 
 		"Maximum")
 
-return(round(stats, 3))
+return(structure(round(stats, 3), class = "smry"))
 }
 ```
 
 2. Load the `ratebeer_beerjobber.txt` dataset, and apply the function to each
-   of the final five columns.
+   of the final five columns. Bind these results together into a single data frame or matrix, with the row names indicating the variable.
 
 ```{r}
 setwd("/Users/Daniel/Dropbox/Teaching/CourseR/")
 beer <- read.delim("./data/ratebeer_beerjobber.txt")
 head(beer)
-
 
 Style <- smry(beer$style)
 ABV <- smry(beer$abv)
@@ -52,7 +55,23 @@ Style_Score <- smry(beer$score.by.style)
 rbind(Style, ABV, Ratings, Overall_Score, Style_Score)
 ```
 
-3. Write a function to calculate the median of a generic vector, `x`.
+3. Produce a default plot for objects of class `smry`. The x-axis should be
+   1:5, and rather than points, place text that states the summary statistic.
+
+```{r}
+plot.smry <- function(ob) {
+	plot(1:5, seq(ob["Minimum"], ob["Maximum"], length.out = 5), 
+		type = "n", 
+		xlab = "Summary Statistic",
+		ylab = "Value",
+		main = "Summary",
+		xlim = c(0, 6))
+	text(1:5, ob, names(ob))
+}
+plot(Style)
+```
+
+4. Write a function to calculate the median of a generic vector, `x`.
    Compare the results of your function to the base call. Again make sure the function can handle missing data, and embed a warning if missing data are removed.
 
 ```{r}
@@ -83,7 +102,7 @@ median(c(1:12, NA, NA), na.rm = TRUE); med(c(1:12, NA, NA))
 median(1:13); med(1:13)
 ```
 
-4. Write a function that takes a generic numeric vector, `x`, and produces a
+5. Write a function that takes a generic numeric vector, `x`, and produces a
    plot of the histogram with the density overlayed. Make sure the y-axis still refers to frequencies, rather than densities. Make the function generic enough that other arguments can be passed to `plot()`. Use the function to produce a plot of `abv`, with the line color changed, and modified x-axis label and title.
 
 ```{r}
@@ -108,35 +127,3 @@ histDens(beer$abv, lineCol = "blue",
 	main = "Alcohol by Volumne",
 	xlab = "ABV")
 ```
-
-5. *Extra Credit*: Write a function that simulates dice being rolled. The
-   function should take 3 formal arguments: `nsides`, `nrolls`, and `ndice`, corresponding to the number of sides of the die or dice, number of rolls of the die or dice, and the number of dice in each roll. The output should be an *n* by *p* matrix, where *n* is the number of rolls and *p* is the number of dice. 
-   + Use the function to simulate rolling 3 dice, each with 8 sides, 100,000
-     times. Compute the sum for each roll and summarize this sum with a histogram. Annotate the histogram by including vertical lines denoting the mean, and 1 standard deviation above and below the mean.
-   + Compute the probability of the second and third dice rolled being 1
-     greater than the previous (e.g., 5, 6, 7, or 1, 2, 3, etc.).
-
-```{r}
-dice <- function(nsides, nrolls, ndice) {
-	t(replicate(nrolls, sample(1:nsides, ndice, replace = TRUE)))
-
-} 
-experiment <- dice(8, 1e5, 3)
-head(experiment)
-```
-
-\newpage
-
-```{r}
-tot <- rowSums(experiment)
-
-hist(tot, main = "Histogram of Simulated Rolls (3 dice, 8 sides)")
-abline(v = mean(tot), col = "red", lwd = 3)
-abline(v = mean(tot) - sd(tot), col = "gray", lwd = 2, lty = 2)
-abline(v = mean(tot) + sd(tot), col = "gray", lwd = 2, lty = 2)
-
-(table(experiment[ ,2] == experiment[ ,1] + 1 & 
-	  experiment[ ,3] == experiment[ ,2] + 1) / 1e5) * 100
-```
-There's approximately a 1.163% chance of the second and third dice each being
-  one greater than the previous. 

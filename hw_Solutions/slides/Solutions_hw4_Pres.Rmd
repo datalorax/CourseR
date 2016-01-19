@@ -29,12 +29,11 @@ smry <- function(x) {
 	
 	if(length(x) != length(na.omit(x))) {
 		warning("Missing data removed")
-	}
-	
+	}	
 	stats <- c(mn, md, stDev, minm, maxm)
 	names(stats) <- c("Mean", "Median", "Standard Deviation", "Minimum", 
 		"Maximum")
-return(round(stats, 3))
+return(structure(round(stats, 3), class = "smry"))
 }
 ```
 
@@ -44,7 +43,7 @@ return(round(stats, 3))
 ```{r}
 setwd("/Users/Daniel/Dropbox/Teaching/CourseR/")
 beer <- read.delim("./data/ratebeer_beerjobber.txt")
-
+str
 Style <- smry(beer$style)
 ABV <- smry(beer$abv)
 Ratings <- smry(beer$ratings)
@@ -56,6 +55,51 @@ Style_Score <- smry(beer$score.by.style)
 # Bind results together
 ```{r}
 rbind(Style, ABV, Ratings, Overall_Score, Style_Score)
+```
+
+----
+# Produce a default plot for objects of type `smry`.
+
+```{r}
+plot.smry <- function(ob) {
+	plot(1:5, seq(ob["Minimum"], ob["Maximum"], length.out = 5), 
+		type = "n", 
+		xlab = "Summary Statistic",
+		ylab = "Value",
+		main = "Summary",
+		xlim = c(0, 6))
+	text(1:5, ob, names(ob))
+}
+```
+
+---- &twocol
+# Plot examples
+
+*** =left
+
+```{r}
+plot(Style)
+```
+
+*** =right
+
+```{r}
+plot(ABV)
+```
+
+---- &twocol
+# Plot examples
+
+*** =left
+
+```{r}
+plot(Ratings)
+```
+
+*** =right
+
+```{r}
+plot(Overall_Score)
 ```
 
 ----
@@ -130,45 +174,3 @@ histDens(beer$abv, lineCol = "blue",
 	main = "Alcohol by Volumne",
 	xlab = "ABV")
 ```
-
-----
-# Simulating Rolling Dice
-
-```{r}
-dice <- function(nsides, nrolls, ndice) {
-	t(replicate(nrolls, sample(1:nsides, ndice, replace = TRUE)))
-
-} 
-```
-Simulate rolling 3 dice, each with 8 sides, 100,000
-     times.
-
-```{r}
-experiment <- dice(8, 1e5, 3)
-head(experiment)
-```
-
-----
-# Compute sum for each roll, produce annotated histogram
-
-```{r, fig.height = 5}
-tot <- rowSums(experiment)
-
-hist(tot, 
-	main = "Histogram of Simulated Rolls (3 dice, 8 sides)",
-	xlab = "Sum of Roll")
-abline(v = mean(tot), col = "red", lwd = 3)
-abline(v = mean(tot) - sd(tot), col = "gray", lwd = 2, lty = 2)
-abline(v = mean(tot) + sd(tot), col = "gray", lwd = 2, lty = 2)
-```
-
-----
-# Compute probability of second/third dice being 1 greater than  previous
-
-```{r}
-(table(experiment[ ,2] == experiment[ ,1] + 1 & 
-	  experiment[ ,3] == experiment[ ,2] + 1) / 1e5) * 100
-```
-<br>
-There is approximately a 1.163% chance of the second and third dice each being
-  one greater than the previous. 
