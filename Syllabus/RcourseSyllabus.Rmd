@@ -19,8 +19,8 @@ Throughout the course, we apply the topics of the week to help process "messy"
   data into workable formats, conduct basic analyses, and visualize the data. We use data visualization to explore both raw data and the results of fitted models. We work very basically with *git*, which is a version control software that can help when collaborating on code. This class is constructed with the philosophy that the only way to truly learn R and become proficient with it, is to dive in and practice, practice, practice. Class sessions are highly interactive. During class, you are asked to write code with the instructor concurrently, independently other times, and in small groups at other times. Weekly homeworks are assigned, which are intended to be brief but get you more practice. These can be completed independently or in small groups, and are scored on a completion basis. The course also includes a term project, which  requires you to complete the three main components of the course described above with a "real" dataset. This can, again, be completed independently or in small groups. You are encouraged to find data that you are actually interested in using. If you do not have access to data, please contact the instructor as soon as possible.
 
 # Required Materials
-Prior to the first class you should have the latest version of R downloaded and 
-  installed on your computer, available through the comprehensive R archive network (CRAN): https://cran.r-project.org. We work with various packages as well, but these can be installed as we work through the material. All readings are provided as PDFs or are freely available online. Please also download and install *git*: https://git-scm.com/downloads. You are expected to clone the entire course repository with all the materials (you should have received a tutorial describing all the steps fore cloning). If you have trouble with cloning the course repository prior to the first class, please contact the instructor to help you troubleshoot outside of normal class hours. You are encouraged you to create a *github* repository (https://github.com) where you can store all your work for this class and get additional practice with git.
+Prior to the first class you should have the latest version of R downloaded
+  and installed on your computer, available through the comprehensive R archive network (CRAN): https://cran.r-project.org. We work with various packages as well, but these can be installed as we work through the material. All readings are provided as PDFs or are freely available online. Please also download and install *git*: https://git-scm.com/downloads. You are expected to clone the entire course repository with all the materials (you should have received a tutorial describing all the steps fore cloning). If you have trouble with cloning the course repository prior to the first class, please contact the instructor to help you troubleshoot outside of normal class hours. You are encouraged you to create a *github* repository (https://github.com) where you can store all your work for this class and get additional practice with git.
 
 **Recommended Materials:** Prior to the first class, it is highly recommended
   that you spend some time exploring different text editors and/or integrated development enviornments (IDEs) for R. The instructor of the course uses the text editor Sublime Text (http://www.sublimetext.com) which has some really nice features and is very aesthetically pleasing. By far the most popular IDE is RStudio, which is being actively developed and has numerous plugin-like features that make many tasks simpler. Most of this is just personal preference. The built in editor for Mac is also pretty nice, but on the Windows side is about as basic as can be. Getting a text editor/environment that you feel comfortable with can really ease the process.
@@ -38,7 +38,8 @@ Prior to the first class you should have the latest version of R downloaded and
       Publishing.
   * Sanchez, G. (2013). *Handling and Processing Strings in R.* Trowchez
   	  Editions: Berkely. (http://www.gastonsanchez.com/Handling_and_Processing_Strings_in_R.pdf)
-  * Wickham, H. (2015). *Advanced R*. Available online at http://adv-r.had.co.nz
+  * Wickham, H. (2015). *Advanced R*. Available online at 
+      http://adv-r.had.co.nz
   * Wickham, H. (2010). *ggplot2*. New York, NY: Springer.
   
 # Course Website
@@ -68,7 +69,6 @@ Upon completion of this course, the successful student will:
 ## Before the first class
   * Decide on a text editor or IDE for R
   * Clone course github repository (see git tutorials)
-
 
 
 ### Week 1.1: Getting Started Introduction and overview of the R environment  

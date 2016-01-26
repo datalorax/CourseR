@@ -1,0 +1,667 @@
+---
+title       : "Loops, part 1"
+subtitle    : Week 5.1
+author      : Daniel Anderson
+job         : CourseR
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
+```
+<style>
+em {
+  font-style: italic
+}
+</style>
+
+<style>
+strong {
+  font-weight: bold;
+}
+</style>
+
+## Today's Agenda 
+* For loops (most of the day)
+* While loops
+* Repeat loops (not the same thing as the repeat function) 
+
+---- &twocol
+## Basic overview: for loops
+
+*** =left
+<div align = "left">
+<img src = ./assets/img/forLoops.png width = 450 height = 200>
+</div>
+
+*** =right
+
+```{r}
+a <- letters[1:26]
+a
+for(i in 1:5){
+	print(a[i])
+}
+```
+
+----
+## Another basic example
+
+Simulate tossing a coin, record results
+
+```{r}
+b <- rep(NA, 10)
+b
+for(i in seq_along(b)) {
+	b[i] <- sample(c("Heads", "Tails"), 1)
+}
+b
+```
+
+---- &twocol
+## Basic example of nested for loops
+
+*** =left
+
+```{r}
+m <- matrix(101:112, ncol = 3)
+m
+```
+
+*** =right
+
+```{r}
+for(i in 1:3) {
+	for(j in 1:4) {
+		print(m[j, i])
+	}
+}
+```
+
+----
+## Batch processing with for loops
+# Look at the HSB_pieces folder, within the data folder.
+
+![HSBFiles](./assets/img/HSBFiles.png)
+
+---- &twocol
+## Load all files
+
+```{r}
+# List all files in directory
+files <- list.files("./data/HSB_pieces/")
+files
+
+# Create empty list
+l <- vector("list", length(files))
+l
+```
+
+----
+## For loop to batch read files
+
+```{r}
+for(i in seq_along(files)) {
+	l[[i]] <- read.csv(paste0("./data/HSB_pieces/", files[i]))
+}
+
+# Name elements of the list according to the file name
+names(l) <- substr(files, 1, nchar(files) - 4)
+````
+
+----
+## Inspect the structure of the list
+
+```{r}
+str(l)
+```
+
+----
+## Create a new variable
+For each data frame, we're going to create a new variable that is a
+  standardized version of `mathach`. Note that this variable will be standardized relative to the specific group.
+
+```{r}
+# First, write a z-score function
+standardize <- function(x) (x - mean(x, na.rm = TRUE)) / (sd(x, na.rm = TRUE))
+
+# Next, loop through the list to create each new variable
+for(i in seq_along(l)) {
+	l[[i]]$math_z <- standardize(l[[i]]$mathach)
+}
+head(l[[1]])
+```
+
+----
+```{r}
+str(l)
+```
+
+----
+## Your turn
+* First create, a random normal matrix, **m**, of size $4 * 3$ with 
+  $\mu =$ 100 and $\sigma = 10$. If you want your results to match those on the following slides, first run `set.seed(100)` before generating the random numbers.
+* Write a for loop that returns the mean of each column (note, there are
+  better ways to do this, but this is just for practice).
+* Create an empty list of length two. Use a for loop to store the second and
+  fourth rows of the matrix.
+
+----
+## Matrix creation
+
+```{r}
+set.seed(100)
+m <- matrix(rnorm(n = 12, mean = 100, sd = 10), ncol = 3)
+m
+```
+
+----
+## For loops to calculate column means
+
+```{r}
+colMeans <- rep(NA, ncol(m))
+for(i in 1:ncol(m)) {
+	colMeans[i] <- mean(m[ ,i])
+}
+colMeans
+```
+
+----
+## Store rows 2 and 4
+
+```{r}
+row24 <- vector("list", 2)
+for(i in c(2, 4)) {
+	row24[[i / 2]] <- m[i, ]
+}
+row24
+```
+Note that the above is not the most general, but happens to work in this case.
+  There are better ways to do this (the excersise is just to get you thinking about for loops and indexing).
+
+
+---- &twocol
+## A few things to note
+* For loops requre you initialize objects
+
+*** =left
+
+```{r}
+a <- rep(NA, 100)
+for(i in 1:100) {
+	a[i] <- rnorm(1, mean = 0, sd = i)
+}
+a
+```
+
+*** =right
+
+```{r}
+for(i in 1:100) {
+	f[i] <- rnorm(1, mean = 0, sd = i)
+}
+```
+
+---- &twocol
+## No printing by default
+
+*** =left
+
+```{r}
+for(i in seq(0, 500, length.out = 40)) {
+	rnorm(100, 0, i)
+}
+```
+
+What sort of object would you need to create to most efficiently store the
+  results of this `for` loop?
+
+*** =right
+
+```{r}
+for(i in seq(0, 500, length.out = 40)) {
+	print( round( rnorm(100, 0, i), 2) )
+}
+```
+
+----
+## Storing random variables
+# A bit of a convoluded nested for loop
+
+```{r}
+m <- matrix(rep(NA, 40*100), ncol = 100)
+
+for(i in 1:40) {
+	for(j in seq(0, 500, length.out = 40)[i]) {
+		m[i, ] <- rnorm(100, 0, j)
+	}
+}
+head(m)
+```
+
+---- &twocol
+## Use the results for plotting
+
+*** =left
+
+```{r, eval = FALSE}
+plot(-100:100, 
+	seq(0, 0.02, 
+		length.out = length(-100:100)), 
+	type = "n",
+	xlab = "Simulated value",
+	ylab = "Density",
+	main = "100 Random Normal 
+	Draws w/Same Mean and Varying SDs")
+for(i in 2:nrow(m)) {
+	lines(density(m[i, ]), col = "gray")	
+}
+```
+
+*** =right
+
+```{r, echo = FALSE}
+plot(-100:100, 
+	seq(0, 0.02, 
+		length.out = length(-100:100) ), 
+	type = "n",
+	xlab = "Simulated value",
+	ylab = "Density",
+	main = "100 Random Normal Draws w/Same Mean and Varying SDs")
+for(i in 2:nrow(m)) {
+	lines(density(m[i, ]), col = "gray")	
+}
+```
+
+---- &twocol
+## A few more plotting examples
+# Display likelihood of data, given a distribution: Half-Cauchy
+
+*** =left
+
+```{r, eval = FALSE}
+data <- seq(0, 10, .1)
+plot(x = data, 
+	y = seq(0, 0.6, 
+		length.out = length(data)), 
+	type = "n",
+	ylab = "Density",
+	main = "Half-Cauchy Distribtuion")
+for(i in seq(0.5, 10, by = 0.5)) {
+	lines(x = data, 
+		y = dcauchy(data, 0, i), 
+		col = "gray")
+}
+```
+
+*** =right
+
+```{r, echo = FALSE}
+data <- seq(0, 10, .1)
+plot(x = data, 
+	y = seq(0, 0.6, 
+		length.out = length(data)), 
+	type = "n",
+	ylab = "Density",
+	main = "Half-Cauchy Distribtuion")
+for(i in seq(0.5, 10, by = 0.5)) {
+	lines(x = data, 
+		y = dcauchy(data, 0, i), 
+		col = "gray")
+}
+```
+
+---- &twocol
+## Student's $t$
+
+*** =left
+
+```{r, eval = FALSE}
+data2 <- seq(-5, 5, length.out = 100)
+plot(x = data2, 
+	y = seq(0, 0.4, 
+		length.out = length(data2)), 
+	type = "n",
+	ylab = "Density", 
+	main = "Standard Normal vs 
+		t-Distribution")
+
+for(i in 1:20) {
+	lines(x = data2, 
+		y = dt(data2, i), 
+		col = i)
+}
+
+lines(x = data2, y = dnorm(data2, 0, 1), 
+	lwd = 3, lty = 2)
+```
+
+*** =right
+
+```{r, echo = FALSE}
+data2 <- seq(-5, 5, length.out = 100)
+plot(x = data2, 
+	y = seq(0, 0.4, 
+		length.out = length(data2)), 
+	type = "n",
+	ylab = "Density", 
+	main = "Standard Normal vs t-Distribution")
+for(i in 1:20) {
+	lines(x = data2, y = dt(data2, i), col = i)
+}
+lines(x = data2, y = dnorm(data2, 0, 1), 
+	lwd = 3, lty = 2)
+```
+
+----
+## One last for loop example
+* Load the beer data, fit a regression within each brewer between style and
+  overall score. 
+* Plot all the regression lines on one plot to get a sense of the intercept
+  and slope variability.
+
+```{r}
+beer <- read.delim("./data/ratebeer_beerjobber.txt")
+head(beer)
+```
+
+----
+## Fitting a regression model within each brewery
+
+* First, remove cases with missing data on `score.overall` or 
+  `score.by.style`. 
+
+```{r}
+beer <- beer[!is.na(beer$score.overall) & !is.na(beer$score.by.style), ]
+head(beer)
+```
+
+* Second, subset the data to only breweries with at least 3 beers (this is a
+  really convoluted way of doing it, but works with the topics we've discussed so far. `tapply` would be a much better approach, which we'll talk about next class).
+
+```{r}
+splitd <- split(beer, as.character(beer$brewer)) # overide factor
+
+nBeers <- data.frame(brewer = unique(beer$brewer), 
+					 nBeers = rep(NA, length(unique(beer$brewer))))
+
+for(i in seq_along(splitd)) {
+	nBeers$nBeers[i] <- nrow(splitd[[i]])
+}
+beer <- merge(beer, nBeers, by = "brewer", all = TRUE)
+head(beer)
+```
+
+----
+## Finally, subset the data and fit each regression model
+
+```{r}
+beer <- subset(beer, nBeers > 2)
+
+regList <- vector("list", length(unique(beer$brewer)))
+coefs <- vector("list", length(regList))
+
+for(i in seq_along(regList)) {
+	regList[[i]] <- lm(score.overall ~ score.by.style, 
+		data = beer, 
+		subset = beer$brewer == unique(beer$brewer)[i])
+	
+	coefs[[i]] <- coef(regList[[i]])
+}
+```
+
+----
+## Now plot all the regression lines
+
+```{r, eval = FALSE}
+plot(beer$score.by.style, beer$score.overall, 
+	type = "n", 
+	xlab = "Style Score", 
+	ylab = "Overall Score", 
+	main = "Variability in Style and Overall Scores by Brewery")
+
+for(i in seq_along(coefs)) {
+	abline(a = coefs[[i]][1], b = coefs[[i]][2], 
+		col = i)
+}
+for(i in 1:nrow(beer)) {
+	points(beer$score.by.style[i], beer$score.overall[i],
+		pch = 21, 
+		col = as.numeric(beer$brewer)[i],
+		bg = as.numeric(beer$brewer)[i])
+}
+```
+
+----
+
+
+```{r, echo = FALSE, fig.height = 9, fig.width = 9}
+plot(beer$score.by.style, beer$score.overall, 
+	type = "n", 
+	xlab = "Style Score", 
+	ylab = "Overall Score", 
+	main = "Variability in Style and Overall Scores by Brewery")
+
+for(i in seq_along(coefs)) {
+	abline(a = coefs[[i]][1], b = coefs[[i]][2], 
+		col = i)
+}
+for(i in 1:nrow(beer)) {
+	points(beer$score.by.style[i], beer$score.overall[i],
+		pch = 21, 
+		col = as.numeric(beer$brewer)[i],
+		bg = as.numeric(beer$brewer)[i])
+}
+```
+
+----
+## Summary on for loops
+* Very general
+* Some say they are slower 
+    * (They're wrong, see https://kbroman.wordpress.com/2013/04/02/apply-vs-for/)
+* Pretty intuitive
+* Have limitation (initializing objects, etc.)
+* We'll contrast `for` loops with other the `apply` family of loops in the
+  coming weeks.
+
+----
+## While loops
+Evaluate a loop while a condition is `TRUE`. Break from the loop once the
+  condition becomes `FALSE`. 
+
+```{r}
+index <- 0
+while(index < 5) {
+	index <- index + 1
+print(index)
+}
+```
+
+----
+## Skip elements
+
+# Skip 2 
+
+```{r}
+index <- 0
+while(index < 5) {
+
+	index <- index + 1
+
+	if(index == 2) {
+		next
+	}
+print(index)
+}
+```
+
+----
+## While loop caution
+* If the condition is not met, the loop will run infinitely. For example the 
+  following code will run into eternity. Why?
+
+```{r, eval = FALSE}
+counts <- 0
+while(counts < 10 ) {
+	out <- counts + rpois(1, 10)
+}
+```
+
+----
+## Explicit breaks
+(This is a pretty dumb example, because the while loop is junk, but...)
+
+```{r, eval = FALSE}
+counts <- 0
+ptm <- proc.time()[3] # computer processor time: Third element is "real" time
+while(counts < 10 ) {
+	out <- counts + rpois(1, 10)
+	if(proc.time()[3] - ptm > 10) {
+		break
+	} 
+}
+```
+
+----
+## While loop summary
+* Conditionally carry out an operation while the condition hold (i.e., break
+  once the condition is false)
+* I personally do not use them regularly (but this doesn't mean they can't be
+  useful)
+
+----
+## Repeat loops
+* Repeat loops require an explicit break command. 
+* They will repeat the body of the function continuously until the condition
+  relating to the break is met.
+
+```{r}
+a <- 0
+repeat {
+	a <- a + 1
+	
+	if(a > 5) {
+		break
+	}
+	print(a)
+}
+```
+
+----
+## Cautions with repeat loops
+The cautions with repeat loops are essentially analagous to those of while
+  loops. If the brek function cannot occur, the loop will run in perpetuity. For example, the following will never break. 
+
+```{r, eval = FALSE}
+a <- 0
+repeat {
+	b <- 0
+	a <- b + 1
+	
+	if(a > 5) {
+		break
+	}
+	print(a)
+}
+```
+
+----
+## Real life example
+Only time I've used a repeat loop to date was from my *r2Winsteps* package.
+  This bit of code is from the *runWinsteps* function. The function writes out the neccessary text files to run an analysis, along with a .bat file, which can be used to call Winsteps. The function then opens the .bat file, prompting Winsteps to run, and then waits for Winsteps to complete the analysis. Once the analysis is complete, two new files should exist. This function repeats the `Sys.sleep()` function, prompting R to be dormant, until both files exist, at which point the rest of the function evaluated.
+
+```{r, eval = FALSE}
+repeat { Sys.sleep(0.1)
+        
+        if (file.exists(pfileName) == TRUE & file.exists(ifileName) == TRUE) 
+            
+        break
+    }
+```
+
+----
+
+The previous function also probably could have been written with a while loop.
+
+```{r, eval = FALSE}
+while(file.exists(pfileName) != TRUE & file.exists(ifileName) != TRUE) { 
+	Sys.sleep(0.1)
+    }
+```
+(Note the above code is untested)
+
+----
+## Lab
+* Load the LSAT_theta data
+* Use a for loop to calculate *p* values: The proportion of students corretly
+  responding to each of items 1 through 5.
+* Use a for loop to create a new *raw score* variable. Split the data frame by
+  raw score.
+* Use a for loop to create a new standardized version of *z1* within each raw
+  score. Why does it fail for raw scores of 0 and 6?
+* Move back to the standard lsat data. Plot the density of *z1*. Use a for
+  loop to overlay the 5 normal distributions with a mean equal to the sample mean, and standard deviations ranging from 0.5 to 2.5 by 0.5 invervals. Make each distribution a different color.
+
+----
+# Load the LSAT_theta data
+
+```{r}
+lsat <- read.csv("./data/LSAT_theta.csv")
+head(lsat)
+```
+
+----
+# Calculate p values with a for loop
+
+```{r}
+pvals <- rep(NA, 5)
+for(i in 1:5) {
+	pvals[i] <- mean(lsat[ ,i], na.rm = TRUE)
+}
+pvals
+```
+
+----
+# Calculate raw scores 
+(Again, there are better ways to do this. We're just practicing.)
+
+```{r}
+for(i in 1:nrow(lsat)) {
+	lsat$raw[i] <- sum(lsat[i, 1:5])	
+}
+head(lsat)
+```
+
+----
+# Split the data fram by raw score
+
+```{r}
+l <- split(lsat, lsat$raw)
+str(l)
+```
+
+----
+# Create within-group standardized *z1* variable
+
+```{r}
+standardize <- function(x) (x - mean(x, na.rm = TRUE)) / (sd(x, na.rm = TRUE))
+for(i in seq_along(l)) {
+	l[[i]]$z1_z <- standardize(l[[i]]$z1)
+}
+str(l)
+```
+
+----
+# Plotting
+
+```{r}
+dens <- density(lsat$z1)
+plot(dens, main = "Density of Theta Distribution")
+for(i in seq(0.5, 2.5, by = 0.5)) {
+	lines(x = dens$x, y = dnorm(dens$x, 0, i), col = i*10, lwd = 1.5)
+}
+```

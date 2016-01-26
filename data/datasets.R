@@ -28,3 +28,13 @@ data(LSAT)
 m <- ltm(LSAT ~ z1)
 theta <- factor.scores(m, resp.patterns = LSAT)
 write.csv(theta[[1]], file = "./data/LSAT_theta.csv", row.names = FALSE)
+
+d <- foreign::read.spss("./data/HSB.sav", to.data.frame = TRUE)
+write.csv(subset(d, minority == 0 & female == 0), 
+	"./data/HSB_pieces/WhiteMaleHSB.csv", row.names = FALSE)
+write.csv(subset(d, minority == 0 & female == 1), 
+	"./data/HSB_pieces/WhiteFemaleHSB.csv", row.names = FALSE)
+write.csv(subset(d, minority == 1 & female == 0), 
+	"./data/HSB_pieces/NonWhiteMaleHSB.csv", row.names = FALSE)
+write.csv(subset(d, minority == 1 & female == 1), 
+	"./data/HSB_pieces/NonWhiteFemaleHSB.csv", row.names = FALSE)
