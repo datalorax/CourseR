@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reproducible Research</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Reproducible Research">
+  <meta name="author" content="Daniel Anderson">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Reproducible Research</h1>
+    <h2>A very brief intro</h2>
+    <p>Daniel Anderson<br/>CourseR</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <article data-timings="">
+    <style>
+em {
+  font-style: italic
+}
+</style>
+
+<style>
+strong {
+  font-weight: bold;
+}
+</style>
+
+<h2>A couple caveats before we begin</h2>
+
+<ul>
+<li>Much of what I&#39;m going to be discussing is largely <em>not</em> how I have
+interacted with research to this point. Instead, it represents an ideal that I am working towards.</li>
+<li>None of what I will talk about should be taken as a referendum on you or
+your current practices. However, I hope to convince you that you should be working toward the reproducible research ideal, and that, as a field, we should be moving toward reproducible research being the <em>minimal standard</em>.</li>
+<li>I will be focusing on reproducible research with R. Other options are
+available but, in my view, none are as clear, comprehensive, and easy to implement as the tools at your disposal through R.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>What is reproducible research?</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><strong>Replicability</strong> is the gold standard for research. Ideally, most research
+would be verified through replication. </li>
+<li>Reproducibility represents a minimal standard, which itself can aid
+replication (tremendously), by conducting and documenting the research sufficiently that <strong>an independent research could reproduce all the results from a study</strong>, provided the data were available</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Why should we care?</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Reproducibility as an ethical standard
+
+<ul>
+<li>More transparency</li>
+<li>More potential for results to be verified (and errors found/corrected)</li>
+</ul></li>
+<li>If your work <strong>is not</strong> reproducible, it is not truly replicable.</li>
+<li>If your work <strong>is</strong> replicable, then others have a &quot;recipe&quot; for replication</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Are journal articles research?</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Initially, we may think of journal articles as research, but really the
+research is everything that went into the article, not the article itself. </li>
+<li>Some (Gandrud, 2015) conceive of the article as the &quot;advertisement&quot;.</li>
+<li>If all we have is the advertisement, can we really fully understand the
+steps and decisions made during the research?<br></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Tangential benefits</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Striving toward reproducible research will:</p>
+
+<ul>
+<li>Make your own code more efficient/easily interpretable
+
+<ul>
+<li>Can help with collaboration on a project</li>
+</ul></li>
+<li>Reduce errors</li>
+<li>Increase efficiency by not having to redo tables with each tweak to a model.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>What does the process actually look like?</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Start with a basic text document (not Word, text)</li>
+<li>Use the text document to write your article</li>
+<li>Embed code within the text document that corresponds to your analysis. Note
+this is not just copying the code in. The code should be live and what you&#39;re working with while conducting your research.</li>
+<li>Render the document into a different format (pdf, html, etc.).
+
+<ul>
+<li>Select which code (if any) will be displayed</li>
+<li>Build tables of results and plots to be produced</li>
+</ul></li>
+<li>Readers can then read the &quot;advertisement&quot;, but if they are interested 
+in reproducing your results (maybe because they disagree with you, or they think your results are weird and want to clearly see all the steps you took), they can access the text file that contains the computer code.</li>
+<li>The end result is a single product that has the advertisement and the
+research process embedded.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="segue" id="slide-7" style="background:;">
+  <hgroup>
+    <h1>A Quick example</h1>
+  </hgroup>
+  <article data-timings="">
+    <div align = "right">
+<img src = assets/img/exampleRMarkdown.png width = 500 height = 750>
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>R Markdown</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <ul>
+<li>Simple language for convering R code/output into other formats, most notably 
+HTML and PDF</li>
+<li>These slides were produced using a varient of Markdown</li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <div align = "center">
+<img src = assets/img/markdownPDF.png width = 500 height = 600>
+</div>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>YAML Front Matter</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code>---
+title: Example Markdown document
+author: Daniel Anderson
+date: &quot;2015-09-17&quot;
+---
+</code></pre>
+
+<p><img src="assets/img/frontMatter.png" alt="frontMatter"></p>
+
+<ul>
+<li>Three dashes before and after the YAML fields</li>
+<li>Case sensitive</li>
+<li>Many other fields are possible.
+
+<ul>
+<li>For example, you may want to include an <code>output:</code> argument (<code>pdf_document</code>,
+<code>html_document</code>, <code>word_document</code>). Must be specified as it is rendered, if
+not supplied.</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Headings and Lists</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code># Level 1
+## Level 2 
+### Level 3 (etc.)
+</code></pre>
+
+<pre><code>* Unordered list
+  - inset
+    + inset more
+  - etc.
+
+1. Ordered list
+  a. blah blah
+2. More stuff
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/img/headersLists.png" alt="headersLists"></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Code chunks</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Start a code chunk with ```{r}, then produce some r code, then close the 
+  chunk with three additional back ticks ```.</p>
+
+<div style='float:left;width:48%;'>
+  <p><img src="assets/img/codeChunk1.png" alt="codechunk1"></p>
+
+<pre><code class="r">a &lt;- 3
+b &lt;- 5
+
+a + b * (exp(a)/b)
+</code></pre>
+
+<pre><code>## [1] 23.08554
+</code></pre>
+
+<p>You can show code without evaluating it, using <code>eval = FALSE</code>. </p>
+
+<p><img src="assets/img/codeChunk2.png" alt="codechunk2"></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p>Alternatively, you can evaluate the code without displaying it, using <code>echo = 
+  FALSE</code>.</p>
+
+<p><img src="assets/img/codeChunk3.png" alt="codechunk3"></p>
+
+<p><img src="assets/fig/unnamed-chunk-2-1.png" alt="plot of chunk unnamed-chunk-2"> </p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>Inline code</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>A single back tick followed by <code>r</code> prooduces inline code to be evaluated.</p>
+
+<div align = "center">
+<img src = assets/img/inlineCode.png width = 1000 height = 80>
+</div>
+
+<p><br></p>
+
+<p>This is an example of inline code, where I want to refer to the sum of <code>a</code> and
+  <code>b</code>, which is 8.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Rendering the document</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <p>Through a text editor (e.g., SublimeText)</p>
+
+<pre><code class="r">install.packages(&quot;rmarkdown&quot;)
+library(rmarkdown)
+setwd(&quot;dir/to/Rmd/doc&quot;)
+render(&quot;ExampleRMarkdown.Rmd&quot;, 
+  &quot;html_document&quot;)
+</code></pre>
+
+<p>Note that the document type need not be specified if <code>output:</code> is supplied in 
+  the YAML front matter. </p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p>Through RStudio</p>
+
+<p><img src="assets/img/knitRStudio.png" alt="knitRStudio"></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Final Product</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <div align = "right">
+<img src = assets/img/rMarkdownCode.png width = 500 height = 600>
+</div>
+
+</div>
+<div style='float:right;width:48%;'>
+  <div align = "left">
+<img src = assets/img/fullRMarkdownDoc.png width = 500 height = 600>
+</div>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='NA'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='What is reproducible research?'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Why should we care?'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Are journal articles research?'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Tangential benefits'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='What does the process actually look like?'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='A Quick example'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='R Markdown'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='YAML Front Matter'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Headings and Lists'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='Code chunks'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='Inline code'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Rendering the document'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='Final Product'>
+         14
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

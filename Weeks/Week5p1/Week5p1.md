@@ -296,8 +296,8 @@ str(l)
   $\mu =$ 100 and $\sigma = 10$. If you want your results to match those on the following slides, first run `set.seed(100)` before generating the random numbers.
 * Write a for loop that returns the mean of each column (note, there are
   better ways to do this, but this is just for practice).
-* Create an empty list of length two. Use a for loop to store the second and
-  fourth rows of the matrix.
+* Create an empty list of length four. Use a for loop to store the each row of
+  the matrix into each of the four elements of the list.
 
 ----
 ## Matrix creation
@@ -334,26 +334,30 @@ colMeans
 ```
 
 ----
-## Store rows 2 and 4
+## Store rows in list
 
 
 ```r
-row24 <- vector("list", 2)
-for(i in c(2, 4)) {
-	row24[[i / 2]] <- m[i, ]
+rows <- vector("list", 4)
+for(i in 1:4) {
+	rows[[i]] <- m[i, ]
 }
-row24
+rows
 ```
 
 ```
 ## [[1]]
-## [1] 101.31531 103.18630  96.40138
+## [1]  94.97808 101.16971  91.74741
 ## 
 ## [[2]]
+## [1] 101.31531 103.18630  96.40138
+## 
+## [[3]]
+## [1]  99.21083  94.18209 100.89886
+## 
+## [[4]]
 ## [1] 108.8678 107.1453 100.9627
 ```
-Note that the above is not the most general, but happens to work in this case.
-  There are better ways to do this (the excersise is just to get you thinking about for loops and indexing).
 
 
 ---- &twocol
@@ -1401,7 +1405,7 @@ while(counts < 10 ) {
 
 ----
 ## While loop summary
-* Conditionally carry out an operation while the condition hold (i.e., break
+* Conditionally carry out an operation while the condition holds (i.e., break
   once the condition is false)
 * I personally do not use them regularly (but this doesn't mean they can't be
   useful)
@@ -1489,7 +1493,7 @@ while(file.exists(pfileName) != TRUE & file.exists(ifileName) != TRUE) {
 * Use a for loop to create a new standardized version of *z1* within each raw
   score. Why does it fail for raw scores of 0 and 6?
 * Move back to the standard lsat data. Plot the density of *z1*. Use a for
-  loop to overlay the 5 normal distributions with a mean equal to the sample mean, and standard deviations ranging from 0.5 to 2.5 by 0.5 invervals. Make each distribution a different color.
+  loop to overlay  5 normal distributions with a mean equal to the sample mean, and standard deviations ranging from the sample mean to plus or minus 0.5 to 2.0 standard deviations by 0.5 invervals. Make each distribution a different color.
 
 ----
 # Load the LSAT_theta data
@@ -1722,9 +1726,38 @@ str(l)
 ```r
 dens <- density(lsat$z1)
 plot(dens, main = "Density of Theta Distribution")
-for(i in seq(0.5, 2.5, by = 0.5)) {
-	lines(x = dens$x, y = dnorm(dens$x, 0, i), col = i*10, lwd = 1.5)
+	lines(x = dens$x, y = dnorm(dens$x, 0, sd(lsat$z1, na.rm = TRUE)), 
+		col = "red", lwd = 2, lty = 2)
+for(i in seq(0.5, 2, by = 0.5)) {
+	lines(x = dens$x, y = dnorm(dens$x, 0, (sd(lsat$z1, na.rm = TRUE) - 1)), 
+		col = i*10)
+	lines(x = dens$x, y = dnorm(dens$x, 0, (sd(lsat$z1, na.rm = TRUE) + i)), 
+		col = i*20)
 }
 ```
 
-![plot of chunk unnamed-chunk-43](assets/fig/unnamed-chunk-43-1.png) 
+----
+
+
+```
+## Warning in dnorm(dens$x, 0, (sd(lsat$z1, na.rm = TRUE) - 1)): NaNs produced
+```
+
+```
+## Warning in dnorm(dens$x, 0, (sd(lsat$z1, na.rm = TRUE) - 1)): NaNs produced
+```
+
+```
+## Warning in dnorm(dens$x, 0, (sd(lsat$z1, na.rm = TRUE) - 1)): NaNs produced
+```
+
+```
+## Warning in dnorm(dens$x, 0, (sd(lsat$z1, na.rm = TRUE) - 1)): NaNs produced
+```
+
+![plot of chunk unnamed-chunk-44](assets/fig/unnamed-chunk-44-1.png) 
+
+----
+
+Note that this plot did produce some warnings, because we tried to calculate
+  the likelihood of the data from a distribution with a negative standard deviation (i.e., the the question was sort of bogus, because the standard deviation was already very small).

@@ -1,0 +1,220 @@
+---
+title       : "Loops, part 2"
+subtitle    : Week 5.2
+author      : Daniel Anderson
+job         : CourseR
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
+```
+<style>
+em {
+  font-style: italic
+}
+</style>
+
+<style>
+strong {
+  font-weight: bold;
+}
+</style>
+
+## Today's Agenda 
+* Apply family of loops
+    + `apply()`
+      - Also `rowSums()` and `colSums()`
+    + `tapply()`
+      - Also `rowsum()`
+    + `lapply()`
+    + `sapply()`
+    + `mapply()`
+* Similar functions
+    + `by()`
+    + `aggregate()`
+    + `sweep()`
+
+----
+# Some basic background
+* The apply family of loops are exceptionally useful, and can often speed up
+  your code.
+* Advantages over for loops include
+	+ No need for initialization of objects
+	+ Automatic indexing of an object (if you want)
+	+ Simplification of results (can be a massive benefit)
+
+----
+## apply
+Each of the members of the apply family function a little bit differently. The `apply()` function is probably the most straight forward.
+
+<div align = "center">
+<img src = assets/img/apply.png width = 1000 height = 600>
+</div>
+
+----
+## Examples of `apply()`
+
+```{r}
+m <- matrix(1:12, ncol = 4)
+m
+```
+
+```{r}
+# Mean of each row
+apply(m, 1, mean)
+
+# Mean of each column
+apply(m, 2, mean)
+```
+
+----
+## A few more examples: LSAT data
+
+```{r}
+lsat <- read.csv("./data/LSAT_theta.csv")
+head(lsat)
+```
+
+----
+## Calculate raw scores
+
+```{r}
+lsat$raw <- apply(lsat[ ,1:5], 1, sum) # Only item-level data
+head(lsat)
+table(lsat$raw)
+```
+
+----
+## Calculate p values
+
+```{r}
+apply(lsat[ ,1:5], 2, mean, na.rm = TRUE)
+```
+Notice that additional arguments to the function (in this case `mean`) just
+  get passed as additional arguments to `apply()`.
+
+----
+## One more example
+
+```{r}
+att <- read.delim("./data/attitude.txt")
+head(att)
+```
+
+----
+## Center all but *learning* (which we'll say is our outcome)
+
+```{r}
+center <- function(x) x - mean(x, na.rm = TRUE) # write the centering function
+att2 <- att # copy dataset
+att2[ ,-4] <- apply(att[ ,-4], 2, center) # apply the function to all but the 4th column
+head(att2)
+```
+
+----
+## Check that centering worked
+
+```{r}
+round( apply(att2, 2, mean, na.rm = TRUE), 2)
+```
+
+---- 
+## Summing rows 
+
+The following are equivalent
+
+```{r}
+apply(att, 1, sum)
+rowSums(att)
+```
+However, `rowSums` is optimized for speed (but it often doesn't have a huge
+  practical impact)
+
+----
+## Summing columns
+
+The same rules apply for summing collumns. The following are equivalent
+
+```{r}
+apply(att, 2, sum) 
+colSums(att)
+```
+
+but `colSums` is, again, optimized for speed
+
+----
+## Applying function by group
+
+The `tapply()` function is useful for applying any generic function to each
+  level of a grouping factor
+
+![tapply](./assets/img/tapply.png)
+
+
+----
+## Load the beer data
+```{r}
+beer <- read.delim("./data/ratebeer_beerjobber.txt") # Load beer data
+head(beer)
+```
+
+----
+## Mean overall score by brewer
+
+```{r}
+tapply(beer$score.overall, beer$brewer, mean, na.rm = TRUE)
+```
+
+----
+## Number of beers rated by brewer
+
+```{r}
+tapply(beer$name, beer$brewer, length)
+```
+
+----
+## Average overall score by abv 
+#(rounded to nearest whole number)
+
+```{r}
+tapply(beer$score.overall, round(beer$abv), mean, na.rm = TRUE)
+```
+
+----
+## Make a summary by abv
+
+```{r}
+summary <- data.frame(
+	row.names = c(0, 4:13),
+	meanOverallScore = tapply(beer$score.overall, 
+						   round(beer$abv), 
+						   mean, na.rm = TRUE),
+	numberRatings = tapply(beer$ratings, 
+						   round(beer$abv), 
+						   sum, na.rm = TRUE),
+	numberBreweries = tapply(beer$brewer, 
+						   round(beer$abv), 
+						   function(x) length(unique(x)))
+	)
+```
+
+----
+```{r}
+summary
+```
+
+----
+# An alternative to tapply for summation
+
+Just as `rowSums` and `colSums` are optimized versions of `apply` for summation, `rowsum` is an optimized version of `tapply` for summary
+
+Compute the total number of ratings by brewer
+
+```{r}
+rowsum(beer$ratings, beer$brewer)
+```
