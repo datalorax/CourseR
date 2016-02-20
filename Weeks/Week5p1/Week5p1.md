@@ -1235,6 +1235,8 @@ head(beer)
 ## 8       American Pale Ale 5.3      61            75             67
 ```
 
+----
+
 * Second, subset the data to only breweries with at least 3 beers (this is a
   really convoluted way of doing it, but works with the topics we've discussed so far. `tapply` would be a much better approach, which we'll talk about next class).
 

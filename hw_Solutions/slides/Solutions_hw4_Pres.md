@@ -1,5 +1,5 @@
 ---
-title       : Homework 3 Review
+title       : Homework 4 Review
 subtitle    : 
 author      : Daniel Anderson
 job         : CourseR
@@ -43,17 +43,6 @@ return(structure(round(stats, 3), class = "smry"))
 ```r
 setwd("/Users/Daniel/Dropbox/Teaching/CourseR/")
 beer <- read.delim("./data/ratebeer_beerjobber.txt")
-str
-```
-
-```
-## function (object, ...) 
-## UseMethod("str")
-## <bytecode: 0x7fe00d746380>
-## <environment: namespace:utils>
-```
-
-```r
 Style <- smry(beer$style)
 ```
 
@@ -121,7 +110,7 @@ plot.smry <- function(ob) {
 plot(Style)
 ```
 
-![plot of chunk unnamed-chunk-5](assets/fig/unnamed-chunk-5-1.png) 
+![plot of chunk unnamed-chunk-5](assets/fig/unnamed-chunk-5-1.png)
 
 *** =right
 
@@ -130,7 +119,7 @@ plot(Style)
 plot(ABV)
 ```
 
-![plot of chunk unnamed-chunk-6](assets/fig/unnamed-chunk-6-1.png) 
+![plot of chunk unnamed-chunk-6](assets/fig/unnamed-chunk-6-1.png)
 
 ---- &twocol
 # Plot examples
@@ -142,7 +131,7 @@ plot(ABV)
 plot(Ratings)
 ```
 
-![plot of chunk unnamed-chunk-7](assets/fig/unnamed-chunk-7-1.png) 
+![plot of chunk unnamed-chunk-7](assets/fig/unnamed-chunk-7-1.png)
 
 *** =right
 
@@ -151,7 +140,7 @@ plot(Ratings)
 plot(Overall_Score)
 ```
 
-![plot of chunk unnamed-chunk-8](assets/fig/unnamed-chunk-8-1.png) 
+![plot of chunk unnamed-chunk-8](assets/fig/unnamed-chunk-8-1.png)
 
 ----
 # Function for Median

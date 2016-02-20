@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Homework 3 Review</title>
+  <title>Homework 4 Review</title>
   <meta charset="utf-8">
-  <meta name="description" content="Homework 3 Review">
+  <meta name="description" content="Homework 4 Review">
   <meta name="author" content="Daniel Anderson">
   <meta name="generator" content="slidify" />
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -31,7 +31,7 @@
     <!-- LOGO SLIDE -->
         <slide class="title-slide segue nobackground">
   <hgroup class="auto-fadein">
-    <h1>Homework 3 Review</h1>
+    <h1>Homework 4 Review</h1>
     <h2></h2>
     <p>Daniel Anderson<br/>CourseR</p>
   </hgroup>
@@ -84,16 +84,7 @@ return(structure(round(stats, 3), class = &quot;smry&quot;))
   <article data-timings="">
     <pre><code class="r">setwd(&quot;/Users/Daniel/Dropbox/Teaching/CourseR/&quot;)
 beer &lt;- read.delim(&quot;./data/ratebeer_beerjobber.txt&quot;)
-str
-</code></pre>
-
-<pre><code>## function (object, ...) 
-## UseMethod(&quot;str&quot;)
-## &lt;bytecode: 0x7fe00d746380&gt;
-## &lt;environment: namespace:utils&gt;
-</code></pre>
-
-<pre><code class="r">Style &lt;- smry(beer$style)
+Style &lt;- smry(beer$style)
 </code></pre>
 
 <pre><code>## Warning in smry(beer$style): Vector coerced to numeric
@@ -167,14 +158,14 @@ Overall_Score &lt;- smry(beer$score.overall)
   <pre><code class="r">plot(Style)
 </code></pre>
 
-<p><img src="assets/fig/unnamed-chunk-5-1.png" alt="plot of chunk unnamed-chunk-5"> </p>
+<p><img src="assets/fig/unnamed-chunk-5-1.png" alt="plot of chunk unnamed-chunk-5"></p>
 
 </div>
 <div style='float:right;width:48%;'>
   <pre><code class="r">plot(ABV)
 </code></pre>
 
-<p><img src="assets/fig/unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6"> </p>
+<p><img src="assets/fig/unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6"></p>
 
 </div>
   </article>
@@ -191,14 +182,14 @@ Overall_Score &lt;- smry(beer$score.overall)
   <pre><code class="r">plot(Ratings)
 </code></pre>
 
-<p><img src="assets/fig/unnamed-chunk-7-1.png" alt="plot of chunk unnamed-chunk-7"> </p>
+<p><img src="assets/fig/unnamed-chunk-7-1.png" alt="plot of chunk unnamed-chunk-7"></p>
 
 </div>
 <div style='float:right;width:48%;'>
   <pre><code class="r">plot(Overall_Score)
 </code></pre>
 
-<p><img src="assets/fig/unnamed-chunk-8-1.png" alt="plot of chunk unnamed-chunk-8"> </p>
+<p><img src="assets/fig/unnamed-chunk-8-1.png" alt="plot of chunk unnamed-chunk-8"></p>
 
 </div>
   </article>

@@ -29,18 +29,18 @@ strong {
 * Apply family of loops
     + `apply()`
       - Also `rowSums()` and `colSums()`
-    + `tapply()`
-      - Also `rowsum()`
     + `lapply()`
     + `sapply()`
     + `mapply()`
+    + `tapply()`
+      - Also `rowsum()`
 * Similar functions
     + `by()`
     + `aggregate()`
     + `sweep()`
 
 ----
-# Some basic background
+## Some basic background
 * The apply family of loops are exceptionally useful, and can often speed up
   your code.
 * Advantages over for loops include
@@ -148,6 +148,290 @@ colSums(att)
 but `colSums` is, again, optimized for speed
 
 ----
+## Column and row means
+
+No examples, but just a note that `colMeans()` and `rowMeans()` are equivalent
+  optimized versions of `apply()` for computing the mean of a column or row.
+
+----
+## Guided Practice
+* First, copy and run the following code to get the ChickWeight dataset
+
+```{r}
+# install.packages("openintro") # you will need to run this too
+library(openintro)
+data(gifted)
+d <- gifted
+head(d)
+```
+
+----
+# Next, copy and run the following code to get data including only mother and father IQ scores
+
+```{r}
+iq <- d[ ,2:3]
+```
+Finally, use `apply()` to calculate the mean parent IQ score. Add this variable back to the dataset using `cbind(d, iqM)`, where iqM is the mean parental IQ score.
+
+<br> 
+
+Repeat the previous steps again, but this time apply the **standardize** function to all variables *except* score.
+
+```{r}
+standardize <- function(x) (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+```
+
+----
+## Final solutions: IQ total
+
+```{r}
+iqM <- apply(iq, 1, mean, na.rm = TRUE)
+
+# Or equivalently
+iqM <- rowMeans(iq, na.rm = TRUE)
+
+# Merge back in
+d <- cbind(d, iqM)
+head(d)
+```
+
+----
+## Standardize solutions
+
+```{r}
+standardVars <- apply(d[ ,-1], 2, standardize)
+head(standardVars)
+```
+
+----
+## lapply and sapply
+* `lapply()` allows you to apply a function to a **l**ist. You can also use it
+   similarly to a `for` loop. In both cases, `lapply()` will return a **l**ist.
+* `sapply()` does the same thing as `lapply()`, but simplifies the result if it
+  can, into a vector, matrix, or array.
+
+----
+## Basic structure of an lapply loop
+![lapply](./assets/img/lapply.png)
+
+----
+## Batch loading
+# Alternative to for loop
+
+```{r}
+files <- list.files("./data/HSB_pieces/")
+l <- lapply(seq_along(files), function(i) {
+  read.csv(paste0("./data/HSB_pieces/", files[i]))
+})
+names(l) <- substr(files, 1, nchar(files) - 4)
+str(l)
+```
+
+----
+## Create group-standardized mathach variable
+
+```{r}
+standardize <- function(x) (x - mean(x, na.rm = TRUE)) / (sd(x, na.rm = TRUE))
+l <- lapply(l, function(x) {
+  x$mathach_z <- standardize(x$mathach)
+  return(x) # This part is important if you want the full data frame returned
+})
+str(l)
+```
+
+----
+## Example without return
+
+```{r}
+standardized <- lapply(l, function(x) standardize(x$mathach))
+str(standardized)
+```
+
+----
+## Revisiting the convoluted random matrix from last time
+
+```{r}
+m <- matrix(rep(NA, 40*100), ncol = 100)
+
+for(i in 1:40) {
+  for(j in seq(0, 500, length.out = 40)[i]) {
+    m[i, ] <- rnorm(100, 0, j)
+  }
+}
+head(m)
+```
+
+----
+## Creating the same matrix with lapply
+
+```{r}
+norm <- lapply(seq(0, 500, length.out = 40), function(i) rnorm(100, 0, i))
+str(norm)
+```
+
+----
+```{r}
+m <- matrix(unlist(norm), ncol = 100, byrow = TRUE)
+head(m)
+```
+
+----
+## Even better, use sapply
+
+```{r}
+m <- sapply(seq(0, 500, length.out = 40), function(i) rnorm(100, 0, i))
+head(m) 
+```
+
+----
+Note that by default, sapply returned the transpose of the matrix we were
+ going for before. That's really not a problem, now each column represent 100 draws from the corresponding random normal distribution rather than rows. We can easily verify this.
+
+```{r}
+nrow(m)
+ncol(m)
+```
+<br>
+Of course, we can also easily get the matrix back by just transposing it.
+
+```{r}
+m <- t(m)
+head(m)
+```
+
+----
+## Contrasting lapply and sapply
+
+```{r}
+sapply(l, function(x) cor(x$ses, x$mathach_z, use = "complete.obs"))
+```
+
+```{r}
+lapply(l, function(x) cor(x$ses, x$mathach_z, use = "complete.obs"))
+```
+
+----
+## Summary on lapply/sapply
+Major benefits over for loops include:
+* No need to initialize objects
+* Names from the list are maintained
+* Overall, can substantially reduce the amount of code you may need to write,
+  and can therefore also make your code more clear.
+
+----
+## The multivariate version
+
+Consider the following
+
+```{r}
+list(rnorm(1, 1, 5), 
+     rnorm(2, 2, 4), 
+     rnorm(3, 3, 3), 
+     rnorm(4, 4, 2), 
+     rnorm(5, 5, 1))
+```
+
+----
+## Alternatively: mapply
+
+```{r}
+mapply(rnorm, 1:5, 1:5, 5:1)
+```
+
+----
+## One more example
+
+Usually better ways, but why might we want to do something like this?
+
+```{r}
+v <- c(3, 7, 4, 2)
+l <- mapply(rep, NA, v)
+l
+```
+
+----
+## Guided Practice
+Let's return to the *gifted* data, which should be stored in an object *d*.
+  The following code will produce a data frame (table) with the minimum, maximum, mean, median, and standard deviation for the first variable in the dataset *d*. Use `sapply()` to produce a table with the summary information reported for all variables in the *gifted* dataset. Try making it a bit prettier by providing dimension names (columns and rows).
+
+```{r, eval = FALSE}
+cbind(
+    min(d[ ,1], na.rm = TRUE),
+    max(d[ ,1], na.rm = TRUE),
+    mean(d[ ,1], na.rm = TRUE),
+    median(d[ ,1], na.rm = TRUE),
+    sd(d[ ,1], na.rm = TRUE)
+  )
+
+```
+
+---- &twocol
+## One method
+
+*** =left
+
+```{r, eval = FALSE}
+smry <- sapply(1:ncol(d), function(i) {
+  cbind(
+    min(d[ ,i], na.rm = TRUE),
+    max(d[ ,i], na.rm = TRUE),
+    mean(d[ ,i], na.rm = TRUE),
+    median(d[ ,i], na.rm = TRUE),
+    sd(d[ ,i], na.rm = TRUE)
+  )
+})
+
+# Make it prettier
+dimnames(smry) <- list(
+    c("Min", "Max", "Mean", "Median", "SD"), 
+    names(d)
+  )
+
+t(round(smry, 1))
+```
+
+*** =right
+
+```{r, echo = FALSE}
+smry <- sapply(1:ncol(d), function(i) {
+  cbind(
+    min(d[ ,i], na.rm = TRUE),
+    max(d[ ,i], na.rm = TRUE),
+    mean(d[ ,i], na.rm = TRUE),
+    median(d[ ,i], na.rm = TRUE),
+    sd(d[ ,i], na.rm = TRUE)
+  )
+})
+
+# Make it prettier
+dimnames(smry) <- list(
+    c("Min", "Max", "Mean", "Median", "SD"), 
+    names(d)
+  )
+
+t(round(smry, 1))
+```
+
+----
+## Alternative (analogous) method
+
+```{r}
+smryVar <- function(i) {
+  cbind(
+    min(d[ ,i], na.rm = TRUE),
+    max(d[ ,i], na.rm = TRUE),
+    mean(d[ ,i], na.rm = TRUE),
+    median(d[ ,i], na.rm = TRUE),
+    sd(d[ ,i], na.rm = TRUE)
+  )
+}
+sapply(1:ncol(d), smryVar)
+```
+
+---- .segue
+# Summaries by grouping variables
+
+----
 ## Applying function by group
 
 The `tapply()` function is useful for applying any generic function to each
@@ -189,18 +473,14 @@ tapply(beer$score.overall, round(beer$abv), mean, na.rm = TRUE)
 ## Make a summary by abv
 
 ```{r}
+abv <- round(beer$abv)
+
 summary <- data.frame(
-	row.names = c(0, 4:13),
-	meanOverallScore = tapply(beer$score.overall, 
-						   round(beer$abv), 
-						   mean, na.rm = TRUE),
-	numberRatings = tapply(beer$ratings, 
-						   round(beer$abv), 
-						   sum, na.rm = TRUE),
-	numberBreweries = tapply(beer$brewer, 
-						   round(beer$abv), 
-						   function(x) length(unique(x)))
-	)
+  row.names = names(table(abv)),
+  meanOverallScore = tapply(beer$score.overall, abv, mean, na.rm = TRUE),
+  numberRatings = tapply(beer$ratings, abv, sum, na.rm = TRUE),
+  numberBreweries = tapply(beer$brewer, abv, function(x) length(unique(x)))
+  )
 ```
 
 ----
@@ -209,12 +489,264 @@ summary
 ```
 
 ----
-# An alternative to tapply for summation
+## An alternative to tapply for summation
 
-Just as `rowSums` and `colSums` are optimized versions of `apply` for summation, `rowsum` is an optimized version of `tapply` for summary
+Just as `rowSums` and `colSums` are optimized versions of `apply` for summation, `rowsum` is an optimized version of `tapply` for summation.
 
 Compute the total number of ratings by brewer
 
 ```{r}
 rowsum(beer$ratings, beer$brewer)
 ```
+
+----
+## Calculate average overall score for each brewer
+
+```{r}
+tot <- rowsum(beer$score.overall, beer$brewer)
+n <- tapply(beer$score.overall, beer$brewer, length)
+av <- tot[ ,1]/n # Note tot is an integer matrix
+as.matrix(av)
+```
+
+----
+## The `by()` function
+
+Apply a function to groups.
+
+```{r}
+library(openintro) # Lots of nice datasets (which I just discovered)
+data(census)
+head(census)
+```
+
+----
+## Calculate means by state, race, and sex
+
+```{r}
+means <- by(census$totalPersonalIncome, 
+              list(census$stateFIPScode, 
+                   census$raceGeneral,
+                   census$sex), mean, na.rm = TRUE)
+means # Note there's a lot of missing data
+```
+
+----
+## Structure of means
+
+```{r}
+str(means)
+```
+
+----
+## Compute marginal means by state
+
+```{r}
+apply(means, 1, mean, na.rm = TRUE)
+```
+
+----
+## Compute marginal means by race/ethnicity
+
+```{r}
+apply(means, 2, mean, na.rm = TRUE)
+```
+
+----
+## Compute marginal means by sex
+
+```{r}
+apply(means, 3, mean, na.rm = TRUE)
+```
+
+----
+## Look within a particular state
+
+```{r}
+means["Oregon", , ]
+```
+
+----
+## Only individuals identifying as Black
+
+```{r}
+means[ ,"Black", ]
+```
+
+----
+## Only Males
+
+```{r}
+means[ , ,"Male"]
+```
+
+----
+## The `aggregate()` Function
+
+Aggregate is another way of summarizing data, but the output returned is different.
+
+Note that a formula can be used.
+
+```{r}
+ag <- aggregate(totalPersonalIncome ~ stateFIPScode + raceGeneral + sex, 
+        data = census, mean, na.rm = TRUE)
+str(ag)
+```
+
+----
+## View output
+
+```{r}
+ag[3:15, ]
+```
+
+----
+## Compare to `tapply()`
+The below output (and syntax, essentially) will produce exactly the same array
+  produced earlier with `by()`, but that of course is different than `aggregate()`.
+
+```{r}
+means2 <- with(census, tapply(totalPersonalIncome, 
+                            list(stateFIPScode, raceGeneral, sex),
+                          mean, na.rm = TRUE))
+str(means2)
+```
+
+----
+## Contrasting functions
+Why `tapply()` or `by()` or `aggregate()`?
+* The `aggregate()` function provides different output from the other two, 
+  which may be preferable at times.
+* `tapply()` and `by()` are essentially the same, but `by()` can occasionally
+  produce summaries when `tapply()` fails
+
+----
+## Contrasting functions example
+(Note. The example shown is from SabDeM on [SO](http://stackoverflow.com/questions/3505701/r-grouping-functions-sapply-vs-lapply-vs-apply-vs-tapply-vs-by-vs-aggrega) (the response from joran there is also worth reading))
+
+```{r}
+data(iris)
+head(iris)
+```
+
+----
+Note that `tapply()` fails in this context
+
+```{r}
+tapply(iris, iris$Species, summary)
+```
+<br>
+
+But `by()` can handle this situation
+
+----
+```{r, tapplyFail_byWins}
+by(iris, iris$Species, summary)
+```
+
+----
+## Finally: `sweep()`
+* Used when you want to *sweep* a function across an array.
+* Generally used when you want to apply an operation to an array, but the
+  values differ for each column.
+
+![sweep](./assets/img/sweep.png)
+
+----
+## Example
+
+`sweep()` can be an efficient way to **center** variables, because you need to
+   subtract each value within a column by the mean of that column (rather than subtracting a specific value from each column, in which case we'd just us `apply()`)
+
+----
+## Centering columns 4-7 in beer data
+```{r}
+head(beer)
+````
+
+----
+```{r}
+col_M <- colMeans(beer[ ,4:ncol(beer)], na.rm = TRUE)
+col_M
+centered <- sweep(beer[ ,4:ncol(beer)], 2, col_M, "-")
+head(centered)
+```
+
+----
+```{r}
+names(centered) <- paste0(names(centered), "_c")
+names(centered)
+
+# Check that centering worked properly
+round(colMeans(centered, na.rm = TRUE), digits = 2)
+```
+
+----
+## Put it all back together
+```{r}
+beer <- cbind(beer, centered)
+head(beer)
+```
+
+----
+## Final Guided Practice
+MLB salary data
+
+```{r}
+data(MLB)
+head(MLB)
+```
+
+----
+## Salary by position and team
+First, transform salary to represent salary in millions
+
+```{r}
+MLB$salary <- MLB$salary / 1000
+```
+Next, compute the average salary by team and position using the following two
+  methods:
+
+```{r}
+array <- by(MLB$salary, list(MLB$team, MLB$position), mean)
+dtaframe <- aggregate(salary ~ team + position, data = MLB, mean)
+```
+Use either of the summaries from above to answer the following two questions
+
+1. Which team spends the most, on average, on pitchers?
+2. Which team spends the least, on average, on shortstops?
+
+Finally, compute the total salary by position an team, and answer Questions 1 and 2 again (only in sum, instead of on average).
+
+----
+## Solutions w/array
+
+```{r}
+array[ ,"Pitcher"]
+array[ ,"Pitcher"][which.max(array[ ,"Pitcher"])]
+
+array[ ,"Shortstop"][which.min(array[ ,"Shortstop"])]
+```
+
+----
+## Solutions w/dtaframe
+
+```{r}
+pitchers <- subset(dtaframe, position == "Pitcher")
+pitchers[which.max(pitchers$salary), ]
+
+shortstops <- subset(dtaframe, position == "Shortstop")
+shortstops[which.min(shortstops$salary), ]
+```
+
+----
+## Recalculate with summing
+
+```{r}
+arraySum <- by(MLB$salary, list(MLB$team, MLB$position), sum)
+dtaframeSum <- aggregate(salary ~ team + position, data = MLB, sum)
+
+arraySum[ ,"Pitcher"][which.max(arraySum[ ,"Pitcher"])]
+arraySum[ ,"Shortstop"][which.min(arraySum[ ,"Shortstop"])]
+```
+

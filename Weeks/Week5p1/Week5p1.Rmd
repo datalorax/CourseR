@@ -378,6 +378,8 @@ beer <- beer[!is.na(beer$score.overall) & !is.na(beer$score.by.style), ]
 head(beer)
 ```
 
+----
+
 * Second, subset the data to only breweries with at least 3 beers (this is a
   really convoluted way of doing it, but works with the topics we've discussed so far. `tapply` would be a much better approach, which we'll talk about next class).
 
@@ -552,7 +554,7 @@ repeat {
 ----
 ## Cautions with repeat loops
 The cautions with repeat loops are essentially analagous to those of while
-  loops. If the brek function cannot occur, the loop will run in perpetuity. For example, the following will never break. 
+  loops. If the break function cannot occur, the loop will run in perpetuity. For example, the following will never break. 
 
 ```{r, eval = FALSE}
 a <- 0
@@ -595,12 +597,12 @@ while(file.exists(pfileName) != TRUE & file.exists(ifileName) != TRUE) {
 ----
 ## Lab
 * Load the LSAT_theta data
-* Use a for loop to calculate *p* values: The proportion of students corretly
+* Use a for loop to calculate *p* values: The proportion of students correctly
   responding to each of items 1 through 5.
 * Use a for loop to create a new *raw score* variable. Split the data frame by
   raw score.
 * Use a for loop to create a new standardized version of *z1* within each raw
-  score. Why does it fail for raw scores of 0 and 6?
+  score. Why does it fail for raw scores of 0 and 5?
 * Move back to the standard lsat data. Plot the density of *z1*. Use a for
   loop to overlay  5 normal distributions with a mean equal to the sample mean, and standard deviations ranging from the sample mean to plus or minus 0.5 to 2.0 standard deviations by 0.5 invervals. Make each distribution a different color.
 
@@ -677,7 +679,7 @@ plot(dens, main = "Density of Theta Distribution")
 	lines(x = dens$x, y = dnorm(dens$x, 0, sd(lsat$z1, na.rm = TRUE)), 
 		col = "red", lwd = 2, lty = 2)
 for(i in seq(0.5, 2, by = 0.5)) {
-	lines(x = dens$x, y = dnorm(dens$x, 0, (sd(lsat$z1, na.rm = TRUE) - 1)), 
+	lines(x = dens$x, y = dnorm(dens$x, 0, (sd(lsat$z1, na.rm = TRUE) - i)), 
 		col = i*10)
 	lines(x = dens$x, y = dnorm(dens$x, 0, (sd(lsat$z1, na.rm = TRUE) + i)), 
 		col = i*20)

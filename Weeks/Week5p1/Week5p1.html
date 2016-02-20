@@ -1353,7 +1353,13 @@ head(beer)
 ## 8       American Pale Ale 5.3      61            75             67
 </code></pre>
 
-<ul>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  <article data-timings="">
+    <ul>
 <li>Second, subset the data to only breweries with at least 3 beers (this is a
 really convoluted way of doing it, but works with the topics we&#39;ve discussed so far. <code>tapply</code> would be a much better approach, which we&#39;ll talk about next class).</li>
 </ul>
@@ -1390,7 +1396,7 @@ head(beer)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-23" style="background:;">
+<slide class="" id="slide-24" style="background:;">
   <hgroup>
     <h2>Finally, subset the data and fit each regression model</h2>
   </hgroup>
@@ -1413,7 +1419,7 @@ for(i in seq_along(regList)) {
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-24" style="background:;">
+<slide class="" id="slide-25" style="background:;">
   <hgroup>
     <h2>Now plot all the regression lines</h2>
   </hgroup>
@@ -1440,7 +1446,7 @@ for(i in 1:nrow(beer)) {
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-25" style="background:;">
+<slide class="" id="slide-26" style="background:;">
   <article data-timings="">
     <p><img src="assets/fig/unnamed-chunk-29-1.png" alt="plot of chunk unnamed-chunk-29"> </p>
 
@@ -1448,7 +1454,7 @@ for(i in 1:nrow(beer)) {
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-26" style="background:;">
+<slide class="" id="slide-27" style="background:;">
   <hgroup>
     <h2>Summary on for loops</h2>
   </hgroup>
@@ -1470,7 +1476,7 @@ coming weeks.</li>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-27" style="background:;">
+<slide class="" id="slide-28" style="background:;">
   <hgroup>
     <h2>While loops</h2>
   </hgroup>
@@ -1496,7 +1502,7 @@ print(index)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-28" style="background:;">
+<slide class="" id="slide-29" style="background:;">
   <hgroup>
     <h2>Skip elements</h2>
   </hgroup>
@@ -1525,7 +1531,7 @@ print(index)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-29" style="background:;">
+<slide class="" id="slide-30" style="background:;">
   <hgroup>
     <h2>While loop caution</h2>
   </hgroup>
@@ -1545,7 +1551,7 @@ while(counts &lt; 10 ) {
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-30" style="background:;">
+<slide class="" id="slide-31" style="background:;">
   <hgroup>
     <h2>Explicit breaks</h2>
   </hgroup>
@@ -1566,7 +1572,7 @@ while(counts &lt; 10 ) {
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-31" style="background:;">
+<slide class="" id="slide-32" style="background:;">
   <hgroup>
     <h2>While loop summary</h2>
   </hgroup>
@@ -1582,7 +1588,7 @@ useful)</li>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-32" style="background:;">
+<slide class="" id="slide-33" style="background:;">
   <hgroup>
     <h2>Repeat loops</h2>
   </hgroup>
@@ -1615,7 +1621,7 @@ repeat {
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-33" style="background:;">
+<slide class="" id="slide-34" style="background:;">
   <hgroup>
     <h2>Cautions with repeat loops</h2>
   </hgroup>
@@ -1639,7 +1645,7 @@ repeat {
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-34" style="background:;">
+<slide class="" id="slide-35" style="background:;">
   <hgroup>
     <h2>Real life example</h2>
   </hgroup>
@@ -1659,7 +1665,7 @@ repeat {
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-35" style="background:;">
+<slide class="" id="slide-36" style="background:;">
   <article data-timings="">
     <p>The previous function also probably could have been written with a while loop.</p>
 
@@ -1674,7 +1680,7 @@ repeat {
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-36" style="background:;">
+<slide class="" id="slide-37" style="background:;">
   <hgroup>
     <h2>Lab</h2>
   </hgroup>
@@ -1695,7 +1701,7 @@ loop to overlay  5 normal distributions with a mean equal to the sample mean, an
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-37" style="background:;">
+<slide class="" id="slide-38" style="background:;">
   <hgroup>
     <h1>Load the LSAT_theta data</h1>
   </hgroup>
@@ -1717,7 +1723,7 @@ head(lsat)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-38" style="background:;">
+<slide class="" id="slide-39" style="background:;">
   <hgroup>
     <h1>Calculate p values with a for loop</h1>
   </hgroup>
@@ -1736,7 +1742,7 @@ pvals
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-39" style="background:;">
+<slide class="" id="slide-40" style="background:;">
   <hgroup>
     <h1>Calculate raw scores</h1>
   </hgroup>
@@ -1762,7 +1768,7 @@ head(lsat)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-40" style="background:;">
+<slide class="" id="slide-41" style="background:;">
   <hgroup>
     <h1>Split the data fram by raw score</h1>
   </hgroup>
@@ -1844,7 +1850,7 @@ str(l)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-41" style="background:;">
+<slide class="" id="slide-42" style="background:;">
   <hgroup>
     <h1>Create within-group standardized <em>z1</em> variable</h1>
   </hgroup>
@@ -1935,7 +1941,7 @@ str(l)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-42" style="background:;">
+<slide class="" id="slide-43" style="background:;">
   <hgroup>
     <h1>Plotting</h1>
   </hgroup>
@@ -1956,7 +1962,7 @@ for(i in seq(0.5, 2, by = 0.5)) {
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-43" style="background:;">
+<slide class="" id="slide-44" style="background:;">
   <article data-timings="">
     <pre><code>## Warning in dnorm(dens$x, 0, (sd(lsat$z1, na.rm = TRUE) - 1)): NaNs produced
 </code></pre>
@@ -1976,7 +1982,7 @@ for(i in seq(0.5, 2, by = 0.5)) {
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-44" style="background:;">
+<slide class="" id="slide-45" style="background:;">
   <article data-timings="">
     <p>Note that this plot did produce some warnings, because we tried to calculate
   the likelihood of the data from a distribution with a negative standard deviation (i.e., the the question was sort of bogus, because the standard deviation was already very small).</p>
@@ -2123,127 +2129,127 @@ for(i in seq(0.5, 2, by = 0.5)) {
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=23 title='Finally, subset the data and fit each regression model'>
+        data-slide=23 title='NA'>
          23
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=24 title='Now plot all the regression lines'>
+        data-slide=24 title='Finally, subset the data and fit each regression model'>
          24
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=25 title='NA'>
+        data-slide=25 title='Now plot all the regression lines'>
          25
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=26 title='Summary on for loops'>
+        data-slide=26 title='NA'>
          26
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=27 title='While loops'>
+        data-slide=27 title='Summary on for loops'>
          27
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=28 title='Skip elements'>
+        data-slide=28 title='While loops'>
          28
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=29 title='While loop caution'>
+        data-slide=29 title='Skip elements'>
          29
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=30 title='Explicit breaks'>
+        data-slide=30 title='While loop caution'>
          30
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=31 title='While loop summary'>
+        data-slide=31 title='Explicit breaks'>
          31
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=32 title='Repeat loops'>
+        data-slide=32 title='While loop summary'>
          32
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=33 title='Cautions with repeat loops'>
+        data-slide=33 title='Repeat loops'>
          33
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=34 title='Real life example'>
+        data-slide=34 title='Cautions with repeat loops'>
          34
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=35 title='NA'>
+        data-slide=35 title='Real life example'>
          35
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=36 title='Lab'>
+        data-slide=36 title='NA'>
          36
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=37 title='Load the LSAT_theta data'>
+        data-slide=37 title='Lab'>
          37
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=38 title='Calculate p values with a for loop'>
+        data-slide=38 title='Load the LSAT_theta data'>
          38
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=39 title='Calculate raw scores'>
+        data-slide=39 title='Calculate p values with a for loop'>
          39
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=40 title='Split the data fram by raw score'>
+        data-slide=40 title='Calculate raw scores'>
          40
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=41 title='Create within-group standardized <em>z1</em> variable'>
+        data-slide=41 title='Split the data fram by raw score'>
          41
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=42 title='Plotting'>
+        data-slide=42 title='Create within-group standardized <em>z1</em> variable'>
          42
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=43 title='NA'>
+        data-slide=43 title='Plotting'>
          43
       </a>
     </li>
@@ -2251,6 +2257,12 @@ for(i in seq(0.5, 2, by = 0.5)) {
       <a href="#" target="_self" rel='tooltip' 
         data-slide=44 title='NA'>
          44
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=45 title='NA'>
+         45
       </a>
     </li>
   </ul>
