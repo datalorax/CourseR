@@ -1,0 +1,190 @@
+---
+title       : Homework 5 Review
+subtitle    : 
+author      : Daniel Anderson
+job         : CourseR
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+--- &twocol
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
+```
+
+```{r echo = FALSE, message = FALSE}
+library(openintro)
+data(countyComplete)
+data(births)
+d <- countyComplete
+d2 <- births
+```
+
+
+## Disclaimer
+There are multiple ways to complete this homework. These slides represent the
+  methods I used (today, as I write this), and alternative methods are certainly possible.
+
+---
+# Question 1
+Load the *countyComplete* dataset from the *openintro* package. 
+	
+  + Use a `for()` loop to calculate the grand mean for the following variables: `r names(d)[c(10:17, 21, 22, 25:29)]`. 
+  + Calculate the same values using an `apply` family loop.
+  + Conduct a test (i.e., not just visual comparison) to ensure the same means were produced by both methods.
+
+----
+
+```{r item1}
+library(openintro)
+data(countyComplete)
+d <- countyComplete
+head(d)
+```
+
+----
+
+# `for()` loop method
+```{r}
+varLocs <- c(10:17, 21, 22, 25:29)
+means <- rep(NA, length(varLocs))
+for(i in seq_along(means)) {
+	means[i] <- mean(d[ ,varLocs[i]], na.rm = TRUE)
+}
+
+round(means, 2)
+```
+
+----
+# apply family loop
+
+```{r}
+means2 <- apply(d[ ,varLocs], 2, mean, na.rm = TRUE)
+round(means2, 2)
+```
+
+----
+# Test equivalence
+
+```{r}
+table(means == means2)
+```
+
+----
+# Question 2
+Calculate the *difference* between the means for each of the preceding
+  variables and the mean for each state. Do so using only `for()` loops, and then again using only the apply family of loops.
+
+```{r item2}
+
+## For loop method
+
+stateMeanDiff <- matrix(#	 NROWS						NCOLS
+					rep(NA, length(unique(d$state)) * length(varLocs)),
+				ncol = length(varLocs)
+				)
+
+s <- split(d[ ,varLocs], d$state)
+
+for(i in seq_along(s)) {
+	for(j in 1:ncol(s[[1]])) {
+		stateMeanDiff[i, j] <- means[j] - mean(s[[i]][ ,j], na.rm = TRUE)
+	}
+}
+
+# Make it prettier
+dimnames(stateMeanDiff) <- list(names(s), names(s[[1]]))
+```
+
+----
+# Show first six rows and columns
+
+```{r}
+stateMeanDiff[1:6, 1:6] 
+```
+
+----
+## apply family method
+
+```{r}
+stateMeanDiff2 <- sapply(seq_along(varLocs), function(i) {
+	means[i] - tapply(d[ ,varLocs[i]], d[ ,1], mean, na.rm = TRUE)
+})
+
+#Give column names
+colnames(stateMeanDiff2) <- names(d[ ,varLocs])
+stateMeanDiff2[1:6, 1:6]
+```
+
+---
+# Test equivalence
+```{r}
+table(stateMeanDiff == stateMeanDiff2)
+```
+
+----
+# Question 3
+Load the *births* dataset. Use `by()` **or** `tapply()` to calculate the
+  mean birth weight by the following: `r names(d2)[c(3, 4, 8, 9)]`. Calculate the same means using `aggregate()`
+  + Use the output to report the following:
+  	- Mean birth weights across weeks for full term non-smokers.
+  	- Mean birth weights across weeks for premature babies from mothers
+  	  who smoke.
+  	- Mean birth weights for weeks 38-40 for full term males across smokers
+  	- Mean birth weights across weeks for female babies of nonsmoker
+  	  mothers, between premie and full term.
+
+----
+```{r item3}
+data(births)
+d2 <- births
+
+# by method
+
+weightMeans <- by(d2$weight, 
+				as.list(d2[ ,c(3, 4, 8, 9)]),
+				mean, na.rm = TRUE)
+weightMeans[ ,"full term", ,"nonsmoker"]
+````
+
+----
+```{r}
+weightMeans[ ,"premie", ,"smoker"]
+```
+
+----
+```{r}
+weightMeans[10:14, "full term", "male", ]
+```
+
+----
+```{r}
+weightMeans[ , , "female","nonsmoker"]
+```
+
+----
+# aggregate method
+
+```{r}
+weightMeans2 <- aggregate(weight ~ weeks + premature + sexBaby + smoke, 
+	data = d2, mean, na.rm = TRUE)
+subset(weightMeans2, premature == "full term" & smoke == "nonsmoker")
+````
+
+----
+```{r}
+subset(weightMeans2, premature == "premie" & smoke == "smoker")
+```
+
+----
+```{r}
+subset(weightMeans2, weeks %in% 38:42 & premature == "full term" & 
+	sexBaby == "male")
+```
+
+----
+```{r}
+subset(weightMeans2, sexBaby == "female" & smoke == "nonsmoker")
+```

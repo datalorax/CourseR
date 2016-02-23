@@ -1,0 +1,34 @@
+---
+title: Homework 5
+output: pdf_document
+---
+
+
+```{r echo = FALSE, messages = FALSE}
+library(openintro)
+data(countyComplete)
+data(births)
+d <- countyComplete
+d2 <- births
+```
+
+This homework is focused on using `for()` loops and the `apply` family of
+  loops to processing data.
+
+1. Load the *countyComplete* dataset from the *openintro* package. 
+  + Use a `for()` loop to calculate the grand mean for the following variables: `r names(d)[c(10:17, 21, 22, 25:29)]`. 
+  + Calculate the same values using an `apply` family loop.
+  + Conduct a test (i.e., not just visual comparison) to ensure the same means were produced by both methods.
+
+2. Calculate the *difference* between the mean for each of the preceding
+  variables and the mean for each state. Do so using only `for()` loops, and then again using only the apply family of loops. Again conduct a test to ensure the same means were produced by both methods.
+
+3. Load the *births* dataset. Use `by()` **or** `tapply()` to calculate the
+  mean birth weight by the following: `r names(d2)[c(3, 4, 8, 9)]`. Calculate the same means using `aggregate()`.
+  + Use the output to report the following for each method:
+      - Mean birth weights across weeks for full term non-smokers.
+      - Mean birth weights across weeks for premature babies from mothers
+          who smoke.
+      - Mean birth weights for weeks 38-40 for full term males across smokers
+      - Mean birth weights across weeks for female babies of nonsmoker
+        mothers, between premie and full term.
