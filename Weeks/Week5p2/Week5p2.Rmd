@@ -171,7 +171,7 @@ head(d)
 ```{r}
 iq <- d[ ,2:3]
 ```
-Finally, use `apply()` to calculate the mean parent IQ score. Add this variable back to the dataset using `cbind(d, iqM)`, where iqM is the mean parental IQ score.
+Finally, use `apply()` to calculate the mean parent IQ score for each student. Add this variable back to the dataset using `cbind(d, iqM)`, where iqM is the mean parental IQ score.
 
 <br> 
 
@@ -200,7 +200,10 @@ head(d)
 
 ```{r}
 standardVars <- apply(d[ ,-1], 2, standardize)
-head(standardVars)
+standardVars <- as.data.frame(standardVars)
+names(standardVars) <- paste0(names(standardVars), "_s")
+d <- cbind(d, standardVars)
+head(d)
 ```
 
 ----
