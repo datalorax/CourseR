@@ -151,7 +151,7 @@ environment(sum)
 
 ----
 ## More on formals
-Functions do not neccessarily have to have formal arguments, but they must have a body.
+Functions do not necessarily have to have formal arguments, but they must have a body.
 
 ```{r}
 
