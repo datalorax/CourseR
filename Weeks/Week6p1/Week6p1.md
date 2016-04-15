@@ -2587,7 +2587,7 @@ tapply(beer$name, beer$brewer, length)
 
 ----
 ## Average overall score by abv 
-#(rounded to nearest whole number)
+(rounded to nearest whole number)
 
 
 ```r
@@ -7318,6 +7318,7 @@ array[ ,"Shortstop"][which.min(array[ ,"Shortstop"])]
 ## Oakland Athletics 
 ##             0.405
 ```
+
 
 ----
 ## Solutions w/dtaframe
