@@ -1285,6 +1285,7 @@ array[ ,"Pitcher"][which.max(array[ ,"Pitcher"])]
 array[ ,"Shortstop"][which.min(array[ ,"Shortstop"])]
 ```
 
+
 ----
 ## Solutions w/dtaframe
 
