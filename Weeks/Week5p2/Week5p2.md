@@ -299,7 +299,7 @@ head(d)
 ```r
 iq <- d[ ,2:3]
 ```
-Finally, use `apply()` to calculate the mean parent IQ score. Add this variable back to the dataset using `cbind(d, iqM)`, where iqM is the mean parental IQ score.
+Finally, use `apply()` to calculate the mean parent IQ score for each student. Add this variable back to the dataset using `cbind(d, iqM)`, where iqM is the mean parental IQ score.
 
 <br> 
 
@@ -341,17 +341,34 @@ head(d)
 
 ```r
 standardVars <- apply(d[ ,-1], 2, standardize)
-head(standardVars)
+standardVars <- as.data.frame(standardVars)
+names(standardVars) <- paste0(names(standardVars), "_s")
+d <- cbind(d, standardVars)
+head(d)
 ```
 
 ```
-##      fatheriq motheriq speak count  read edutv cartoons     iqM
-## [1,]    0.064   -0.179  0.00 -1.09 -1.15  1.86     -1.7 -0.1294
-## [2,]    0.638   -0.794  0.62  1.46  1.77 -0.37      0.3 -0.4033
-## [3,]    0.064   -0.026  0.62  0.30  0.31  1.42     -0.9  0.0076
-## [4,]   -0.511    1.973 -1.86 -1.55 -2.12  1.42     -1.3  1.5142
-## [5,]   -1.372   -1.409 -0.31  0.77  0.31  0.52     -0.9 -1.9098
-## [6,]   -0.511   -1.409 -1.55 -0.62 -1.15 -1.27      1.1 -1.4989
+##   score fatheriq motheriq speak count read edutv cartoons   iqM
+## 1   159      115      117    18    26  1.9  3.00     2.00 116.0
+## 2   164      117      113    20    37  2.5  1.75     3.25 115.0
+## 3   154      115      118    20    32  2.2  2.75     2.50 116.5
+## 4   157      113      131    12    24  1.7  2.75     2.25 122.0
+## 5   156      110      109    17    34  2.2  2.25     2.50 109.5
+## 6   150      113      109    13    28  1.9  1.25     3.75 111.0
+##    fatheriq_s  motheriq_s    speak_s    count_s     read_s    edutv_s
+## 1  0.06382999 -0.17935079  0.0000000 -1.0879645 -1.1470220  1.8633900
+## 2  0.63829994 -0.79426776  0.6201737  1.4613488  1.7677633 -0.3726780
+## 3  0.06382999 -0.02562154  0.6201737  0.3025700  0.3103707  1.4161764
+## 4 -0.51063995  1.97285864 -1.8605210 -1.5514760 -2.1186171  1.4161764
+## 5 -1.37234486 -1.40918474 -0.3100868  0.7660815  0.3103707  0.5217492
+## 6 -0.51063995 -1.40918474 -1.5504342 -0.6244530 -1.1470220 -1.2671052
+##   cartoons_s        iqM_s
+## 1 -1.6922815 -0.129350332
+## 2  0.2986379 -0.403268683
+## 3 -0.8959137  0.007608843
+## 4 -1.2940976  1.514159774
+## 5 -0.8959137 -1.909819614
+## 6  1.0950056 -1.498942088
 ```
 
 ----
