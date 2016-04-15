@@ -344,7 +344,7 @@ xbar3(v, 3)
 
 ---- &twocol
 ## More on `return()`
-The `return()` function does not neccessarily need to be used within functions (although it can make it a little more clear). If `return()` is not used, the function will output the final expression from the function. For example, the following two functions are equivalent.
+The `return()` function does not necessarily need to be used within functions (although it can make it a little more clear). If `return()` is not used, the function will output the final expression from the function. For example, the following two functions are equivalent.
 
 *** =left
 
