@@ -208,7 +208,7 @@ v
 ```{r, rowColNames}
 rownames(m1) <- c("r1", "r2", "r3")
 colnames(m1) <- c("c1", "c2", "c3")
-m
+m1
 ```
 
 ----
