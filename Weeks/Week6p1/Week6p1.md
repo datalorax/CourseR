@@ -2587,7 +2587,6 @@ tapply(beer$name, beer$brewer, length)
 
 ----
 ## Average overall score by abv 
-(rounded to nearest whole number)
 
 
 ```r

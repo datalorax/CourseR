@@ -2938,9 +2938,7 @@ head(beer)
     <h2>Average overall score by abv</h2>
   </hgroup>
   <article data-timings="">
-    <p>(rounded to nearest whole number)</p>
-
-<pre><code class="r">tapply(beer$score.overall, round(beer$abv), mean, na.rm = TRUE)
+    <pre><code class="r">tapply(beer$score.overall, round(beer$abv), mean, na.rm = TRUE)
 </code></pre>
 
 <pre><code>##        0        4        5        6        7        8        9       10 
