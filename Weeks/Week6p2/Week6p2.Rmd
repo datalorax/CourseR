@@ -1,0 +1,357 @@
+---
+title       : "Group-level Summaries and Code Sharing"
+subtitle    : Week 6.2
+author      : Daniel Anderson
+job         : CourseR
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
+```
+<style>
+em {
+  font-style: italic
+}
+</style>
+
+<style>
+strong {
+  font-weight: bold;
+}
+</style>
+
+## Today's Agenda
+* Group-level summaries
+* Code sharing
+	+ Me: Constructing a longitudinal dataset
+	+ Joe: R Markdown
+
+<br>
+
+<span style="color:red"> Reschedule/Cancel May 27th Meeting</span>
+<span style="color:gray"> Because I apparently don't know how to read my own
+	calendar</span>
+
+----
+## Applying function by group
+
+The `tapply()` function is useful for applying any generic function to each
+  level of a grouping factor
+
+![tapply](./assets/img/tapply.png)
+
+
+----
+## Load the beer data
+```{r, loadBeer}
+beer <- read.delim("./data/ratebeer_beerjobber.txt") # Load beer data
+head(beer)
+```
+
+----
+## Mean overall score by brewer
+
+```{r, tapplyBrewerScore}
+tapply(beer$score.overall, beer$brewer, mean, na.rm = TRUE)
+```
+
+----
+## Number of beers rated by brewer
+
+```{r, tapplyBrewerBeerN}
+tapply(beer$name, beer$brewer, length)
+```
+
+----
+## Average overall score by abv 
+
+```{r, tapplyScoreByABV}
+tapply(beer$score.overall, round(beer$abv), mean, na.rm = TRUE)
+```
+
+----
+## Make a summary by abv
+
+```{r, abvSummary}
+abv <- round(beer$abv)
+
+smry <- data.frame(
+  row.names = names(table(abv)),
+  meanOverallScore = tapply(beer$score.overall, abv, mean, na.rm = TRUE),
+  numberRatings = tapply(beer$ratings, abv, sum, na.rm = TRUE),
+  numberBreweries = tapply(beer$brewer, abv, function(x) length(unique(x)))
+  )
+```
+
+----
+```{r, printsmry}
+smry
+```
+
+----
+## An alternative to tapply for summation
+
+Just as `rowSums` and `colSums` are optimized versions of `apply` for summation, `rowsum` is an optimized version of `tapply` for summation.
+
+Compute the total number of ratings by brewer
+
+```{r, nRatingsByBrewer}
+rowsum(beer$ratings, beer$brewer)
+```
+
+----
+## Calculate average overall score for each brewer
+
+```{r, BrewerScoreOverall}
+tot <- rowsum(beer$score.overall, beer$brewer)
+n <- tapply(beer$score.overall, beer$brewer, length)
+av <- tot[ ,1]/n # Note tot is an integer matrix
+as.matrix(av)
+```
+
+----
+## The `by()` function
+
+Apply a function to groups.
+
+```{r, loadCensus}
+library(openintro) # Lots of nice datasets (which I just discovered)
+data(census)
+head(census)
+```
+
+----
+## Calculate means by state, race, and sex
+
+```{r, meansCensus}
+means <- by(census$totalPersonalIncome, 
+              list(census$stateFIPScode, 
+                   census$raceGeneral,
+                   census$sex), mean, na.rm = TRUE)
+means # Note there's a lot of missing data
+```
+
+----
+## Structure of means
+
+```{r, strMeans}
+str(means)
+```
+
+----
+## Compute marginal means by state
+
+```{r, stateMeans}
+apply(means, 1, mean, na.rm = TRUE)
+```
+
+----
+## Compute marginal means by race/ethnicity
+
+```{r, raceMeans}
+apply(means, 2, mean, na.rm = TRUE)
+```
+
+----
+## Compute marginal means by sex
+
+```{r, sexMeans}
+apply(means, 3, mean, na.rm = TRUE)
+```
+
+----
+## Look within a particular state
+
+```{r, OregonMeans}
+means["Oregon", , ]
+```
+
+----
+## Only individuals identifying as Black
+
+```{r, BlackMeans}
+means[ ,"Black", ]
+```
+
+----
+## Only Males
+
+```{r, maleMeans}
+means[ , ,"Male"]
+```
+
+----
+## The `aggregate()` Function
+
+Aggregate is another way of summarizing data, but the output returned is different.
+
+Note that a formula can be used.
+
+```{r, aggregate1}
+ag <- aggregate(totalPersonalIncome ~ stateFIPScode + raceGeneral + sex, 
+        data = census, mean, na.rm = TRUE)
+str(ag)
+```
+
+----
+## View output
+
+```{r, ag1}
+ag[3:15, ]
+```
+
+----
+## Compare to `tapply()`
+The below output (and syntax, essentially) will produce exactly the same array
+  produced earlier with `by()`, but that of course is different than `aggregate()`.
+
+```{r, tapplyAggregate}
+means2 <- with(census, tapply(totalPersonalIncome, 
+                            list(stateFIPScode, raceGeneral, sex),
+                          mean, na.rm = TRUE))
+str(means2)
+```
+
+----
+## Contrasting functions
+Why `tapply()` or `by()` or `aggregate()`?
+* The `aggregate()` function provides different output from the other two, 
+  which may be preferable at times.
+* `tapply()` and `by()` are essentially the same, but `by()` can occasionally
+  produce summaries when `tapply()` fails
+
+----
+## Contrasting functions example
+(Note. The example shown is from SabDeM on [SO](http://stackoverflow.com/questions/3505701/r-grouping-functions-sapply-vs-lapply-vs-apply-vs-tapply-vs-by-vs-aggrega) (the response from joran there is also worth reading))
+
+```{r, loadIris}
+data(iris)
+head(iris)
+```
+
+----
+Note that `tapply()` fails in this context
+
+```{r, tapplyFail}
+tapply(iris, iris$Species, summary)
+```
+<br>
+
+But `by()` can handle this situation
+
+----
+```{r, tapplyFail_byWins}
+by(iris, iris$Species, summary)
+```
+
+----
+## Finally: `sweep()`
+* Used when you want to *sweep* a function across an array.
+* Generally used when you want to apply an operation to an array, but the
+  values differ for each column.
+
+![sweep](./assets/img/sweep.png)
+
+----
+## Example
+
+`sweep()` can be an efficient way to **center** variables, because you need to
+   subtract each value within a column by the mean of that column (rather than subtracting a specific value from each column, in which case we'd just us `apply()`)
+
+----
+## Centering columns 4-7 in beer data
+```{r, beerHead}
+head(beer)
+````
+
+----
+```{r, centerBeer1}
+col_M <- colMeans(beer[ ,4:ncol(beer)], na.rm = TRUE)
+col_M
+centered <- sweep(beer[ ,4:ncol(beer)], 2, col_M, "-")
+head(centered)
+```
+
+----
+```{r, centerBeer2}
+names(centered) <- paste0(names(centered), "_c")
+names(centered)
+
+# Check that centering worked properly
+round(colMeans(centered, na.rm = TRUE), digits = 2)
+```
+
+----
+## Put it all back together
+```{r, centerBeer3}
+beer <- cbind(beer, centered)
+head(beer)
+```
+
+----
+## Final Guided Practice
+MLB salary data
+
+```{r, loadMLB}
+data(MLB)
+head(MLB)
+```
+
+----
+## Salary by position and team
+First, transform salary to represent salary in millions
+
+```{r, salaryByTeam1}
+MLB$salary <- MLB$salary / 1000
+```
+Next, compute the average salary by team and position using the following two
+  methods:
+
+```{r, salaryByTeam}
+array <- by(MLB$salary, list(MLB$team, MLB$position), mean)
+dtaframe <- aggregate(salary ~ team + position, data = MLB, mean)
+```
+Use either of the summaries from above to answer the following two questions
+
+1. Which team spends the most, on average, on pitchers?
+2. Which team spends the least, on average, on shortstops?
+
+Finally, compute the total salary by position an team, and answer Questions 1 and 2 again (only in sum, instead of on average).
+
+----
+## Solutions w/array
+
+```{r, MLBarray}
+array[ ,"Pitcher"]
+array[ ,"Pitcher"][which.max(array[ ,"Pitcher"])]
+
+array[ ,"Shortstop"][which.min(array[ ,"Shortstop"])]
+```
+
+
+----
+## Solutions w/dtaframe
+
+```{r, dtaframe}
+pitchers <- subset(dtaframe, position == "Pitcher")
+pitchers[which.max(pitchers$salary), ]
+
+shortstops <- subset(dtaframe, position == "Shortstop")
+shortstops[which.min(shortstops$salary), ]
+```
+
+----
+## Recalculate with summing
+
+```{r, summing}
+arraySum <- by(MLB$salary, list(MLB$team, MLB$position), sum)
+dtaframeSum <- aggregate(salary ~ team + position, data = MLB, sum)
+
+arraySum[ ,"Pitcher"][which.max(arraySum[ ,"Pitcher"])]
+arraySum[ ,"Shortstop"][which.min(arraySum[ ,"Shortstop"])]
+```
