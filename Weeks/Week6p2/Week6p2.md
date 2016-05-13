@@ -613,24 +613,6 @@ Apply a function to groups.
 
 ```r
 library(openintro) # Lots of nice datasets (which I just discovered)
-```
-
-```
-## Please visit openintro.org for free statistics materials
-```
-
-```
-## 
-## Attaching package: 'openintro'
-```
-
-```
-## The following object is masked from 'package:datasets':
-## 
-##     cars
-```
-
-```r
 data(census)
 head(census)
 ```

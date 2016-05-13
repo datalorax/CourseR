@@ -1,0 +1,4594 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>String Manipulations</title>
+  <meta charset="utf-8">
+  <meta name="description" content="String Manipulations">
+  <meta name="author" content="Daniel Anderson">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>String Manipulations</h1>
+    <h2>Week 7.1</h2>
+    <p>Daniel Anderson<br/>CourseR</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <article data-timings="">
+    <style>
+em {
+  font-style: italic
+}
+</style>
+
+<style>
+strong {
+  font-weight: bold;
+}
+</style>
+
+<h2>Today&#39;s Agenda</h2>
+
+<p>Cover a bunch of string manipulation functions</p>
+
+<div style='float:left;width:48%;'>
+  <ul>
+<li>Combining strings
+
+<ul>
+<li><code>paste()</code>, <code>paste0()</code></li>
+<li><code>cat()</code></li>
+</ul></li>
+<li>Manipulating strings
+
+<ul>
+<li><code>substr()</code></li>
+<li><code>nchar()</code></li>
+<li><code>strsplit()</code></li>
+<li><code>toupper()</code> and <code>tolower()</code></li>
+</ul></li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li>Equality and Boolean 
+
+<ul>
+<li><code>==</code>, <code>identical()</code>, <code>setequal()</code>, <code>%in%</code>, <code>is.element()</code></li>
+<li><code>union()</code>, <code>intersect()</code>, and <code>setdiff()</code></li>
+</ul></li>
+</ul>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>paste</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>One of the most useful functions in R (probably in my top 5 most used functions)</p>
+
+<pre><code class="r">a &lt;- &quot;Ducks&quot;
+paste(&quot;I Love my&quot;, a) # default separator is a space, &quot; &quot;
+</code></pre>
+
+<pre><code>## [1] &quot;I Love my Ducks&quot;
+</code></pre>
+
+<pre><code class="r">paste(a, &quot;Geese&quot;, &quot;Mergansers&quot;, sep = &quot;|&quot;)
+</code></pre>
+
+<pre><code>## [1] &quot;Ducks|Geese|Mergansers&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Using paste with vectors</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">paste(&quot;Variable&quot;, 1:5, sep = &quot;_&quot;)
+</code></pre>
+
+<pre><code>## [1] &quot;Variable_1&quot; &quot;Variable_2&quot; &quot;Variable_3&quot; &quot;Variable_4&quot; &quot;Variable_5&quot;
+</code></pre>
+
+<pre><code class="r">paste(&quot;Variable&quot;, rep(1:3, each = 2), c(&quot;a&quot;, &quot;b&quot;), sep = &quot;.&quot;)
+</code></pre>
+
+<pre><code>## [1] &quot;Variable.1.a&quot; &quot;Variable.1.b&quot; &quot;Variable.2.a&quot; &quot;Variable.2.b&quot;
+## [5] &quot;Variable.3.a&quot; &quot;Variable.3.b&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Using paste to report numbers</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">data(mtcars)
+mod &lt;- lm(mpg ~ hp, data = mtcars)
+paste(&quot;The coefficient for horsepower was &quot;, coef(mod)[2], &quot;.&quot;, sep = &quot;&quot;)
+</code></pre>
+
+<pre><code>## [1] &quot;The coefficient for horsepower was -0.0682282780715636.&quot;
+</code></pre>
+
+<pre><code class="r">paste(&quot;Cars with 0 horsepower had, on average,&quot;, coef(mod)[1], &quot;mpgs.&quot;)
+</code></pre>
+
+<pre><code>## [1] &quot;Cars with 0 horsepower had, on average, 30.0988605396225 mpgs.&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Using paste to find patterns</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>How many different combinations of gears and carburetors are there?</p>
+
+<pre><code class="r">gearCarb &lt;- with(mtcars, paste0(&quot;(&quot;, gear, &quot; | &quot;, carb, &quot;)&quot;))
+data.frame(table(gearCarb))
+</code></pre>
+
+<pre><code>##    gearCarb Freq
+## 1   (3 | 1)    3
+## 2   (3 | 2)    4
+## 3   (3 | 3)    3
+## 4   (3 | 4)    5
+## 5   (4 | 1)    4
+## 6   (4 | 2)    4
+## 7   (4 | 4)    4
+## 8   (5 | 2)    2
+## 9   (5 | 4)    1
+## 10  (5 | 6)    1
+## 11  (5 | 8)    1
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>View patterns</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">plot(table(gearCarb))
+</code></pre>
+
+<p><img src="assets/fig/viewPatterns-1.png" alt="plot of chunk viewPatterns"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Collapsing to a single string</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">paste(&quot;Waterfowl&quot;, &quot;include&quot;, &quot;ducks&quot;, &quot;geese&quot;, &quot;and&quot;, &quot;grebes.&quot;, collapse = &quot; &quot;)
+</code></pre>
+
+<pre><code>## [1] &quot;Waterfowl include ducks geese and grebes.&quot;
+</code></pre>
+
+<p>Alternative pattern method</p>
+
+<pre><code class="r">pats &lt;- apply(mtcars[ ,c(&quot;gear&quot;, &quot;carb&quot;)], 1, paste, collapse = &quot; | &quot;)
+pats
+</code></pre>
+
+<pre><code>##           Mazda RX4       Mazda RX4 Wag          Datsun 710 
+##             &quot;4 | 4&quot;             &quot;4 | 4&quot;             &quot;4 | 1&quot; 
+##      Hornet 4 Drive   Hornet Sportabout             Valiant 
+##             &quot;3 | 1&quot;             &quot;3 | 2&quot;             &quot;3 | 1&quot; 
+##          Duster 360           Merc 240D            Merc 230 
+##             &quot;3 | 4&quot;             &quot;4 | 2&quot;             &quot;4 | 2&quot; 
+##            Merc 280           Merc 280C          Merc 450SE 
+##             &quot;4 | 4&quot;             &quot;4 | 4&quot;             &quot;3 | 3&quot; 
+##          Merc 450SL         Merc 450SLC  Cadillac Fleetwood 
+##             &quot;3 | 3&quot;             &quot;3 | 3&quot;             &quot;3 | 4&quot; 
+## Lincoln Continental   Chrysler Imperial            Fiat 128 
+##             &quot;3 | 4&quot;             &quot;3 | 4&quot;             &quot;4 | 1&quot; 
+##         Honda Civic      Toyota Corolla       Toyota Corona 
+##             &quot;4 | 2&quot;             &quot;4 | 1&quot;             &quot;3 | 1&quot; 
+##    Dodge Challenger         AMC Javelin          Camaro Z28 
+##             &quot;3 | 2&quot;             &quot;3 | 2&quot;             &quot;3 | 4&quot; 
+##    Pontiac Firebird           Fiat X1-9       Porsche 914-2 
+##             &quot;3 | 2&quot;             &quot;4 | 1&quot;             &quot;5 | 2&quot; 
+##        Lotus Europa      Ford Pantera L        Ferrari Dino 
+##             &quot;5 | 2&quot;             &quot;5 | 4&quot;             &quot;5 | 6&quot; 
+##       Maserati Bora          Volvo 142E 
+##             &quot;5 | 8&quot;             &quot;4 | 2&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>The cat function</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><code>cat</code> is similar to paste, in that it concatenates strings together, and can insert the results from objects into text.</li>
+</ul>
+
+<pre><code class="r">ob &lt;- 5
+cat(&quot;There were&quot;, ob, &quot;people.&quot;)
+</code></pre>
+
+<pre><code>## There were 5 people.
+</code></pre>
+
+<ul>
+<li>Notice anything that&#39;s different from using <code>paste</code></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>cat does not store results</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">catStore &lt;- cat(&quot;some&quot;, &quot;stuff&quot;)
+</code></pre>
+
+<pre><code>## some stuff
+</code></pre>
+
+<pre><code class="r">catStore
+</code></pre>
+
+<pre><code>## NULL
+</code></pre>
+
+<pre><code class="r">pasteStore &lt;- paste(&quot;some&quot;, &quot;stuff&quot;)
+pasteStore
+</code></pre>
+
+<pre><code>## [1] &quot;some stuff&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>What good is cat?</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Useful for printing messages to the console during function runs
+Extended example from last week, with assigning &quot;Wandering Demographics&quot;</p>
+
+<pre><code class="r">collapse &lt;- function(d, pat, seed = 100) {
+    group &lt;- d[ ,grep(as.character(pat), names(d))]
+    fullMiss &lt;- apply(group, 1, function(x) sum(is.na(x)))
+    if(any(fullMiss == ncol(group))) {
+        group[fullMiss == ncol(group), ] &lt;- &quot;Missing&quot;
+    }
+    tbls &lt;- apply(group, 1, table)
+    names(tbls) &lt;- paste(seq_along(tbls))
+
+    lengths &lt;- sapply(tbls, length)
+    wanderingDems &lt;- sum(lengths &gt; 1)
+
+    patterns &lt;- lapply(tbls, function(x) names(which(x == max(x))))
+
+    randomAssign &lt;- sum(sapply(patterns, function(x) length(x) &gt; 1))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">    cat(
+        paste0(round(
+                ((wanderingDems - randomAssign) / length(tbls))*100), 
+            &quot;% of students assigned based on majority rule&quot;),
+        paste0(round(
+                (randomAssign / length(tbls))*100), 
+            &quot;% of students randomly assigned (tied categories)&quot;), 
+        sep = &quot;\n&quot;
+        )
+
+    pick &lt;- function(x) {
+        if(length(x) &gt; 1) {
+            sample(x, 1)
+        }
+        else {
+            x
+        }
+    }
+
+    set.seed(seed) # for reproducibility
+    out &lt;- sapply(patterns, pick)
+    out &lt;- ifelse(out == &quot;Missing&quot;, NA, out)
+
+as.factor(out)
+}
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>What this ends up looking like</h2>
+  </hgroup>
+  <article data-timings="">
+    <div align = "center">
+<img src = assets/img/catFunExample.png width = 1000 height = 400>
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Another cat example</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><code>print.by</code></p>
+
+<pre><code class="r">print.by &lt;- function (x, ..., vsep) {
+    d &lt;- dim(x)
+    dn &lt;- dimnames(x)
+    dnn &lt;- names(dn)
+    if (missing(vsep)) 
+        vsep &lt;- paste(rep.int(&quot;-&quot;, 0.75 * getOption(&quot;width&quot;)), 
+            collapse = &quot;&quot;)
+    lapply(X = seq_along(x), FUN = function(i, x, vsep, ...) {
+        if (i != 1L &amp;&amp; !is.null(vsep)) 
+            cat(vsep, &quot;\n&quot;)
+        ii &lt;- i - 1L
+        for (j in seq_along(dn)) {
+            iii &lt;- ii%%d[j] + 1L
+            ii &lt;- ii%/%d[j]
+            cat(dnn[j], &quot;: &quot;, dn[[j]][iii], &quot;\n&quot;, sep = &quot;&quot;)
+        }
+        print(x[[i]], ...)
+    }, x, vsep, ...)
+    invisible(x)
+}
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Guided practice</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Renaming variables</p>
+
+<ul>
+<li>Create training and validation sets</li>
+<li>Rename the variables in each accordingly</li>
+</ul>
+
+<pre><code class="r">data(email)
+head(email)
+</code></pre>
+
+<pre><code>##   spam to_multiple from cc sent_email                time image attach
+## 1    0           0    1  0          0 2011-12-31 22:16:41     0      0
+## 2    0           0    1  0          0 2011-12-31 23:03:59     0      0
+## 3    0           0    1  0          0 2012-01-01 08:00:32     0      0
+## 4    0           0    1  0          0 2012-01-01 01:09:49     0      0
+## 5    0           0    1  0          0 2012-01-01 02:00:01     0      0
+## 6    0           0    1  0          0 2012-01-01 02:04:46     0      0
+##   dollar winner inherit viagra password num_char line_breaks format
+## 1      0     no       0      0        0   11.370         202      1
+## 2      0     no       0      0        0   10.504         202      1
+## 3      4     no       1      0        0    7.773         192      1
+## 4      0     no       0      0        0   13.256         255      1
+## 5      0     no       0      0        2    1.231          29      0
+## 6      0     no       0      0        2    1.091          25      0
+##   re_subj exclaim_subj urgent_subj exclaim_mess number
+## 1       0            0           0            0    big
+## 2       0            0           0            1  small
+## 3       0            0           0            6  small
+## 4       0            0           0           48  small
+## 5       0            0           0            1   none
+## 6       0            0           0            1   none
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>Split data into training and validations sets</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">set.seed(100)
+train &lt;- sample(c(TRUE, FALSE), nrow(email), 
+            replace = TRUE, prob = c(.90, .10))
+
+dtrain &lt;- email[train, ]
+dval &lt;- email[!train, ]
+nrow(dtrain)
+</code></pre>
+
+<pre><code>## [1] 3511
+</code></pre>
+
+<pre><code class="r">nrow(dval)
+</code></pre>
+
+<pre><code>## [1] 410
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>Define new names</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Names can be redefined as follows</p>
+
+<pre><code class="r">names(dtrain) &lt;- VECTOR
+</code></pre>
+
+<p>Where <code>VECTOR</code> represents a character vector of new names.</p>
+
+<p><br></p>
+
+<ul>
+<li>Use <code>paste</code> or <code>paste0</code> to append &quot;_tr&quot; and &quot;_val&quot; to each of the variable names in the corresponding datasets.</li>
+<li>Look back at creating patterns: Create a pattern variable for the subject variables <em>re_subj</em>, <em>exclaim_subj</em>, and <em>urgent_subj</em>.</li>
+<li>Extra credit: Plot a simple histogram of the patterns</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">names(dtrain) &lt;- paste(names(dtrain), &quot;tr&quot;, sep = &quot;_&quot;)
+names(dval) &lt;- paste(names(dval), &quot;val&quot;, sep = &quot;_&quot;)
+
+cbind(names(dtrain), names(dval))
+</code></pre>
+
+<pre><code>##       [,1]              [,2]              
+##  [1,] &quot;spam_tr&quot;         &quot;spam_val&quot;        
+##  [2,] &quot;to_multiple_tr&quot;  &quot;to_multiple_val&quot; 
+##  [3,] &quot;from_tr&quot;         &quot;from_val&quot;        
+##  [4,] &quot;cc_tr&quot;           &quot;cc_val&quot;          
+##  [5,] &quot;sent_email_tr&quot;   &quot;sent_email_val&quot;  
+##  [6,] &quot;time_tr&quot;         &quot;time_val&quot;        
+##  [7,] &quot;image_tr&quot;        &quot;image_val&quot;       
+##  [8,] &quot;attach_tr&quot;       &quot;attach_val&quot;      
+##  [9,] &quot;dollar_tr&quot;       &quot;dollar_val&quot;      
+## [10,] &quot;winner_tr&quot;       &quot;winner_val&quot;      
+## [11,] &quot;inherit_tr&quot;      &quot;inherit_val&quot;     
+## [12,] &quot;viagra_tr&quot;       &quot;viagra_val&quot;      
+## [13,] &quot;password_tr&quot;     &quot;password_val&quot;    
+## [14,] &quot;num_char_tr&quot;     &quot;num_char_val&quot;    
+## [15,] &quot;line_breaks_tr&quot;  &quot;line_breaks_val&quot; 
+## [16,] &quot;format_tr&quot;       &quot;format_val&quot;      
+## [17,] &quot;re_subj_tr&quot;      &quot;re_subj_val&quot;     
+## [18,] &quot;exclaim_subj_tr&quot; &quot;exclaim_subj_val&quot;
+## [19,] &quot;urgent_subj_tr&quot;  &quot;urgent_subj_val&quot; 
+## [20,] &quot;exclaim_mess_tr&quot; &quot;exclaim_mess_val&quot;
+## [21,] &quot;number_tr&quot;       &quot;number_val&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>Create subject pattern variable</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">dtrain$subPat &lt;- apply(dtrain[ ,grep(&quot;subj&quot;, names(dtrain))], 
+                1, paste, collapse = &quot;-&quot;)
+head(dtrain[ ,17:22])
+</code></pre>
+
+<pre><code>##   re_subj_tr exclaim_subj_tr urgent_subj_tr exclaim_mess_tr number_tr
+## 1          0               0              0               0       big
+## 2          0               0              0               1     small
+## 3          0               0              0               6     small
+## 4          0               0              0              48     small
+## 5          0               0              0               1      none
+## 6          0               0              0               1      none
+##   subPat
+## 1  0-0-0
+## 2  0-0-0
+## 3  0-0-0
+## 4  0-0-0
+## 5  0-0-0
+## 6  0-0-0
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">plot(table(dtrain$subPat))
+</code></pre>
+
+<p><img src="assets/fig/emailPats2-1.png" alt="plot of chunk emailPats2"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  <hgroup>
+    <h2>One more quick practice with cat</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>First, write the function shown below</p>
+
+<pre><code class="r">pSum &lt;- function(x, ...) {
+    mn &lt;- mean(x, na.rm = TRUE)
+    stDev &lt;- sd(x, na.rm = TRUE)
+
+    plot(density(x, na.rm = TRUE), ...)
+    abline(v = mn, col = &quot;blue&quot;, lty = 2, lwd = 2)
+    abline(v = mn - stDev, col = &quot;red&quot;, lty = 3) 
+    abline(v = mn + stDev, col = &quot;red&quot;, lty = 3) 
+}
+</code></pre>
+
+<p>Apply the function to any vector of your choosing. Next, use cat to modify the function so that the mean and standard deviation are printed to the console. <em>Hint: Use a mix of <code>paste</code> and <code>cat</code> for best results.</em></p>
+
+<p><strong>Extra credit:</strong> Print to the console the proportion of cases above 1 SD</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">pSum2 &lt;- function(x, ...) {
+    mn &lt;- mean(x, na.rm = TRUE)
+    stDev &lt;- sd(x, na.rm = TRUE)
+
+    plot(density(x, na.rm = TRUE), ...)
+    abline(v = mn, col = &quot;blue&quot;, lty = 2, lwd = 2)
+    abline(v = mn - stDev, col = &quot;red&quot;, lty = 3) 
+    abline(v = mn + stDev, col = &quot;red&quot;, lty = 3)
+    cat(paste(&quot;Mean =&quot;, round(mn, 3)), 
+        paste(&quot;Standard Deviation = &quot;, round(stDev, 3)), 
+        sep = &quot;\n&quot;)
+}
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">pSum3 &lt;- function(x, ...) {
+    mn &lt;- mean(x, na.rm = TRUE)
+    stDev &lt;- sd(x, na.rm = TRUE)
+
+    pAbove &lt;- sum(x &gt; (mn + stDev)) / length(x)
+
+    plot(density(x, na.rm = TRUE), ...)
+    abline(v = mn, col = &quot;blue&quot;, lty = 2, lwd = 2)
+    abline(v = mn - stDev, col = &quot;red&quot;, lty = 3) 
+    abline(v = mn + stDev, col = &quot;red&quot;, lty = 3)
+    cat(paste(&quot;Mean =&quot;, round(mn, 3)), 
+        paste(&quot;Standard Deviation = &quot;, round(stDev, 3)),
+        paste(&quot;Proportion &gt; 1 SD Above Mean = &quot;, round(pAbove, 3)),
+        sep = &quot;\n&quot;)
+}
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">pSum(mtcars$cyl)
+</code></pre>
+
+<p><img src="assets/fig/pSum1-1.png" alt="plot of chunk pSum1"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-24" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">pSum2(mtcars$cyl)
+</code></pre>
+
+<p><img src="assets/fig/pSum2-1.png" alt="plot of chunk pSum2"></p>
+
+<pre><code>## Mean = 6.188
+## Standard Deviation =  1.786
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">pSum3(mtcars$cyl)
+</code></pre>
+
+<p><img src="assets/fig/pSum3-1.png" alt="plot of chunk pSum3"></p>
+
+<pre><code>## Mean = 6.188
+## Standard Deviation =  1.786
+## Proportion &gt; 1 SD Above Mean =  0.438
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h2>Quick aside...</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Building predictive models</p>
+
+<ul>
+<li>Fit Model to training data only</li>
+<li>Evaluate model on validation set</li>
+</ul>
+
+<pre><code class="r">tMod &lt;- glm(spam ~ ., 
+    data = email[train, ], family = binomial)
+</code></pre>
+
+<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+</code></pre>
+
+<pre><code class="r">summary(tMod)
+</code></pre>
+
+<pre><code>## 
+## Call:
+## glm(formula = spam ~ ., family = binomial, data = email[train, 
+##     ])
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.9472  -0.4042  -0.1708   0.0000   3.7124  
+## 
+## Coefficients:
+##                Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  -9.332e+01  9.824e+03  -0.009  0.99242    
+## to_multiple  -2.637e+00  3.436e-01  -7.674 1.67e-14 ***
+## from         -2.203e+01  9.824e+03  -0.002  0.99821    
+## cc            2.474e-02  2.233e-02   1.108  0.26785    
+## sent_email   -2.042e+01  4.069e+02  -0.050  0.95997    
+## time          8.673e-08  3.049e-08   2.845  0.00445 ** 
+## image        -1.712e+00  6.011e-01  -2.849  0.00439 ** 
+## attach        7.189e-01  1.522e-01   4.724 2.31e-06 ***
+## dollar       -5.457e-02  2.818e-02  -1.937  0.05278 .  
+## winneryes     2.017e+00  3.849e-01   5.239 1.61e-07 ***
+## inherit       3.921e-01  1.817e-01   2.158  0.03091 *  
+## viagra        2.862e+00  2.216e+03   0.001  0.99897    
+## password     -1.024e+00  3.834e-01  -2.670  0.00758 ** 
+## num_char      5.635e-02  2.478e-02   2.274  0.02299 *  
+## line_breaks  -5.710e-03  1.437e-03  -3.974 7.07e-05 ***
+## format       -6.455e-01  1.583e-01  -4.078 4.54e-05 ***
+## re_subj      -1.820e+00  4.429e-01  -4.110 3.96e-05 ***
+## exclaim_subj  3.948e-02  2.613e-01   0.151  0.87989    
+## urgent_subj   3.927e+00  1.354e+00   2.900  0.00373 ** 
+## exclaim_mess  1.055e-02  1.914e-03   5.513 3.53e-08 ***
+## numbersmall  -1.276e+00  1.639e-01  -7.784 7.03e-15 ***
+## numberbig    -4.690e-01  2.365e-01  -1.983  0.04738 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 2147.5  on 3510  degrees of freedom
+## Residual deviance: 1431.0  on 3489  degrees of freedom
+## AIC: 1475
+## 
+## Number of Fisher Scoring iterations: 19
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">preds &lt;- predict(tMod, 
+    newdata = email[!train, ], 
+    type = &quot;response&quot;)
+head( round(preds, 3) )
+</code></pre>
+
+<pre><code>##    32    34    39    63    74    83 
+## 0.002 0.001 0.001 0.010 0.157 0.005
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">library(verification)
+roc.plot(email[!train, 1], preds, 
+    bty = &quot;n&quot;)
+</code></pre>
+
+<p><img src="assets/fig/predict3-1.png" alt="plot of chunk predict3"></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">library(caret)
+pFun &lt;- function(threshold) ifelse(preds &gt; threshold, 1, 0)
+confusionMatrix(pFun(0.1), email[!train, 1])
+</code></pre>
+
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   0   1
+##          0 294   9
+##          1  70  37
+##                                           
+##                Accuracy : 0.8073          
+##                  95% CI : (0.7658, 0.8444)
+##     No Information Rate : 0.8878          
+##     P-Value [Acc &gt; NIR] : 1               
+##                                           
+##                   Kappa : 0.3876          
+##  Mcnemar&#39;s Test P-Value : 1.473e-11       
+##                                           
+##             Sensitivity : 0.8077          
+##             Specificity : 0.8043          
+##          Pos Pred Value : 0.9703          
+##          Neg Pred Value : 0.3458          
+##              Prevalence : 0.8878          
+##          Detection Rate : 0.7171          
+##    Detection Prevalence : 0.7390          
+##       Balanced Accuracy : 0.8060          
+##                                           
+##        &#39;Positive&#39; Class : 0               
+## 
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="segue" id="slide-29" style="background:;">
+  <hgroup>
+    <h1>Manipulating strings</h1>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  <hgroup>
+    <h2>Extracting parts of strings with <code>substr</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <div align = "left">
+<img src = assets/img/substr.png width = 1000 height = 550>
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">s &lt;- &quot;supercalifragilisticexpialidocious&quot;
+substr(s, 1, 5)
+</code></pre>
+
+<pre><code>## [1] &quot;super&quot;
+</code></pre>
+
+<pre><code class="r">substr(s, 6, 9)
+</code></pre>
+
+<pre><code>## [1] &quot;cali&quot;
+</code></pre>
+
+<p><br></p>
+
+<p><code>substr</code> can often be used in combination with <code>nchar</code>, which calculates the number of characters in a string.</p>
+
+<pre><code class="r">substr(s, 21, nchar(s))
+</code></pre>
+
+<pre><code>## [1] &quot;expialidocious&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-32" style="background:;">
+  <hgroup>
+    <h2>Use with vectors</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">itemIDs &lt;- c(&quot;E8LA2H04&quot;, &quot;E11WR5L04&quot;, &quot;E6RL1L01&quot;, &quot;E11RL1M08&quot;, &quot;E3RI1L03&quot;)
+
+#Extract item type
+type &lt;- substr(itemIDs, nchar(itemIDs) - 5, nchar(itemIDs) - 4)
+table(type)
+</code></pre>
+
+<pre><code>## type
+## LA RI RL WR 
+##  1  1  2  1
+</code></pre>
+
+<pre><code class="r"># Extract theoretical difficulty level
+diff &lt;- substr(itemIDs, nchar(itemIDs) - 2, nchar(itemIDs) - 2)
+table(diff)
+</code></pre>
+
+<pre><code>## diff
+## H L M 
+## 1 3 1
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-33" style="background:;">
+  <hgroup>
+    <h2>Splitting strings</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">longString &lt;- &quot;Here&#39;s some of my favorite colors: blue, green, and purple&quot;
+strsplit(longString, &quot; &quot;)
+</code></pre>
+
+<pre><code>## [[1]]
+##  [1] &quot;Here&#39;s&quot;   &quot;some&quot;     &quot;of&quot;       &quot;my&quot;       &quot;favorite&quot; &quot;colors:&quot; 
+##  [7] &quot;blue,&quot;    &quot;green,&quot;   &quot;and&quot;      &quot;purple&quot;
+</code></pre>
+
+<pre><code class="r">strsplit(longString, &quot;:&quot;)
+</code></pre>
+
+<pre><code>## [[1]]
+## [1] &quot;Here&#39;s some of my favorite colors&quot; &quot; blue, green, and purple&quot;
+</code></pre>
+
+<pre><code class="r">strsplit(longString, &quot;,&quot;)
+</code></pre>
+
+<pre><code>## [[1]]
+## [1] &quot;Here&#39;s some of my favorite colors: blue&quot;
+## [2] &quot; green&quot;                                 
+## [3] &quot; and purple&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-34" style="background:;">
+  <hgroup>
+    <h2>More on strsplit</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Note that the output is a list</p>
+
+<pre><code class="r">strsplit(longString, &quot;&quot;)
+</code></pre>
+
+<pre><code>## [[1]]
+##  [1] &quot;H&quot; &quot;e&quot; &quot;r&quot; &quot;e&quot; &quot;&#39;&quot; &quot;s&quot; &quot; &quot; &quot;s&quot; &quot;o&quot; &quot;m&quot; &quot;e&quot; &quot; &quot; &quot;o&quot; &quot;f&quot; &quot; &quot; &quot;m&quot; &quot;y&quot;
+## [18] &quot; &quot; &quot;f&quot; &quot;a&quot; &quot;v&quot; &quot;o&quot; &quot;r&quot; &quot;i&quot; &quot;t&quot; &quot;e&quot; &quot; &quot; &quot;c&quot; &quot;o&quot; &quot;l&quot; &quot;o&quot; &quot;r&quot; &quot;s&quot; &quot;:&quot;
+## [35] &quot; &quot; &quot;b&quot; &quot;l&quot; &quot;u&quot; &quot;e&quot; &quot;,&quot; &quot; &quot; &quot;g&quot; &quot;r&quot; &quot;e&quot; &quot;e&quot; &quot;n&quot; &quot;,&quot; &quot; &quot; &quot;a&quot; &quot;n&quot; &quot;d&quot;
+## [52] &quot; &quot; &quot;p&quot; &quot;u&quot; &quot;r&quot; &quot;p&quot; &quot;l&quot; &quot;e&quot;
+</code></pre>
+
+<pre><code class="r">strsplit(longString, &quot;&quot;)[[1]][3]
+</code></pre>
+
+<pre><code>## [1] &quot;r&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-35" style="background:;">
+  <hgroup>
+    <h2>Use with vectors</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">moreText &lt;- c(&quot;Here&#39;s some text&quot;, &quot;Here&#39;s some more&quot;, &quot;and even more&quot;)
+strsplit(moreText, &quot; &quot;)
+</code></pre>
+
+<pre><code>## [[1]]
+## [1] &quot;Here&#39;s&quot; &quot;some&quot;   &quot;text&quot;  
+## 
+## [[2]]
+## [1] &quot;Here&#39;s&quot; &quot;some&quot;   &quot;more&quot;  
+## 
+## [[3]]
+## [1] &quot;and&quot;  &quot;even&quot; &quot;more&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-36" style="background:;">
+  <hgroup>
+    <h2>Changing text case</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">toupper(moreText)
+</code></pre>
+
+<pre><code>## [1] &quot;HERE&#39;S SOME TEXT&quot; &quot;HERE&#39;S SOME MORE&quot; &quot;AND EVEN MORE&quot;
+</code></pre>
+
+<pre><code class="r">tolower(moreText)
+</code></pre>
+
+<pre><code>## [1] &quot;here&#39;s some text&quot; &quot;here&#39;s some more&quot; &quot;and even more&quot;
+</code></pre>
+
+<p><br></p>
+
+<p>Why would this be useful?</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-37" style="background:;">
+  <hgroup>
+    <h2>Merging data frames with string ids: Create fake data</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">d1 &lt;- data.frame(id = c(&quot;Mary&quot;, &quot;liam&quot;, &quot;Karina&quot;), score = c(100, 112, 97))
+d1
+</code></pre>
+
+<pre><code>##       id score
+## 1   Mary   100
+## 2   liam   112
+## 3 Karina    97
+</code></pre>
+
+<pre><code class="r">d2 &lt;- data.frame(id = c(&quot;Mary&quot;, &quot;Liam&quot;, &quot;Karina&quot;), score = c(102, 116, 100))
+d2
+</code></pre>
+
+<pre><code>##       id score
+## 1   Mary   102
+## 2   Liam   116
+## 3 Karina   100
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-38" style="background:;">
+  <hgroup>
+    <h2>Merge data</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Merging data frames by an id that has even slight differences will fail </p>
+
+<pre><code class="r">d &lt;- merge(d1, d2, by = &quot;id&quot;, all = TRUE)
+d
+</code></pre>
+
+<pre><code>##       id score.x score.y
+## 1 Karina      97     100
+## 2   liam     112      NA
+## 3   Mary     100     102
+## 4   Liam      NA     116
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-39" style="background:;">
+  <hgroup>
+    <h2>Change ids to all lower</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">d1$id &lt;- tolower(d1$id)
+d2$id &lt;- tolower(d2$id)
+head(d1); head(d2)
+</code></pre>
+
+<pre><code>##       id score
+## 1   mary   100
+## 2   liam   112
+## 3 karina    97
+</code></pre>
+
+<pre><code>##       id score
+## 1   mary   102
+## 2   liam   116
+## 3 karina   100
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-40" style="background:;">
+  <hgroup>
+    <h2>Change var names, merge datasets</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">names(d1)[2] &lt;- paste0(names(d1)[2], &quot;_t1&quot;)
+names(d2)[2] &lt;- paste0(names(d2)[2], &quot;_t2&quot;)
+d &lt;- merge(d1, d2, by = &quot;id&quot;, all = TRUE)
+d
+</code></pre>
+
+<pre><code>##       id score_t1 score_t2
+## 1 karina       97      100
+## 2   liam      112      116
+## 3   mary      100      102
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-41" style="background:;">
+  <hgroup>
+    <h2>Guided practice</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Load the CamdenBoroughs data set</li>
+</ul>
+
+<pre><code class="r">cam &lt;- read.csv(&quot;./data/CamdenBoroughs.csv&quot;, na = &quot;999&quot;)
+head(cam)
+</code></pre>
+
+<pre><code>##   Unique.Reference.Number Local.Authority.Code Local.Authority.Name
+## 1                  100007                  202               Camden
+## 2                  100052                  202               Camden
+## 3                  100029                  202               Camden
+## 4                  100406                  206            Islington
+## 5                  100027                  202               Camden
+## 6                  100428                  206            Islington
+##   Establishment.Number                 Establishment.Name
+## 1                 1101 Camden Primary Pupil Referral Unit
+## 2                 4275                   Hampstead School
+## 3                 3327               Christ Church School
+## 4                 2261             Grafton Primary School
+## 5                 2841      Eleanor Palmer Primary School
+## 6                 2646              Winton Primary School
+##    Type.Of.Establishment Establishment.Status Reason.Establishment.Opened
+## 1    Pupil Referral Unit                 Open              Not applicable
+## 2       Community School                 Open              Not applicable
+## 3 Voluntary Aided School                 Open              Not applicable
+## 4       Community School                 Open              Not applicable
+## 5       Community School                 Open              Not applicable
+## 6       Community School                 Open              Not applicable
+##   Open.Date Reason.Establishment.Closed Close.Date Phase.Of.Education
+## 1                        Not applicable         NA     Not applicable
+## 2                        Not applicable         NA          Secondary
+## 3                        Not applicable         NA            Primary
+## 4                        Not applicable         NA            Primary
+## 5                        Not applicable         NA            Primary
+## 6                        Not applicable         NA            Primary
+##   Statutory.Low.Age Statutory.High.Age    Boarders
+## 1                 5                 11 No Boarders
+## 2                11                 18 No Boarders
+## 3                 3                 11 No Boarders
+## 4                 3                 11 No Boarders
+## 5                 3                 11 No Boarders
+## 6                 3                 11 No Boarders
+##          Official.Sixth.Form Gender Religious.Character           Diocese
+## 1             Not applicable  Mixed      Does not apply    Not applicable
+## 2           Has a sixth form  Mixed      Does not apply    Not applicable
+## 3 Does not have a sixth form  Mixed   Church of England Diocese of London
+## 4 Does not have a sixth form  Mixed      Does not apply    Not applicable
+## 5 Does not have a sixth form  Mixed      Does not apply    Not applicable
+## 6 Does not have a sixth form  Mixed      Does not apply    Not applicable
+##   Admissions.Policy School.Capacity    Special.Classes Census.Date
+## 1    Not applicable              20     Not applicable  16/01/2014
+## 2     Comprehensive            1302 No Special Classes  16/01/2014
+## 3    Not applicable             210 No Special Classes  16/01/2014
+## 4    Not applicable             393 No Special Classes  16/01/2014
+## 5    Not applicable             210 No Special Classes  16/01/2014
+## 6    Not applicable             315 No Special Classes  16/01/2014
+##   Number.Of.Pupils Number.Of.Boys Number.Of.Girls
+## 1               12             10              NA
+## 2             1259            710             550
+## 3              228            120             110
+## 4              519            270             250
+## 5              237            125             115
+## 6              194            110              85
+##   Percentage.Claiming.Free.School.Meals   Trust.School Trust.Name
+## 1                                       Not applicable           
+## 2                                 29.6% Not applicable           
+## 3                                 27.2% Not applicable           
+## 4                                 43.2% Not applicable           
+## 5                                 12.2% Not applicable           
+## 6                                 54.3% Not applicable           
+##   School.Sponsored School.Sponsor             Federation Federation.Name
+## 1   Not applicable                        Not applicable                
+## 2   Not applicable                Not under a federation                
+## 3   Not applicable                Not under a federation                
+## 4   Not applicable                Not under a federation                
+## 5   Not applicable                Not under a federation                
+## 6   Not applicable                Not under a federation                
+##   Unique.Property.Reference.Number Further.Higher.Education.Identifier
+## 1                               NA                                  NA
+## 2                         10002876                                  NA
+## 3                               NA                                  NA
+## 4                               NA                                  NA
+## 5                               NA                                  NA
+## 6                               NA                                  NA
+##   Further.Education.Type Ofsted.Last.Inspected Ofsted.Special.Measures
+## 1         Not applicable            26/03/2015 Not in special measures
+## 2         Not applicable            01/02/2012 Not in special measures
+## 3         Not applicable            19/01/2012 Not in special measures
+## 4         Not applicable            13/11/2008 Not in special measures
+## 5         Not applicable            18/10/2011 Not in special measures
+## 6         Not applicable            11/03/2014 Not in special measures
+##   Last.Changed.Date                           Street         Locality
+## 1        02/06/2015 Robson House, 74 Stanhope Street                 
+## 2        18/06/2014                    Westbere Road        Hampstead
+## 3        18/06/2014                   Redhill Street           Camden
+## 4        18/06/2014                      Eburne Road         Holloway
+## 5        18/06/2014                    Lupton Street                 
+## 6        18/06/2014                   Killick Street Pentonville Road
+##   Address.3   Town County Postcode                                 Website
+## 1           London         NW1 3EX     http://www.robsonhouse.org.uk/main/
+## 2           London         NW2 3RT      http://www.hampsteadschool.org.uk/
+## 3           London         NW1 4BD     http://www.cchurchnw1.camden.sch.uk
+## 4           London          N7 6AR                                        
+## 5           London         NW5 2JA http://www.eleanorpalmer.camden.sch.uk/
+## 6           London          N1 9AZ      http://www.wintonprimaryschool.com
+##   Telephone.Number Head.Title Head.First.Name Head.Last.Name Head.Honours
+## 1       2037720370         Mr          Andrew        Herbert             
+## 2       2077948133         Mr         Jacques  Szemalikowski             
+## 3       2073877881         Ms           Paula         Walker             
+## 4       2072723284         Ms               T       Sergides             
+## 5       2074852155        Mrs            Kate          Frood             
+## 6       2078376096         Mr          Andrew          Rigby             
+##   Head.Preferred.Job.Title   Teen.Mothers Teen.Mothers.Places
+## 1          Head of Service Not applicable                  NA
+## 2                     Head Not applicable                  NA
+## 3              Headteacher Not applicable                  NA
+## 4              Headteacher Not applicable                  NA
+## 5              Headteacher Not applicable                  NA
+## 6              Headteacher Not applicable                  NA
+##   Child.Care.Facilities Special.Education.Needs.Pupil.Referral.Unit
+## 1        Not applicable             PRU Does have Provision for SEN
+## 2        Not applicable                              Not applicable
+## 3        Not applicable                              Not applicable
+## 4        Not applicable                              Not applicable
+## 5        Not applicable                              Not applicable
+## 6        Not applicable                              Not applicable
+##   Emotional.Behavioural.Difficulties                Full.Time.Provision
+## 1        PRU Does have EBD provision PRU does offer full time provision
+## 2                     Not applicable                                   
+## 3                     Not applicable                                   
+## 4                     Not applicable                                   
+## 5                     Not applicable                                   
+## 6                     Not applicable                                   
+##   Education.By.Other Section.41.Approved
+## 1     Not applicable      Not applicable
+## 2     Not applicable      Not applicable
+## 3     Not applicable      Not applicable
+## 4     Not applicable      Not applicable
+## 5     Not applicable      Not applicable
+## 6     Not applicable      Not applicable
+##                    Special.Education.Needs.1 Special.Education.Needs.2
+## 1 SEMH - Social, Emotional and Mental Health                          
+## 2                   PD - Physical Disability                          
+## 3                                                                     
+## 4                                                                     
+## 5                                                                     
+## 6                                                                     
+##   Region Administrative.Ward   Parliamentary.Constituency
+## 1 London       Regent&#39;s Park      Holborn and St. Pancras
+## 2 London       Fortune Green        Hampstead and Kilburn
+## 3 London       Regent&#39;s Park      Holborn and St. Pancras
+## 4 London       Finsbury Park              Islington North
+## 5 London        Kentish Town      Holborn and St. Pancras
+## 6 London          Caledonian Islington South and Finsbury
+##                 Urban.Rural GSSLA.Code Easting Northing
+## 1 Urban &gt; 10k - less sparse  E09000007  529076   182495
+## 2 Urban &gt; 10k - less sparse  E09000007  524402   185633
+## 3 Urban &gt; 10k - less sparse  E09000007  528821   182991
+## 4 Urban &gt; 10k - less sparse  E09000019  530483   186145
+## 5 Urban &gt; 10k - less sparse  E09000007  529117   185613
+## 6 Urban &gt; 10k - less sparse  E09000019  530634   183172
+##   Middle.Super.Output.Area Lower.Super.Output.Area Boarding.Establishment
+## 1               Camden 023             Camden 023B                       
+## 2               Camden 005             Camden 005A                       
+## 3               Camden 021             Camden 021B                       
+## 4            Islington 007          Islington 007B                       
+## 5               Camden 003             Camden 003C                       
+## 6            Islington 021          Islington 021B                       
+##   Previous.Local.Authority.Code Previous.Local.Authority.Name
+## 1                            NA                              
+## 2                            NA                              
+## 3                            NA                              
+## 4                            NA                              
+## 5                            NA                              
+## 6                            NA                              
+##   Previous.Establishment.Number Longitude Latitude Spatial.Accuracy
+## 1                            NA -0.140758 51.52663          Unknown
+## 2                            NA -0.206990 51.55588          Unknown
+## 3                            NA -0.144251 51.53115          Unknown
+## 4                            NA -0.119136 51.55911          Unknown
+## 5                            NA -0.139025 51.55465          Unknown
+## 6                            NA -0.118062 51.53236          Unknown
+##   Last.Uploaded               Location Socrata.ID
+## 1    24/09/2015 (51.526635, -0.140758)          7
+## 2    24/09/2015  (51.555884, -0.20699)         50
+## 3    24/09/2015  (51.53115, -0.144251)         27
+## 4    24/09/2015 (51.559113, -0.119136)         97
+## 5    24/09/2015 (51.554646, -0.139025)         25
+## 6    24/09/2015 (51.532361, -0.118062)        106
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-42" style="background:;">
+  <article data-timings="">
+    <p>You can calculate the month of <em>Last.Uploaded</em> by doing the following</p>
+
+<ul>
+<li>Use <code>strsplit</code> to split the variable into Day/Month/Year</li>
+</ul>
+
+<pre><code class="r">lastUpload &lt;- strsplit(as.character(cam$Last.Uploaded), &quot;/&quot;)
+lastUpload
+</code></pre>
+
+<pre><code>## [[1]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[2]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[3]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[4]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[5]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[6]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[7]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[8]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[9]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[10]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[11]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[12]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[13]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[14]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[15]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[16]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[17]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[18]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[19]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[20]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[21]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[22]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[23]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[24]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[25]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[26]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[27]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[28]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[29]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[30]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[31]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[32]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[33]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[34]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[35]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[36]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[37]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[38]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[39]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[40]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[41]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[42]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[43]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[44]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[45]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[46]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[47]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[48]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[49]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[50]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[51]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[52]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[53]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[54]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[55]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[56]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[57]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[58]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[59]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[60]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[61]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[62]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[63]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[64]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[65]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[66]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[67]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[68]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[69]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[70]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[71]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[72]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[73]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[74]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[75]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[76]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[77]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[78]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[79]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[80]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[81]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[82]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[83]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[84]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[85]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[86]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[87]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[88]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[89]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[90]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[91]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[92]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[93]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[94]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[95]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[96]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[97]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[98]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[99]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[100]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[101]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[102]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[103]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[104]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[105]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[106]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[107]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[108]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[109]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[110]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[111]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[112]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[113]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[114]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[115]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[116]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[117]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[118]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[119]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[120]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[121]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[122]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[123]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[124]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[125]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[126]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[127]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[128]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[129]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[130]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[131]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[132]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[133]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[134]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[135]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[136]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[137]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[138]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[139]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[140]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[141]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[142]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[143]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[144]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[145]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[146]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[147]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[148]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[149]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[150]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[151]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[152]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[153]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[154]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[155]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[156]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[157]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[158]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[159]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[160]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[161]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[162]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[163]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[164]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[165]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[166]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[167]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[168]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[169]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[170]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[171]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[172]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[173]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[174]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[175]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[176]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[177]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[178]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[179]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[180]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[181]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[182]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[183]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[184]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[185]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[186]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[187]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[188]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[189]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[190]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[191]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[192]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[193]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[194]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[195]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[196]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[197]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[198]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[199]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[200]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[201]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[202]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[203]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[204]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[205]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[206]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[207]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[208]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[209]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[210]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[211]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[212]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[213]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[214]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[215]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[216]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[217]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[218]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[219]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[220]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[221]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[222]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[223]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[224]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[225]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[226]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[227]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[228]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[229]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[230]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[231]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[232]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[233]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[234]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[235]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[236]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[237]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[238]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[239]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[240]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[241]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[242]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[243]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[244]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[245]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[246]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[247]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[248]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[249]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[250]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[251]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[252]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[253]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[254]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[255]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[256]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[257]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[258]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[259]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[260]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[261]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[262]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[263]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[264]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[265]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[266]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[267]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[268]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[269]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[270]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[271]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[272]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[273]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[274]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[275]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[276]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[277]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[278]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[279]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[280]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[281]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[282]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[283]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[284]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[285]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[286]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[287]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[288]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[289]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[290]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[291]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[292]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[293]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[294]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[295]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[296]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[297]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[298]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[299]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[300]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[301]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[302]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[303]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[304]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[305]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[306]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[307]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[308]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[309]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[310]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[311]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[312]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[313]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[314]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[315]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[316]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[317]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[318]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[319]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[320]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[321]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[322]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[323]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[324]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[325]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[326]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[327]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[328]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[329]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[330]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[331]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[332]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[333]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[334]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[335]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[336]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[337]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[338]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[339]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[340]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[341]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[342]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[343]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[344]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[345]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[346]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[347]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[348]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[349]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[350]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[351]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[352]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[353]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[354]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[355]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[356]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[357]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[358]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[359]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[360]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[361]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[362]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[363]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[364]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[365]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[366]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[367]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[368]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[369]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[370]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[371]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[372]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[373]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[374]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[375]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[376]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[377]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[378]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[379]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[380]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[381]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[382]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[383]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[384]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[385]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[386]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[387]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[388]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[389]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[390]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[391]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[392]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[393]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[394]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[395]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[396]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[397]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[398]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[399]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[400]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[401]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[402]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[403]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[404]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[405]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[406]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[407]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[408]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[409]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[410]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[411]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[412]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[413]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[414]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[415]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[416]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[417]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[418]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[419]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[420]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[421]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[422]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[423]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[424]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[425]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[426]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[427]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[428]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[429]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[430]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[431]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[432]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[433]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[434]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[435]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[436]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[437]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[438]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[439]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[440]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[441]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[442]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[443]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[444]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[445]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[446]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[447]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[448]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[449]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[450]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[451]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[452]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[453]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[454]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[455]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[456]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[457]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[458]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[459]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[460]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[461]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[462]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[463]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[464]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[465]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[466]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[467]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[468]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[469]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[470]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[471]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[472]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[473]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[474]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[475]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[476]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[477]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[478]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[479]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[480]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[481]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[482]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[483]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[484]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[485]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[486]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[487]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[488]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[489]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[490]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[491]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[492]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[493]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[494]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[495]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[496]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[497]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[498]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[499]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[500]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[501]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[502]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[503]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[504]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[505]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[506]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[507]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[508]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[509]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[510]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[511]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[512]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[513]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[514]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[515]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[516]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[517]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[518]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[519]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[520]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[521]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[522]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[523]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[524]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[525]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[526]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[527]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[528]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[529]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[530]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[531]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[532]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[533]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[534]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[535]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[536]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[537]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[538]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[539]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[540]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[541]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[542]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[543]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[544]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[545]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[546]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[547]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[548]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[549]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[550]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[551]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[552]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[553]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[554]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[555]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[556]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[557]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[558]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[559]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[560]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[561]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[562]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[563]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[564]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[565]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[566]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[567]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[568]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[569]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[570]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[571]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[572]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[573]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[574]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[575]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[576]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[577]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[578]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[579]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[580]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[581]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[582]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[583]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[584]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[585]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[586]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[587]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[588]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[589]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[590]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[591]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[592]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[593]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[594]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[595]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[596]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[597]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[598]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[599]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[600]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[601]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[602]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[603]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[604]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[605]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[606]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[607]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[608]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[609]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[610]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[611]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[612]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[613]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[614]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[615]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[616]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[617]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[618]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[619]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[620]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[621]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[622]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[623]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[624]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[625]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[626]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[627]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[628]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[629]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[630]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[631]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[632]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[633]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[634]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[635]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[636]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[637]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[638]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[639]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[640]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[641]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[642]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[643]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[644]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[645]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[646]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[647]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[648]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[649]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[650]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[651]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[652]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[653]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[654]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[655]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[656]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[657]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[658]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[659]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[660]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[661]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[662]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[663]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+## 
+## [[664]]
+## [1] &quot;24&quot;   &quot;09&quot;   &quot;2015&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-43" style="background:;">
+  <article data-timings="">
+    <ul>
+<li>Use <code>sapply</code> to extract the month, store it as a new variable</li>
+</ul>
+
+<pre><code class="r">cam$LastUploadMonth &lt;- sapply(lastUpload, &quot;[&quot;, 2)
+head(cam[ ,(ncol(cam) - 3):ncol(cam)])
+</code></pre>
+
+<pre><code>##   Last.Uploaded               Location Socrata.ID LastUploadMonth
+## 1    24/09/2015 (51.526635, -0.140758)          7              09
+## 2    24/09/2015  (51.555884, -0.20699)         50              09
+## 3    24/09/2015  (51.53115, -0.144251)         27              09
+## 4    24/09/2015 (51.559113, -0.119136)         97              09
+## 5    24/09/2015 (51.554646, -0.139025)         25              09
+## 6    24/09/2015 (51.532361, -0.118062)        106              09
+</code></pre>
+
+<ul>
+<li>Use a similar process to calculate the year the school opened (from <em>Open.Date</em>)
+
+<ul>
+<li>Can you use at least one different process to do the same thing?</li>
+</ul></li>
+<li>Use <code>substr</code> to create a new <em>areaCode</em> variable from <em>Telephone.Number</em></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-44" style="background:;">
+  <hgroup>
+    <h2>Answers</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Use a similar process to calculate the year the school opened (from <em>Open.Date</em>)</li>
+</ul>
+
+<pre><code class="r">openDate &lt;- strsplit(as.character(cam$Open.Date), &quot;/&quot;)
+cam$yearOpen &lt;- sapply(openDate, &quot;[&quot;, 3)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-45" style="background:;">
+  <hgroup>
+    <h2>Quick aside: Plotting growth in number schools</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">nSchools &lt;- cumsum(tbl)
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;tbl&#39; not found
+</code></pre>
+
+<pre><code class="r">head(nSchools)
+</code></pre>
+
+<pre><code>## Error in head(nSchools): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;head&#39;: Error: cannot open file &#39;/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week7p1/.cache/cumSchools_02614fd995b116fcbe4b57a2dea52e6f.rdb&#39;: No such file or directory
+</code></pre>
+
+<pre><code class="r">plot(x = nSchools, 
+    type = &quot;l&quot;, 
+    xaxt = &quot;n&quot;, 
+    bty = &quot;n&quot;,
+    xlab = &quot;Year&quot;,
+    ylab = &quot;Number of Schools&quot;,
+    main = &quot;Number of Schools in 
+        Camden Boroughs Over Time&quot;)
+
+axis(1, at=1:length(nSchools), 
+    labels=names(tbl))
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code>## Warning in plot(x = nSchools, type = &quot;l&quot;, xaxt = &quot;n&quot;, bty = &quot;n&quot;, xlab =
+## &quot;Year&quot;, : restarting interrupted promise evaluation
+</code></pre>
+
+<pre><code>## Error in xy.coords(x, y, xlabel, ylabel, log): &#39;x&#39; is a list, but does not have components &#39;x&#39; and &#39;y&#39;
+</code></pre>
+
+<pre><code>## Error in as.graphicsAnnot(labels): object &#39;tbl&#39; not found
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-46" style="background:;">
+  <hgroup>
+    <h2>Add reference lines</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">abline(v = 57, col = &quot;gray&quot;, lty = 2)
+text(names(tbl)[57], 
+    x = 60, y = 200, col = &quot;gray&quot;)
+
+abline(v = 41, col = &quot;gray&quot;, lty = 2)
+text(names(tbl)[41], 
+    x = 44, y = 90, col = &quot;gray&quot;)
+
+abline(v = 20, col = &quot;gray&quot;, lty = 2)
+text(names(tbl)[20], 
+    x = 23, y = 45, col = &quot;gray&quot;)
+
+abline(v = 18, col = &quot;gray&quot;, lty = 2)
+text(names(tbl)[18], 
+    x = 15, y = 35, col = &quot;gray&quot;)
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code>## Error in xy.coords(x, y, xlabel, ylabel, log): &#39;x&#39; is a list, but does not have components &#39;x&#39; and &#39;y&#39;
+</code></pre>
+
+<pre><code>## Error in as.graphicsAnnot(labels): object &#39;tbl&#39; not found
+</code></pre>
+
+<pre><code>## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet
+</code></pre>
+
+<pre><code>## Error in as.graphicsAnnot(labels): object &#39;tbl&#39; not found
+</code></pre>
+
+<pre><code>## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet
+</code></pre>
+
+<pre><code>## Error in as.graphicsAnnot(labels): object &#39;tbl&#39; not found
+</code></pre>
+
+<pre><code>## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet
+</code></pre>
+
+<pre><code>## Error in as.graphicsAnnot(labels): object &#39;tbl&#39; not found
+</code></pre>
+
+<pre><code>## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet
+</code></pre>
+
+<pre><code>## Error in as.graphicsAnnot(labels): object &#39;tbl&#39; not found
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="segue" id="slide-47" style="background:;">
+  <hgroup>
+    <h1>Equality Boolean operators</h1>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-48" style="background:;">
+  <hgroup>
+    <h2>Equality and Boolean</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <ul>
+<li>Can be used on on numerics or strings</li>
+<li>Test equality element-wise</li>
+<li>Test if value is within a vector</li>
+<li>Combine common unique elements</li>
+<li>etc.</li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/img/booleanOperators.png" alt="boolean"></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-49" style="background:;">
+  <hgroup>
+    <h2>The <code>==</code> operator</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Logical element-wise equality test.</p>
+
+<pre><code class="r">string1 &lt;- c(&quot;a&quot;, &quot;c&quot;, &quot;f&quot;, &quot;g&quot;)
+string2 &lt;- c(&quot;a&quot;, &quot;f&quot;, &quot;c&quot;, &quot;g&quot;)
+string1 == string2
+</code></pre>
+
+<pre><code>## [1]  TRUE FALSE FALSE  TRUE
+</code></pre>
+
+<p>Note that this can be used with non-strings as well</p>
+
+<pre><code class="r">num1 &lt;- 1:5
+num2 &lt;- c(1, -1, 3, 3, 5)
+num1 == num2
+</code></pre>
+
+<pre><code>## [1]  TRUE FALSE  TRUE FALSE  TRUE
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-50" style="background:;">
+  <hgroup>
+    <h2><code>identical</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Evaluates whether the entire vector is identical. </p>
+
+<pre><code class="r">identical(string1, string2)
+</code></pre>
+
+<pre><code>## [1] FALSE
+</code></pre>
+
+<pre><code class="r">identical(string1, string1)
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<pre><code class="r">identical(1:5, 1:5)
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<pre><code class="r">identical(1:5, 5:1)
+</code></pre>
+
+<pre><code>## [1] FALSE
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-51" style="background:;">
+  <hgroup>
+    <h2><code>setequal</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <p>For identical, order matters. But, if you just want to know if the elements are all the same, and you don&#39;t care about order, use <code>setequal</code></p>
+
+<pre><code class="r">setequal(string1, string2)
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<pre><code class="r">setequal(c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;), c(&quot;b&quot;, &quot;c&quot;, &quot;a&quot;))
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<pre><code class="r">setequal(c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;), c(&quot;d&quot;, &quot;c&quot;, &quot;b&quot;))
+</code></pre>
+
+<pre><code>## [1] FALSE
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-52" style="background:;">
+  <hgroup>
+    <h2><code>%in%</code> and <code>is.element</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <p>As far as I know there&#39;s no difference between them. </p>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">&quot;c&quot; %in% c(&quot;a&quot;, &quot;c&quot;, &quot;f&quot;, &quot;g&quot;)
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<pre><code class="r">&quot;h&quot; %in% c(&quot;a&quot;, &quot;c&quot;, &quot;f&quot;, &quot;g&quot;)
+</code></pre>
+
+<pre><code>## [1] FALSE
+</code></pre>
+
+<pre><code class="r">1:3 %in% 3:6
+</code></pre>
+
+<pre><code>## [1] FALSE FALSE  TRUE
+</code></pre>
+
+<pre><code class="r">3:6 %in% 1:3
+</code></pre>
+
+<pre><code>## [1]  TRUE FALSE FALSE FALSE
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">is.element(&quot;c&quot;, c(&quot;a&quot;, &quot;c&quot;, &quot;f&quot;, &quot;g&quot;)) 
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<pre><code class="r">is.element(&quot;h&quot;, c(&quot;a&quot;, &quot;c&quot;, &quot;f&quot;, &quot;g&quot;))
+</code></pre>
+
+<pre><code>## [1] FALSE
+</code></pre>
+
+<pre><code class="r">is.element(1:3, 3:6)
+</code></pre>
+
+<pre><code>## [1] FALSE FALSE  TRUE
+</code></pre>
+
+<pre><code class="r">is.element(3:6, 1:3) 
+</code></pre>
+
+<pre><code>## [1]  TRUE FALSE FALSE FALSE
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-53" style="background:;">
+  <hgroup>
+    <h2>Using <code>%in%</code> for subsetting</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">dta1 &lt;- data.frame(&quot;a&quot; = rnorm(5), &quot;b&quot; = rnorm(5), &quot;c&quot; = rnorm(5))
+dta2 &lt;- data.frame(&quot;d&quot; = rnorm(5), &quot;c&quot; = rnorm(5), &quot;a&quot; = rnorm(5))
+dta1
+</code></pre>
+
+<pre><code>##            a          b          c
+## 1 -2.3317420 -1.1618647  2.0619911
+## 2  0.2713665  0.1317364  0.7743039
+## 3  0.7501112  0.4150806 -0.7209201
+## 4 -0.4037719 -0.3144298 -1.1679867
+## 5  1.6903328 -0.1776039  1.0091170
+</code></pre>
+
+<pre><code class="r">dta2
+</code></pre>
+
+<pre><code>##            d          c          a
+## 1  0.1423975 -1.4788725  1.8926039
+## 2  3.3745572  0.6438043 -1.3363039
+## 3 -1.3601808 -0.8262088 -0.5872207
+## 4 -0.6619926  1.2393595  1.8810505
+## 5 -1.3007155  0.9247345 -1.9745383
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-54" style="background:;">
+  <article data-timings="">
+    <pre><code class="r"># Select the columns from dataset 2 that have the same names as dataset 1.
+dta1[ ,names(dta1) %in% names(dta2)]
+</code></pre>
+
+<pre><code>##            a          c
+## 1 -2.3317420  2.0619911
+## 2  0.2713665  0.7743039
+## 3  0.7501112 -0.7209201
+## 4 -0.4037719 -1.1679867
+## 5  1.6903328  1.0091170
+</code></pre>
+
+<pre><code class="r"># Select the columns from dataset 2 that have the same names as dataset 1.
+dta2[ ,names(dta2) %in% names(dta1)]
+</code></pre>
+
+<pre><code>##            c          a
+## 1 -1.4788725  1.8926039
+## 2  0.6438043 -1.3363039
+## 3 -0.8262088 -0.5872207
+## 4  1.2393595  1.8810505
+## 5  0.9247345 -1.9745383
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-55" style="background:;">
+  <hgroup>
+    <h2>Combine all unique elements</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">union(c(&quot;a&quot;, &quot;c&quot;, &quot;f&quot;), c(&quot;d&quot;, &quot;d&quot;, &quot;b&quot;, &quot;a&quot;))
+</code></pre>
+
+<pre><code>## [1] &quot;a&quot; &quot;c&quot; &quot;f&quot; &quot;d&quot; &quot;b&quot;
+</code></pre>
+
+<pre><code class="r">union(c(1, 3, 3, 4, 7), c(8, 8, 8, 8, 9))
+</code></pre>
+
+<pre><code>## [1] 1 3 4 7 8 9
+</code></pre>
+
+<pre><code class="r">union(c(1, 3, 2), c(&quot;a&quot;, &quot;c&quot;))
+</code></pre>
+
+<pre><code>## [1] &quot;1&quot; &quot;3&quot; &quot;2&quot; &quot;a&quot; &quot;c&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-56" style="background:;">
+  <hgroup>
+    <h2>Extract only common elements</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">intersect(c(&quot;a&quot;, &quot;c&quot;, &quot;f&quot;), c(&quot;d&quot;, &quot;d&quot;, &quot;b&quot;, &quot;a&quot;))
+</code></pre>
+
+<pre><code>## [1] &quot;a&quot;
+</code></pre>
+
+<pre><code class="r">intersect(c(1, 3, 3, 4, 7), c(8, 8, 8, 8, 9))
+</code></pre>
+
+<pre><code>## numeric(0)
+</code></pre>
+
+<pre><code class="r">intersect(c(1, 5, 7, 8), c(3, 5, 7))
+</code></pre>
+
+<pre><code>## [1] 5 7
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-57" style="background:;">
+  <hgroup>
+    <h2>Remove elements from a vector</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">setdiff(c(&quot;a&quot;, &quot;c&quot;, &quot;f&quot;), c(&quot;d&quot;, &quot;d&quot;, &quot;b&quot;, &quot;a&quot;))
+</code></pre>
+
+<pre><code>## [1] &quot;c&quot; &quot;f&quot;
+</code></pre>
+
+<pre><code class="r">setdiff(3:9, 5)
+</code></pre>
+
+<pre><code>## [1] 3 4 6 7 8 9
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-58" style="background:;">
+  <hgroup>
+    <h2>Guided practice/Lab</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Load the <em>CollegeScorecard</em> dataset, set stringsAsFactors to <code>FALSE</code>, and specify the missing data.</li>
+</ul>
+
+<pre><code class="r">scCard &lt;- read.csv(&quot;./data/CollegeScorecard.csv&quot;, 
+    stringsAsFactors = FALSE, na = c(&quot;NULL&quot;, &quot;PrivacySuppressed&quot;))
+head(scCard)
+</code></pre>
+
+<pre><code>##   UNITID   OPEID opeid6                              INSTNM       CITY
+## 1 100654  100200   1002            Alabama A &amp; M University     Normal
+## 2 100663  105200   1052 University of Alabama at Birmingham Birmingham
+## 3 100690 2503400  25034                  Amridge University Montgomery
+## 4 100706  105500   1055 University of Alabama in Huntsville Huntsville
+## 5 100724  100500   1005            Alabama State University Montgomery
+## 6 100751  105100   1051           The University of Alabama Tuscaloosa
+##   STABBR                        INSTURL
+## 1     AL                  www.aamu.edu/
+## 2     AL                    www.uab.edu
+## 3     AL      www.amridgeuniversity.edu
+## 4     AL                    www.uah.edu
+## 5     AL www.alasu.edu/email/index.aspx
+## 6     AL                    www.ua.edu/
+##                                                                                    NPCURL
+## 1                                          galileo.aamu.edu/netpricecalculator/npcalc.htm
+## 2                                         www.collegeportraits.org/AL/UAB/estimator/agree
+## 3 tcc.noellevitz.com/(S(miwoihs5stz5cpyifh4nczu0))/Amridge%20University/Freshman-Students
+## 4                                                                         finaid.uah.edu/
+## 5                                     www.alasu.edu/cost-aid/forms/calculator/index.aspx/
+## 6                                                                             oira.ua.edu
+##   HCM2 PREDDEG CONTROL LOCALE HBCU PBI ANNHI TRIBAL AANAPII HSI NANTI
+## 1    0       3       1     12    1   0     0      0       0   0     0
+## 2    0       3       1     12    0   0     0      0       0   0     0
+## 3    0       3       2     12    0   0     0      0       0   0     0
+## 4    0       3       1     12    0   0     0      0       0   0     0
+## 5    0       3       1     12    1   0     0      0       0   0     0
+## 6    0       3       1     13    0   0     0      0       0   0     0
+##   MENONLY WOMENONLY RELAFFIL SATVR25 SATVR75 SATMT25 SATMT75 SATWR25
+## 1       0         0       NA     370     450     350     450      NA
+## 2       0         0       NA     520     640     520     650      NA
+## 3       0         0       74      NA      NA      NA      NA      NA
+## 4       0         0       NA     510     640     510     650      NA
+## 5       0         0       NA     380     480     370     480      NA
+## 6       0         0       NA     490     620     500     640     480
+##   SATWR75 SATVRMID SATMTMID SATWRMID ACTCM25 ACTCM75 ACTEN25 ACTEN75
+## 1      NA      410      400       NA      15      19      14      19
+## 2      NA      580      585       NA      22      28      22      29
+## 3      NA       NA       NA       NA      NA      NA      NA      NA
+## 4      NA      575      580       NA      23      29      22      30
+## 5      NA      430      425       NA      15      19      14      20
+## 6     600      555      570      540      22      30      22      32
+##   ACTMT25 ACTMT75 ACTWR25 ACTWR75 ACTCMMID ACTENMID ACTMTMID ACTWRMID
+## 1      15      18      NA      NA       17       17       17       NA
+## 2      20      26      NA      NA       25       26       23       NA
+## 3      NA      NA      NA      NA       NA       NA       NA       NA
+## 4      22      28      NA      NA       26       26       25       NA
+## 5      15      18      NA      NA       17       17       17       NA
+## 6      21      28       6       8       26       27       25        7
+##   SAT_AVG SAT_AVG_ALL PCIP01 PCIP03 PCIP04 PCIP05 PCIP09 PCIP10 PCIP11
+## 1     823         823 0.0397 0.0199 0.0116 0.0000 0.0000 0.0348 0.0348
+## 2    1146        1146 0.0000 0.0000 0.0000 0.0018 0.0456 0.0000 0.0099
+## 3      NA          NA 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0411
+## 4    1180        1180 0.0000 0.0000 0.0000 0.0000 0.0318 0.0000 0.0273
+## 5     830         830 0.0000 0.0000 0.0000 0.0000 0.0733 0.0000 0.0450
+## 6    1171        1171 0.0000 0.0054 0.0000 0.0022 0.1084 0.0000 0.0068
+##   PCIP12 PCIP13 PCIP14 PCIP15 PCIP16 PCIP19 PCIP22 PCIP23 PCIP24 PCIP25
+## 1      0 0.1490 0.1175 0.0348 0.0000 0.0281      0 0.0182 0.0546      0
+## 2      0 0.0862 0.0632 0.0000 0.0090 0.0000      0 0.0203 0.0262      0
+## 3      0 0.0000 0.0000 0.0000 0.0000 0.0000      0 0.0000 0.6301      0
+## 4      0 0.0173 0.2566 0.0000 0.0173 0.0000      0 0.0309 0.0000      0
+## 5      0 0.2150 0.0000 0.0000 0.0000 0.0000      0 0.0183 0.0000      0
+## 6      0 0.0840 0.0640 0.0000 0.0068 0.0700      0 0.0178 0.0000      0
+##   PCIP26 PCIP27 PCIP29 PCIP30 PCIP31 PCIP38 PCIP39 PCIP40 PCIP41 PCIP42
+## 1 0.1026 0.0199      0 0.0000 0.0000 0.0000 0.0000 0.0248      0 0.0579
+## 2 0.0619 0.0135      0 0.0000 0.0000 0.0095 0.0000 0.0181      0 0.0840
+## 3 0.0000 0.0000      0 0.0000 0.0000 0.0000 0.2603 0.0000      0 0.0000
+## 4 0.0855 0.0218      0 0.0000 0.0000 0.0082 0.0000 0.0209      0 0.0218
+## 5 0.1033 0.0183      0 0.0000 0.0183 0.0000 0.0000 0.0150      0 0.0617
+## 6 0.0348 0.0076      0 0.0302 0.0000 0.0060 0.0000 0.0074      0 0.0354
+##   PCIP43 PCIP44 PCIP45 PCIP46 PCIP47 PCIP48 PCIP49 PCIP50 PCIP51 PCIP52
+## 1 0.0050 0.0364 0.0480      0      0      0      0 0.0166 0.0000 0.1457
+## 2 0.0280 0.0244 0.0501      0      0      0      0 0.0415 0.2090 0.1765
+## 3 0.0000 0.0000 0.0000      0      0      0      0 0.0000 0.0000 0.0685
+## 4 0.0000 0.0000 0.0173      0      0      0      0 0.0346 0.1720 0.2247
+## 5 0.1183 0.0650 0.0150      0      0      0      0 0.0567 0.0633 0.1067
+## 6 0.0216 0.0124 0.0422      0      0      0      0 0.0360 0.0946 0.2870
+##   PCIP54 DISTANCEONLY  UGDS UGDS_WHITE UGDS_BLACK UGDS_HISP UGDS_ASIAN
+## 1 0.0000            0  4051     0.0279     0.9501    0.0089     0.0022
+## 2 0.0212            0 11200     0.5987     0.2590    0.0258     0.0518
+## 3 0.0000            0   322     0.2919     0.4224    0.0093     0.0031
+## 4 0.0118            0  5525     0.7012     0.1310    0.0338     0.0364
+## 5 0.0067            0  5354     0.0161     0.9285    0.0114     0.0015
+## 6 0.0194            0 28692     0.7865     0.1140    0.0313     0.0112
+##   UGDS_AIAN UGDS_NHPI UGDS_2MOR UGDS_NRA UGDS_UNKN PPTUG_EF CURROPER
+## 1    0.0012    0.0010    0.0000   0.0002    0.0084   0.0622        1
+## 2    0.0026    0.0007    0.0344   0.0140    0.0130   0.2579        1
+## 3    0.0031    0.0031    0.0000   0.0000    0.2671   0.3727        1
+## 4    0.0145    0.0002    0.0161   0.0329    0.0338   0.2395        1
+## 5    0.0009    0.0007    0.0064   0.0207    0.0138   0.0902        1
+## 6    0.0044    0.0011    0.0210   0.0278    0.0028   0.0852        1
+##   NPT4_PUB NPT4_PRIV NPT41_PUB NPT42_PUB NPT43_PUB NPT44_PUB NPT45_PUB
+## 1    13415        NA     12683     13292     16104     16944     15416
+## 2    14805        NA     12361     13765     16670     17096     17291
+## 3       NA      7455        NA        NA        NA        NA        NA
+## 4    17520        NA     14652     16334     19016     20263     20306
+## 5    11936        NA     12342     10811     11362     13079      2948
+## 6    20916        NA     17206     19960     21363     23115     23748
+##   NPT41_PRIV NPT42_PRIV NPT43_PRIV NPT44_PRIV NPT45_PRIV PCTPELL RET_FT4
+## 1         NA         NA         NA         NA         NA  0.7115  0.6314
+## 2         NA         NA         NA         NA         NA  0.3505  0.8016
+## 3       6736       9974         NA         NA         NA  0.6839  0.3750
+## 4         NA         NA         NA         NA         NA  0.3281  0.8098
+## 5         NA         NA         NA         NA         NA  0.8265  0.6219
+## 6         NA         NA         NA         NA         NA  0.2107  0.8700
+##   RET_FTL4 RET_PT4 RET_PTL4 PCTFLOAN UG25abv GRAD_DEBT_MDN_SUPP
+## 1       NA  0.5000       NA   0.8204  0.1049            33611.5
+## 2       NA  0.5000       NA   0.5397  0.2422            23117.0
+## 3       NA  0.3333       NA   0.7629  0.8540                 NA
+## 4       NA  0.4444       NA   0.4728  0.2640            24738.0
+## 5       NA  0.3023       NA   0.8735  0.1270            33452.0
+## 6       NA  0.6563       NA   0.4148  0.0853            24000.0
+##   GRAD_DEBT_MDN10YR_SUPP RPY_3YR_RT_SUPP C150_4_POOLED_SUPP
+## 1               373.1566       0.4447139          0.3087183
+## 2               256.6461       0.7562667          0.5085498
+## 3                     NA       0.6472492                 NA
+## 4               274.6425       0.7819979          0.4782113
+## 5               371.3858       0.3311989          0.2574820
+## 6               266.4492       0.8139413          0.6660094
+##   C200_L4_POOLED_SUPP md_earn_wne_p10 gt_25k_p6
+## 1                  NA           31400 0.4622980
+## 2                  NA           40300 0.6604845
+## 3                  NA           38100 0.6466666
+## 4                  NA           46600 0.6605657
+## 5                  NA           27800 0.3422256
+## 6                  NA           42400 0.6610854
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-59" style="background:;">
+  <article data-timings="">
+    <ul>
+<li>Use the <code>%in%</code> operator to subset the data to only schools in Oregon, using the <em>STABBR</em> variable and the string &quot;OR&quot;
+
+<ul>
+<li>Which university has the highest median SAT verbal (<em>SATVRMID</em>)</li>
+</ul></li>
+<li>Use the <code>union</code> operator to find all the unique values of <em>SATVRMID</em> and 
+<em>SATMTMID</em> in Oregon.
+
+<ul>
+<li>What is the average across these variables? Range? Plot the results in a
+histogram</li>
+</ul></li>
+<li>Use <code>==</code> to subset the full data to only schools with the same <em>SATVRMID</em>
+and <em>SATMTMID</em> scores.
+
+<ul>
+<li><em>Note.</em> This is harder than it initially seems. Use <code>!is.na()</code> with <code>&amp;</code> 
+to also eliminate missing values from the equality test.</li>
+<li>How many schools have the same <em>SATVRMID</em> and <em>SATMTMID</em>? Calculate this 
+number as a percentage of the total number of schools.</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-60" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">oregon &lt;- subset(scCard, STABBR %in% &quot;OR&quot;)
+oregon[which.max(oregon$SATVRMID), 4]
+</code></pre>
+
+<pre><code>## [1] &quot;Reed College&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-61" style="background:;">
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <pre><code class="r">satmv &lt;- union(oregon$SATVRMID, 
+                oregon$SATMTMID)
+mean(satmv, na.rm = TRUE)
+</code></pre>
+
+<pre><code>## [1] 549
+</code></pre>
+
+<pre><code class="r">range(satmv, na.rm = TRUE)
+</code></pre>
+
+<pre><code>## [1] 465 705
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">hist(satmv)
+</code></pre>
+
+<p><img src="assets/fig/histLab-1.png" alt="plot of chunk histLab"></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-62" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">same &lt;- scCard[(scCard$SATVRMID == scCard$SATMTMID) &amp; 
+        !is.na(scCard$SATVRMID) &amp; !is.na(scCard$SATMTMID), ]
+nrow(same)
+</code></pre>
+
+<pre><code>## [1] 112
+</code></pre>
+
+<pre><code class="r">(nrow(same) / nrow(scCard)) * 100
+</code></pre>
+
+<pre><code>## [1] 1.435161
+</code></pre>
+
+<pre><code class="r">head(same)
+</code></pre>
+
+<pre><code>##     UNITID  OPEID opeid6                                      INSTNM
+## 52  102234 104100   1041                         Spring Hill College
+## 118 105330 108200   1082                 Northern Arizona University
+## 169 107044 109700   1097                          Harding University
+## 242 110361 112500   1125               California Baptist University
+## 259 110547 114100   1141 California State University-Dominguez Hills
+## 374 114813 125300   1253                   Fresno Pacific University
+##          CITY STABBR            INSTURL
+## 52     Mobile     AL        www.shc.edu
+## 118 Flagstaff     AZ           nau.edu/
+## 169    Searcy     AR    www.harding.edu
+## 242 Riverside     CA www.calbaptist.edu
+## 259    Carson     CA      www.csudh.edu
+## 374    Fresno     CA     www.fresno.edu
+##                                                                             NPCURL
+## 52         www.shc.edu/ug/tuition-and-financial-aid/resources/net-price-calculator
+## 118                                                 nau.edu/FinAid/Cost/Budgeting/
+## 169                                            www.harding.edu/admissions/npc.html
+## 242                               calbaptist.studentaidcalculator.com/welcome.aspx
+## 259                                                 www.csumentor.edu/finaid/pais/
+## 374 experiencefpu.com/financial-aid/traditional-undergraduate-net-price-calculator
+##     HCM2 PREDDEG CONTROL LOCALE HBCU PBI ANNHI TRIBAL AANAPII HSI NANTI
+## 52     0       3       2     12    0   0     0      0       0   0     0
+## 118    0       3       1     13    0   0     0      0       0   0     0
+## 169    0       3       2     32    0   0     0      0       0   0     0
+## 242    0       3       2     11    0   0     0      0       0   0     0
+## 259    0       3       1     13    0   0     0      0       0   1     0
+## 374    0       3       2     11    0   0     0      0       0   0     0
+##     MENONLY WOMENONLY RELAFFIL SATVR25 SATVR75 SATMT25 SATMT75 SATWR25
+## 52        0         0       30     480     600     480     600     480
+## 118       0         0       NA     470     580     470     580     450
+## 169       0         0       74     490     630     500     620      NA
+## 242       0         0       75     430     550     420     560     420
+## 259       0         0       NA     380     470     380     470      NA
+## 374       0         0       43     440     550     440     550     428
+##     SATWR75 SATVRMID SATMTMID SATWRMID ACTCM25 ACTCM75 ACTEN25 ACTEN75
+## 52      610      540      540      545      21      27      22      28
+## 118     560      525      525      505      20      25      19      25
+## 169      NA      560      560       NA      22      28      22      30
+## 242     540      490      490      480      18      24      17      24
+## 259      NA      425      425       NA      15      19      14      20
+## 374     550      495      495      489      18      22      15      22
+##     ACTMT25 ACTMT75 ACTWR25 ACTWR75 ACTCMMID ACTENMID ACTMTMID ACTWRMID
+## 52       20      26       6       8       24       25       23        7
+## 118      20      26       6       8       23       22       23        7
+## 169      21      27      NA      NA       25       26       24       NA
+## 242      17      24      NA      NA       21       21       21       NA
+## 259      16      20      NA      NA       17       17       18       NA
+## 374      17      23      NA      NA       20       19       20       NA
+##     SAT_AVG SAT_AVG_ALL PCIP01 PCIP03 PCIP04 PCIP05 PCIP09 PCIP10 PCIP11
+## 52     1100        1100      0 0.0000      0 0.0000 0.0660  0.000 0.0000
+## 118    1050        1050      0 0.0308      0 0.0023 0.0501  0.000 0.0057
+## 169    1139        1139      0 0.0000      0 0.0000 0.0392  0.000 0.0333
+## 242     984         984      0 0.0000      0 0.0000 0.0441  0.028 0.0000
+## 259     845         845      0 0.0000      0 0.0077 0.0637  0.000 0.0141
+## 374     979         979      0 0.0025      0 0.0038 0.0126  0.000 0.0000
+##     PCIP12 PCIP13 PCIP14 PCIP15 PCIP16 PCIP19 PCIP22 PCIP23 PCIP24 PCIP25
+## 52       0 0.1226 0.0047  0.000 0.0094 0.0000 0.0000 0.0425 0.0566      0
+## 118      0 0.1413 0.0384  0.000 0.0043 0.0000 0.0002 0.0250 0.1077      0
+## 169      0 0.1403 0.0321  0.000 0.0119 0.0178 0.0000 0.0095 0.0761      0
+## 242      0 0.0452 0.0560  0.000 0.0011 0.0000 0.0000 0.0248 0.0657      0
+## 259      0 0.0246 0.0000  0.002 0.0073 0.0000 0.0000 0.0250 0.0814      0
+## 374      0 0.1788 0.0000  0.000 0.0013 0.0000 0.0088 0.0013 0.2116      0
+##     PCIP26 PCIP27 PCIP29 PCIP30 PCIP31 PCIP38 PCIP39 PCIP40 PCIP41 PCIP42
+## 52  0.0755 0.0283      0 0.0142 0.0000 0.0236 0.0000 0.0142 0.0000 0.0991
+## 118 0.0566 0.0041      0 0.0039 0.0341 0.0037 0.0000 0.0244 0.0283 0.0406
+## 169 0.0273 0.0048      0 0.0095 0.0595 0.0000 0.0440 0.0059 0.0000 0.0547
+## 242 0.0226 0.0043      0 0.0463 0.0786 0.0301 0.0140 0.0032 0.0000 0.1087
+## 259 0.0185 0.0113      0 0.0113 0.0318 0.0012 0.0000 0.0040 0.0000 0.1012
+## 374 0.0202 0.0088      0 0.0063 0.0202 0.0013 0.0264 0.0025 0.0000 0.0378
+##     PCIP43 PCIP44 PCIP45 PCIP46 PCIP47 PCIP48 PCIP49 PCIP50 PCIP51 PCIP52
+## 52  0.0000 0.0000 0.0566      0      0      0      0 0.0377 0.0849 0.2264
+## 118 0.0000 0.0121 0.0652      0      0      0      0 0.0351 0.0892 0.1889
+## 169 0.0226 0.0333 0.0107      0      0      0      0 0.0642 0.1189 0.1677
+## 242 0.0441 0.0000 0.0689      0      0      0      0 0.0151 0.1389 0.1464
+## 259 0.0621 0.0617 0.1024      0      0      0      0 0.0210 0.1197 0.2044
+## 374 0.0025 0.0176 0.0756      0      0      0      0 0.0076 0.0491 0.2821
+##     PCIP54 DISTANCEONLY  UGDS UGDS_WHITE UGDS_BLACK UGDS_HISP UGDS_ASIAN
+## 52  0.0377            0  1269     0.6643     0.1608    0.0875     0.0071
+## 118 0.0080            0 22011     0.6280     0.0325    0.1925     0.0160
+## 169 0.0166            0  4428     0.8347     0.0379    0.0294     0.0068
+## 242 0.0140            0  5797     0.4480     0.0840    0.3012     0.0497
+## 259 0.0238            0 11894     0.0931     0.1703    0.5397     0.0943
+## 374 0.0214            0  2496     0.3842     0.0525    0.4058     0.0405
+##     UGDS_AIAN UGDS_NHPI UGDS_2MOR UGDS_NRA UGDS_UNKN PPTUG_EF CURROPER
+## 52     0.0063    0.0000    0.0236   0.0134    0.0370   0.0504        1
+## 118    0.0310    0.0034    0.0478   0.0424    0.0063   0.1561        1
+## 169    0.0079    0.0007    0.0133   0.0657    0.0036   0.0729        1
+## 242    0.0071    0.0098    0.0285   0.0191    0.0526   0.1226        1
+## 259    0.0019    0.0041    0.0281   0.0246    0.0439   0.2794        1
+## 374    0.0108    0.0048    0.0180   0.0176    0.0657   0.1450        1
+##     NPT4_PUB NPT4_PRIV NPT41_PUB NPT42_PUB NPT43_PUB NPT44_PUB NPT45_PUB
+## 52        NA     18555        NA        NA        NA        NA        NA
+## 118    15011        NA     11962     12893     15636     18280     19619
+## 169       NA     23534        NA        NA        NA        NA        NA
+## 242       NA     23137        NA        NA        NA        NA        NA
+## 259     3698        NA      1592      3104      8070     12615     12319
+## 374       NA     15403        NA        NA        NA        NA        NA
+##     NPT41_PRIV NPT42_PRIV NPT43_PRIV NPT44_PRIV NPT45_PRIV PCTPELL RET_FT4
+## 52       14705      17885      17946      20409      22490  0.3328  0.7559
+## 118         NA         NA         NA         NA         NA  0.3778  0.7178
+## 169      20056      21435      24091      25320      25363  0.2631  0.8234
+## 242      20886      21686      22042      24141      28143  0.4777  0.7683
+## 259         NA         NA         NA         NA         NA  0.5862  0.7926
+## 374      12391      13144      15370      20075      21564  0.5761  0.8263
+##     RET_FTL4 RET_PT4 RET_PTL4 PCTFLOAN UG25abv GRAD_DEBT_MDN_SUPP
+## 52        NA      NA       NA   0.6564  0.0712            27000.0
+## 118       NA  0.4381       NA   0.5571  0.1989            21450.0
+## 169       NA  0.6667       NA   0.5573  0.0580            26250.0
+## 242       NA  0.4848       NA   0.7734  0.2255            27686.5
+## 259       NA  0.5679       NA   0.4291  0.3762            17201.5
+## 374       NA  0.5000       NA   0.6928  0.4482            19205.0
+##     GRAD_DEBT_MDN10YR_SUPP RPY_3YR_RT_SUPP C150_4_POOLED_SUPP
+## 52                299.7554       0.8119181          0.5889917
+## 118               238.1390       0.7601142          0.4919794
+## 169               291.4288       0.8767541          0.6147346
+## 242               307.3769       0.7827980          0.5844250
+## 259               190.9719       0.6982066          0.2846300
+## 374               213.2149       0.8079242          0.5677522
+##     C200_L4_POOLED_SUPP md_earn_wne_p10 gt_25k_p6
+## 52                   NA           43800 0.6388060
+## 118                  NA           38800 0.6524296
+## 169                  NA           38600 0.6309091
+## 242                  NA           41800 0.6174636
+## 259                  NA           42800 0.6189524
+## 374                  NA           39700 0.6051051
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='NA'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='paste'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Using paste with vectors'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Using paste to report numbers'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Using paste to find patterns'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='View patterns'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='Collapsing to a single string'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='The cat function'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='cat does not store results'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='What good is cat?'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='NA'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='What this ends up looking like'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Another cat example'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='Guided practice'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='Split data into training and validations sets'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='Define new names'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='NA'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='Create subject pattern variable'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='NA'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='One more quick practice with cat'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='NA'>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='NA'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='NA'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='NA'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='NA'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='Quick aside...'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='NA'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='NA'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='Manipulating strings'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='Extracting parts of strings with <code>substr</code>'>
+         30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='NA'>
+         31
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='Use with vectors'>
+         32
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='Splitting strings'>
+         33
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=34 title='More on strsplit'>
+         34
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=35 title='Use with vectors'>
+         35
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=36 title='Changing text case'>
+         36
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=37 title='Merging data frames with string ids: Create fake data'>
+         37
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=38 title='Merge data'>
+         38
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=39 title='Change ids to all lower'>
+         39
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=40 title='Change var names, merge datasets'>
+         40
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=41 title='Guided practice'>
+         41
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=42 title='NA'>
+         42
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=43 title='NA'>
+         43
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=44 title='Answers'>
+         44
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=45 title='Quick aside: Plotting growth in number schools'>
+         45
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=46 title='Add reference lines'>
+         46
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=47 title='Equality Boolean operators'>
+         47
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=48 title='Equality and Boolean'>
+         48
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=49 title='The <code>==</code> operator'>
+         49
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=50 title='<code>identical</code>'>
+         50
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=51 title='<code>setequal</code>'>
+         51
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=52 title='<code>%in%</code> and <code>is.element</code>'>
+         52
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=53 title='Using <code>%in%</code> for subsetting'>
+         53
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=54 title='NA'>
+         54
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=55 title='Combine all unique elements'>
+         55
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=56 title='Extract only common elements'>
+         56
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=57 title='Remove elements from a vector'>
+         57
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=58 title='Guided practice/Lab'>
+         58
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=59 title='NA'>
+         59
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=60 title='NA'>
+         60
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=61 title='NA'>
+         61
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=62 title='NA'>
+         62
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

@@ -1,0 +1,104 @@
+---
+title       : "String Manipulations"
+subtitle    : Week 7.1
+author      : Daniel Anderson
+job         : CourseR
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+--- &twocol
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
+```
+<style>
+em {
+  font-style: italic
+}
+</style>
+
+<style>
+strong {
+  font-weight: bold;
+}
+</style>
+
+## Today's Agenda
+String Searching and regular expressions
+
+* Searching strings
+	+ `grep()`
+	+ `grepl()`
+	+ `sub()`
+	+ `gsub()`
+* Regular expressions
+	+ metacharacters
+
+----
+# Needle in a haystack
+`grep` and `grepl` can be used to find a needle (string pattern) in a haystack string vector. By default, `grep` will return the location in the vector of any string matching the pattern.
+
+```{r grep1}
+
+
+```
+
+---- .segue
+# Regular Expressions
+
+----
+# Regular Expressions
+This will all be part of Week 7p2. I just didn't want to create a new slide set right now.
+
+----
+## What is a regular expression?
+* "an 'instruction' given to a function on what and how to match or replace strings" (Eden, 2007)
+* Special characters, or *metacharacters*, define specific operations
+* Metacharacters can be interpreted as regular characters, provided the appropriate syntax is used.
+* Metacharacters include the following: 
+
+```{r regexpTbl, echo = FALSE}
+noquote(c("$","*","+",".","?","[","^","{","|","(","\\"))
+```
+
+
+----
+## Why does this matter?
+Many of the built-in string functions in R take regular expressions as their arguments. If you're unaware of how regular expressions work, you could end up with unexpected behavior. For example, the following seems like it should work, but it will not.
+
+```{r strSplitRegEx1}
+string <- "School is fun. Especially recess. That's the best part. I love recess."
+strsplit(string, ".")
+```
+
+----
+We can get the behavior we intend by overriding the metacharacter
+
+```{r strSplitRegEx2}
+strsplit(string, "\\.")
+```
+
+----
+## The + metacharacter
+Matches one or more repetitions of the preceding string.
+
+```{r regEx+}
+stringPlus <- "I guess school is okay... It's not my favorite. But art is fun."
+strsplit(stringPlus, "\\.")
+strsplit(stringPlus, "\\.+")
+gsub("I", "t", stringPlus)
+```
+
+
+----
+## More examples
+```{r regEx+Example}
+set.seed(300)
+d <- data.frame(rnorm(3), rbinom(3, 1, 0.5), rpois(3, 2))
+d
+names(d) <- gsub(pattern = "\\.+", replacement = "", x = names(d))
+```
+
+

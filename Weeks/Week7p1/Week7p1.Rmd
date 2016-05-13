@@ -1,0 +1,813 @@
+---
+title       : "String Manipulations"
+subtitle    : Week 7.1
+author      : Daniel Anderson
+job         : CourseR
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+--- &twocol
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
+```
+<style>
+em {
+  font-style: italic
+}
+</style>
+
+<style>
+strong {
+  font-weight: bold;
+}
+</style>
+
+## Today's Agenda
+Cover a bunch of string manipulation functions
+
+*** =left
+
+* Combining strings
+	+ `paste()`, `paste0()`
+	+ `cat()`
+* Manipulating strings
+	+ `substr()`
+	+ `nchar()`
+	+ `strsplit()`
+	+ `toupper()` and `tolower()`
+
+*** =right
+
+* Equality and Boolean 
+	+ `==`, `identical()`, `setequal()`, `%in%`, `is.element()`
+	+ `union()`, `intersect()`, and `setdiff()`
+
+
+----
+## paste
+
+One of the most useful functions in R (probably in my top 5 most used functions)
+
+```{r paste1}
+a <- "Ducks"
+paste("I Love my", a) # default separator is a space, " "
+paste(a, "Geese", "Mergansers", sep = "|")
+```
+
+----
+## Using paste with vectors
+
+```{r paste2}
+paste("Variable", 1:5, sep = "_")
+paste("Variable", rep(1:3, each = 2), c("a", "b"), sep = ".")
+```
+
+----
+## Using paste to report numbers
+
+```{r pasteLM}
+data(mtcars)
+mod <- lm(mpg ~ hp, data = mtcars)
+paste("The coefficient for horsepower was ", coef(mod)[2], ".", sep = "")
+paste("Cars with 0 horsepower had, on average,", coef(mod)[1], "mpgs.")
+```
+
+----
+## Using paste to find patterns
+
+How many different combinations of gears and carburetors are there?
+
+```{r patterns}
+gearCarb <- with(mtcars, paste0("(", gear, " | ", carb, ")"))
+data.frame(table(gearCarb))
+```
+
+----
+## View patterns
+
+```{r viewPatterns, fig.width = 12, fig.height = 5}
+plot(table(gearCarb))
+```
+
+----
+## Collapsing to a single string
+
+```{r pasteCollapse}
+paste("Waterfowl", "include", "ducks", "geese", "and", "grebes.", collapse = " ")
+```
+Alternative pattern method
+
+```{r patternCollapse}
+pats <- apply(mtcars[ ,c("gear", "carb")], 1, paste, collapse = " | ")
+pats
+```
+
+----
+## The cat function
+* `cat` is similar to paste, in that it concatenates strings together, and can insert the results from objects into text.
+
+```{r cat}
+ob <- 5
+cat("There were", ob, "people.")
+```
+* Notice anything that's different from using `paste`
+
+----
+## cat does not store results
+
+```{r cat2}
+catStore <- cat("some", "stuff")
+catStore
+pasteStore <- paste("some", "stuff")
+pasteStore
+```
+
+----
+## What good is cat?
+Useful for printing messages to the console during function runs
+Extended example from last week, with assigning "Wandering Demographics"
+
+```{r cat3, eval = FALSE}
+collapse <- function(d, pat, seed = 100) {
+	group <- d[ ,grep(as.character(pat), names(d))]
+	fullMiss <- apply(group, 1, function(x) sum(is.na(x)))
+	if(any(fullMiss == ncol(group))) {
+		group[fullMiss == ncol(group), ] <- "Missing"
+	}
+	tbls <- apply(group, 1, table)
+	names(tbls) <- paste(seq_along(tbls))
+	
+	lengths <- sapply(tbls, length)
+	wanderingDems <- sum(lengths > 1)
+	
+	patterns <- lapply(tbls, function(x) names(which(x == max(x))))
+	
+	randomAssign <- sum(sapply(patterns, function(x) length(x) > 1))
+
+```
+
+----
+```{r cat4, eval = FALSE}
+	cat(
+		paste0(round(
+				((wanderingDems - randomAssign) / length(tbls))*100), 
+			"% of students assigned based on majority rule"),
+		paste0(round(
+				(randomAssign / length(tbls))*100), 
+			"% of students randomly assigned (tied categories)"), 
+		sep = "\n"
+		)
+	
+	pick <- function(x) {
+		if(length(x) > 1) {
+			sample(x, 1)
+		}
+		else {
+			x
+		}
+	}
+	
+	set.seed(seed) # for reproducibility
+	out <- sapply(patterns, pick)
+	out <- ifelse(out == "Missing", NA, out)
+
+as.factor(out)
+}
+```
+
+----
+## What this ends up looking like
+<div align = "center">
+<img src = assets/img/catFunExample.png width = 1000 height = 400>
+</div>
+
+----
+## Another cat example
+
+`print.by`
+
+```{r byCat}
+print.by <- function (x, ..., vsep) {
+    d <- dim(x)
+    dn <- dimnames(x)
+    dnn <- names(dn)
+    if (missing(vsep)) 
+        vsep <- paste(rep.int("-", 0.75 * getOption("width")), 
+            collapse = "")
+    lapply(X = seq_along(x), FUN = function(i, x, vsep, ...) {
+        if (i != 1L && !is.null(vsep)) 
+            cat(vsep, "\n")
+        ii <- i - 1L
+        for (j in seq_along(dn)) {
+            iii <- ii%%d[j] + 1L
+            ii <- ii%/%d[j]
+            cat(dnn[j], ": ", dn[[j]][iii], "\n", sep = "")
+        }
+        print(x[[i]], ...)
+    }, x, vsep, ...)
+    invisible(x)
+}
+```
+
+----
+## Guided practice
+Renaming variables
+* Create training and validation sets
+* Rename the variables in each accordingly
+
+```{r emailData}
+data(email)
+head(email)
+```
+
+----
+## Split data into training and validations sets
+
+```{r trainSplit}
+set.seed(100)
+train <- sample(c(TRUE, FALSE), nrow(email), 
+			replace = TRUE, prob = c(.90, .10))
+
+dtrain <- email[train, ]
+dval <- email[!train, ]
+nrow(dtrain)
+nrow(dval)
+```
+
+-----
+## Define new names
+
+Names can be redefined as follows
+
+```{r rename1, eval = FALSE}
+names(dtrain) <- VECTOR
+```
+Where `VECTOR` represents a character vector of new names.
+
+<br>
+
+* Use `paste` or `paste0` to append "_tr" and "_val" to each of the variable names in the corresponding datasets.
+* Look back at creating patterns: Create a pattern variable for the subject variables *re_subj*, *exclaim_subj*, and *urgent_subj*.
+* Extra credit: Plot a simple histogram of the patterns
+
+-----
+```{r rename2}
+names(dtrain) <- paste(names(dtrain), "tr", sep = "_")
+names(dval) <- paste(names(dval), "val", sep = "_")
+
+cbind(names(dtrain), names(dval))
+```
+
+----
+## Create subject pattern variable
+
+```{r emailPats1}
+dtrain$subPat <- apply(dtrain[ ,grep("subj", names(dtrain))], 
+				1, paste, collapse = "-")
+head(dtrain[ ,17:22])
+```
+
+----
+```{r emailPats2}
+plot(table(dtrain$subPat))
+```
+
+----
+## One more quick practice with cat
+
+First, write the function shown below
+
+```{r catFunPractice1}
+pSum <- function(x, ...) {
+	mn <- mean(x, na.rm = TRUE)
+	stDev <- sd(x, na.rm = TRUE)
+
+	plot(density(x, na.rm = TRUE), ...)
+	abline(v = mn, col = "blue", lty = 2, lwd = 2)
+	abline(v = mn - stDev, col = "red", lty = 3) 
+	abline(v = mn + stDev, col = "red", lty = 3) 
+}
+```
+Apply the function to any vector of your choosing. Next, use cat to modify the function so that the mean and standard deviation are printed to the console. *Hint: Use a mix of `paste` and `cat` for best results.*
+
+**Extra credit:** Print to the console the proportion of cases above 1 SD
+
+----
+```{r catFunPractice2}
+pSum2 <- function(x, ...) {
+	mn <- mean(x, na.rm = TRUE)
+	stDev <- sd(x, na.rm = TRUE)
+
+	plot(density(x, na.rm = TRUE), ...)
+	abline(v = mn, col = "blue", lty = 2, lwd = 2)
+	abline(v = mn - stDev, col = "red", lty = 3) 
+	abline(v = mn + stDev, col = "red", lty = 3)
+	cat(paste("Mean =", round(mn, 3)), 
+		paste("Standard Deviation = ", round(stDev, 3)), 
+		sep = "\n")
+}
+```
+
+----
+```{r catFunPractice3}
+pSum3 <- function(x, ...) {
+	mn <- mean(x, na.rm = TRUE)
+	stDev <- sd(x, na.rm = TRUE)
+
+	pAbove <- sum(x > (mn + stDev)) / length(x)
+
+	plot(density(x, na.rm = TRUE), ...)
+	abline(v = mn, col = "blue", lty = 2, lwd = 2)
+	abline(v = mn - stDev, col = "red", lty = 3) 
+	abline(v = mn + stDev, col = "red", lty = 3)
+	cat(paste("Mean =", round(mn, 3)), 
+		paste("Standard Deviation = ", round(stDev, 3)),
+		paste("Proportion > 1 SD Above Mean = ", round(pAbove, 3)),
+		sep = "\n")
+}
+```
+
+----
+```{r pSum1}
+pSum(mtcars$cyl)
+```
+
+----
+```{r pSum2, fig.height = 6}
+pSum2(mtcars$cyl)
+```
+
+----
+```{r pSum3, fig.height = 6}
+pSum3(mtcars$cyl)
+```
+
+----
+## Quick aside...
+Building predictive models
+* Fit Model to training data only
+* Evaluate model on validation set
+
+```{r predict1}
+tMod <- glm(spam ~ ., 
+	data = email[train, ], family = binomial)
+summary(tMod)
+```
+
+---- &twocol
+
+*** =left
+
+```{r predict2}
+preds <- predict(tMod, 
+	newdata = email[!train, ], 
+	type = "response")
+head( round(preds, 3) )
+```
+
+*** =right
+
+```{r predict3}
+library(verification)
+roc.plot(email[!train, 1], preds, 
+	bty = "n")
+```
+
+----
+```{r predict4}
+library(caret)
+pFun <- function(threshold) ifelse(preds > threshold, 1, 0)
+confusionMatrix(pFun(0.1), email[!train, 1])
+```
+
+--- .segue
+# Manipulating strings
+
+---
+## Extracting parts of strings with `substr`
+<div align = "left">
+<img src = assets/img/substr.png width = 1000 height = 550>
+</div>
+
+----
+```{r substr1}
+s <- "supercalifragilisticexpialidocious"
+substr(s, 1, 5)
+substr(s, 6, 9)
+```
+<br>
+
+`substr` can often be used in combination with `nchar`, which calculates the number of characters in a string.
+
+```{r, substrNchar}
+substr(s, 21, nchar(s))
+```
+
+-----
+## Use with vectors
+
+```{r substrVectors}
+itemIDs <- c("E8LA2H04", "E11WR5L04", "E6RL1L01", "E11RL1M08", "E3RI1L03")
+
+#Extract item type
+type <- substr(itemIDs, nchar(itemIDs) - 5, nchar(itemIDs) - 4)
+table(type)
+
+# Extract theoretical difficulty level
+diff <- substr(itemIDs, nchar(itemIDs) - 2, nchar(itemIDs) - 2)
+table(diff)
+```
+
+-----
+## Splitting strings
+
+```{r strsplit1}
+longString <- "Here's some of my favorite colors: blue, green, and purple"
+strsplit(longString, " ")
+strsplit(longString, ":")
+strsplit(longString, ",")
+```
+
+----
+## More on strsplit
+Note that the output is a list
+
+```{r strsplit2}
+strsplit(longString, "")
+strsplit(longString, "")[[1]][3]
+```
+
+----
+## Use with vectors
+
+```{r strsplit3}
+moreText <- c("Here's some text", "Here's some more", "and even more")
+strsplit(moreText, " ")
+```
+
+----
+## Changing text case
+
+```{r textCase}
+toupper(moreText)
+tolower(moreText)
+```
+
+<br>
+
+Why would this be useful?
+
+----
+## Merging data frames with string ids: Create fake data
+
+```{r dfCreate}
+d1 <- data.frame(id = c("Mary", "liam", "Karina"), score = c(100, 112, 97))
+d1
+d2 <- data.frame(id = c("Mary", "Liam", "Karina"), score = c(102, 116, 100))
+d2
+```
+
+----
+## Merge data  
+Merging data frames by an id that has even slight differences will fail 
+
+```{r mrgDta}
+d <- merge(d1, d2, by = "id", all = TRUE)
+d
+```
+
+----
+## Change ids to all lower
+
+```{r txtCaseChange}
+d1$id <- tolower(d1$id)
+d2$id <- tolower(d2$id)
+head(d1); head(d2)
+```
+
+----
+## Change var names, merge datasets
+
+```{r varNamesChange}
+names(d1)[2] <- paste0(names(d1)[2], "_t1")
+names(d2)[2] <- paste0(names(d2)[2], "_t2")
+d <- merge(d1, d2, by = "id", all = TRUE)
+d
+```
+
+----
+## Guided practice
+* Load the CamdenBoroughs data set
+
+```{r camBor1}
+cam <- read.csv("./data/CamdenBoroughs.csv", na = "999")
+head(cam)
+```
+
+----	
+You can calculate the month of *Last.Uploaded* by doing the following
+* Use `strsplit` to split the variable into Day/Month/Year
+
+```{r camBor2}
+lastUpload <- strsplit(as.character(cam$Last.Uploaded), "/")
+lastUpload
+````
+
+-----
+* Use `sapply` to extract the month, store it as a new variable
+
+```{r camBor3}
+cam$LastUploadMonth <- sapply(lastUpload, "[", 2)
+head(cam[ ,(ncol(cam) - 3):ncol(cam)])
+```
+
+* Use a similar process to calculate the year the school opened (from *Open.Date*)
+	+ Can you use at least one different process to do the same thing?
+* Use `substr` to create a new *areaCode* variable from *Telephone.Number*
+
+----
+## Answers
+* Use a similar process to calculate the year the school opened (from *Open.Date*)
+
+```{r camBor4}
+openDate <- strsplit(as.character(cam$Open.Date), "/")
+cam$yearOpen <- sapply(openDate, "[", 3)
+
+````
+
+---- &twocol
+## Quick aside: Plotting growth in number schools
+
+*** =left
+
+```{r cumSchools}
+nSchools <- cumsum(tbl)
+head(nSchools)
+```
+
+```{r schoolGrowthEcho, eval = FALSE}
+plot(x = nSchools, 
+	type = "l", 
+	xaxt = "n", 
+	bty = "n",
+	xlab = "Year",
+	ylab = "Number of Schools",
+	main = "Number of Schools in 
+		Camden Boroughs Over Time")
+
+axis(1, at=1:length(nSchools), 
+	labels=names(tbl))
+```
+
+*** =right
+
+```{r schoolGrowthEval, echo = FALSE}
+plot(x = nSchools, 
+	type = "l", 
+	xaxt = "n", 
+	bty = "n",
+	xlab = "Year",
+	ylab = "Number of Schools",
+	main = "Number of Schools in Camden Boroughs Over Time")
+axis(1, at=1:length(nSchools), labels=names(tbl))
+```
+
+---- &twocol
+## Add reference lines
+
+*** =left
+
+```{r refLines, eval = FALSE}
+abline(v = 57, col = "gray", lty = 2)
+text(names(tbl)[57], 
+	x = 60, y = 200, col = "gray")
+
+abline(v = 41, col = "gray", lty = 2)
+text(names(tbl)[41], 
+	x = 44, y = 90, col = "gray")
+
+abline(v = 20, col = "gray", lty = 2)
+text(names(tbl)[20], 
+	x = 23, y = 45, col = "gray")
+
+abline(v = 18, col = "gray", lty = 2)
+text(names(tbl)[18], 
+	x = 15, y = 35, col = "gray")
+```
+
+*** =right
+
+```{r fullPlot, echo = FALSE}
+plot(x = nSchools, 
+	type = "l", 
+	xaxt = "n", 
+	bty = "n",
+	xlab = "Year",
+	ylab = "Number of Schools",
+	main = "Number of Schools in Camden Boroughs Over Time")
+axis(1, at=1:length(nSchools), labels=names(tbl))
+
+abline(v = 57, col = "gray", lty = 2)
+text(names(tbl)[57], x = 60, y = 200, col = "gray")
+
+abline(v = 41, col = "gray", lty = 2)
+text(names(tbl)[41], x = 44, y = 90, col = "gray")
+
+abline(v = 20, col = "gray", lty = 2)
+text(names(tbl)[20], x = 23, y = 45, col = "gray")
+
+abline(v = 18, col = "gray", lty = 2)
+text(names(tbl)[18], x = 15, y = 35, col = "gray")
+```
+
+---- .segue
+# Equality Boolean operators
+
+---- &twocol
+## Equality and Boolean
+
+*** =left
+* Can be used on on numerics or strings
+* Test equality element-wise
+* Test if value is within a vector
+* Combine common unique elements
+* etc.
+
+*** =right
+
+![boolean](assets/img/booleanOperators.png)
+
+
+----
+## The `==` operator
+Logical element-wise equality test.
+
+```{r equal1}
+string1 <- c("a", "c", "f", "g")
+string2 <- c("a", "f", "c", "g")
+string1 == string2
+```
+Note that this can be used with non-strings as well
+
+```{r equal2}
+num1 <- 1:5
+num2 <- c(1, -1, 3, 3, 5)
+num1 == num2
+```
+
+----
+## `identical`
+Evaluates whether the entire vector is identical. 
+
+```{r identical}
+identical(string1, string2)
+identical(string1, string1)
+identical(1:5, 1:5)
+identical(1:5, 5:1)
+```
+
+----
+## `setequal`
+For identical, order matters. But, if you just want to know if the elements are all the same, and you don't care about order, use `setequal`
+
+```{r setequal}
+setequal(string1, string2)
+setequal(c("a", "b", "c"), c("b", "c", "a"))
+setequal(c("a", "b", "c"), c("d", "c", "b"))
+```
+
+---- &twocol
+## `%in%` and `is.element`
+As far as I know there's no difference between them. 
+
+*** =left
+
+```{r in1}
+"c" %in% c("a", "c", "f", "g")
+"h" %in% c("a", "c", "f", "g")
+
+1:3 %in% 3:6
+3:6 %in% 1:3
+```
+
+*** =right
+
+```{r inElement1}
+is.element("c", c("a", "c", "f", "g")) 
+is.element("h", c("a", "c", "f", "g"))
+is.element(1:3, 3:6)
+is.element(3:6, 1:3) 
+```
+
+----
+## Using `%in%` for subsetting
+
+```{r in2}
+dta1 <- data.frame("a" = rnorm(5), "b" = rnorm(5), "c" = rnorm(5))
+dta2 <- data.frame("d" = rnorm(5), "c" = rnorm(5), "a" = rnorm(5))
+dta1
+dta2
+```
+
+----
+
+```{r in3}
+# Select the columns from dataset 2 that have the same names as dataset 1.
+dta1[ ,names(dta1) %in% names(dta2)]
+
+# Select the columns from dataset 2 that have the same names as dataset 1.
+dta2[ ,names(dta2) %in% names(dta1)]
+```
+
+-----
+## Combine all unique elements
+
+```{r union1}
+union(c("a", "c", "f"), c("d", "d", "b", "a"))
+union(c(1, 3, 3, 4, 7), c(8, 8, 8, 8, 9))
+union(c(1, 3, 2), c("a", "c"))
+```
+
+-----
+## Extract only common elements
+
+```{r union2}
+intersect(c("a", "c", "f"), c("d", "d", "b", "a"))
+intersect(c(1, 3, 3, 4, 7), c(8, 8, 8, 8, 9))
+intersect(c(1, 5, 7, 8), c(3, 5, 7))
+```
+
+----
+## Remove elements from a vector
+
+```{r setdiff}
+setdiff(c("a", "c", "f"), c("d", "d", "b", "a"))
+setdiff(3:9, 5)
+```
+
+
+----
+## Guided practice/Lab
+
+* Load the *CollegeScorecard* dataset, set stringsAsFactors to `FALSE`, and specify the missing data.
+
+```{r scoreCard1}
+scCard <- read.csv("./data/CollegeScorecard.csv", 
+	stringsAsFactors = FALSE, na = c("NULL", "PrivacySuppressed"))
+head(scCard)
+```
+
+----
+* Use the `%in%` operator to subset the data to only schools in Oregon, using the *STABBR* variable and the string "OR"
+	+ Which university has the highest median SAT verbal (*SATVRMID*)
+* Use the `union` operator to find all the unique values of *SATVRMID* and 
+  *SATMTMID* in Oregon.
+  	+ What is the average across these variables? Range? Plot the results in a
+  	  histogram
+* Use `==` to subset the full data to only schools with the same *SATVRMID*
+  and *SATMTMID* scores.
+  	+ *Note.* This is harder than it initially seems. Use `!is.na()` with `&` 
+  	  to also eliminate missing values from the equality test.
+  	+ How many schools have the same *SATVRMID* and *SATMTMID*? Calculate this 
+  	  number as a percentage of the total number of schools.
+
+----
+
+```{r subsetIn}
+oregon <- subset(scCard, STABBR %in% "OR")
+oregon[which.max(oregon$SATVRMID), 4]
+````
+
+---- &twocol
+
+*** =left
+
+```{r unionLab}
+satmv <- union(oregon$SATVRMID, 
+				oregon$SATMTMID)
+mean(satmv, na.rm = TRUE)
+range(satmv, na.rm = TRUE)
+```
+
+*** =right
+
+```{r histLab}
+hist(satmv)
+```
+
+----
+
+```{r equalityLab}
+same <- scCard[(scCard$SATVRMID == scCard$SATMTMID) & 
+		!is.na(scCard$SATVRMID) & !is.na(scCard$SATMTMID), ]
+nrow(same)
+(nrow(same) / nrow(scCard)) * 100
+head(same)
+```
+
+
+
+
