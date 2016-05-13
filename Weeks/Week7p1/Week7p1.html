@@ -306,8 +306,9 @@ pasteStore
     <h2>What good is cat?</h2>
   </hgroup>
   <article data-timings="">
-    <p>Useful for printing messages to the console during function runs
-Extended example from last week, with assigning &quot;Wandering Demographics&quot;</p>
+    <p>Useful for printing messages to the console during function runs.</p>
+
+<p>Extended example from last week, with assigning &quot;Wandering Demographics&quot;</p>
 
 <pre><code class="r">collapse &lt;- function(d, pat, seed = 100) {
     group &lt;- d[ ,grep(as.character(pat), names(d))]
@@ -421,7 +422,8 @@ as.factor(out)
 <li>Rename the variables in each accordingly</li>
 </ul>
 
-<pre><code class="r">data(email)
+<pre><code class="r">library(openintro)
+data(email)
 head(email)
 </code></pre>
 
@@ -3385,16 +3387,13 @@ cam$yearOpen &lt;- sapply(openDate, &quot;[&quot;, 3)
   <article data-timings="">
     
 <div style='float:left;width:48%;'>
-  <pre><code class="r">nSchools &lt;- cumsum(tbl)
+  <pre><code class="r">tbl &lt;- table(cam$yearOpen)
+nSchools &lt;- cumsum(tbl)
+head(nSchools)
 </code></pre>
 
-<pre><code>## Error in eval(expr, envir, enclos): object &#39;tbl&#39; not found
-</code></pre>
-
-<pre><code class="r">head(nSchools)
-</code></pre>
-
-<pre><code>## Error in head(nSchools): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;head&#39;: Error: cannot open file &#39;/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week7p1/.cache/cumSchools_02614fd995b116fcbe4b57a2dea52e6f.rdb&#39;: No such file or directory
+<pre><code>## 1900 1907 1912 1918 1919 1920 
+##    2    3    4    5    8   14
 </code></pre>
 
 <pre><code class="r">plot(x = nSchools, 
@@ -3412,15 +3411,7 @@ axis(1, at=1:length(nSchools),
 
 </div>
 <div style='float:right;width:48%;'>
-  <pre><code>## Warning in plot(x = nSchools, type = &quot;l&quot;, xaxt = &quot;n&quot;, bty = &quot;n&quot;, xlab =
-## &quot;Year&quot;, : restarting interrupted promise evaluation
-</code></pre>
-
-<pre><code>## Error in xy.coords(x, y, xlabel, ylabel, log): &#39;x&#39; is a list, but does not have components &#39;x&#39; and &#39;y&#39;
-</code></pre>
-
-<pre><code>## Error in as.graphicsAnnot(labels): object &#39;tbl&#39; not found
-</code></pre>
+  <p><img src="assets/fig/schoolGrowthEval-1.png" alt="plot of chunk schoolGrowthEval"></p>
 
 </div>
   </article>
@@ -3453,35 +3444,7 @@ text(names(tbl)[18],
 
 </div>
 <div style='float:right;width:48%;'>
-  <pre><code>## Error in xy.coords(x, y, xlabel, ylabel, log): &#39;x&#39; is a list, but does not have components &#39;x&#39; and &#39;y&#39;
-</code></pre>
-
-<pre><code>## Error in as.graphicsAnnot(labels): object &#39;tbl&#39; not found
-</code></pre>
-
-<pre><code>## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet
-</code></pre>
-
-<pre><code>## Error in as.graphicsAnnot(labels): object &#39;tbl&#39; not found
-</code></pre>
-
-<pre><code>## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet
-</code></pre>
-
-<pre><code>## Error in as.graphicsAnnot(labels): object &#39;tbl&#39; not found
-</code></pre>
-
-<pre><code>## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet
-</code></pre>
-
-<pre><code>## Error in as.graphicsAnnot(labels): object &#39;tbl&#39; not found
-</code></pre>
-
-<pre><code>## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet
-</code></pre>
-
-<pre><code>## Error in as.graphicsAnnot(labels): object &#39;tbl&#39; not found
-</code></pre>
+  <p><img src="assets/fig/fullPlot-1.png" alt="plot of chunk fullPlot"></p>
 
 </div>
   </article>

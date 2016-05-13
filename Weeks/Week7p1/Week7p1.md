@@ -236,7 +236,8 @@ pasteStore
 
 ----
 ## What good is cat?
-Useful for printing messages to the console during function runs
+Useful for printing messages to the console during function runs.
+
 Extended example from last week, with assigning "Wandering Demographics"
 
 
@@ -331,6 +332,7 @@ Renaming variables
 
 
 ```r
+library(openintro)
 data(email)
 head(email)
 ```
@@ -3196,19 +3198,14 @@ cam$yearOpen <- sapply(openDate, "[", 3)
 
 
 ```r
+tbl <- table(cam$yearOpen)
 nSchools <- cumsum(tbl)
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'tbl' not found
-```
-
-```r
 head(nSchools)
 ```
 
 ```
-## Error in head(nSchools): error in evaluating the argument 'x' in selecting a method for function 'head': Error: cannot open file '/Users/Daniel/Dropbox/Teaching/CourseR/Weeks/Week7p1/.cache/cumSchools_02614fd995b116fcbe4b57a2dea52e6f.rdb': No such file or directory
+## 1900 1907 1912 1918 1919 1920 
+##    2    3    4    5    8   14
 ```
 
 
@@ -3228,19 +3225,7 @@ axis(1, at=1:length(nSchools),
 
 *** =right
 
-
-```
-## Warning in plot(x = nSchools, type = "l", xaxt = "n", bty = "n", xlab =
-## "Year", : restarting interrupted promise evaluation
-```
-
-```
-## Error in xy.coords(x, y, xlabel, ylabel, log): 'x' is a list, but does not have components 'x' and 'y'
-```
-
-```
-## Error in as.graphicsAnnot(labels): object 'tbl' not found
-```
+![plot of chunk schoolGrowthEval](assets/fig/schoolGrowthEval-1.png)
 
 ---- &twocol
 ## Add reference lines
@@ -3268,46 +3253,7 @@ text(names(tbl)[18],
 
 *** =right
 
-
-```
-## Error in xy.coords(x, y, xlabel, ylabel, log): 'x' is a list, but does not have components 'x' and 'y'
-```
-
-```
-## Error in as.graphicsAnnot(labels): object 'tbl' not found
-```
-
-```
-## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet
-```
-
-```
-## Error in as.graphicsAnnot(labels): object 'tbl' not found
-```
-
-```
-## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet
-```
-
-```
-## Error in as.graphicsAnnot(labels): object 'tbl' not found
-```
-
-```
-## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet
-```
-
-```
-## Error in as.graphicsAnnot(labels): object 'tbl' not found
-```
-
-```
-## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): plot.new has not been called yet
-```
-
-```
-## Error in as.graphicsAnnot(labels): object 'tbl' not found
-```
+![plot of chunk fullPlot](assets/fig/fullPlot-1.png)
 
 ---- .segue
 # Equality Boolean operators

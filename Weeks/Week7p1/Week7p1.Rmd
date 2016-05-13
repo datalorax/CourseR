@@ -127,7 +127,8 @@ pasteStore
 
 ----
 ## What good is cat?
-Useful for printing messages to the console during function runs
+Useful for printing messages to the console during function runs.
+
 Extended example from last week, with assigning "Wandering Demographics"
 
 ```{r cat3, eval = FALSE}
@@ -219,6 +220,7 @@ Renaming variables
 * Rename the variables in each accordingly
 
 ```{r emailData}
+library(openintro)
 data(email)
 head(email)
 ```
@@ -535,8 +537,7 @@ head(cam[ ,(ncol(cam) - 3):ncol(cam)])
 ```{r camBor4}
 openDate <- strsplit(as.character(cam$Open.Date), "/")
 cam$yearOpen <- sapply(openDate, "[", 3)
-
-````
+```
 
 ---- &twocol
 ## Quick aside: Plotting growth in number schools
@@ -544,6 +545,7 @@ cam$yearOpen <- sapply(openDate, "[", 3)
 *** =left
 
 ```{r cumSchools}
+tbl <- table(cam$yearOpen)
 nSchools <- cumsum(tbl)
 head(nSchools)
 ```
