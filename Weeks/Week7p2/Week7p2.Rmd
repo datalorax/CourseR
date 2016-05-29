@@ -1,6 +1,6 @@
 ---
-title       : "String Manipulations"
-subtitle    : Week 7.1
+title       : "String Manipulations: grep and regex"
+subtitle    : Week 7.2
 author      : Daniel Anderson
 job         : CourseR
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
@@ -35,34 +35,254 @@ String Searching and regular expressions
 	+ `gsub()`
 * Regular expressions
 	+ metacharacters
+	+ sequences
+	+ character classes
 
 ----
-# Needle in a haystack
+## Needle in a haystack
 `grep` and `grepl` can be used to find a needle (string pattern) in a haystack string vector. By default, `grep` will return the location in the vector of any string matching the pattern.
 
 ```{r grep1}
+fruits <- c("apple", "orange", "banana", "mango")
+grep("b", fruits)
+grep("o", fruits)
+```
+
+-----
+## Return values, rather than an index
+
+```{r grep2}
+grep("b", fruits, value = TRUE)
+grep("o", fruits, value = TRUE)
+```
+
+----
+## Logical version: `grepl`
+
+```{r grepl1}
+grepl("b", fruits)
+grepl("o", fruits)
+
+```
+
+----
+## Using `grep` and `grepl` for subsetting
+
+```{r loadScCard}
+# load data
+scCard <- read.csv("./data/CollegeScorecard.csv", 
+	stringsAsFactors = FALSE, na = c("NULL", "PrivacySuppressed"))
+head(scCard)
+```
+
+----
+## Select Institution ID and SAT variables
+
+```{r selectSATvars}
+sat <- scCard[ ,c(1, grep("SAT", names(scCard)))]
+head(sat)
+```
+
+---- &twocol
+## with `grepl`
+# Two steps, two methods
+
+*** =left
+
+```{r greplSATvars1}
+satVars <- grepl("SAT", names(scCard))
+satVars[1] <- TRUE
+sat <- scCard[ ,satVars]
+head(sat)
+```
+
+*** =right
+
+```{r greplSATvars2}
+satVars <- scCard[ ,grepl("SAT", names(scCard))]
+sat <- as.data.frame(
+		cbind("UNITID" = scCard[ ,1], satVars))
+head(sat)
+```
+
+----
+## Percentage degrees awarded by program type
+
+<span style="color:gray"> see full data dictionary at </span> https://collegescorecard.ed.gov/data/documentation/
+
+```{r scCardDict, echo = FALSE, results = "asis"}
+vars <- c("PCIP01", "PCIP03", "PCIP04", "PCIP05", "PCIP09", "PCIP10", 
+			"PCIP11", "PCIP12", "PCIP13", "PCIP14", "PCIP15", "PCIP16", 
+			"PCIP19", "PCIP22", "PCIP23", "PCIP24", "PCIP25", "PCIP26", 
+			"PCIP27", "PCIP29", "PCIP30", "PCIP31", "PCIP38", "PCIP39", 
+			"PCIP40", "PCIP41", "PCIP42", "PCIP43", "PCIP44", "PCIP45", 
+			"PCIP46", "PCIP47", "PCIP48", "PCIP49", "PCIP50", "PCIP51", 
+			"PCIP52", "PCIP54")
+desc <- c("Agriculture, Agriculture Operations, and Related Sciences", 
+			"Natural Resources and Conservation", 
+			"Architecture and Related Services", 
+			"Area, Ethnic, Cultural, Gender, and Group Studies", 
+			"Communication, Journalism, and Related Programs", 
+			"Communications Technologies/Technicians and Support Services", 
+			"Computer and Information Sciences and Support Services", 
+			"Personal and Culinary Services", "Education", "Engineering", 
+			"Engineering Technologies and Engineering-Related Fields", 
+			"Foreign Languages, Literatures, and Linguistics", 
+			"Family and Consumer Sciences/Human Sciences", 
+			"Legal Professions and Studies", 
+			"English Language and Literature/Letters", 
+			"Liberal Arts and Sciences, General Studies and Humanities", 
+			"Library Science", "Biological and Biomedical Sciences", 
+			"Mathematics and Statistics", 
+			"Military Technologies and Applied Sciences", 
+			"Multi/Interdisciplinary Studies", 
+			"Parks, Recreation, Leisure, and Fitness Studies", 
+			"Philosophy and Religious Studies", 
+			"Theology and Religious Vocations", "Physical Sciences", 
+			"Science Technologies/Technicians", "Psychology", 
+			"Homeland Security, Law Enforcement, Firefighting and Related Protective Services", 
+			"Public Administration and Social Service Professions", 
+			"Social Sciences", "Construction Trades", 
+			"Mechanic and Repair Technologies/Technicians", 
+			"Precision Production", "Transportation and Materials Moving", 
+			"Visual and Performing Arts", 
+			"Health Professions and Related Programs", 
+			"Business, Management, Marketing, and Related Support Services", 
+			"History")
+knitr::kable(data.frame(vars, desc), 
+	col.names = c("Variable Name", "Program"))
+```
+
+----
+## Select percentage degree awarded var
+
+```{r pctSelect}
+pct <- scCard[ ,c(1, grep("PCIP", names(scCard)))]
+head(pct)
+```
+
+----
+## Create a new variable **max** variable
+Variable should include the name of the PCIP that corresponds to its maximum.
+
+```{r maxProp}
+# Remove rows with complete missing data
+pct2 <- pct[apply(pct[ ,-1], 1, function(x) sum(is.na(x)) != (ncol(pct) -1)), ]
+
+maxLoc <- apply(pct2[ ,-1], 1, which.max) + 1
+pct2$maxprop <- sapply(1:nrow(pct2), function(i) {
+	names(pct2)[maxLoc[i]]
+})
+head(pct2[ ,35:40])
+```
+
+----
+## Merge results back in
+
+```{r mergeMaxProp1, eval = FALSE}
+scCard <- merge(scCard, pct2[ ,c(1, ncol(pct2))], by = 1, all = TRUE)
+par(las = 2)
+plot(table(scCard$maxprop),
+	main = "Frequency of Max Graduation Programs",
+	xlab = "Program Code",
+	ylab = "Frequency",
+	tck = 0,
+	cex.axis = 0.6)
+```
+
+----
+
+```{r mergeMaxProp, fig.height = 9, fig.width = 14, echo = FALSE}
+scCard <- merge(scCard, pct2[ ,c(1, ncol(pct2))], by = 1, all = TRUE)
+par(las = 2)
+plot(table(scCard$maxprop),
+	main = "Frequency of Max Graduation Programs",
+	xlab = "Program Code",
+	ylab = "Frequency",
+	tck = 0,
+	cex.axis = 0.6)
+```
+
+----
+## Selecting rows
+Select only Oregon schools
+
+```{r rowSelect1}
+OR <- scCard[grep("OR", scCard$STABBR), ] # grepl could be used equivalntly
+table(OR$STABBR)
+head(OR)
+```
+
+----
+## Selecting rows (continued)
+Select only schools with ".edu" in their website (i.e., eliminate hair schools, etc.)
+
+```{r rowSelect2}
+eduWeb <- scCard[grep(".edu", scCard$INSTURL), ]
+head(eduWeb)
+```
+
+----
+## Select only community colleges
+
+```{r rowSelect3}
+Sys.setlocale('LC_ALL','C')
+# I was getting some weird warnings with the code below. Google 
+# helped me fix it with the above line of code. Still not sure 
+# what was going on.
+
+cc <- scCard[grep("Community", scCard$INSTNM), ]
+head(cc)
+```
 
 
+----
+## Substituting characters
+
+```{r sub1}
+sentences <- c("Here's some text. Here's some more text.", 
+			  "Red text makes me feel bad.",
+			  "Green text makes me feel good.")
+sub("text", "food", sentences) # replace only the first match within each element
+gsub("text", "food", sentences) # replace all matches
+```
+
+----
+## Real example
+
+```{r sub2}
+cam <- read.csv("./data/CamdenBoroughs.csv", na = "999")
+head(cam$Percentage)
+cam$frl <- as.numeric( sub("%", "", cam$Percentage.Claiming.Free.School.Meals) )
+str(cam$frl)
+```
+Note that in the above we can use either `sub` or `gsub` equivalently, because there's only one instance. In other cases, this would not be the case. For example, if we wanted to change the format of the dates.
+
+-----
+## Change census date format
+
+```{r censusDateReFormat}
+cam$censusDate <- sub("/", "-", cam$Census.Date) 
+head(cam$censusDate) # Not what we want
+cam$censusDate <- gsub("/", "-", cam$Census.Date) 
+head(cam$censusDate) # What we want
 ```
 
 ---- .segue
 # Regular Expressions
 
 ----
-# Regular Expressions
-This will all be part of Week 7p2. I just didn't want to create a new slide set right now.
-
-----
 ## What is a regular expression?
 * "an 'instruction' given to a function on what and how to match or replace strings" (Eden, 2007)
-* Special characters, or *metacharacters*, define specific operations
-* Metacharacters can be interpreted as regular characters, provided the appropriate syntax is used.
-* Metacharacters include the following: 
+* *Metacharacters* are special characters that define specific operations
+	+ can be interpreted as standard characters, provided the appropriate syntax is used.
+	+ include the following: 
 
 ```{r regexpTbl, echo = FALSE}
 noquote(c("$","*","+",".","?","[","^","{","|","(","\\"))
 ```
-
+* *Sequences* define sequences of characters to match
+* *Character classes* define ranges to match or not match
 
 ----
 ## Why does this matter?
@@ -81,7 +301,139 @@ strsplit(string, "\\.")
 ```
 
 ----
-## The + metacharacter
+## Quick overview of metacharacters
+(we'll talk about each in more detail)
+
+```{r metaTable, echo = FALSE, results = "asis"}
+sequences <- noquote(c("$","*","+",".","?","[","^","{","|","(", "\\"))
+operation <- c("Matches the end of a string",
+			   "Matches preceding character at least 0 times",
+			   "Matches preceding character at least 1 time",
+			   "Matches any single character (i.e., skip operator)",
+			   "Matches preceding character at most 1 time",
+			   "Define character classes",
+			   "Matches the start of a string",
+			   "Define n to m matches of preceding character",
+			   "Or operator",
+			   "Define groupings",
+			   "Anchor sequences (different from R escape sequences")
+knitr::kable(data.frame("Metacharacter" = sequences, 
+						"Operation" = operation))
+```
+
+----
+## Quantifiers
+```{r quantifiers, echo = FALSE, results = "asis"}
+knitr::kable(data.frame("Metacharacter" = sequences, 
+						"Operation" = operation)[c(2, 3, 5, 8), ], 
+	row.names = FALSE)
+```
+<span style="color:gray; font-size:8pt;">Examples taken from http://stat545.com/block022_regular-expression.html </span>
+
+```{r quantifiers1}
+letterSet <- c("a", "ab", "acb", "accb", "acccb", "accccb")
+grep("ac*b", letterSet, value = TRUE)
+grep("ac+b", letterSet, value = TRUE)
+```
+
+----
+```{r pTable1, echo = FALSE, results = "asis"}
+knitr::kable(data.frame("Metacharacter" = sequences, 
+						"Operation" = operation)[c(5, 8), ], 
+	row.names = FALSE)
+```
+
+```{r pLetterSet1, echo = FALSE}
+letterSet
+
+```
+
+```{r quantifiers2}
+grep("ac?b", letterSet, value = TRUE)
+grep("ac{2}b", letterSet, value = TRUE)
+grep("ac{2,}b", letterSet, value = TRUE)
+```
+
+-----
+
+```{r pLetterSet2, echo = FALSE}
+letterSet
+```
+
+```{r quantifiers3}
+grep("ac{1,3}b", letterSet, value = TRUE)
+grep("ac{0,3}b", letterSet, value = TRUE)
+```
+
+---- &twocol
+## Position matching
+
+*** =left
+
+```{r posMatchTab1, results = "asis", echo = FALSE}
+knitr::kable(data.frame("Metacharacter" = sequences, 
+						"Operation" = operation)[c(1, 7, 11), ], 
+	row.names = FALSE)
+```
+Most common escape characters are probably `\n` and `\t`, for new line and tab, respectively. There are also the following anchor sequences.
+
+*** =right
+
+<div align = "center">
+<img src = ./assets/img/anchorSequences.png width = 500 height = 500>
+</div>
+
+----
+## Match the end of a string
+
+```{r dollarStringMatch}
+itemIDs <- c("RF3L02E03", "RF3M08E05", "RF3H10E08", "RL1L03E03", "RL1M05E05",
+ 			 "RL1H10E04", "RI2L03E07", "RI2M06E05", "RI2HSAMPLEE06", 
+ 			 "WR4L02E03", "WR4M06E06", "WR4H09E03", "WR9L03E04", "WR9M08E04", 
+ 			 "WR9H12E04", "LA1L01E11", "LA1M06E04", "LA1H09E04", "WR2L03E05", 
+ 			 "WR2M06E05", "WR2H10E05", "LA2LSAMPLEE03", "LA2M06E04", 
+ 			 "LA2H09E08", "RF4L02E03", "RF4M08E06", "RF4H09E07", "RL7L02E07", 
+ 			 "RL7M06E06", "RL7H10E06", "RI1L02E07", "RI1M07E08", "RI1H11E07", 
+ 			 "WR1L02E07", "WR1M07E07", "WR1H11E08")
+
+# Select fourth grade items
+grep("4$", itemIDs, value = TRUE)
+```
+
+----
+## Match the start of a string
+
+```{r startStringMatch}
+# Select RL items
+grep("^RF", itemIDs, value = TRUE)
+
+# Select WR items
+grep("^WR", itemIDs, value = TRUE)
+```
+<br>
+
+Note that in this case, the result would be the same without using the `^` metacharacter, but it's safer to go ahead and use it anyway. In other cases, there may be matches with the same pattern that are not at the beginning.
+
+----
+## Escape on new lines
+
+```{r escape1}
+string <- "Here is a string. It's quite long.
+ It has multiple line breaks. And some
+ occur in the middle of a 
+ sentence."
+strsplit(string, "\n")
+
+strsplit(string, "\\Bl")
+```
+
+
+grep("...L", itemIDs, value = TRUE)
+```
+
+
+----
+## The `+` metacharacter
 Matches one or more repetitions of the preceding string.
 
 ```{r regEx+}
@@ -100,5 +452,30 @@ d <- data.frame(rnorm(3), rbinom(3, 1, 0.5), rpois(3, 2))
 d
 names(d) <- gsub(pattern = "\\.+", replacement = "", x = names(d))
 ```
+
+----
+## Putting them together
+
+From https://www.stat.auckland.ac.nz/~paul/ItDT/HTML/node84.html
+
+```{r sillyExample1}
+catmat <- c("The cat sat on the mat.", "Here's a second example.")
+grep("c(..) s\\1", catmat, value = TRUE)
+
+```
+
+More realistic examples
+
+```{r gaminder1}
+gapMinder <- read.delim("http://www.stat.ubc.ca/~jenny/notOcto/STAT545A/examples/gapminder/data/gapminderDataFiveYear.txt", header = TRUE)
+head(gapMinder)
+grep("(.*[it].*)land$", gapMinder$country, value = TRUE)
+```
+
+
+----
+## Padding numbers
+`sprintf`
+
 
 
