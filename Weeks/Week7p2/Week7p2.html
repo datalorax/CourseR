@@ -1,0 +1,2835 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>String Manipulations: grep and regex</title>
+  <meta charset="utf-8">
+  <meta name="description" content="String Manipulations: grep and regex">
+  <meta name="author" content="Daniel Anderson">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>String Manipulations: grep and regex</h1>
+    <h2>Week 7.2</h2>
+    <p>Daniel Anderson<br/>CourseR</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <article data-timings="">
+    <style>
+em {
+  font-style: italic
+}
+</style>
+
+<style>
+strong {
+  font-weight: bold;
+}
+</style>
+
+<h2>Today&#39;s Agenda</h2>
+
+<p>String Searching and regular expressions</p>
+
+<ul>
+<li>Searching strings
+
+<ul>
+<li><code>grep()</code></li>
+<li><code>grepl()</code></li>
+<li><code>sub()</code></li>
+<li><code>gsub()</code></li>
+</ul></li>
+<li>Regular expressions
+
+<ul>
+<li>metacharacters</li>
+<li>character classes</li>
+</ul></li>
+</ul>
+
+<div style='float:left;width:48%;'>
+  
+</div>
+<div style='float:right;width:48%;'>
+  
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Needle in a haystack</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><code>grep</code> and <code>grepl</code> can be used to find a needle (string pattern) in a haystack string vector. By default, <code>grep</code> will return the location in the vector of any string matching the pattern.</p>
+
+<pre><code class="r">fruits &lt;- c(&quot;apple&quot;, &quot;orange&quot;, &quot;banana&quot;, &quot;mango&quot;)
+grep(&quot;b&quot;, fruits)
+</code></pre>
+
+<pre><code>## [1] 3
+</code></pre>
+
+<pre><code class="r">grep(&quot;o&quot;, fruits)
+</code></pre>
+
+<pre><code>## [1] 2 4
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Return values, rather than an index</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">grep(&quot;b&quot;, fruits, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;banana&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;o&quot;, fruits, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;orange&quot; &quot;mango&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Logical version: <code>grepl</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">grepl(&quot;b&quot;, fruits)
+</code></pre>
+
+<pre><code>## [1] FALSE FALSE  TRUE FALSE
+</code></pre>
+
+<pre><code class="r">grepl(&quot;o&quot;, fruits)
+</code></pre>
+
+<pre><code>## [1] FALSE  TRUE FALSE  TRUE
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Using <code>grep</code> and <code>grepl</code> for subsetting</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r"># load data
+scCard &lt;- read.csv(&quot;./data/CollegeScorecard.csv&quot;, 
+    stringsAsFactors = FALSE, na = c(&quot;NULL&quot;, &quot;PrivacySuppressed&quot;))
+head(scCard)
+</code></pre>
+
+<pre><code>##   UNITID   OPEID opeid6                              INSTNM       CITY
+## 1 100654  100200   1002            Alabama A &amp; M University     Normal
+## 2 100663  105200   1052 University of Alabama at Birmingham Birmingham
+## 3 100690 2503400  25034                  Amridge University Montgomery
+## 4 100706  105500   1055 University of Alabama in Huntsville Huntsville
+## 5 100724  100500   1005            Alabama State University Montgomery
+## 6 100751  105100   1051           The University of Alabama Tuscaloosa
+##   STABBR                        INSTURL
+## 1     AL                  www.aamu.edu/
+## 2     AL                    www.uab.edu
+## 3     AL      www.amridgeuniversity.edu
+## 4     AL                    www.uah.edu
+## 5     AL www.alasu.edu/email/index.aspx
+## 6     AL                    www.ua.edu/
+##                                                                                    NPCURL
+## 1                                          galileo.aamu.edu/netpricecalculator/npcalc.htm
+## 2                                         www.collegeportraits.org/AL/UAB/estimator/agree
+## 3 tcc.noellevitz.com/(S(miwoihs5stz5cpyifh4nczu0))/Amridge%20University/Freshman-Students
+## 4                                                                         finaid.uah.edu/
+## 5                                     www.alasu.edu/cost-aid/forms/calculator/index.aspx/
+## 6                                                                             oira.ua.edu
+##   HCM2 PREDDEG CONTROL LOCALE HBCU PBI ANNHI TRIBAL AANAPII HSI NANTI
+## 1    0       3       1     12    1   0     0      0       0   0     0
+## 2    0       3       1     12    0   0     0      0       0   0     0
+## 3    0       3       2     12    0   0     0      0       0   0     0
+## 4    0       3       1     12    0   0     0      0       0   0     0
+## 5    0       3       1     12    1   0     0      0       0   0     0
+## 6    0       3       1     13    0   0     0      0       0   0     0
+##   MENONLY WOMENONLY RELAFFIL SATVR25 SATVR75 SATMT25 SATMT75 SATWR25
+## 1       0         0       NA     370     450     350     450      NA
+## 2       0         0       NA     520     640     520     650      NA
+## 3       0         0       74      NA      NA      NA      NA      NA
+## 4       0         0       NA     510     640     510     650      NA
+## 5       0         0       NA     380     480     370     480      NA
+## 6       0         0       NA     490     620     500     640     480
+##   SATWR75 SATVRMID SATMTMID SATWRMID ACTCM25 ACTCM75 ACTEN25 ACTEN75
+## 1      NA      410      400       NA      15      19      14      19
+## 2      NA      580      585       NA      22      28      22      29
+## 3      NA       NA       NA       NA      NA      NA      NA      NA
+## 4      NA      575      580       NA      23      29      22      30
+## 5      NA      430      425       NA      15      19      14      20
+## 6     600      555      570      540      22      30      22      32
+##   ACTMT25 ACTMT75 ACTWR25 ACTWR75 ACTCMMID ACTENMID ACTMTMID ACTWRMID
+## 1      15      18      NA      NA       17       17       17       NA
+## 2      20      26      NA      NA       25       26       23       NA
+## 3      NA      NA      NA      NA       NA       NA       NA       NA
+## 4      22      28      NA      NA       26       26       25       NA
+## 5      15      18      NA      NA       17       17       17       NA
+## 6      21      28       6       8       26       27       25        7
+##   SAT_AVG SAT_AVG_ALL PCIP01 PCIP03 PCIP04 PCIP05 PCIP09 PCIP10 PCIP11
+## 1     823         823 0.0397 0.0199 0.0116 0.0000 0.0000 0.0348 0.0348
+## 2    1146        1146 0.0000 0.0000 0.0000 0.0018 0.0456 0.0000 0.0099
+## 3      NA          NA 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0411
+## 4    1180        1180 0.0000 0.0000 0.0000 0.0000 0.0318 0.0000 0.0273
+## 5     830         830 0.0000 0.0000 0.0000 0.0000 0.0733 0.0000 0.0450
+## 6    1171        1171 0.0000 0.0054 0.0000 0.0022 0.1084 0.0000 0.0068
+##   PCIP12 PCIP13 PCIP14 PCIP15 PCIP16 PCIP19 PCIP22 PCIP23 PCIP24 PCIP25
+## 1      0 0.1490 0.1175 0.0348 0.0000 0.0281      0 0.0182 0.0546      0
+## 2      0 0.0862 0.0632 0.0000 0.0090 0.0000      0 0.0203 0.0262      0
+## 3      0 0.0000 0.0000 0.0000 0.0000 0.0000      0 0.0000 0.6301      0
+## 4      0 0.0173 0.2566 0.0000 0.0173 0.0000      0 0.0309 0.0000      0
+## 5      0 0.2150 0.0000 0.0000 0.0000 0.0000      0 0.0183 0.0000      0
+## 6      0 0.0840 0.0640 0.0000 0.0068 0.0700      0 0.0178 0.0000      0
+##   PCIP26 PCIP27 PCIP29 PCIP30 PCIP31 PCIP38 PCIP39 PCIP40 PCIP41 PCIP42
+## 1 0.1026 0.0199      0 0.0000 0.0000 0.0000 0.0000 0.0248      0 0.0579
+## 2 0.0619 0.0135      0 0.0000 0.0000 0.0095 0.0000 0.0181      0 0.0840
+## 3 0.0000 0.0000      0 0.0000 0.0000 0.0000 0.2603 0.0000      0 0.0000
+## 4 0.0855 0.0218      0 0.0000 0.0000 0.0082 0.0000 0.0209      0 0.0218
+## 5 0.1033 0.0183      0 0.0000 0.0183 0.0000 0.0000 0.0150      0 0.0617
+## 6 0.0348 0.0076      0 0.0302 0.0000 0.0060 0.0000 0.0074      0 0.0354
+##   PCIP43 PCIP44 PCIP45 PCIP46 PCIP47 PCIP48 PCIP49 PCIP50 PCIP51 PCIP52
+## 1 0.0050 0.0364 0.0480      0      0      0      0 0.0166 0.0000 0.1457
+## 2 0.0280 0.0244 0.0501      0      0      0      0 0.0415 0.2090 0.1765
+## 3 0.0000 0.0000 0.0000      0      0      0      0 0.0000 0.0000 0.0685
+## 4 0.0000 0.0000 0.0173      0      0      0      0 0.0346 0.1720 0.2247
+## 5 0.1183 0.0650 0.0150      0      0      0      0 0.0567 0.0633 0.1067
+## 6 0.0216 0.0124 0.0422      0      0      0      0 0.0360 0.0946 0.2870
+##   PCIP54 DISTANCEONLY  UGDS UGDS_WHITE UGDS_BLACK UGDS_HISP UGDS_ASIAN
+## 1 0.0000            0  4051     0.0279     0.9501    0.0089     0.0022
+## 2 0.0212            0 11200     0.5987     0.2590    0.0258     0.0518
+## 3 0.0000            0   322     0.2919     0.4224    0.0093     0.0031
+## 4 0.0118            0  5525     0.7012     0.1310    0.0338     0.0364
+## 5 0.0067            0  5354     0.0161     0.9285    0.0114     0.0015
+## 6 0.0194            0 28692     0.7865     0.1140    0.0313     0.0112
+##   UGDS_AIAN UGDS_NHPI UGDS_2MOR UGDS_NRA UGDS_UNKN PPTUG_EF CURROPER
+## 1    0.0012    0.0010    0.0000   0.0002    0.0084   0.0622        1
+## 2    0.0026    0.0007    0.0344   0.0140    0.0130   0.2579        1
+## 3    0.0031    0.0031    0.0000   0.0000    0.2671   0.3727        1
+## 4    0.0145    0.0002    0.0161   0.0329    0.0338   0.2395        1
+## 5    0.0009    0.0007    0.0064   0.0207    0.0138   0.0902        1
+## 6    0.0044    0.0011    0.0210   0.0278    0.0028   0.0852        1
+##   NPT4_PUB NPT4_PRIV NPT41_PUB NPT42_PUB NPT43_PUB NPT44_PUB NPT45_PUB
+## 1    13415        NA     12683     13292     16104     16944     15416
+## 2    14805        NA     12361     13765     16670     17096     17291
+## 3       NA      7455        NA        NA        NA        NA        NA
+## 4    17520        NA     14652     16334     19016     20263     20306
+## 5    11936        NA     12342     10811     11362     13079      2948
+## 6    20916        NA     17206     19960     21363     23115     23748
+##   NPT41_PRIV NPT42_PRIV NPT43_PRIV NPT44_PRIV NPT45_PRIV PCTPELL RET_FT4
+## 1         NA         NA         NA         NA         NA  0.7115  0.6314
+## 2         NA         NA         NA         NA         NA  0.3505  0.8016
+## 3       6736       9974         NA         NA         NA  0.6839  0.3750
+## 4         NA         NA         NA         NA         NA  0.3281  0.8098
+## 5         NA         NA         NA         NA         NA  0.8265  0.6219
+## 6         NA         NA         NA         NA         NA  0.2107  0.8700
+##   RET_FTL4 RET_PT4 RET_PTL4 PCTFLOAN UG25abv GRAD_DEBT_MDN_SUPP
+## 1       NA  0.5000       NA   0.8204  0.1049            33611.5
+## 2       NA  0.5000       NA   0.5397  0.2422            23117.0
+## 3       NA  0.3333       NA   0.7629  0.8540                 NA
+## 4       NA  0.4444       NA   0.4728  0.2640            24738.0
+## 5       NA  0.3023       NA   0.8735  0.1270            33452.0
+## 6       NA  0.6563       NA   0.4148  0.0853            24000.0
+##   GRAD_DEBT_MDN10YR_SUPP RPY_3YR_RT_SUPP C150_4_POOLED_SUPP
+## 1               373.1566       0.4447139          0.3087183
+## 2               256.6461       0.7562667          0.5085498
+## 3                     NA       0.6472492                 NA
+## 4               274.6425       0.7819979          0.4782113
+## 5               371.3858       0.3311989          0.2574820
+## 6               266.4492       0.8139413          0.6660094
+##   C200_L4_POOLED_SUPP md_earn_wne_p10 gt_25k_p6
+## 1                  NA           31400 0.4622980
+## 2                  NA           40300 0.6604845
+## 3                  NA           38100 0.6466666
+## 4                  NA           46600 0.6605657
+## 5                  NA           27800 0.3422256
+## 6                  NA           42400 0.6610854
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>Select Institution ID and SAT variables</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">sat &lt;- scCard[ ,c(1, grep(&quot;SAT&quot;, names(scCard)))]
+head(sat)
+</code></pre>
+
+<pre><code>##   UNITID SATVR25 SATVR75 SATMT25 SATMT75 SATWR25 SATWR75 SATVRMID SATMTMID
+## 1 100654     370     450     350     450      NA      NA      410      400
+## 2 100663     520     640     520     650      NA      NA      580      585
+## 3 100690      NA      NA      NA      NA      NA      NA       NA       NA
+## 4 100706     510     640     510     650      NA      NA      575      580
+## 5 100724     380     480     370     480      NA      NA      430      425
+## 6 100751     490     620     500     640     480     600      555      570
+##   SATWRMID SAT_AVG SAT_AVG_ALL
+## 1       NA     823         823
+## 2       NA    1146        1146
+## 3       NA      NA          NA
+## 4       NA    1180        1180
+## 5       NA     830         830
+## 6      540    1171        1171
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>with <code>grepl</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <h1>Two steps, two methods</h1>
+
+<div style='float:left;width:48%;'>
+  <pre><code class="r">satVars &lt;- grepl(&quot;SAT&quot;, names(scCard))
+satVars[1] &lt;- TRUE
+sat &lt;- scCard[ ,satVars]
+head(sat)
+</code></pre>
+
+<pre><code>##   UNITID SATVR25 SATVR75 SATMT25 SATMT75 SATWR25 SATWR75 SATVRMID SATMTMID
+## 1 100654     370     450     350     450      NA      NA      410      400
+## 2 100663     520     640     520     650      NA      NA      580      585
+## 3 100690      NA      NA      NA      NA      NA      NA       NA       NA
+## 4 100706     510     640     510     650      NA      NA      575      580
+## 5 100724     380     480     370     480      NA      NA      430      425
+## 6 100751     490     620     500     640     480     600      555      570
+##   SATWRMID SAT_AVG SAT_AVG_ALL
+## 1       NA     823         823
+## 2       NA    1146        1146
+## 3       NA      NA          NA
+## 4       NA    1180        1180
+## 5       NA     830         830
+## 6      540    1171        1171
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="r">satVars &lt;- scCard[ ,grepl(&quot;SAT&quot;, names(scCard))]
+sat &lt;- as.data.frame(
+        cbind(&quot;UNITID&quot; = scCard[ ,1], satVars))
+head(sat)
+</code></pre>
+
+<pre><code>##   UNITID SATVR25 SATVR75 SATMT25 SATMT75 SATWR25 SATWR75 SATVRMID SATMTMID
+## 1 100654     370     450     350     450      NA      NA      410      400
+## 2 100663     520     640     520     650      NA      NA      580      585
+## 3 100690      NA      NA      NA      NA      NA      NA       NA       NA
+## 4 100706     510     640     510     650      NA      NA      575      580
+## 5 100724     380     480     370     480      NA      NA      430      425
+## 6 100751     490     620     500     640     480     600      555      570
+##   SATWRMID SAT_AVG SAT_AVG_ALL
+## 1       NA     823         823
+## 2       NA    1146        1146
+## 3       NA      NA          NA
+## 4       NA    1180        1180
+## 5       NA     830         830
+## 6      540    1171        1171
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Percentage degrees awarded by program type</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><span style="color:gray"> see full data dictionary at </span> <a href="https://collegescorecard.ed.gov/data/documentation/">https://collegescorecard.ed.gov/data/documentation/</a></p>
+
+<table><thead>
+<tr>
+<th align="left">Variable Name</th>
+<th align="left">Program</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">PCIP01</td>
+<td align="left">Agriculture, Agriculture Operations, and Related Sciences</td>
+</tr>
+<tr>
+<td align="left">PCIP03</td>
+<td align="left">Natural Resources and Conservation</td>
+</tr>
+<tr>
+<td align="left">PCIP04</td>
+<td align="left">Architecture and Related Services</td>
+</tr>
+<tr>
+<td align="left">PCIP05</td>
+<td align="left">Area, Ethnic, Cultural, Gender, and Group Studies</td>
+</tr>
+<tr>
+<td align="left">PCIP09</td>
+<td align="left">Communication, Journalism, and Related Programs</td>
+</tr>
+<tr>
+<td align="left">PCIP10</td>
+<td align="left">Communications Technologies/Technicians and Support Services</td>
+</tr>
+<tr>
+<td align="left">PCIP11</td>
+<td align="left">Computer and Information Sciences and Support Services</td>
+</tr>
+<tr>
+<td align="left">PCIP12</td>
+<td align="left">Personal and Culinary Services</td>
+</tr>
+<tr>
+<td align="left">PCIP13</td>
+<td align="left">Education</td>
+</tr>
+<tr>
+<td align="left">PCIP14</td>
+<td align="left">Engineering</td>
+</tr>
+<tr>
+<td align="left">PCIP15</td>
+<td align="left">Engineering Technologies and Engineering-Related Fields</td>
+</tr>
+<tr>
+<td align="left">PCIP16</td>
+<td align="left">Foreign Languages, Literatures, and Linguistics</td>
+</tr>
+<tr>
+<td align="left">PCIP19</td>
+<td align="left">Family and Consumer Sciences/Human Sciences</td>
+</tr>
+<tr>
+<td align="left">PCIP22</td>
+<td align="left">Legal Professions and Studies</td>
+</tr>
+<tr>
+<td align="left">PCIP23</td>
+<td align="left">English Language and Literature/Letters</td>
+</tr>
+<tr>
+<td align="left">PCIP24</td>
+<td align="left">Liberal Arts and Sciences, General Studies and Humanities</td>
+</tr>
+<tr>
+<td align="left">PCIP25</td>
+<td align="left">Library Science</td>
+</tr>
+<tr>
+<td align="left">PCIP26</td>
+<td align="left">Biological and Biomedical Sciences</td>
+</tr>
+<tr>
+<td align="left">PCIP27</td>
+<td align="left">Mathematics and Statistics</td>
+</tr>
+<tr>
+<td align="left">PCIP29</td>
+<td align="left">Military Technologies and Applied Sciences</td>
+</tr>
+<tr>
+<td align="left">PCIP30</td>
+<td align="left">Multi/Interdisciplinary Studies</td>
+</tr>
+<tr>
+<td align="left">PCIP31</td>
+<td align="left">Parks, Recreation, Leisure, and Fitness Studies</td>
+</tr>
+<tr>
+<td align="left">PCIP38</td>
+<td align="left">Philosophy and Religious Studies</td>
+</tr>
+<tr>
+<td align="left">PCIP39</td>
+<td align="left">Theology and Religious Vocations</td>
+</tr>
+<tr>
+<td align="left">PCIP40</td>
+<td align="left">Physical Sciences</td>
+</tr>
+<tr>
+<td align="left">PCIP41</td>
+<td align="left">Science Technologies/Technicians</td>
+</tr>
+<tr>
+<td align="left">PCIP42</td>
+<td align="left">Psychology</td>
+</tr>
+<tr>
+<td align="left">PCIP43</td>
+<td align="left">Homeland Security, Law Enforcement, Firefighting and Related Protective Services</td>
+</tr>
+<tr>
+<td align="left">PCIP44</td>
+<td align="left">Public Administration and Social Service Professions</td>
+</tr>
+<tr>
+<td align="left">PCIP45</td>
+<td align="left">Social Sciences</td>
+</tr>
+<tr>
+<td align="left">PCIP46</td>
+<td align="left">Construction Trades</td>
+</tr>
+<tr>
+<td align="left">PCIP47</td>
+<td align="left">Mechanic and Repair Technologies/Technicians</td>
+</tr>
+<tr>
+<td align="left">PCIP48</td>
+<td align="left">Precision Production</td>
+</tr>
+<tr>
+<td align="left">PCIP49</td>
+<td align="left">Transportation and Materials Moving</td>
+</tr>
+<tr>
+<td align="left">PCIP50</td>
+<td align="left">Visual and Performing Arts</td>
+</tr>
+<tr>
+<td align="left">PCIP51</td>
+<td align="left">Health Professions and Related Programs</td>
+</tr>
+<tr>
+<td align="left">PCIP52</td>
+<td align="left">Business, Management, Marketing, and Related Support Services</td>
+</tr>
+<tr>
+<td align="left">PCIP54</td>
+<td align="left">History</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Select percentage degree awarded var</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">pct &lt;- scCard[ ,c(1, grep(&quot;PCIP&quot;, names(scCard)))]
+head(pct)
+</code></pre>
+
+<pre><code>##   UNITID PCIP01 PCIP03 PCIP04 PCIP05 PCIP09 PCIP10 PCIP11 PCIP12 PCIP13
+## 1 100654 0.0397 0.0199 0.0116 0.0000 0.0000 0.0348 0.0348      0 0.1490
+## 2 100663 0.0000 0.0000 0.0000 0.0018 0.0456 0.0000 0.0099      0 0.0862
+## 3 100690 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0411      0 0.0000
+## 4 100706 0.0000 0.0000 0.0000 0.0000 0.0318 0.0000 0.0273      0 0.0173
+## 5 100724 0.0000 0.0000 0.0000 0.0000 0.0733 0.0000 0.0450      0 0.2150
+## 6 100751 0.0000 0.0054 0.0000 0.0022 0.1084 0.0000 0.0068      0 0.0840
+##   PCIP14 PCIP15 PCIP16 PCIP19 PCIP22 PCIP23 PCIP24 PCIP25 PCIP26 PCIP27
+## 1 0.1175 0.0348 0.0000 0.0281      0 0.0182 0.0546      0 0.1026 0.0199
+## 2 0.0632 0.0000 0.0090 0.0000      0 0.0203 0.0262      0 0.0619 0.0135
+## 3 0.0000 0.0000 0.0000 0.0000      0 0.0000 0.6301      0 0.0000 0.0000
+## 4 0.2566 0.0000 0.0173 0.0000      0 0.0309 0.0000      0 0.0855 0.0218
+## 5 0.0000 0.0000 0.0000 0.0000      0 0.0183 0.0000      0 0.1033 0.0183
+## 6 0.0640 0.0000 0.0068 0.0700      0 0.0178 0.0000      0 0.0348 0.0076
+##   PCIP29 PCIP30 PCIP31 PCIP38 PCIP39 PCIP40 PCIP41 PCIP42 PCIP43 PCIP44
+## 1      0 0.0000 0.0000 0.0000 0.0000 0.0248      0 0.0579 0.0050 0.0364
+## 2      0 0.0000 0.0000 0.0095 0.0000 0.0181      0 0.0840 0.0280 0.0244
+## 3      0 0.0000 0.0000 0.0000 0.2603 0.0000      0 0.0000 0.0000 0.0000
+## 4      0 0.0000 0.0000 0.0082 0.0000 0.0209      0 0.0218 0.0000 0.0000
+## 5      0 0.0000 0.0183 0.0000 0.0000 0.0150      0 0.0617 0.1183 0.0650
+## 6      0 0.0302 0.0000 0.0060 0.0000 0.0074      0 0.0354 0.0216 0.0124
+##   PCIP45 PCIP46 PCIP47 PCIP48 PCIP49 PCIP50 PCIP51 PCIP52 PCIP54
+## 1 0.0480      0      0      0      0 0.0166 0.0000 0.1457 0.0000
+## 2 0.0501      0      0      0      0 0.0415 0.2090 0.1765 0.0212
+## 3 0.0000      0      0      0      0 0.0000 0.0000 0.0685 0.0000
+## 4 0.0173      0      0      0      0 0.0346 0.1720 0.2247 0.0118
+## 5 0.0150      0      0      0      0 0.0567 0.0633 0.1067 0.0067
+## 6 0.0422      0      0      0      0 0.0360 0.0946 0.2870 0.0194
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Create a new variable <strong>max</strong> variable</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Variable should include the name of the PCIP that corresponds to its maximum.</p>
+
+<pre><code class="r"># Remove rows with complete missing data
+pct2 &lt;- pct[apply(pct[ ,-1], 1, function(x) sum(is.na(x)) != (ncol(pct) -1)), ]
+
+maxLoc &lt;- apply(pct2[ ,-1], 1, which.max) + 1
+pct2$maxprop &lt;- sapply(1:nrow(pct2), function(i) {
+    names(pct2)[maxLoc[i]]
+})
+head(pct2[ ,35:40])
+</code></pre>
+
+<pre><code>##   PCIP49 PCIP50 PCIP51 PCIP52 PCIP54 maxprop
+## 1      0 0.0166 0.0000 0.1457 0.0000  PCIP13
+## 2      0 0.0415 0.2090 0.1765 0.0212  PCIP51
+## 3      0 0.0000 0.0000 0.0685 0.0000  PCIP24
+## 4      0 0.0346 0.1720 0.2247 0.0118  PCIP14
+## 5      0 0.0567 0.0633 0.1067 0.0067  PCIP13
+## 6      0 0.0360 0.0946 0.2870 0.0194  PCIP52
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Merge results back in</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">scCard &lt;- merge(scCard, pct2[ ,c(1, ncol(pct2))], by = 1, all = TRUE)
+par(las = 2)
+plot(table(scCard$maxprop),
+    main = &quot;Frequency of Max Graduation Programs&quot;,
+    xlab = &quot;Program Code&quot;,
+    ylab = &quot;Frequency&quot;,
+    tck = 0,
+    cex.axis = 0.6)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <article data-timings="">
+    <p><img src="assets/fig/mergeMaxProp-1.png" alt="plot of chunk mergeMaxProp"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Selecting rows</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Select only Oregon schools</p>
+
+<pre><code class="r">OR &lt;- scCard[grep(&quot;OR&quot;, scCard$STABBR), ] # grepl could be used equivalntly
+table(OR$STABBR)
+</code></pre>
+
+<pre><code>## 
+## OR 
+## 96
+</code></pre>
+
+<pre><code class="r">head(OR)
+</code></pre>
+
+<pre><code>##      UNITID   OPEID opeid6                            INSTNM      CITY
+## 3126 208080 1050700  10507      Academy of Hair Design-Salem     Salem
+## 3127 208123 3783400  37834         Abdill Career College Inc   Medford
+## 3128 208187 2311000  23110 Paul Mitchell the School-Portland  Portland
+## 3129 208239  781900   7819     The Art Institute of Portland  Portland
+## 3130 208248 2154400  21544 Beau Monde College of Hair Design  Portland
+## 3131 208275  318600   3186   Blue Mountain Community College Pendleton
+##      STABBR                         INSTURL
+## 3126     OR        academyofhairdesign.info
+## 3127     OR                  www.abdill.com
+## 3128     OR      portland.paulmitchell.edu:
+## 3129     OR www.artinstitutes.edu/portland/
+## 3130     OR        www.beaumondecollege.com
+## 3131     OR                  www.bluecc.edu
+##                                                                           NPCURL
+## 3126                           netcalculator.academyofhairdesign.info/npcalc.htm
+## 3127                                                 files.abdill.com/npcalc.htm
+## 3128                          portland.paulmitchell.edu/programs/finance-options
+## 3129 tcc.noellevitz.com/edmc/Freshman-Students?iframe=true&amp;width=600&amp;height=1000
+## 3130                                                    www.beaumondecollege.com
+## 3131                   www.bluecc.edu/sites/bluecc.edu/files/NetPrice/npcalc.htm
+##      HCM2 PREDDEG CONTROL LOCALE HBCU PBI ANNHI TRIBAL AANAPII HSI NANTI
+## 3126    0       1       3     12    0   0     0      0       0   0     0
+## 3127    0       1       3     13    0   0     0      0       0   0     0
+## 3128    0       1       3     11    0   0     0      0       0   0     0
+## 3129    0       3       3     11    0   0     0      0       0   0     0
+## 3130    0       1       3     11    0   0     0      0       0   0     0
+## 3131    0       2       1     41    0   0     0      0       0   0     0
+##      MENONLY WOMENONLY RELAFFIL SATVR25 SATVR75 SATMT25 SATMT75 SATWR25
+## 3126       0         0       NA      NA      NA      NA      NA      NA
+## 3127       0         0       NA      NA      NA      NA      NA      NA
+## 3128       0         0       NA      NA      NA      NA      NA      NA
+## 3129       0         0       NA      NA      NA      NA      NA      NA
+## 3130       0         0       NA      NA      NA      NA      NA      NA
+## 3131       0         0       NA      NA      NA      NA      NA      NA
+##      SATWR75 SATVRMID SATMTMID SATWRMID ACTCM25 ACTCM75 ACTEN25 ACTEN75
+## 3126      NA       NA       NA       NA      NA      NA      NA      NA
+## 3127      NA       NA       NA       NA      NA      NA      NA      NA
+## 3128      NA       NA       NA       NA      NA      NA      NA      NA
+## 3129      NA       NA       NA       NA      NA      NA      NA      NA
+## 3130      NA       NA       NA       NA      NA      NA      NA      NA
+## 3131      NA       NA       NA       NA      NA      NA      NA      NA
+##      ACTMT25 ACTMT75 ACTWR25 ACTWR75 ACTCMMID ACTENMID ACTMTMID ACTWRMID
+## 3126      NA      NA      NA      NA       NA       NA       NA       NA
+## 3127      NA      NA      NA      NA       NA       NA       NA       NA
+## 3128      NA      NA      NA      NA       NA       NA       NA       NA
+## 3129      NA      NA      NA      NA       NA       NA       NA       NA
+## 3130      NA      NA      NA      NA       NA       NA       NA       NA
+## 3131      NA      NA      NA      NA       NA       NA       NA       NA
+##      SAT_AVG SAT_AVG_ALL PCIP01 PCIP03 PCIP04 PCIP05 PCIP09 PCIP10 PCIP11
+## 3126      NA          NA 0.0000      0      0      0 0.0000 0.0000 0.0000
+## 3127      NA          NA 0.0000      0      0      0 0.0000 0.0000 0.0000
+## 3128      NA          NA 0.0000      0      0      0 0.0000 0.0000 0.0000
+## 3129      NA          NA 0.0000      0      0      0 0.0241 0.0103 0.1724
+## 3130      NA          NA 0.0000      0      0      0 0.0000 0.0000 0.0000
+## 3131      NA          NA 0.0172      0      0      0 0.0000 0.0000 0.0000
+##      PCIP12 PCIP13 PCIP14 PCIP15 PCIP16 PCIP19 PCIP22 PCIP23 PCIP24 PCIP25
+## 3126    1.0 0.0000      0 0.0000      0      0 0.0000      0 0.0000      0
+## 3127    0.0 0.0000      0 0.0000      0      0 0.0137      0 0.0000      0
+## 3128    1.0 0.0000      0 0.0000      0      0 0.0000      0 0.0000      0
+## 3129    0.1 0.0000      0 0.0000      0      0 0.0000      0 0.0000      0
+## 3130    1.0 0.0000      0 0.0000      0      0 0.0000      0 0.0000      0
+## 3131    0.0 0.0931      0 0.0392      0      0 0.0000      0 0.5539      0
+##      PCIP26 PCIP27 PCIP29 PCIP30 PCIP31 PCIP38 PCIP39 PCIP40 PCIP41 PCIP42
+## 3126      0      0      0      0      0      0      0      0      0      0
+## 3127      0      0      0      0      0      0      0      0      0      0
+## 3128      0      0      0      0      0      0      0      0      0      0
+## 3129      0      0      0      0      0      0      0      0      0      0
+## 3130      0      0      0      0      0      0      0      0      0      0
+## 3131      0      0      0      0      0      0      0      0      0      0
+##      PCIP43 PCIP44 PCIP45 PCIP46 PCIP47 PCIP48 PCIP49 PCIP50 PCIP51 PCIP52
+## 3126      0      0      0 0.0000 0.0000 0.0000      0 0.0000 0.0000 0.0000
+## 3127      0      0      0 0.0000 0.0000 0.0000      0 0.0000 0.9315 0.0548
+## 3128      0      0      0 0.0000 0.0000 0.0000      0 0.0000 0.0000 0.0000
+## 3129      0      0      0 0.0000 0.0000 0.0000      0 0.5897 0.0000 0.1034
+## 3130      0      0      0 0.0000 0.0000 0.0000      0 0.0000 0.0000 0.0000
+## 3131      0      0      0 0.0025 0.0588 0.0074      0 0.0000 0.0809 0.1471
+##      PCIP54 DISTANCEONLY UGDS UGDS_WHITE UGDS_BLACK UGDS_HISP UGDS_ASIAN
+## 3126      0            0   56     0.7679     0.0536    0.1786     0.0000
+## 3127      0            0   80     0.8125     0.0250    0.1375     0.0250
+## 3128      0            0   88     0.8750     0.0000    0.0455     0.0000
+## 3129      0            0 1348     0.1847     0.0074    0.1031     0.0260
+## 3130      0            0  126     0.7302     0.1190    0.1111     0.0079
+## 3131      0            0 1550     0.6923     0.0110    0.1910     0.0090
+##      UGDS_AIAN UGDS_NHPI UGDS_2MOR UGDS_NRA UGDS_UNKN PPTUG_EF CURROPER
+## 3126    0.0000    0.0000    0.0000   0.0000    0.0000   0.0000        1
+## 3127    0.0000    0.0000    0.0000   0.0000    0.0000   0.0000        1
+## 3128    0.0227    0.0000    0.0114   0.0000    0.0455   0.0000        1
+## 3129    0.0037    0.0007    0.0000   0.0000    0.6743   0.3175        1
+## 3130    0.0159    0.0000    0.0079   0.0079    0.0000   0.0000        1
+## 3131    0.0277    0.0058    0.0368   0.0013    0.0252   0.3761        1
+##      NPT4_PUB NPT4_PRIV NPT41_PUB NPT42_PUB NPT43_PUB NPT44_PUB NPT45_PUB
+## 3126       NA     10839        NA        NA        NA        NA        NA
+## 3127       NA     21353        NA        NA        NA        NA        NA
+## 3128       NA        NA        NA        NA        NA        NA        NA
+## 3129       NA     27383        NA        NA        NA        NA        NA
+## 3130       NA      8653        NA        NA        NA        NA        NA
+## 3131    10679        NA      9947     10574     11730     13544     13289
+##      NPT41_PRIV NPT42_PRIV NPT43_PRIV NPT44_PRIV NPT45_PRIV PCTPELL
+## 3126      10839         NA         NA         NA         NA  1.0000
+## 3127      21015      22297      22147      23847      23714  0.8110
+## 3128         NA         NA         NA         NA         NA  0.0000
+## 3129      25466      27342      28843      31389      30908  0.5645
+## 3130       8298      10115      10573         NA         NA  0.4794
+## 3131         NA         NA         NA         NA         NA  0.3296
+##      RET_FT4 RET_FTL4 RET_PT4 RET_PTL4 PCTFLOAN UG25abv GRAD_DEBT_MDN_SUPP
+## 3126      NA   0.7273      NA       NA   1.0000  0.5536            18833.0
+## 3127      NA       NA      NA       NA   0.8346  0.4500             9500.0
+## 3128      NA       NA      NA       NA   0.0000  0.2159                 NA
+## 3129  0.4527       NA  0.4333       NA   0.7974  0.4110            35287.0
+## 3130      NA   0.9130      NA       NA   0.5928  0.3413            12295.5
+## 3131      NA   0.3221      NA   0.3273   0.2017  0.3920            14549.0
+##      GRAD_DEBT_MDN10YR_SUPP RPY_3YR_RT_SUPP C150_4_POOLED_SUPP
+## 3126               209.0849       0.3877551                 NA
+## 3127               105.4695       0.5403727                 NA
+## 3128                     NA              NA                 NA
+## 3129               391.7580       0.7190442           0.304133
+## 3130               136.5053       0.3333333                 NA
+## 3131               161.5237       0.4602941                 NA
+##      C200_L4_POOLED_SUPP md_earn_wne_p10 gt_25k_p6 maxprop
+## 3126           0.5658000           14500 0.1964286  PCIP12
+## 3127           0.5652014              NA 0.4305556  PCIP51
+## 3128                  NA              NA        NA  PCIP12
+## 3129                  NA           33000 0.4994475  PCIP50
+## 3130           0.7814305           20700 0.3461539  PCIP12
+## 3131           0.2670621           28800 0.4957265  PCIP24
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Selecting rows (continued)</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Select only schools with &quot;.edu&quot; in their website (i.e., eliminate hair schools, etc.)</p>
+
+<pre><code class="r">eduWeb &lt;- scCard[grep(&quot;.edu&quot;, scCard$INSTURL), ]
+head(eduWeb)
+</code></pre>
+
+<pre><code>##   UNITID   OPEID opeid6                              INSTNM       CITY
+## 1 100654  100200   1002            Alabama A &amp; M University     Normal
+## 2 100663  105200   1052 University of Alabama at Birmingham Birmingham
+## 3 100690 2503400  25034                  Amridge University Montgomery
+## 4 100706  105500   1055 University of Alabama in Huntsville Huntsville
+## 5 100724  100500   1005            Alabama State University Montgomery
+## 6 100751  105100   1051           The University of Alabama Tuscaloosa
+##   STABBR                        INSTURL
+## 1     AL                  www.aamu.edu/
+## 2     AL                    www.uab.edu
+## 3     AL      www.amridgeuniversity.edu
+## 4     AL                    www.uah.edu
+## 5     AL www.alasu.edu/email/index.aspx
+## 6     AL                    www.ua.edu/
+##                                                                                    NPCURL
+## 1                                          galileo.aamu.edu/netpricecalculator/npcalc.htm
+## 2                                         www.collegeportraits.org/AL/UAB/estimator/agree
+## 3 tcc.noellevitz.com/(S(miwoihs5stz5cpyifh4nczu0))/Amridge%20University/Freshman-Students
+## 4                                                                         finaid.uah.edu/
+## 5                                     www.alasu.edu/cost-aid/forms/calculator/index.aspx/
+## 6                                                                             oira.ua.edu
+##   HCM2 PREDDEG CONTROL LOCALE HBCU PBI ANNHI TRIBAL AANAPII HSI NANTI
+## 1    0       3       1     12    1   0     0      0       0   0     0
+## 2    0       3       1     12    0   0     0      0       0   0     0
+## 3    0       3       2     12    0   0     0      0       0   0     0
+## 4    0       3       1     12    0   0     0      0       0   0     0
+## 5    0       3       1     12    1   0     0      0       0   0     0
+## 6    0       3       1     13    0   0     0      0       0   0     0
+##   MENONLY WOMENONLY RELAFFIL SATVR25 SATVR75 SATMT25 SATMT75 SATWR25
+## 1       0         0       NA     370     450     350     450      NA
+## 2       0         0       NA     520     640     520     650      NA
+## 3       0         0       74      NA      NA      NA      NA      NA
+## 4       0         0       NA     510     640     510     650      NA
+## 5       0         0       NA     380     480     370     480      NA
+## 6       0         0       NA     490     620     500     640     480
+##   SATWR75 SATVRMID SATMTMID SATWRMID ACTCM25 ACTCM75 ACTEN25 ACTEN75
+## 1      NA      410      400       NA      15      19      14      19
+## 2      NA      580      585       NA      22      28      22      29
+## 3      NA       NA       NA       NA      NA      NA      NA      NA
+## 4      NA      575      580       NA      23      29      22      30
+## 5      NA      430      425       NA      15      19      14      20
+## 6     600      555      570      540      22      30      22      32
+##   ACTMT25 ACTMT75 ACTWR25 ACTWR75 ACTCMMID ACTENMID ACTMTMID ACTWRMID
+## 1      15      18      NA      NA       17       17       17       NA
+## 2      20      26      NA      NA       25       26       23       NA
+## 3      NA      NA      NA      NA       NA       NA       NA       NA
+## 4      22      28      NA      NA       26       26       25       NA
+## 5      15      18      NA      NA       17       17       17       NA
+## 6      21      28       6       8       26       27       25        7
+##   SAT_AVG SAT_AVG_ALL PCIP01 PCIP03 PCIP04 PCIP05 PCIP09 PCIP10 PCIP11
+## 1     823         823 0.0397 0.0199 0.0116 0.0000 0.0000 0.0348 0.0348
+## 2    1146        1146 0.0000 0.0000 0.0000 0.0018 0.0456 0.0000 0.0099
+## 3      NA          NA 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0411
+## 4    1180        1180 0.0000 0.0000 0.0000 0.0000 0.0318 0.0000 0.0273
+## 5     830         830 0.0000 0.0000 0.0000 0.0000 0.0733 0.0000 0.0450
+## 6    1171        1171 0.0000 0.0054 0.0000 0.0022 0.1084 0.0000 0.0068
+##   PCIP12 PCIP13 PCIP14 PCIP15 PCIP16 PCIP19 PCIP22 PCIP23 PCIP24 PCIP25
+## 1      0 0.1490 0.1175 0.0348 0.0000 0.0281      0 0.0182 0.0546      0
+## 2      0 0.0862 0.0632 0.0000 0.0090 0.0000      0 0.0203 0.0262      0
+## 3      0 0.0000 0.0000 0.0000 0.0000 0.0000      0 0.0000 0.6301      0
+## 4      0 0.0173 0.2566 0.0000 0.0173 0.0000      0 0.0309 0.0000      0
+## 5      0 0.2150 0.0000 0.0000 0.0000 0.0000      0 0.0183 0.0000      0
+## 6      0 0.0840 0.0640 0.0000 0.0068 0.0700      0 0.0178 0.0000      0
+##   PCIP26 PCIP27 PCIP29 PCIP30 PCIP31 PCIP38 PCIP39 PCIP40 PCIP41 PCIP42
+## 1 0.1026 0.0199      0 0.0000 0.0000 0.0000 0.0000 0.0248      0 0.0579
+## 2 0.0619 0.0135      0 0.0000 0.0000 0.0095 0.0000 0.0181      0 0.0840
+## 3 0.0000 0.0000      0 0.0000 0.0000 0.0000 0.2603 0.0000      0 0.0000
+## 4 0.0855 0.0218      0 0.0000 0.0000 0.0082 0.0000 0.0209      0 0.0218
+## 5 0.1033 0.0183      0 0.0000 0.0183 0.0000 0.0000 0.0150      0 0.0617
+## 6 0.0348 0.0076      0 0.0302 0.0000 0.0060 0.0000 0.0074      0 0.0354
+##   PCIP43 PCIP44 PCIP45 PCIP46 PCIP47 PCIP48 PCIP49 PCIP50 PCIP51 PCIP52
+## 1 0.0050 0.0364 0.0480      0      0      0      0 0.0166 0.0000 0.1457
+## 2 0.0280 0.0244 0.0501      0      0      0      0 0.0415 0.2090 0.1765
+## 3 0.0000 0.0000 0.0000      0      0      0      0 0.0000 0.0000 0.0685
+## 4 0.0000 0.0000 0.0173      0      0      0      0 0.0346 0.1720 0.2247
+## 5 0.1183 0.0650 0.0150      0      0      0      0 0.0567 0.0633 0.1067
+## 6 0.0216 0.0124 0.0422      0      0      0      0 0.0360 0.0946 0.2870
+##   PCIP54 DISTANCEONLY  UGDS UGDS_WHITE UGDS_BLACK UGDS_HISP UGDS_ASIAN
+## 1 0.0000            0  4051     0.0279     0.9501    0.0089     0.0022
+## 2 0.0212            0 11200     0.5987     0.2590    0.0258     0.0518
+## 3 0.0000            0   322     0.2919     0.4224    0.0093     0.0031
+## 4 0.0118            0  5525     0.7012     0.1310    0.0338     0.0364
+## 5 0.0067            0  5354     0.0161     0.9285    0.0114     0.0015
+## 6 0.0194            0 28692     0.7865     0.1140    0.0313     0.0112
+##   UGDS_AIAN UGDS_NHPI UGDS_2MOR UGDS_NRA UGDS_UNKN PPTUG_EF CURROPER
+## 1    0.0012    0.0010    0.0000   0.0002    0.0084   0.0622        1
+## 2    0.0026    0.0007    0.0344   0.0140    0.0130   0.2579        1
+## 3    0.0031    0.0031    0.0000   0.0000    0.2671   0.3727        1
+## 4    0.0145    0.0002    0.0161   0.0329    0.0338   0.2395        1
+## 5    0.0009    0.0007    0.0064   0.0207    0.0138   0.0902        1
+## 6    0.0044    0.0011    0.0210   0.0278    0.0028   0.0852        1
+##   NPT4_PUB NPT4_PRIV NPT41_PUB NPT42_PUB NPT43_PUB NPT44_PUB NPT45_PUB
+## 1    13415        NA     12683     13292     16104     16944     15416
+## 2    14805        NA     12361     13765     16670     17096     17291
+## 3       NA      7455        NA        NA        NA        NA        NA
+## 4    17520        NA     14652     16334     19016     20263     20306
+## 5    11936        NA     12342     10811     11362     13079      2948
+## 6    20916        NA     17206     19960     21363     23115     23748
+##   NPT41_PRIV NPT42_PRIV NPT43_PRIV NPT44_PRIV NPT45_PRIV PCTPELL RET_FT4
+## 1         NA         NA         NA         NA         NA  0.7115  0.6314
+## 2         NA         NA         NA         NA         NA  0.3505  0.8016
+## 3       6736       9974         NA         NA         NA  0.6839  0.3750
+## 4         NA         NA         NA         NA         NA  0.3281  0.8098
+## 5         NA         NA         NA         NA         NA  0.8265  0.6219
+## 6         NA         NA         NA         NA         NA  0.2107  0.8700
+##   RET_FTL4 RET_PT4 RET_PTL4 PCTFLOAN UG25abv GRAD_DEBT_MDN_SUPP
+## 1       NA  0.5000       NA   0.8204  0.1049            33611.5
+## 2       NA  0.5000       NA   0.5397  0.2422            23117.0
+## 3       NA  0.3333       NA   0.7629  0.8540                 NA
+## 4       NA  0.4444       NA   0.4728  0.2640            24738.0
+## 5       NA  0.3023       NA   0.8735  0.1270            33452.0
+## 6       NA  0.6563       NA   0.4148  0.0853            24000.0
+##   GRAD_DEBT_MDN10YR_SUPP RPY_3YR_RT_SUPP C150_4_POOLED_SUPP
+## 1               373.1566       0.4447139          0.3087183
+## 2               256.6461       0.7562667          0.5085498
+## 3                     NA       0.6472492                 NA
+## 4               274.6425       0.7819979          0.4782113
+## 5               371.3858       0.3311989          0.2574820
+## 6               266.4492       0.8139413          0.6660094
+##   C200_L4_POOLED_SUPP md_earn_wne_p10 gt_25k_p6 maxprop
+## 1                  NA           31400 0.4622980  PCIP13
+## 2                  NA           40300 0.6604845  PCIP51
+## 3                  NA           38100 0.6466666  PCIP24
+## 4                  NA           46600 0.6605657  PCIP14
+## 5                  NA           27800 0.3422256  PCIP13
+## 6                  NA           42400 0.6610854  PCIP52
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>Select only community colleges</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">Sys.setlocale(&#39;LC_ALL&#39;,&#39;C&#39;)
+</code></pre>
+
+<pre><code>## [1] &quot;C/C/C/C/C/en_US.UTF-8&quot;
+</code></pre>
+
+<pre><code class="r"># I was getting some weird warnings with the code below. Google 
+# helped me fix it with the above line of code. Still not sure 
+# what was going on.
+
+cc &lt;- scCard[grep(&quot;Community&quot;, scCard$INSTNM), ]
+head(cc)
+</code></pre>
+
+<pre><code>##    UNITID   OPEID opeid6                                          INSTNM
+## 7  100760  100700   1007               Central Alabama Community College
+## 12 101028 1218200  12182          Chattahoochee Valley Community College
+## 15 101143  101500   1015              Enterprise State Community College
+## 16 101161  106000   1060        James H Faulkner State Community College
+## 18 101240  101700   1017                 Gadsden State Community College
+## 20 101286  101800   1018 George C Wallace State Community College-Dothan
+##              CITY STABBR               INSTURL
+## 7  Alexander City     AL          www.cacc.edu
+## 12    Phenix City     AL            www.cv.edu
+## 15     Enterprise     AL          www.escc.edu
+## 16    Bay Minette     AL www.faulknerstate.edu
+## 18        Gadsden     AL  www.gadsdenstate.edu
+## 20         Dothan     AL       www.wallace.edu
+##                                                 NPCURL HCM2 PREDDEG
+## 7  www.cacc.edu/graphics/netpricecalculator/npcalc.htm    0       2
+## 12                      external.cv.edu/npc/npcalc.htm    0       2
+## 15                    www.escc.edu/NetPrice/npcalc.htm    0       2
+## 16                               www.faulknerstate.edu    0       2
+## 18            www.gadsdenstate.edu/netpricecalculator/    0       2
+## 20           www.wallace.edu/net_price_calculator.aspx    0       2
+##    CONTROL LOCALE HBCU PBI ANNHI TRIBAL AANAPII HSI NANTI MENONLY
+## 7        1     32    0   0     0      0       0   0     0       0
+## 12       1     41    0   0     0      0       0   0     0       0
+## 15       1     32    0   0     0      0       0   0     0       0
+## 16       1     32    0   0     0      0       0   0     0       0
+## 18       1     13    1   0     0      0       0   0     0       0
+## 20       1     41    0   0     0      0       0   0     0       0
+##    WOMENONLY RELAFFIL SATVR25 SATVR75 SATMT25 SATMT75 SATWR25 SATWR75
+## 7          0       NA      NA      NA      NA      NA      NA      NA
+## 12         0       NA      NA      NA      NA      NA      NA      NA
+## 15         0       NA      NA      NA      NA      NA      NA      NA
+## 16         0       NA      NA      NA      NA      NA      NA      NA
+## 18         0       NA      NA      NA      NA      NA      NA      NA
+## 20         0       NA      NA      NA      NA      NA      NA      NA
+##    SATVRMID SATMTMID SATWRMID ACTCM25 ACTCM75 ACTEN25 ACTEN75 ACTMT25
+## 7        NA       NA       NA      NA      NA      NA      NA      NA
+## 12       NA       NA       NA      NA      NA      NA      NA      NA
+## 15       NA       NA       NA      NA      NA      NA      NA      NA
+## 16       NA       NA       NA      NA      NA      NA      NA      NA
+## 18       NA       NA       NA      NA      NA      NA      NA      NA
+## 20       NA       NA       NA      NA      NA      NA      NA      NA
+##    ACTMT75 ACTWR25 ACTWR75 ACTCMMID ACTENMID ACTMTMID ACTWRMID SAT_AVG
+## 7       NA      NA      NA       NA       NA       NA       NA      NA
+## 12      NA      NA      NA       NA       NA       NA       NA      NA
+## 15      NA      NA      NA       NA       NA       NA       NA      NA
+## 16      NA      NA      NA       NA       NA       NA       NA      NA
+## 18      NA      NA      NA       NA       NA       NA       NA      NA
+## 20      NA      NA      NA       NA       NA       NA       NA      NA
+##    SAT_AVG_ALL PCIP01 PCIP03 PCIP04 PCIP05 PCIP09 PCIP10 PCIP11 PCIP12
+## 7           NA 0.0000      0      0      0 0.0000      0 0.0186 0.0000
+## 12          NA 0.0000      0      0      0 0.0000      0 0.0205 0.0000
+## 15          NA 0.0000      0      0      0 0.0000      0 0.0085 0.0000
+## 16          NA 0.0085      0      0      0 0.0000      0 0.0449 0.0000
+## 18          NA 0.0069      0      0      0 0.0057      0 0.0069 0.0631
+## 20          NA 0.0000      0      0      0 0.0000      0 0.0081 0.0477
+##    PCIP13 PCIP14 PCIP15 PCIP16 PCIP19 PCIP22 PCIP23 PCIP24 PCIP25 PCIP26
+## 7       0      0 0.0669      0 0.0000 0.0000      0 0.4833      0      0
+## 12      0      0 0.0000      0 0.0000 0.0000      0 0.3846      0      0
+## 15      0      0 0.0000      0 0.0085 0.0021      0 0.1855      0      0
+## 16      0      0 0.0043      0 0.0000 0.0128      0 0.4637      0      0
+## 18      0      0 0.1239      0 0.0183 0.0298      0 0.1950      0      0
+## 20      0      0 0.0862      0 0.0467 0.0000      0 0.2069      0      0
+##    PCIP27 PCIP29 PCIP30 PCIP31 PCIP38 PCIP39 PCIP40 PCIP41 PCIP42 PCIP43
+## 7       0      0 0.0372      0      0      0      0 0.0000      0 0.0000
+## 12      0      0 0.0000      0      0      0      0 0.0000      0 0.1077
+## 15      0      0 0.0000      0      0      0      0 0.0000      0 0.0000
+## 16      0      0 0.0000      0      0      0      0 0.0000      0 0.0000
+## 18      0      0 0.0000      0      0      0      0 0.0000      0 0.0000
+## 20      0      0 0.0000      0      0      0      0 0.0203      0 0.0101
+##    PCIP44 PCIP45 PCIP46 PCIP47 PCIP48 PCIP49 PCIP50 PCIP51 PCIP52 PCIP54
+## 7       0      0 0.0000 0.0558 0.0297      0 0.0000 0.2045 0.1041      0
+## 12      0      0 0.0000 0.0000 0.0000      0 0.0103 0.3744 0.1026      0
+## 15      0      0 0.0000 0.7249 0.0000      0 0.0000 0.0171 0.0533      0
+## 16      0      0 0.0000 0.0150 0.0150      0 0.0150 0.3162 0.1047      0
+## 18      0      0 0.0218 0.1009 0.0722      0 0.0000 0.2878 0.0677      0
+## 20      0      0 0.0568 0.0294 0.0477      0 0.0000 0.4118 0.0284      0
+##    DISTANCEONLY UGDS UGDS_WHITE UGDS_BLACK UGDS_HISP UGDS_ASIAN UGDS_AIAN
+## 7             0 1779     0.6785     0.2945    0.0118     0.0022    0.0022
+## 12            0 1769     0.4675     0.4409    0.0379     0.0136    0.0034
+## 15            0 1984     0.6411     0.2661    0.0444     0.0166    0.0055
+## 16            0 4182     0.7104     0.2176    0.0263     0.0072    0.0187
+## 18            0 5480     0.6792     0.2100    0.0261     0.0055    0.0075
+## 20            0 4293     0.6306     0.3196    0.0240     0.0058    0.0051
+##    UGDS_NHPI UGDS_2MOR UGDS_NRA UGDS_UNKN PPTUG_EF CURROPER NPT4_PUB
+## 7     0.0011    0.0006   0.0011    0.0079   0.4660        1     6407
+## 12    0.0028    0.0107   0.0000    0.0232   0.4059        1     1873
+## 15    0.0015    0.0176   0.0015    0.0055   0.3538        1     5048
+## 16    0.0012    0.0163   0.0007    0.0017   0.3867        1     7404
+## 18    0.0015    0.0190   0.0135    0.0378   0.4345        1     4565
+## 20    0.0019    0.0128   0.0000    0.0002   0.4675        1     2681
+##    NPT4_PRIV NPT41_PUB NPT42_PUB NPT43_PUB NPT44_PUB NPT45_PUB NPT41_PRIV
+## 7         NA      6330      6032      7802     10512        NA         NA
+## 12        NA      1110      2223      3296      6215      5940         NA
+## 15        NA      4486      4699      7476      9713     10060         NA
+## 16        NA      6474      6901      9452     10286     10846         NA
+## 18        NA      4516      4872      6147      5143        NA         NA
+## 20        NA      2386      3243      5046        NA      2590         NA
+##    NPT42_PRIV NPT43_PRIV NPT44_PRIV NPT45_PRIV PCTPELL RET_FT4 RET_FTL4
+## 7          NA         NA         NA         NA  0.6515      NA   0.4267
+## 12         NA         NA         NA         NA  0.6116      NA   0.5165
+## 15         NA         NA         NA         NA  0.5121      NA   0.5411
+## 16         NA         NA         NA         NA  0.4885      NA   0.5211
+## 18         NA         NA         NA         NA  0.6000      NA   0.5589
+## 20         NA         NA         NA         NA  0.5548      NA   0.5597
+##    RET_PT4 RET_PTL4 PCTFLOAN UG25abv GRAD_DEBT_MDN_SUPP
+## 7       NA   0.4159   0.4777  0.3153                 NA
+## 12      NA   0.3293   0.1948  0.3876               7000
+## 15      NA   0.4500   0.2673  0.3399              11073
+## 16      NA   0.3981   0.4042  0.2909               9153
+## 18      NA   0.3865   0.0000  0.3733                 NA
+## 20      NA   0.4627   0.0000  0.3920                 NA
+##    GRAD_DEBT_MDN10YR_SUPP RPY_3YR_RT_SUPP C150_4_POOLED_SUPP
+## 7                      NA       0.4384018                 NA
+## 12               77.71435       0.5287081                 NA
+## 15              122.93300       0.5543018                 NA
+## 16              101.61706       0.5908529                 NA
+## 18                     NA              NA                 NA
+## 20                     NA              NA                 NA
+##    C200_L4_POOLED_SUPP md_earn_wne_p10 gt_25k_p6 maxprop
+## 7            0.2891894           27100 0.4461358  PCIP24
+## 12           0.2398542           27700 0.4287710  PCIP24
+## 15           0.3382836           26300 0.4896142  PCIP47
+## 16           0.1640982           28900 0.4334661  PCIP24
+## 18           0.2107528           26900 0.3863238  PCIP51
+## 20           0.2604453           27100 0.4051502  PCIP51
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>Substituting characters</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">sentences &lt;- c(&quot;Here&#39;s some text. Here&#39;s some more text.&quot;, 
+              &quot;Red text makes me feel bad.&quot;,
+              &quot;Green text makes me feel good.&quot;)
+sub(&quot;text&quot;, &quot;food&quot;, sentences) # replace only the first match within each element
+</code></pre>
+
+<pre><code>## [1] &quot;Here&#39;s some food. Here&#39;s some more text.&quot;
+## [2] &quot;Red food makes me feel bad.&quot;             
+## [3] &quot;Green food makes me feel good.&quot;
+</code></pre>
+
+<pre><code class="r">gsub(&quot;text&quot;, &quot;food&quot;, sentences) # replace all matches
+</code></pre>
+
+<pre><code>## [1] &quot;Here&#39;s some food. Here&#39;s some more food.&quot;
+## [2] &quot;Red food makes me feel bad.&quot;             
+## [3] &quot;Green food makes me feel good.&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>Real example</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">cam &lt;- read.csv(&quot;./data/CamdenBoroughs.csv&quot;, na = &quot;999&quot;)
+head(cam$Percentage)
+</code></pre>
+
+<pre><code>## [1]       29.6% 27.2% 43.2% 12.2% 54.3%
+## 297 Levels:  0% 0.7% 0.8% 1.4% 1.6% 1.9% 10% 10.2% 10.4% 10.5% ... 98.1%
+</code></pre>
+
+<pre><code class="r">cam$frl &lt;- as.numeric( sub(&quot;%&quot;, &quot;&quot;, cam$Percentage.Claiming.Free.School.Meals) )
+str(cam$frl)
+</code></pre>
+
+<pre><code>##  num [1:664] NA 29.6 27.2 43.2 12.2 54.3 3.7 32.7 20.5 NA ...
+</code></pre>
+
+<p>Note that in the above we can use either <code>sub</code> or <code>gsub</code> equivalently, because there&#39;s only one instance. In other cases, this would not be the case. For example, if we wanted to change the format of the dates.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>Change census date format</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">cam$censusDate &lt;- sub(&quot;/&quot;, &quot;-&quot;, cam$Census.Date) 
+head(cam$censusDate) # Not what we want
+</code></pre>
+
+<pre><code>## [1] &quot;16-01/2014&quot; &quot;16-01/2014&quot; &quot;16-01/2014&quot; &quot;16-01/2014&quot; &quot;16-01/2014&quot;
+## [6] &quot;16-01/2014&quot;
+</code></pre>
+
+<pre><code class="r">cam$censusDate &lt;- gsub(&quot;/&quot;, &quot;-&quot;, cam$Census.Date) 
+head(cam$censusDate) # What we want
+</code></pre>
+
+<pre><code>## [1] &quot;16-01-2014&quot; &quot;16-01-2014&quot; &quot;16-01-2014&quot; &quot;16-01-2014&quot; &quot;16-01-2014&quot;
+## [6] &quot;16-01-2014&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="segue" id="slide-19" style="background:;">
+  <hgroup>
+    <h1>Regular Expressions</h1>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  <hgroup>
+    <h2>What is a regular expression?</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>&quot;an &#39;instruction&#39; given to a function on what and how to match or replace strings&quot; (Eden, 2007)</li>
+<li><em>Metacharacters</em> are special characters that define specific operations
+
+<ul>
+<li>can be interpreted as standard characters, provided the appropriate syntax is used.</li>
+<li>include the following: </li>
+</ul></li>
+</ul>
+
+<pre><code>##  [1] $  *  +  .  ?  [  ^  {  |  (  \\
+</code></pre>
+
+<ul>
+<li><em>Sequences</em> define sequences of characters to match</li>
+<li><em>Character classes</em> define ranges to match or not match</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  <hgroup>
+    <h2>Why does this matter?</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Many of the built-in string functions in R take regular expressions as their arguments. If you&#39;re unaware of how regular expressions work, you could end up with unexpected behavior. For example, the following seems like it should work, but it will not.</p>
+
+<pre><code class="r">string &lt;- &quot;School is fun. Especially recess. That&#39;s the best part. I love recess.&quot;
+strsplit(string, &quot;.&quot;)
+</code></pre>
+
+<pre><code>## [[1]]
+##  [1] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot;
+## [24] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot;
+## [47] &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot;
+## [70] &quot;&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  <article data-timings="">
+    <p>We can get the behavior we intend by overriding the metacharacter</p>
+
+<pre><code class="r">strsplit(string, &quot;\\.&quot;)
+</code></pre>
+
+<pre><code>## [[1]]
+## [1] &quot;School is fun&quot;         &quot; Especially recess&quot;    &quot; That&#39;s the best part&quot;
+## [4] &quot; I love recess&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  <hgroup>
+    <h2>Quick overview of metacharacters</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>(we&#39;ll talk about each in more detail)</p>
+
+<table><thead>
+<tr>
+<th align="left">Metacharacter</th>
+<th align="left">Operation</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">$</td>
+<td align="left">Matches the end of a string</td>
+</tr>
+<tr>
+<td align="left">*</td>
+<td align="left">Matches preceding character at least 0 times</td>
+</tr>
+<tr>
+<td align="left">+</td>
+<td align="left">Matches preceding character at least 1 time</td>
+</tr>
+<tr>
+<td align="left">.</td>
+<td align="left">Matches any single character (i.e., skip operator)</td>
+</tr>
+<tr>
+<td align="left">?</td>
+<td align="left">Matches preceding character 0 or 1 time</td>
+</tr>
+<tr>
+<td align="left">[</td>
+<td align="left">Define character list or character classes</td>
+</tr>
+<tr>
+<td align="left">^</td>
+<td align="left">Matches the start of a string</td>
+</tr>
+<tr>
+<td align="left">{</td>
+<td align="left">Define n to m matches of preceding character</td>
+</tr>
+<tr>
+<td align="left">&#124;</td>
+<td align="left">Or operator</td>
+</tr>
+<tr>
+<td align="left">(</td>
+<td align="left">Define groupings for backreferencing</td>
+</tr>
+<tr>
+<td align="left">\</td>
+<td align="left">Suppress metacharacters and define anchor sequences</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-24" style="background:;">
+  <hgroup>
+    <h2>Quantifiers</h2>
+  </hgroup>
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th align="left">Metacharacter</th>
+<th align="left">Operation</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">*</td>
+<td align="left">Matches preceding character at least 0 times</td>
+</tr>
+<tr>
+<td align="left">+</td>
+<td align="left">Matches preceding character at least 1 time</td>
+</tr>
+<tr>
+<td align="left">?</td>
+<td align="left">Matches preceding character 0 or 1 time</td>
+</tr>
+<tr>
+<td align="left">{</td>
+<td align="left">Define n to m matches of preceding character</td>
+</tr>
+</tbody></table>
+
+<p><span style="color:gray; font-size:8pt;">Examples taken from <a href="http://stat545.com/block022_regular-expression.html">http://stat545.com/block022_regular-expression.html</a> </span></p>
+
+<pre><code class="r">letterSet &lt;- c(&quot;a&quot;, &quot;ab&quot;, &quot;acb&quot;, &quot;accb&quot;, &quot;acccb&quot;, &quot;accccb&quot;)
+grep(&quot;ac*b&quot;, letterSet, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;ab&quot;     &quot;acb&quot;    &quot;accb&quot;   &quot;acccb&quot;  &quot;accccb&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;ac+b&quot;, letterSet, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;acb&quot;    &quot;accb&quot;   &quot;acccb&quot;  &quot;accccb&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th align="left">Metacharacter</th>
+<th align="left">Operation</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">?</td>
+<td align="left">Matches preceding character 0 or 1 time</td>
+</tr>
+<tr>
+<td align="left">{</td>
+<td align="left">Define n to m matches of preceding character</td>
+</tr>
+</tbody></table>
+
+<pre><code>## [1] &quot;a&quot;      &quot;ab&quot;     &quot;acb&quot;    &quot;accb&quot;   &quot;acccb&quot;  &quot;accccb&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;ac?b&quot;, letterSet, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;ab&quot;  &quot;acb&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;ac{2}b&quot;, letterSet, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;accb&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;ac{2,}b&quot;, letterSet, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;accb&quot;   &quot;acccb&quot;  &quot;accccb&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <article data-timings="">
+    <pre><code>## [1] &quot;a&quot;      &quot;ab&quot;     &quot;acb&quot;    &quot;accb&quot;   &quot;acccb&quot;  &quot;accccb&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;ac{1,3}b&quot;, letterSet, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;acb&quot;   &quot;accb&quot;  &quot;acccb&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;ac{0,3}b&quot;, letterSet, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;ab&quot;    &quot;acb&quot;   &quot;accb&quot;  &quot;acccb&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <hgroup>
+    <h2>Position matching</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;'>
+  <table><thead>
+<tr>
+<th align="left">Metacharacter</th>
+<th align="left">Operation</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">$</td>
+<td align="left">Matches the end of a string</td>
+</tr>
+<tr>
+<td align="left">^</td>
+<td align="left">Matches the start of a string</td>
+</tr>
+<tr>
+<td align="left">\</td>
+<td align="left">Suppress metacharacters and define anchor sequences</td>
+</tr>
+</tbody></table>
+
+<p>Anchor sequences are provided on the right (from Sanchez, p. 61). These should not be confused with R escape characters, such as <code>\n</code> and <code>\t</code>, for new line and tab, respectively. </p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <div align = "center">
+<img src = ./assets/img/anchorSequences.png width = 500 height = 500>
+</div>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  <hgroup>
+    <h2>Match the end of a string</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">itemIDs &lt;- c(&quot;RF3L02E03&quot;, &quot;RF3M08E05&quot;, &quot;RF3H10E08&quot;, &quot;RL1L03E03&quot;, &quot;RL1M05E05&quot;,
+             &quot;RL1H10E04&quot;, &quot;RI2L03E07&quot;, &quot;RI2M06E05&quot;, &quot;RI2HSAMPLEE06&quot;, 
+             &quot;WR4L02E03&quot;, &quot;WR4M06E06&quot;, &quot;WR4H09E03&quot;, &quot;WR9L03E04&quot;, &quot;WR9M08E04&quot;, 
+             &quot;WR9H12E04&quot;, &quot;LA1L01E11&quot;, &quot;LA1M06E04&quot;, &quot;LA1H09E04&quot;, &quot;WR2L03E05&quot;, 
+             &quot;WR2M06E05&quot;, &quot;WR2H10E05&quot;, &quot;LA2LSAMPLEE03&quot;, &quot;LA2M06E04&quot;, 
+             &quot;LA2H09E08&quot;, &quot;RF4L02E03&quot;, &quot;RF4M08E06&quot;, &quot;RF4H09E07&quot;, &quot;RL7L02E07&quot;, 
+             &quot;RL7M06E06&quot;, &quot;RL7H10E06&quot;, &quot;RI1L02E07&quot;, &quot;RI1M07E08&quot;, &quot;RI1H11E07&quot;, 
+             &quot;WR1L02E07&quot;, &quot;WR1M07E07&quot;, &quot;WR1H11E08&quot;)
+
+# Select fourth grade items
+grep(&quot;4$&quot;, itemIDs, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;RL1H10E04&quot; &quot;WR9L03E04&quot; &quot;WR9M08E04&quot; &quot;WR9H12E04&quot; &quot;LA1M06E04&quot; &quot;LA1H09E04&quot;
+## [7] &quot;LA2M06E04&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-29" style="background:;">
+  <hgroup>
+    <h2>Match the start of a string</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r"># Select RL items
+grep(&quot;^RF&quot;, itemIDs, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;RF3L02E03&quot; &quot;RF3M08E05&quot; &quot;RF3H10E08&quot; &quot;RF4L02E03&quot; &quot;RF4M08E06&quot; &quot;RF4H09E07&quot;
+</code></pre>
+
+<pre><code class="r"># Select WR items
+grep(&quot;^WR&quot;, itemIDs, value = TRUE)
+</code></pre>
+
+<pre><code>##  [1] &quot;WR4L02E03&quot; &quot;WR4M06E06&quot; &quot;WR4H09E03&quot; &quot;WR9L03E04&quot; &quot;WR9M08E04&quot;
+##  [6] &quot;WR9H12E04&quot; &quot;WR2L03E05&quot; &quot;WR2M06E05&quot; &quot;WR2H10E05&quot; &quot;WR1L02E07&quot;
+## [11] &quot;WR1M07E07&quot; &quot;WR1H11E08&quot;
+</code></pre>
+
+<p><br></p>
+
+<p>Note that in this case, the result would be the same without using the <code>^</code> metacharacter, but it&#39;s safer to go ahead and use it anyway. In other cases, there may be matches with the same pattern that are not at the beginning.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  <hgroup>
+    <h2>Other examples</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><span style="color:gray; font-size:8pt;">Examples taken from <a href="http://stat545.com/block022_regular-expression.html">http://stat545.com/block022_regular-expression.html</a> </span></p>
+
+<pre><code class="r">string2 &lt;- c(&quot;abcd&quot;, &quot;cdab&quot;, &quot;cabd&quot;, &quot;c abd&quot;)
+grep(&quot;ab&quot;, string2, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;abcd&quot;  &quot;cdab&quot;  &quot;cabd&quot;  &quot;c abd&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;^ab&quot;, string2, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;abcd&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;ab$&quot;, string2, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;cdab&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  <hgroup>
+    <h2>Search start of words, rather than strings</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code>## [1] &quot;abcd&quot;  &quot;cdab&quot;  &quot;cabd&quot;  &quot;c abd&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;\\ba&quot;, string2, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;abcd&quot;  &quot;c abd&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;\\b a&quot;, string2, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;c abd&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-32" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">ids &lt;- c(&quot;123225-5417&quot;, &quot;132123-132975&quot;, &quot;321579-123569&quot;)
+grep(&quot;123&quot;, ids, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;123225-5417&quot;   &quot;132123-132975&quot; &quot;321579-123569&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;^123&quot;, ids, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;123225-5417&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;\\b123&quot;, ids, value = TRUE) # New word starts with 123
+</code></pre>
+
+<pre><code>## [1] &quot;123225-5417&quot;   &quot;321579-123569&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;\\B123&quot;, ids, value = TRUE) # New word does not start with 123
+</code></pre>
+
+<pre><code>## [1] &quot;132123-132975&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-33" style="background:;">
+  <hgroup>
+    <h2>Digits</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">digits &lt;- c(&quot;Charlie&quot;, &quot;Charlie2&quot;, &quot;Mary&quot;, &quot;Marianne&quot;, &quot;Mary2&quot;, &quot;15&quot;)
+grep(&quot;\\d&quot;, digits, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;Charlie2&quot; &quot;Mary2&quot;    &quot;15&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;\\D&quot;, digits, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;Charlie&quot;  &quot;Charlie2&quot; &quot;Mary&quot;     &quot;Marianne&quot; &quot;Mary2&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-34" style="background:;">
+  <hgroup>
+    <h2>Spaces</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">string
+</code></pre>
+
+<pre><code>## [1] &quot;School is fun. Especially recess. That&#39;s the best part. I love recess.&quot;
+</code></pre>
+
+<pre><code class="r">gsub(&quot;\\s&quot;, &quot;_&quot;, string)
+</code></pre>
+
+<pre><code>## [1] &quot;School_is_fun._Especially_recess._That&#39;s_the_best_part._I_love_recess.&quot;
+</code></pre>
+
+<pre><code class="r">gsub(&quot;\\S&quot;, &quot;_&quot;, string)
+</code></pre>
+
+<pre><code>## [1] &quot;______ __ ____ __________ _______ ______ ___ ____ _____ _ ____ _______&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-35" style="background:;">
+  <hgroup>
+    <h2>Words</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">gsub(&quot;\\w&quot;, &quot;_&quot;, string)
+</code></pre>
+
+<pre><code>## [1] &quot;______ __ ___. __________ ______. ____&#39;_ ___ ____ ____. _ ____ ______.&quot;
+</code></pre>
+
+<pre><code class="r">gsub(&quot;\\W&quot;, &quot;_&quot;, string)
+</code></pre>
+
+<pre><code>## [1] &quot;School_is_fun__Especially_recess__That_s_the_best_part__I_love_recess_&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-36" style="background:;">
+  <hgroup>
+    <h2>Operators</h2>
+  </hgroup>
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th align="left">Metacharacter</th>
+<th align="left">Operation</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">.</td>
+<td align="left">Matches any single character (i.e., skip operator)</td>
+</tr>
+<tr>
+<td align="left">[</td>
+<td align="left">Define character list or character classes</td>
+</tr>
+<tr>
+<td align="left">&#124;</td>
+<td align="left">Or operator</td>
+</tr>
+<tr>
+<td align="left">(</td>
+<td align="left">Define groupings for backreferencing</td>
+</tr>
+<tr>
+<td align="left">\</td>
+<td align="left">Suppress metacharacters and define anchor sequences</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-37" style="background:;">
+  <hgroup>
+    <h2>Skip characters</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">string2 
+</code></pre>
+
+<pre><code>## [1] &quot;abcd&quot;  &quot;cdab&quot;  &quot;cabd&quot;  &quot;c abd&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;.ab&quot;, string2, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;cdab&quot;  &quot;cabd&quot;  &quot;c abd&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;ab.&quot;, string2, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;abcd&quot;  &quot;cabd&quot;  &quot;c abd&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-38" style="background:;">
+  <hgroup>
+    <h2>Select high items (easy)</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">head(itemIDs)
+</code></pre>
+
+<pre><code>## [1] &quot;RF3L02E03&quot; &quot;RF3M08E05&quot; &quot;RF3H10E08&quot; &quot;RL1L03E03&quot; &quot;RL1M05E05&quot; &quot;RL1H10E04&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;H&quot;, itemIDs, value = TRUE)
+</code></pre>
+
+<pre><code>##  [1] &quot;RF3H10E08&quot;     &quot;RL1H10E04&quot;     &quot;RI2HSAMPLEE06&quot; &quot;WR4H09E03&quot;    
+##  [5] &quot;WR9H12E04&quot;     &quot;LA1H09E04&quot;     &quot;WR2H10E05&quot;     &quot;LA2H09E08&quot;    
+##  [9] &quot;RF4H09E07&quot;     &quot;RL7H10E06&quot;     &quot;RI1H11E07&quot;     &quot;WR1H11E08&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-39" style="background:;">
+  <hgroup>
+    <h2>Select low items (more difficult)</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">head( grep(&quot;L&quot;, itemIDs, value = TRUE) ) # Fails
+</code></pre>
+
+<pre><code>## [1] &quot;RF3L02E03&quot;     &quot;RL1L03E03&quot;     &quot;RL1M05E05&quot;     &quot;RL1H10E04&quot;    
+## [5] &quot;RI2L03E07&quot;     &quot;RI2HSAMPLEE06&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;...L&quot;, itemIDs, value = TRUE) # Fails
+</code></pre>
+
+<pre><code>##  [1] &quot;RF3L02E03&quot;     &quot;RL1L03E03&quot;     &quot;RI2L03E07&quot;     &quot;RI2HSAMPLEE06&quot;
+##  [5] &quot;WR4L02E03&quot;     &quot;WR9L03E04&quot;     &quot;LA1L01E11&quot;     &quot;WR2L03E05&quot;    
+##  [9] &quot;LA2LSAMPLEE03&quot; &quot;RF4L02E03&quot;     &quot;RL7L02E07&quot;     &quot;RI1L02E07&quot;    
+## [13] &quot;WR1L02E07&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;^.{3}L&quot;, itemIDs, value = TRUE) # Success!
+</code></pre>
+
+<pre><code>##  [1] &quot;RF3L02E03&quot;     &quot;RL1L03E03&quot;     &quot;RI2L03E07&quot;     &quot;WR4L02E03&quot;    
+##  [5] &quot;WR9L03E04&quot;     &quot;LA1L01E11&quot;     &quot;WR2L03E05&quot;     &quot;LA2LSAMPLEE03&quot;
+##  [9] &quot;RF4L02E03&quot;     &quot;RL7L02E07&quot;     &quot;RI1L02E07&quot;     &quot;WR1L02E07&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-40" style="background:;">
+  <hgroup>
+    <h2>Or</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Select RL or WR Items</p>
+
+<pre><code class="r">grep(&quot;RL|WR&quot;, itemIDs, value = TRUE)
+</code></pre>
+
+<pre><code>##  [1] &quot;RL1L03E03&quot; &quot;RL1M05E05&quot; &quot;RL1H10E04&quot; &quot;WR4L02E03&quot; &quot;WR4M06E06&quot;
+##  [6] &quot;WR4H09E03&quot; &quot;WR9L03E04&quot; &quot;WR9M08E04&quot; &quot;WR9H12E04&quot; &quot;WR2L03E05&quot;
+## [11] &quot;WR2M06E05&quot; &quot;WR2H10E05&quot; &quot;RL7L02E07&quot; &quot;RL7M06E06&quot; &quot;RL7H10E06&quot;
+## [16] &quot;WR1L02E07&quot; &quot;WR1M07E07&quot; &quot;WR1H11E08&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-41" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">string3 &lt;- c(&quot;^ab&quot;, &quot;ab&quot;, &quot;abc&quot;, &quot;abd&quot;, &quot;abe&quot;, &quot;ab 12&quot;)
+grep(&quot;bc|be&quot;, string3, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;abc&quot; &quot;abe&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;1|c&quot;, string3, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;abc&quot;   &quot;ab 12&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-42" style="background:;">
+  <hgroup>
+    <h2>Backreferences</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Find and reference any number of patterns.</p>
+
+<pre><code class="r">catMat &lt;- &quot;The cat sat on the mat.&quot;
+gsub(&quot;(.at)&quot;, &quot;\\1!&quot;, catMat)
+</code></pre>
+
+<pre><code>## [1] &quot;The cat! sat! on the mat!.&quot;
+</code></pre>
+
+<pre><code class="r">gsub(&quot;(.)at&quot;, &quot;\\1ot&quot;, catMat)
+</code></pre>
+
+<pre><code>## [1] &quot;The cot sot on the mot.&quot;
+</code></pre>
+
+<pre><code class="r">gsub(&quot;(.he) (.at)&quot;, &quot;__\\1__ \\2!&quot;, catMat)
+</code></pre>
+
+<pre><code>## [1] &quot;__The__ cat! sat on __the__ mat!.&quot;
+</code></pre>
+
+<p><span style="color:gray; font-size:8pt;">Examples adapted from <a href="https://www.stat.auckland.ac.nz/%7Epaul/ItDT/HTML/node84.html">https://www.stat.auckland.ac.nz/~paul/ItDT/HTML/node84.html</a> </span></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-43" style="background:;">
+  <hgroup>
+    <h2>Suppress metacharacters</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">string3
+</code></pre>
+
+<pre><code>## [1] &quot;^ab&quot;   &quot;ab&quot;    &quot;abc&quot;   &quot;abd&quot;   &quot;abe&quot;   &quot;ab 12&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;^ab&quot;, string3, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;ab&quot;    &quot;abc&quot;   &quot;abd&quot;   &quot;abe&quot;   &quot;ab 12&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;\\^ab&quot;, string3, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;^ab&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-44" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">string
+</code></pre>
+
+<pre><code>## [1] &quot;School is fun. Especially recess. That&#39;s the best part. I love recess.&quot;
+</code></pre>
+
+<pre><code class="r">gsub(&quot;.&quot;, &quot;___&quot;, string)
+</code></pre>
+
+<pre><code>## [1] &quot;__________________________________________________________________________________________________________________________________________________________________________________________________________________&quot;
+</code></pre>
+
+<pre><code class="r">gsub(&quot;\\.&quot;, &quot;____&quot;, string)
+</code></pre>
+
+<pre><code>## [1] &quot;School is fun____ Especially recess____ That&#39;s the best part____ I love recess____&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-45" style="background:;">
+  <hgroup>
+    <h2>More examples</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">set.seed(300)
+d &lt;- data.frame(rnorm(3), rbinom(3, 1, 0.5), rpois(3, 2))
+d
+</code></pre>
+
+<pre><code>##    rnorm.3. rbinom.3..1..0.5. rpois.3..2.
+## 1 1.3737909                 1           4
+## 2 0.8621069                 0           4
+## 3 0.4734891                 0           1
+</code></pre>
+
+<pre><code class="r">names(d) &lt;- gsub(pattern = &quot;\\.+&quot;, replacement = &quot;&quot;, names(d))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="segue" id="slide-46" style="background:;">
+  <hgroup>
+    <h1>Character classes</h1>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-47" style="background:;">
+  <hgroup>
+    <h2>Search/specify entire classes of characters</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">string3 &lt;- c(&quot;^ab&quot;, &quot;ab&quot;, &quot;abc&quot;, &quot;abd&quot;, &quot;abe&quot;, &quot;ab 12&quot;)
+grep(&quot;ab[cd]&quot;, string3, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;abc&quot; &quot;abd&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;ab[c-e]&quot;, string3, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;abc&quot; &quot;abd&quot; &quot;abe&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-48" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">textNum &lt;- paste0(rep(letters[1:14], each = 7), 1:7)
+textNum
+</code></pre>
+
+<pre><code>##  [1] &quot;a1&quot; &quot;a2&quot; &quot;a3&quot; &quot;a4&quot; &quot;a5&quot; &quot;a6&quot; &quot;a7&quot; &quot;b1&quot; &quot;b2&quot; &quot;b3&quot; &quot;b4&quot; &quot;b5&quot; &quot;b6&quot; &quot;b7&quot;
+## [15] &quot;c1&quot; &quot;c2&quot; &quot;c3&quot; &quot;c4&quot; &quot;c5&quot; &quot;c6&quot; &quot;c7&quot; &quot;d1&quot; &quot;d2&quot; &quot;d3&quot; &quot;d4&quot; &quot;d5&quot; &quot;d6&quot; &quot;d7&quot;
+## [29] &quot;e1&quot; &quot;e2&quot; &quot;e3&quot; &quot;e4&quot; &quot;e5&quot; &quot;e6&quot; &quot;e7&quot; &quot;f1&quot; &quot;f2&quot; &quot;f3&quot; &quot;f4&quot; &quot;f5&quot; &quot;f6&quot; &quot;f7&quot;
+## [43] &quot;g1&quot; &quot;g2&quot; &quot;g3&quot; &quot;g4&quot; &quot;g5&quot; &quot;g6&quot; &quot;g7&quot; &quot;h1&quot; &quot;h2&quot; &quot;h3&quot; &quot;h4&quot; &quot;h5&quot; &quot;h6&quot; &quot;h7&quot;
+## [57] &quot;i1&quot; &quot;i2&quot; &quot;i3&quot; &quot;i4&quot; &quot;i5&quot; &quot;i6&quot; &quot;i7&quot; &quot;j1&quot; &quot;j2&quot; &quot;j3&quot; &quot;j4&quot; &quot;j5&quot; &quot;j6&quot; &quot;j7&quot;
+## [71] &quot;k1&quot; &quot;k2&quot; &quot;k3&quot; &quot;k4&quot; &quot;k5&quot; &quot;k6&quot; &quot;k7&quot; &quot;l1&quot; &quot;l2&quot; &quot;l3&quot; &quot;l4&quot; &quot;l5&quot; &quot;l6&quot; &quot;l7&quot;
+## [85] &quot;m1&quot; &quot;m2&quot; &quot;m3&quot; &quot;m4&quot; &quot;m5&quot; &quot;m6&quot; &quot;m7&quot; &quot;n1&quot; &quot;n2&quot; &quot;n3&quot; &quot;n4&quot; &quot;n5&quot; &quot;n6&quot; &quot;n7&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;[a-e][3-5]&quot;, textNum, value = TRUE)
+</code></pre>
+
+<pre><code>##  [1] &quot;a3&quot; &quot;a4&quot; &quot;a5&quot; &quot;b3&quot; &quot;b4&quot; &quot;b5&quot; &quot;c3&quot; &quot;c4&quot; &quot;c5&quot; &quot;d3&quot; &quot;d4&quot; &quot;d5&quot; &quot;e3&quot; &quot;e4&quot;
+## [15] &quot;e5&quot;
+</code></pre>
+
+<p>Invert the character list with <code>^</code>.</p>
+
+<pre><code class="r">grep(&quot;[^a-e][3-5]&quot;, textNum, value = TRUE)
+</code></pre>
+
+<pre><code>##  [1] &quot;f3&quot; &quot;f4&quot; &quot;f5&quot; &quot;g3&quot; &quot;g4&quot; &quot;g5&quot; &quot;h3&quot; &quot;h4&quot; &quot;h5&quot; &quot;i3&quot; &quot;i4&quot; &quot;i5&quot; &quot;j3&quot; &quot;j4&quot;
+## [15] &quot;j5&quot; &quot;k3&quot; &quot;k4&quot; &quot;k5&quot; &quot;l3&quot; &quot;l4&quot; &quot;l5&quot; &quot;m3&quot; &quot;m4&quot; &quot;m5&quot; &quot;n3&quot; &quot;n4&quot; &quot;n5&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-49" style="background:;">
+  <hgroup>
+    <h2>POSIX character classes</h2>
+  </hgroup>
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th align="left">Code</th>
+<th align="left">Description</th>
+<th align="left">Equivalent Code</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">[:digit:]</td>
+<td align="left">Digits, 0-9</td>
+<td align="left">[0-9]</td>
+</tr>
+<tr>
+<td align="left">[:lower:]</td>
+<td align="left">Lower case letters</td>
+<td align="left">[a-z]</td>
+</tr>
+<tr>
+<td align="left">[:upper:]</td>
+<td align="left">Upper case letters</td>
+<td align="left">[A-Z]</td>
+</tr>
+<tr>
+<td align="left">[:alpha:]</td>
+<td align="left">Alphabetic characters</td>
+<td align="left">[[:lower:][:upper:]] or [A-z]</td>
+</tr>
+<tr>
+<td align="left">[:alnum:]</td>
+<td align="left">Alphanumeric characters</td>
+<td align="left">[[:alpha:][:digit:]] or [A-z0-9]</td>
+</tr>
+<tr>
+<td align="left">[:xdigit:]</td>
+<td align="left">Base 16 hexadecimal</td>
+<td align="left">[0-9A-Fa-f]</td>
+</tr>
+<tr>
+<td align="left">[:blank:]</td>
+<td align="left">Blank characters (space and tab)</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">[:space:]</td>
+<td align="left">Space characters (all)</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">[:punct:]</td>
+<td align="left">Punctuation characters</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">[:graph:]</td>
+<td align="left">Human readable characters</td>
+<td align="left">[[:alnum:][:punct:]]</td>
+</tr>
+<tr>
+<td align="left">[:print:]</td>
+<td align="left">Printable characters</td>
+<td align="left">[[:alnum:][:punct:]\\s]</td>
+</tr>
+<tr>
+<td align="left">[:cntrl:]</td>
+<td align="left">Control characters (line breaks, etc.)</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-50" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">string4 &lt;- c(&quot;ab&quot;, &quot;ab12&quot;, &quot;Dc a&quot;, &quot;BB&quot;, &quot;Here&#39;s some text.&quot;, &quot;Here&#39;s a \n new line.&quot;)
+cat(string4)
+</code></pre>
+
+<pre><code>## ab ab12 Dc a BB Here&#39;s some text. Here&#39;s a 
+##  new line.
+</code></pre>
+
+<pre><code class="r">grep(&quot;[[:digit:]]&quot;, string4, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;ab12&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;[[:lower:]]&quot;, string4, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;ab&quot;                    &quot;ab12&quot;                  &quot;Dc a&quot;                 
+## [4] &quot;Here&#39;s some text.&quot;     &quot;Here&#39;s a \n new line.&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;[[:upper:]]&quot;, string4, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;Dc a&quot;                  &quot;BB&quot;                    &quot;Here&#39;s some text.&quot;    
+## [4] &quot;Here&#39;s a \n new line.&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-51" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">grep(&quot;[[:space:]]&quot;, string4, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;Dc a&quot;                  &quot;Here&#39;s some text.&quot;     &quot;Here&#39;s a \n new line.&quot;
+</code></pre>
+
+<pre><code class="r">grep(&quot;[[:punct:]]&quot;, string4, value = TRUE)
+</code></pre>
+
+<pre><code>## [1] &quot;Here&#39;s some text.&quot;     &quot;Here&#39;s a \n new line.&quot;
+</code></pre>
+
+<pre><code class="r">strsplit(sentences, &quot;[[:space:]]&quot;)
+</code></pre>
+
+<pre><code>## [[1]]
+## [1] &quot;Here&#39;s&quot; &quot;some&quot;   &quot;text.&quot;  &quot;Here&#39;s&quot; &quot;some&quot;   &quot;more&quot;   &quot;text.&quot; 
+## 
+## [[2]]
+## [1] &quot;Red&quot;   &quot;text&quot;  &quot;makes&quot; &quot;me&quot;    &quot;feel&quot;  &quot;bad.&quot; 
+## 
+## [[3]]
+## [1] &quot;Green&quot; &quot;text&quot;  &quot;makes&quot; &quot;me&quot;    &quot;feel&quot;  &quot;good.&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-52" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">strsplit(sentences, &quot;[[:space:][:punct:]]&quot;)
+</code></pre>
+
+<pre><code>## [[1]]
+##  [1] &quot;Here&quot; &quot;s&quot;    &quot;some&quot; &quot;text&quot; &quot;&quot;     &quot;Here&quot; &quot;s&quot;    &quot;some&quot; &quot;more&quot; &quot;text&quot;
+## 
+## [[2]]
+## [1] &quot;Red&quot;   &quot;text&quot;  &quot;makes&quot; &quot;me&quot;    &quot;feel&quot;  &quot;bad&quot;  
+## 
+## [[3]]
+## [1] &quot;Green&quot; &quot;text&quot;  &quot;makes&quot; &quot;me&quot;    &quot;feel&quot;  &quot;good&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-53" style="background:;">
+  <hgroup>
+    <h2>Things we still haven&#39;t covered</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><code>sprintf</code> (useful for padding numbers)</li>
+<li><code>regexpr</code></li>
+<li><code>gregexpr</code></li>
+<li><code>regexec</code></li>
+<li>Matching
+
+<ul>
+<li><code>regmatches</code></li>
+<li><code>match</code></li>
+<li><code>pmatch</code></li>
+<li><code>charmatch</code></li>
+</ul></li>
+<li>(...still more I&#39;m probably missing)</li>
+<li><em>stringr</em> package (part of the Hadleyverse, contains many useful functions for manipulating strings)</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="segue" id="slide-54" style="background:;">
+  <hgroup>
+    <h1>Example with real data</h1>
+  </hgroup>
+  <article data-timings="">
+    <p><span style="color:gray; font-size:8pt;">Examples taken from <a href="https://rstudio-pubs-static.s3.amazonaws.com/74603_76cd14d5983f47408fdf0b323550b846.html">https://rstudio-pubs-static.s3.amazonaws.com/74603_76cd14d5983f47408fdf0b323550b846.html</a> </span></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-55" style="background:;">
+  <hgroup>
+    <h2>Gapminder data</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">install.packages(&quot;gapminder&quot;)
+</code></pre>
+
+<pre><code>## 
+## The downloaded binary packages are in
+##  /var/folders/wr/3cb759291pl5vg9x64565c4w0000gn/T//RtmpQavlE9/downloaded_packages
+</code></pre>
+
+<pre><code class="r">library(gapminder)
+data(gapminder)
+head(gapminder)
+</code></pre>
+
+<pre><code>##       country continent year lifeExp      pop gdpPercap
+## 1 Afghanistan      Asia 1952  28.801  8425333  779.4453
+## 2 Afghanistan      Asia 1957  30.332  9240934  820.8530
+## 3 Afghanistan      Asia 1962  31.997 10267083  853.1007
+## 4 Afghanistan      Asia 1967  34.020 11537966  836.1971
+## 5 Afghanistan      Asia 1972  36.088 13079460  739.9811
+## 6 Afghanistan      Asia 1977  38.438 14880372  786.1134
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-56" style="background:;">
+  <hgroup>
+    <h2>Quick aside</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Data are also available online. We haven&#39;t talked about this much, but you can always read data into R directly from the web</p>
+
+<pre><code class="r">gapMinder &lt;- read.delim(&quot;http://www.stat.ubc.ca/~jenny/notOcto/STAT545A/examples/gapminder/data/gapminderDataFiveYear.txt&quot;, 
+    header = TRUE)
+head(gapMinder)
+</code></pre>
+
+<pre><code>##       country year      pop continent lifeExp gdpPercap
+## 1 Afghanistan 1952  8425333      Asia  28.801  779.4453
+## 2 Afghanistan 1957  9240934      Asia  30.332  820.8530
+## 3 Afghanistan 1962 10267083      Asia  31.997  853.1007
+## 4 Afghanistan 1967 11537966      Asia  34.020  836.1971
+## 5 Afghanistan 1972 13079460      Asia  36.088  739.9811
+## 6 Afghanistan 1977 14880372      Asia  38.438  786.1134
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-57" style="background:;">
+  <hgroup>
+    <h2>Searching countries</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Find all countries that end with <em>land</em>, and have an &quot;i&quot; or &quot;t&quot; in them.</p>
+
+<pre><code class="r">grep(&quot;(.*[it].*)land$&quot;, gapminder$country, value = TRUE)
+</code></pre>
+
+<pre><code>##  [1] &quot;Finland&quot;     &quot;Finland&quot;     &quot;Finland&quot;     &quot;Finland&quot;     &quot;Finland&quot;    
+##  [6] &quot;Finland&quot;     &quot;Finland&quot;     &quot;Finland&quot;     &quot;Finland&quot;     &quot;Finland&quot;    
+## [11] &quot;Finland&quot;     &quot;Finland&quot;     &quot;Swaziland&quot;   &quot;Swaziland&quot;   &quot;Swaziland&quot;  
+## [16] &quot;Swaziland&quot;   &quot;Swaziland&quot;   &quot;Swaziland&quot;   &quot;Swaziland&quot;   &quot;Swaziland&quot;  
+## [21] &quot;Swaziland&quot;   &quot;Swaziland&quot;   &quot;Swaziland&quot;   &quot;Swaziland&quot;   &quot;Switzerland&quot;
+## [26] &quot;Switzerland&quot; &quot;Switzerland&quot; &quot;Switzerland&quot; &quot;Switzerland&quot; &quot;Switzerland&quot;
+## [31] &quot;Switzerland&quot; &quot;Switzerland&quot; &quot;Switzerland&quot; &quot;Switzerland&quot; &quot;Switzerland&quot;
+## [36] &quot;Switzerland&quot; &quot;Thailand&quot;    &quot;Thailand&quot;    &quot;Thailand&quot;    &quot;Thailand&quot;   
+## [41] &quot;Thailand&quot;    &quot;Thailand&quot;    &quot;Thailand&quot;    &quot;Thailand&quot;    &quot;Thailand&quot;   
+## [46] &quot;Thailand&quot;    &quot;Thailand&quot;    &quot;Thailand&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-58" style="background:;">
+  <hgroup>
+    <h2>Backreferencing</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Replace <em>land</em> for <em>LAND</em> for countries with an &quot;i&quot; or &quot;t&quot; in them</p>
+
+<pre><code class="r">gapminder$country &lt;- gsub(&quot;(.*[it].*)land$&quot;, &quot;\\1LAND&quot;, gapminder$country)
+unique(
+    grep(&quot;LAND&quot;, gapminder$country, value = TRUE)
+    )
+</code></pre>
+
+<pre><code>## [1] &quot;FinLAND&quot;     &quot;SwaziLAND&quot;   &quot;SwitzerLAND&quot; &quot;ThaiLAND&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-59" style="background:;">
+  <hgroup>
+    <h2>Abbreviated lab</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Find countries that begin with &quot;South&quot;</li>
+<li>Find countries that have &quot;Ga&quot; at the beginning of either word (not string)</li>
+<li>Find countries that have 2 consecutive e&#39;s</li>
+</ul>
+
+<h1>Advanced</h1>
+
+<ul>
+<li>write a function that takes a generic string variable and makes the following manipulations: 
+
+<ul>
+<li>keeps only alpha-numeric characters</li>
+<li>removes all spaces</li>
+<li>converts to lower case
+As an example, if the string Coeur d&#39;Alene were fed to the function, it should return coeurdalene. (you can use this to test your function)</li>
+</ul></li>
+</ul>
+
+<p><span style="color:gray; font-size:8pt;">Examples taken from <a href="https://rstudio-pubs-static.s3.amazonaws.com/74603_76cd14d5983f47408fdf0b323550b846.html">https://rstudio-pubs-static.s3.amazonaws.com/74603_76cd14d5983f47408fdf0b323550b846.html</a> </span></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-60" style="background:;">
+  <hgroup>
+    <h1>Find countries that begin with &quot;South&quot;</h1>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">unique( grep(&quot;^South&quot;, gapminder$country, value = TRUE) )
+</code></pre>
+
+<pre><code>## [1] &quot;South Africa&quot;
+</code></pre>
+
+<pre><code class="r">#Alternatively
+grep(&quot;^South&quot;, levels(gapminder$country), value = TRUE)
+</code></pre>
+
+<pre><code>## character(0)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-61" style="background:;">
+  <hgroup>
+    <h1>Find countries that have &quot;Ga&quot; at the beginning of either word (not string)</h1>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">grep(&quot;\\bGa&quot;, levels(gapminder$country), value = TRUE)
+</code></pre>
+
+<pre><code>## character(0)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-62" style="background:;">
+  <hgroup>
+    <h1>Write function</h1>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Keep only alpha-numeric characters</li>
+<li>Remove all spaces</li>
+<li>Convert to lower case</li>
+</ul>
+
+<pre><code class="r">cleanString &lt;- function(x) {
+    string &lt;- gsub(&quot;[^[:alnum:]]&quot;, &quot;&quot;, x)
+    string &lt;- tolower(string)
+return(string)
+}
+cleanString(&quot;Coeur d&#39;Alene&quot;)
+</code></pre>
+
+<pre><code>## [1] &quot;coeurdalene&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-63" style="background:;">
+  <article data-timings="">
+    <pre><code class="r">gapminder$country[1555]
+</code></pre>
+
+<pre><code>## [1] &quot;Trinidad and Tobago&quot;
+</code></pre>
+
+<pre><code class="r">cleanString(gapminder$country)[1555]
+</code></pre>
+
+<pre><code>## [1] &quot;trinidadandtobago&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='NA'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Needle in a haystack'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Return values, rather than an index'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Logical version: <code>grepl</code>'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Using <code>grep</code> and <code>grepl</code> for subsetting'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='Select Institution ID and SAT variables'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='with <code>grepl</code>'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Percentage degrees awarded by program type'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='Select percentage degree awarded var'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Create a new variable <strong>max</strong> variable'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='Merge results back in'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='NA'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Selecting rows'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='Selecting rows (continued)'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='Select only community colleges'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='Substituting characters'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='Real example'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='Change census date format'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='Regular Expressions'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='What is a regular expression?'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='Why does this matter?'>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='NA'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='Quick overview of metacharacters'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='Quantifiers'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='NA'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='NA'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='Position matching'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='Match the end of a string'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='Match the start of a string'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='Other examples'>
+         30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='Search start of words, rather than strings'>
+         31
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='NA'>
+         32
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='Digits'>
+         33
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=34 title='Spaces'>
+         34
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=35 title='Words'>
+         35
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=36 title='Operators'>
+         36
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=37 title='Skip characters'>
+         37
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=38 title='Select high items (easy)'>
+         38
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=39 title='Select low items (more difficult)'>
+         39
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=40 title='Or'>
+         40
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=41 title='NA'>
+         41
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=42 title='Backreferences'>
+         42
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=43 title='Suppress metacharacters'>
+         43
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=44 title='NA'>
+         44
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=45 title='More examples'>
+         45
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=46 title='Character classes'>
+         46
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=47 title='Search/specify entire classes of characters'>
+         47
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=48 title='NA'>
+         48
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=49 title='POSIX character classes'>
+         49
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=50 title='NA'>
+         50
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=51 title='NA'>
+         51
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=52 title='NA'>
+         52
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=53 title='Things we still haven&#39;t covered'>
+         53
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=54 title='Example with real data'>
+         54
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=55 title='Gapminder data'>
+         55
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=56 title='Quick aside'>
+         56
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=57 title='Searching countries'>
+         57
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=58 title='Backreferencing'>
+         58
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=59 title='Abbreviated lab'>
+         59
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=60 title='Find countries that begin with &quot;South&quot;'>
+         60
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=61 title='Find countries that have &quot;Ga&quot; at the beginning of either word (not string)'>
+         61
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=62 title='Write function'>
+         62
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=63 title='NA'>
+         63
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
