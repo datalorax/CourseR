@@ -35,7 +35,6 @@ String Searching and regular expressions
 	+ `gsub()`
 * Regular expressions
 	+ metacharacters
-	+ sequences
 	+ character classes
 
 ----
@@ -310,13 +309,13 @@ operation <- c("Matches the end of a string",
 			   "Matches preceding character at least 0 times",
 			   "Matches preceding character at least 1 time",
 			   "Matches any single character (i.e., skip operator)",
-			   "Matches preceding character at most 1 time",
-			   "Define character classes",
+			   "Matches preceding character 0 or 1 time",
+			   "Define character list or character classes",
 			   "Matches the start of a string",
 			   "Define n to m matches of preceding character",
 			   "Or operator",
-			   "Define groupings",
-			   "Anchor sequences (different from R escape sequences")
+			   "Define groupings for backreferencing",
+			   "Suppress metacharacters and define anchor sequences")
 knitr::kable(data.frame("Metacharacter" = sequences, 
 						"Operation" = operation))
 ```
@@ -375,7 +374,7 @@ knitr::kable(data.frame("Metacharacter" = sequences,
 						"Operation" = operation)[c(1, 7, 11), ], 
 	row.names = FALSE)
 ```
-Most common escape characters are probably `\n` and `\t`, for new line and tab, respectively. There are also the following anchor sequences.
+Anchor sequences are provided on the right (from Sanchez, p. 61). These should not be confused with R escape characters, such as `\n` and `\t`, for new line and tab, respectively. 
 
 *** =right
 
@@ -386,7 +385,7 @@ Most common escape characters are probably `\n` and `\t`, for new line and tab, 
 ----
 ## Match the end of a string
 
-```{r dollarStringMatch}
+```{r posMatch1}
 itemIDs <- c("RF3L02E03", "RF3M08E05", "RF3H10E08", "RL1L03E03", "RL1M05E05",
  			 "RL1H10E04", "RI2L03E07", "RI2M06E05", "RI2HSAMPLEE06", 
  			 "WR4L02E03", "WR4M06E06", "WR4H09E03", "WR9L03E04", "WR9M08E04", 
@@ -403,7 +402,7 @@ grep("4$", itemIDs, value = TRUE)
 ----
 ## Match the start of a string
 
-```{r startStringMatch}
+```{r posMatch2}
 # Select RL items
 grep("^RF", itemIDs, value = TRUE)
 
@@ -415,34 +414,148 @@ grep("^WR", itemIDs, value = TRUE)
 Note that in this case, the result would be the same without using the `^` metacharacter, but it's safer to go ahead and use it anyway. In other cases, there may be matches with the same pattern that are not at the beginning.
 
 ----
-## Escape on new lines
+## Other examples
 
-```{r escape1}
-string <- "Here is a string. It's quite long.
- It has multiple line breaks. And some
- occur in the middle of a 
- sentence."
-strsplit(string, "\n")
+<span style="color:gray; font-size:8pt;">Examples taken from http://stat545.com/block022_regular-expression.html </span>
 
-strsplit(string, "\\Bl")
+```{r posMatch3}
+string2 <- c("abcd", "cdab", "cabd", "c abd")
+grep("ab", string2, value = TRUE)
+grep("^ab", string2, value = TRUE)
+grep("ab$", string2, value = TRUE)
 ```
 
+----
+## Search start of words, rather than strings
 
-grep("...L", itemIDs, value = TRUE)
+```{r printString2, echo = FALSE}
+string2
+```
+
+```{r posMatch4}
+grep("\\ba", string2, value = TRUE)
+grep("\\b a", string2, value = TRUE)
+```
+
+----
+
+```{r posMatch5}
+ids <- c("123225-5417", "132123-132975", "321579-123569")
+grep("123", ids, value = TRUE)
+grep("^123", ids, value = TRUE)
+grep("\\b123", ids, value = TRUE) # New word starts with 123
+grep("\\B123", ids, value = TRUE) # New word does not start with 123
+```
+
+----
+## Digits
+
+```{r digits}
+digits <- c("Charlie", "Charlie2", "Mary", "Marianne", "Mary2", "15")
+grep("\\d", digits, value = TRUE)
+grep("\\D", digits, value = TRUE)
+```
+
+----
+## Spaces
+
+```{r spaces}
+string
+gsub("\\s", "_", string)
+gsub("\\S", "_", string)
+```
+
+----
+## Words
+
+```{r words}
+gsub("\\w", "_", string)
+gsub("\\W", "_", string)
+```
+
+----
+## Operators
+
+```{r operatorTab1, results = "asis", echo = FALSE}
+knitr::kable(data.frame("Metacharacter" = sequences, 
+						"Operation" = operation)[c(4, 6, 9, 10, 11), ], 
+	row.names = FALSE)
+```
+
+-----
+## Skip characters
+
+```{r skip1}
+string2 
+grep(".ab", string2, value = TRUE)
+grep("ab.", string2, value = TRUE)
+```
+
+----
+## Select high items (easy)
+```{r skip2}
+head(itemIDs)
+grep("H", itemIDs, value = TRUE)
+```
+
+----
+## Select low items (more difficult)
+
+```{r skip3}
+head( grep("L", itemIDs, value = TRUE) ) # Fails
+grep("...L", itemIDs, value = TRUE) # Fails
+grep("^.{3}L", itemIDs, value = TRUE) # Success!
+```
+
+----
+## Or
+
+Select RL or WR Items
+
+```{r or1}
+grep("RL|WR", itemIDs, value = TRUE)
+
+```
+
+----
+
+```{r or2}
+string3 <- c("^ab", "ab", "abc", "abd", "abe", "ab 12")
+grep("bc|be", string3, value = TRUE)
+grep("1|c", string3, value = TRUE)
 ```
 
 
 ----
-## The `+` metacharacter
-Matches one or more repetitions of the preceding string.
+## Backreferences
 
-```{r regEx+}
-stringPlus <- "I guess school is okay... It's not my favorite. But art is fun."
-strsplit(stringPlus, "\\.")
-strsplit(stringPlus, "\\.+")
-gsub("I", "t", stringPlus)
+Find and reference any number of patterns.
+
+```{r backreferences1}
+catMat <- "The cat sat on the mat."
+gsub("(.at)", "\\1!", catMat)
+gsub("(.)at", "\\1ot", catMat)
+gsub("(.he) (.at)", "__\\1__ \\2!", catMat)
+```
+<span style="color:gray; font-size:8pt;">Examples adapted from https://www.stat.auckland.ac.nz/~paul/ItDT/HTML/node84.html </span>
+
+
+----
+## Suppress metacharacters
+
+```{r suppress1}
+string3
+grep("^ab", string3, value = TRUE)
+grep("\\^ab", string3, value = TRUE)
 ```
 
+----
+
+```{r suppress2}
+string
+gsub(".", "___", string)
+gsub("\\.", "____", string)
+```
 
 ----
 ## More examples
@@ -450,32 +563,184 @@ gsub("I", "t", stringPlus)
 set.seed(300)
 d <- data.frame(rnorm(3), rbinom(3, 1, 0.5), rpois(3, 2))
 d
-names(d) <- gsub(pattern = "\\.+", replacement = "", x = names(d))
+names(d) <- gsub(pattern = "\\.+", replacement = "", names(d))
+```
+
+---- .segue
+# Character classes
+
+----
+## Search/specify entire classes of characters
+
+```{r charLists1}
+string3 <- c("^ab", "ab", "abc", "abd", "abe", "ab 12")
+grep("ab[cd]", string3, value = TRUE)
+grep("ab[c-e]", string3, value = TRUE)
 ```
 
 ----
-## Putting them together
+```{r charLists2}
+textNum <- paste0(rep(letters[1:14], each = 7), 1:7)
+textNum
+grep("[a-e][3-5]", textNum, value = TRUE)
+```
+Invert the character list with `^`.
 
-From https://www.stat.auckland.ac.nz/~paul/ItDT/HTML/node84.html
-
-```{r sillyExample1}
-catmat <- c("The cat sat on the mat.", "Here's a second example.")
-grep("c(..) s\\1", catmat, value = TRUE)
-
+```{r charLists3}
+grep("[^a-e][3-5]", textNum, value = TRUE)
 ```
 
-More realistic examples
+----
+## POSIX character classes
 
-```{r gaminder1}
-gapMinder <- read.delim("http://www.stat.ubc.ca/~jenny/notOcto/STAT545A/examples/gapminder/data/gapminderDataFiveYear.txt", header = TRUE)
+```{r charClassTab, results = "asis", echo = FALSE}
+classes <- c("[:digit:]", "[:lower:]", "[:upper:]", "[:alpha:]", "[:alnum:]",
+			 "[:xdigit:]", "[:blank:]", "[:space:]", "[:punct:]", "[:graph:]",
+			 "[:print:]", "[:cntrl:]")
+classDesc <- c("Digits, 0-9", "Lower case letters", "Upper case letters",
+			   "Alphabetic characters", "Alphanumeric characters", 
+			   "Base 16 hexadecimal", "Blank characters (space and tab)", 
+			   "Space characters (all)", "Punctuation characters",
+			   "Human readable characters", "Printable characters", 
+			   "Control characters (line breaks, etc.)")
+
+equivalence <- c("[0-9]", "[a-z]","[A-Z]", "[[:lower:][:upper:]] or [A-z]",
+				"[[:alpha:][:digit:]] or [A-z0-9]", "[0-9A-Fa-f]", "", "", "",
+				"[[:alnum:][:punct:]]", "[[:alnum:][:punct:]\\\\\\s]", "")
+knitr::kable(data.frame(classes, classDesc, equivalence), 
+	col.names = c("Code", "Description", "Equivalent Code"),
+	caption = "Character Classes")
+```
+
+----
+
+```{r charClass1}
+string4 <- c("ab", "ab12", "Dc a", "BB", "Here's some text.", "Here's a \n new line.")
+cat(string4)
+grep("[[:digit:]]", string4, value = TRUE)
+grep("[[:lower:]]", string4, value = TRUE)
+grep("[[:upper:]]", string4, value = TRUE)
+```
+
+----
+```{r charClass2}
+grep("[[:space:]]", string4, value = TRUE)
+grep("[[:punct:]]", string4, value = TRUE)
+strsplit(sentences, "[[:space:]]")
+```
+
+----
+```{r charClass3}
+strsplit(sentences, "[[:space:][:punct:]]")
+```
+
+-----
+## Things we still haven't covered
+* `sprintf` (useful for padding numbers)
+* `regexpr`
+* `gregexpr`
+* `regexec`
+* Matching
+	+ `regmatches`
+	+ `match`
+	+ `pmatch`
+	+ `charmatch`
+* (...still more I'm probably missing)
+* *stringr* package (part of the Hadleyverse, contains many useful functions for manipulating strings)
+
+---- .segue
+# Example with real data
+<span style="color:gray; font-size:8pt;">Examples taken from https://rstudio-pubs-static.s3.amazonaws.com/74603_76cd14d5983f47408fdf0b323550b846.html </span>
+
+----
+## Gapminder data
+
+```{r gapMinder1}
+install.packages("gapminder")
+library(gapminder)
+data(gapminder)
+head(gapminder)
+```
+
+-----
+## Quick aside
+Data are also available online. We haven't talked about this much, but you can always read data into R directly from the web
+
+```{r webGapMinder}
+gapMinder <- read.delim("http://www.stat.ubc.ca/~jenny/notOcto/STAT545A/examples/gapminder/data/gapminderDataFiveYear.txt", 
+	header = TRUE)
 head(gapMinder)
-grep("(.*[it].*)land$", gapMinder$country, value = TRUE)
 ```
 
+----
+## Searching countries
+Find all countries that end with *land*, and have an "i" or "t" in them.
+
+```{r gapMinder2}
+grep("(.*[it].*)land$", gapminder$country, value = TRUE)
+```
 
 ----
-## Padding numbers
-`sprintf`
+## Backreferencing
+Replace *land* for *LAND* for countries with an "i" or "t" in them
 
+```{r gapMinder3}
+gapminder$country <- gsub("(.*[it].*)land$", "\\1LAND", gapminder$country)
+unique(
+	grep("LAND", gapminder$country, value = TRUE)
+	)
+```
 
+----
+## Abbreviated lab
+* Find countries that begin with "South"
+* Find countries that have "Ga" at the beginning of either word (not string)
+* Find countries that have 2 consecutive e's
 
+# Advanced
+* write a function that takes a generic string variable and makes the following manipulations: 
+	+ keeps only alpha-numeric characters
+	+ removes all spaces
+	+ converts to lower case
+As an example, if the string Coeur d'Alene were fed to the function, it should return coeurdalene. (you can use this to test your function)
+
+<span style="color:gray; font-size:8pt;">Examples taken from https://rstudio-pubs-static.s3.amazonaws.com/74603_76cd14d5983f47408fdf0b323550b846.html </span>
+
+----
+# Find countries that begin with "South"
+
+```{r lab1}
+unique( grep("^South", gapminder$country, value = TRUE) )
+
+#Alternatively
+grep("^South", levels(gapminder$country), value = TRUE)
+```
+
+----
+# Find countries that have "Ga" at the beginning of either word (not string)
+
+```{r lab2}
+grep("\\bGa", levels(gapminder$country), value = TRUE)
+```
+
+----
+# Write function
+* Keep only alpha-numeric characters
+* Remove all spaces
+* Convert to lower case
+
+```{r lab3}
+
+cleanString <- function(x) {
+	string <- gsub("[^[:alnum:]]", "", x)
+	string <- tolower(string)
+return(string)
+}
+cleanString("Coeur d'Alene")
+```
+
+----
+```{r lab4}
+gapminder$country[1555]
+cleanString(gapminder$country)[1555]
+```
