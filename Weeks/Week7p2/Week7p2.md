@@ -409,8 +409,8 @@ head(pct)
 ```
 
 ----
-## Create a new variable **max** variable
-Variable should include the name of the PCIP that corresponds to its maximum.
+## Create a new max variable
+Variable should include the **name** of the PCIP that corresponds to the institution's maximum.
 
 
 ```r
@@ -435,7 +435,7 @@ head(pct2[ ,35:40])
 ```
 
 ----
-## Merge results back in
+## Merge results back into full dataset, plot results
 
 
 ```r

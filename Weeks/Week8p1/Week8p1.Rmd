@@ -1,0 +1,973 @@
+---
+title       : "Plotting with ggplot2"
+subtitle    : Week 8.1
+author      : Daniel Anderson
+job         : CourseR
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+--- &twocol
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = "/Users/Daniel/Dropbox/Teaching/CourseR/")
+knitr::opts_chunk$set(fig.height = 6, fig.width = 13)
+```
+<style>
+em {
+  font-style: italic
+}
+</style>
+
+<style>
+strong {
+  font-weight: bold;
+}
+</style>
+
+## Today's Agenda
+Today, we'll be covering the basics of the *ggplot2* package. Note that the majority of this presentation is based on examples from the new *ggplot2* book.
+
+![ggplotBook](./assets/img/ggplotBook.png)
+
+
+----
+## Part of the many reasons Hadley is a cool guy
+
+![freeggplot](./assets/img/freeggplot.png)
+
+----
+## Other resources
+The *ggplot2* package is one of the most popular R packages. There are a plethora of resources to learn the syntax. 
+
+* Perhaps the most definitive, and index of all the capabilities of ggplot2, along with multiple examples 
+	+ http://docs.ggplot2.org/current/index.html#
+
+* RStudio cheat sheet can also be helpful
+	+ https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
+
+
+
+---- 
+## Components
+Every *ggplot* plot has three components
+
+1. data
+	* The data used to produce the plot
+2. aesthetic mappings
+	* between variables and visual properties
+3. layer(s)
+	* usually through the geom function to produce geometric shape to be rendered
+
+----
+## Basic syntax
+![ggplotBasicSyntax](./assets/img/ggplotBasicSyntax.png)
+
+Note that Hadley recommends putting each `geom_XXX` on a separate line to ease clarity. I agree with this suggestion, but will not be following it in these slides to help save space.
+
+----
+## mpg data
+Very similar to the *mtcars* data, but with more cases and a few more interesting variables
+
+```{r mpgData}
+library(ggplot2)
+data(mpg)
+head(mpg)
+```
+
+----
+## Quick example
+
+```{r mpgEx1}
+data(mpg)
+ggplot(mpg, aes(x = displ, y = hwy)) + geom_point()
+```
+
+----
+## Quick example 2
+Note that the only thing that has changed here is the `geom` 
+
+```{r mpgEx2, fig.height = 5}
+data(mpg)
+ggplot(mpg, aes(x = displ, y = hwy)) + geom_smooth()
+```
+
+----
+## Add an additional layer
+
+```{r mpgEx3}
+ggplot(mpg, aes(x = displ, y = hwy)) + geom_point() + geom_smooth()
+```
+
+----
+## Add an additional aesthetic
+
+```{r mpgEx4}
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) + geom_point() 
+```
+
+----
+## Add smooth line for each class
+# Too busy
+Note the below spits out some warnings because of the sparsity of the data. I've suppressed them here.
+
+```{r mpgEx5a, eval = FALSE}
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) + geom_point() +
+ geom_smooth()
+```
+```{r mpgEx5b, fig.height = 5, echo = FALSE, warning = FALSE}
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) + geom_point() +
+ geom_smooth()
+```
+
+----
+## Remove SE
+
+```{r mpgEx6a, eval = FALSE}
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) + geom_point() +
+ geom_smooth(se = FALSE)
+```
+
+```{r mpgEx6b, , echo = FALSE, warning = FALSE}
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) + geom_point() +
+ geom_smooth(se = FALSE)
+```
+
+----
+## Change the color of all points
+
+```{r mpgEx7}
+ggplot(mpg, aes(x = displ, y = hwy)) + geom_point(color = "purple") +
+ geom_smooth(se = FALSE)
+```
+
+---- .segue
+# Can you guess how we would change the line color?
+
+----
+
+```{r mpgEx8, fig.height = 7}
+ggplot(mpg, aes(x = displ, y = hwy)) + geom_point(color = "purple") +
+ geom_smooth(se = FALSE, color = "gray", size = 2, linetype = "dashed")
+```
+
+----
+Worth mentioning, traditional calls to line color/type/size also work
+
+```{r mpgEx9, fig.height = 7}
+ggplot(mpg, aes(x = displ, y = hwy)) + geom_point(color = "purple") +
+ geom_smooth(se = FALSE, col = "gray", lwd = 2, lty = "dashed")
+```
+
+----
+## Change the "wiggliness" of the smoother
+
+```{r mpgEx10, fig.height = 7}
+ggplot(mpg, aes(x = displ, y = hwy)) + geom_point(color = "purple") +
+ geom_smooth(span = 0.2)
+```
+
+----
+## Geoms for two continuous variables
+
+```{r geoms2Cont, echo = FALSE, results = "asis"}
+geoms2cont <- c("jitter", "point", "quantile", "rug", "smooth", "text", 
+				  "bin2d", "density2d", "hex")
+desc2cont <- c("Jitter points (to avoid overlapping)", 
+			   "Plot points at each x|y intersection",
+			   "Plot lines from quantile regression",
+			   "Plot 1d scatterplot on margins (stripchart)",
+			   "Plot a smoothing function (many smoothers available)",
+			   "Add text annotations", 
+			   "Bin observations that are close together and color according the density", 
+			   "Contour lines of the data density",
+			   "Hexagonal bins of data colored according to their density")
+
+knitr::kable(data.frame(Geoms = geoms2cont, Description = desc2cont, 
+				Code = paste0("geom_", geoms2cont, "()")))
+```
+
+----
+## Guided practice
+* Load (install first, if necessary) the *ggplot2* package. 
+* Load the diamonds dataset with `data(diamonds)`
+* Set and store the data and aesthetics, in an object `p`, using the following code
+
+```{r guidedp1_1}
+p <- ggplot(diamonds, aes(carat, price))
+```
+
+* Explore different geoms, with `p + geom_XXX()`. For example, a basic scatterplot could be produced with
+
+```{r guidedp1_2, eval = FALSE}
+p + geom_point()
+```
+
+* Add at least one additional layer (i.e., produce a plot with at least two layers)
+* Modify the aesthetics to color the points by one of *cut*, *color*, or *clarity*. Store this in `p2`
+* Play around and change some more colors, explore other variables, geoms, etc.
+
+
+-----
+## Some possibilities
+
+```{r guidedp1_3a, fig.height = 7}
+p + geom_point()
+```
+
+----
+## Probably better
+
+```{r guidedp1_3b, fig.height = 7}
+p + geom_hex()
+```
+
+----
+## Another similar alternative
+```{r guidedp1_3c, fig.height = 7}
+p + geom_bin2d()
+```
+
+----
+## Yet another alternative
+
+```{r guidedp1_3d, fig.height = 7}
+p + geom_point(alpha = 0.01) + geom_density2d(color = "red")
+```
+
+-----
+## Quantiles
+Defaults to the 25th, 50th, and 75th percentiles
+
+```{r guidedp1_4, fig.height = 5}
+p + geom_quantile()
+```
+
+-----
+## Quantiles
+Change the quantiles to deciles (from 10th to 90th)
+
+```{r guidedp1_5, fig.height = 5}
+p + geom_quantile(quantiles = seq(0.1, 0.9, 0.1))
+```
+
+----
+## Add an extra layer
+
+```{r guidedp1_6}
+p + geom_point() + geom_rug() + geom_smooth()
+```
+
+----
+## Color by cut
+
+```{r guidedp1_7}
+p2cut <- ggplot(diamonds, aes(carat, price, color = cut))
+p2cut + geom_point()
+```
+
+----
+## Color by color
+
+```{r guidedp1_8}
+p2color <- ggplot(diamonds, aes(carat, price, color = color))
+p2color + geom_point()
+```
+
+----
+## Color by clarity
+
+```{r guidedp1_9}
+p2clarity <- ggplot(diamonds, aes(carat, price, color = clarity))
+p2clarity + geom_point()
+```
+
+----
+## geoms: One variable
+
+```{r oneVarGeoms, echo = FALSE, results = "asis"}
+geoms1var <- c("area", "density", "dotplot", "polygon of Frequencies", 
+			"histogram", "barplot")
+desc1var <- c("Filled area plot", "Density plot", 
+				"Stacked dotplot, with each dot representing an observation", 
+				"Polygon of frequencies", "Standard histogram", 
+				"Standard barchart")
+code <- c('geom_area(stat = "bin")', "geom_density()", "geom_dotplot()", 
+			"geom_freqpoly","geom_histogram", "geom_bar")
+knitr::kable(data.frame(Geoms = geoms1var, Description = desc1var, 
+	Code = code))
+```
+
+----
+## Area plot
+```{r geom_area}
+price <- ggplot(diamonds, aes(price)) 
+price + geom_area(stat = "bin")
+```
+
+----
+# Frequency polygons
+```{r geom_freqPoly}
+price + geom_freqpoly()
+```
+
+----
+## Evaluate frequencies by *cut*
+
+```{r geom_freqPolyClarity}
+price2 <- ggplot(diamonds, aes(price, color = cut))
+price2 + geom_freqpoly(bins = 50)
+```
+
+----
+## Histograms
+```{r geom_histogram1}
+price + geom_histogram()
+```
+
+----
+# Change binwidth
+```{r geom_histogram2}
+price + geom_histogram(binwidth = 5)
+```
+
+----
+## Barplots
+
+```{r barplot1}
+ggplot(mpg, aes(trans)) + geom_bar()
+```
+
+----
+## Better: Tufte-esque
+* Install and load the *ggthemes* package
+* Add white horizontal lines at y-axis labels (via `geom_hline`)
+
+```{r TufteBarplot1, eval = FALSE}
+install.packages("ggthemes")
+library(ggthemes)
+ggplot(mpg, aes(trans)) + geom_bar(fill = "gray") + theme_tufte() + 
+	geom_hline(yintercept = seq(20, 80, 20), col = "white")
+```
+(plot displayed on next slide)
+
+----
+```{r TufteBarplot2, echo = FALSE, fig.height = 8}
+library(ggthemes)
+ggplot(mpg, aes(trans)) + geom_bar(fill = "gray") + theme_tufte() + 
+	geom_hline(yintercept = seq(20, 80, 20), col = "white")
+```
+
+---- .segue
+# Plotting categorical variables
+
+----
+## boxplots
+Note that the categorical variable must be categorical or declared as a factor
+
+```{r boxplots1}
+bp <- ggplot(mpg, aes(drv, hwy))
+bp + geom_boxplot()
+```
+
+---- &twocol
+## stripcharts
+
+*** =left
+
+```{r stripcharts1, fig.width = 6}
+bp + geom_point()
+```
+
+*** =right
+
+```{r jitterchart1, fig.width = 6}
+bp + geom_jitter()
+```
+
+-----
+## Control the amount of jittering
+
+```{r jitter}
+bp + geom_jitter(width = 0.3)
+```
+
+----
+## Useful together
+
+```{r boxplotJitter}
+bp + geom_boxplot() + geom_jitter(width = 0.3)
+```
+
+----
+## Usually better: Violin plots
+
+```{r violin}
+bp + geom_violin()
+```
+
+---- .segue
+# Modifying axes and labels
+
+---- &twocol
+## Changing labels
+
+*** =left
+
+```{r labels1, fig.width = 5}
+ggplot(mpg, aes(cty, hwy)) + geom_point()
+```
+
+*** =right
+
+```{r labels2, fig.width = 5}
+ggplot(mpg, aes(cty, hwy)) + geom_point() +
+	xlab("MPG (city)") +
+	ylab("MPG (highway)")
+```
+
+----
+## Adding a main title
+
+```{r plotTitle}
+ggplot(mpg, aes(cty, hwy)) + geom_point() +
+	xlab("MPG (city)") +
+	ylab("MPG (highway)") + 
+	ggtitle("Relation between city and highway miles per gallon")
+```
+
+----
+## Alternative specification
+
+```{r labs1}
+mpgHC <- ggplot(mpg, aes(cty, hwy)) + geom_point()
+mpgHC + labs(title = "Relation between city and highway miles per gallon",
+				x = "MPG (city)", y = "MPG (highway)")
+```
+
+----
+## Labs also allows you to change legend names
+
+```{r labs2}
+mpgHC2 <- ggplot(mpg, aes(cty, hwy, color = drv)) + geom_point()
+mpgHC2 + labs(title = "Relation between city and highway miles per gallon",
+				x = "MPG (city)", y = "MPG (highway)", color = "Drivetrain")
+```
+
+----
+## Omit labels
+
+```{r labs3}
+mpgHC2 + xlab(NULL) + ylab(NULL)
+```
+
+----
+## Limit x-axis range
+
+```{r limits1}
+mpgHC2 + xlim(15, 30)
+```
+
+----
+## Limit y-axis range
+
+```{r limits2}
+mpgHC2 + ylim(20, 35)
+```
+
+
+--- .segue
+# Faceting
+
+----
+## Produce separate plots according to a specific variable
+Back to the mpg dataset:
+* Produce a separate plot of the relation between engine size and highway miles per gallon for each car type.
+
+```{r faceting1, fig.height = 3.5}
+hwy <- ggplot(mpg, aes(displ, hwy))
+hwy + geom_point() + facet_wrap(~class)
+```
+
+----
+## Add a linear function to each plot
+
+```{r faceting2}
+hwy <- ggplot(mpg, aes(displ, hwy))
+hwy + geom_point() + geom_smooth(method = "lm") + facet_wrap(~class)
+```
+
+----
+## Example with growth modeling
+The data
+
+```{r loadDissData, echo = FALSE}
+load("/Users/Daniel/BRT/Manuscripts/Dissertation/TeacherSchoolEffects/Analysis/g3Test.Rda")
+d <- g3
+d <- d[ ,c(4, 2, 1, grep("g3mTime", names(d)), grep("mRIT", names(d)))]
+d <- d[order(d$SID, d$g3mTime), ]
+names(d) <- c("SID", "TID", "ScID", "Months", "RIT")
+
+for(i in 1:3) d[ ,i] <- as.factor(d[ ,i])
+```
+
+```{r structureDissData}
+# Loaded earlier
+head(d, n = 15)
+```
+
+----
+## Random sampling
+There are far too many students to plot every one. Instead, we'll take a random sample of 16 (a couple of times)
+
+```{r randomSampling}
+set.seed(100)
+samp1 <- d[d$SID %in% sample(levels(d$SID), 16), ]
+samp2 <- d[d$SID %in% sample(levels(d$SID), 16), ]
+samp3 <- d[d$SID %in% sample(levels(d$SID), 16), ]
+head(samp1)
+```
+
+----
+## Sample 1
+```{r DissPLot1, fig.height = 5, warning = FALSE}
+ggplot(samp1, aes(Months, RIT)) + 
+	geom_point() + geom_smooth(color = "red", span = 2, se = FALSE) +
+	 facet_wrap(~SID)
+```
+
+----
+## Sample 2
+```{r DissPLot2, , warning = FALSE}
+ggplot(samp2, aes(Months, RIT)) + 
+	geom_point() + geom_smooth(color = "red", span = 2, se = FALSE) +
+	 facet_wrap(~SID)
+```
+
+----
+## Sample 3
+```{r DissPLot3, , warning = FALSE}
+ggplot(samp3, aes(Months, RIT)) + 
+	geom_point() + geom_smooth(color = "red", span = 2, se = FALSE) +
+	 facet_wrap(~SID)
+```
+
+----
+## Alternative: Connect the dots
+Note that `group` is specified in the aesthetic now.
+
+```{r connectDots, fig.height = 5.5}
+ggplot(samp1, aes(Months, RIT, group = SID)) + geom_point() + 
+	geom_line()
+```
+
+----
+Or, put all lines in a single plot
+
+```{r smoothDots, warning = FALSE}
+ggplot(samp1, aes(Months, RIT, group = SID)) + geom_point() + 
+	geom_smooth(se = FALSE, span = 2)
+```
+
+----
+## What happens if you forget to specify the group?
+
+```{r connectDotsError}
+ggplot(samp1, aes(Months, RIT)) + geom_point() + 
+	geom_line()
+```
+
+----
+## How bad is the nonlinearity, really?
+Overlay a linear trend
+
+```{r DissPLot4, fig.height = 5, warning = FALSE}
+ggplot(samp1, aes(Months, RIT)) + 
+	geom_point() + geom_smooth(color = "red", span = 2, se = FALSE) +
+	 geom_smooth(method = "lm", se = FALSE) + facet_wrap(~SID)
+```
+
+----
+```{r DissPLot5, , warning = FALSE}
+ggplot(samp2, aes(Months, RIT)) + 
+	geom_point() + geom_smooth(color = "red", span = 2, se = FALSE) +
+	 geom_smooth(method = "lm", se = FALSE) + facet_wrap(~SID)
+```
+
+----
+```{r DissPLot6, , warning = FALSE}
+ggplot(samp3, aes(Months, RIT)) + 
+	geom_point() + geom_smooth(color = "red", span = 2, se = FALSE) +
+	 geom_smooth(method = "lm", se = FALSE) + facet_wrap(~SID)
+```
+
+----
+## A few notes
+* Equivalent plots could be produced at other levels (in this case, the classroom or school levels)
+* The previous plots did produce some warnings (only 3 points with the LOESS)
+
+```{r exampleError}
+lfit <- loess(RIT ~ Months, data = samp1, subset = SID == 503177, span = 2)
+```
+
+----
+## Different faceting
+`facet_wrap` vs `facet_grid`
+
+![faceting](./assets/img/faceting.png)
+
+----
+## Options for `facet_wrap`
+Change the number of columns
+
+```{r faceting3, fig.height = 5}
+f <- ggplot(mpg, aes(displ, hwy)) + geom_point()
+f + facet_wrap(~class, ncol = 4)
+```
+
+----
+Change the direction plots are produced
+
+```{r faceting4, fig.height = 7}
+f + facet_wrap(~class, ncol = 4, dir = "v")
+
+```
+
+----
+## Facet Grid
+Note that `.` must be included on the left, if only a single variable is used
+
+```{r facetGrid1}
+f + facet_grid(. ~ cyl)
+```
+
+----
+```{r facetGrid2, fig.height = 8}
+f + facet_grid(drv ~ .)
+```
+
+----
+## Two variables
+
+```{r facetGrid3}
+f + facet_grid(drv ~ cyl)
+```
+
+----
+## Two variables
+
+(The LOESS estimator spits out warnings here again)
+
+```{r facetGrid4, warning = FALSE}
+f + geom_smooth(span = 2) + facet_grid(drv ~ cyl)
+```
+
+-----
+## Scales with faceting
+Allow all scales to be produced independently (freely)
+
+```{r facetScales1}
+f + facet_wrap(~ cyl, scales = "free")
+```
+
+----
+Free y-axis scale, fixed x
+
+```{r facetScales2}
+f + facet_wrap(~ cyl, scales = "free_y")
+```
+
+----
+Free x-axis scale, fixed y
+
+```{r facetScales3}
+f + facet_wrap(~ cyl, scales = "free_x")
+```
+
+----
+Change spacing with `facet_grid`
+
+```{r facetGrid5}
+f + facet_grid(drv ~ cyl, scales = "free", space = "free")
+```
+
+---- &twocol
+## Faceting vs Grouping
+
+*** =left
+
+```{r facetGrouping1, fig.width = 6, fig.height = 6}
+ggplot(mpg, 
+	aes(displ, hwy, color = factor(drv))) + 
+	geom_point()
+```
+
+*** =right
+
+```{r facetGrouping2, fig.width = 6, fig.height = 6}
+ggplot(mpg, aes(displ, hwy)) + 
+	geom_point() + 
+	facet_wrap(~ drv)
+```
+
+----
+## Another option
+Plot all the points on each plot in the background
+
+```{r facetGrouping3}
+mpg2 <- mpg[ ,c("displ", "hwy")]
+
+ggplot(mpg, aes(displ, hwy)) + 
+	geom_point(data = mpg2, col = "gray80") + 
+	geom_point(aes(color = drv)) +
+	facet_wrap(~ drv)
+```
+
+----
+## Guided practice
+
+You can view the probability densities of diamond price by cut with the following code.
+
+```{r guidedp2_1, eval = FALSE}
+base <- ggplot(diamonds, aes(price, color = cut))
+base + geom_density()
+```
+
+* Use faceting to view the conditional densities by *clarity*.
+* Modify the code to group by *clarity* and facet by *cut*. Which do you 
+  prefer?
+
+You can view the relation between *price* and *carat* with the following code
+
+```{r guidedp2_3, eval = FALSE}
+ggplot(diamonds, aes(carat, price)) + geom_point()
+```
+* Modify the code so the points are colored according to their color.
+* Use faceting to produce separate plots for each color.
+
+----
+Use faceting to view the conditional densities by *clarity*.
+
+```{r guidedp2_4}
+base <- ggplot(diamonds, aes(price, color = cut))
+base + geom_density() + facet_wrap(~ clarity)
+```
+
+----
+Modify the code to group by *clarity* and facet by *cut*.
+
+```{r guidedp2_5}
+base2 <- ggplot(diamonds, aes(price, color = clarity))
+base2 + geom_density() + facet_wrap(~ cut)
+```
+
+----
+Modify the code so the points are colored according to their color.
+
+```{r guidedp2_6}
+ggplot(diamonds, aes(carat, price, color = color)) + geom_point()
+```
+
+----
+Use faceting to produce separate plots for each color.
+
+```{r guidedp2_7}
+ggplot(diamonds, aes(carat, price)) + geom_point() + facet_wrap(~ color)
+```
+
+---- .segue
+# Themes
+
+----
+## Overview of themes
+* Themes do not change how the data are rendered
+* Only change visual properties
+* Many built-in themes
+	+ Even more available through extension packages (specifically *ggthemes*)
+* Fully customizable (though the syntax becomes lengthier)
+
+----
+## theme_gray (default)
+
+```{r theme_gray}
+baseP <- ggplot(economics, aes(date, unemploy)) + geom_line()
+baseP + theme_gray()
+```
+
+----
+## theme_bw
+
+```{r theme_bw}
+baseP + theme_bw()
+```
+
+----
+## theme_classic
+
+```{r theme_classic}
+baseP + theme_classic()
+```
+
+----
+## theme_dark
+
+```{r theme_dark}
+baseP + theme_dark()
+```
+
+----
+## theme_minimal
+
+```{r theme_minimal}
+baseP + theme_minimal()
+```
+
+----
+## Some from the *ggthemes* packages
+# theme_tufte
+
+```{r theme_tufte, fig.height = 5}
+# install.packages("ggthemes") # (stable) or
+# devtools::install_github(""jrnold/ggthemes"") # (development)
+library(ggthemes)
+baseP + theme_tufte()
+```
+
+----
+## theme_fivethirtyeight
+
+```{r theme_fivethirtyeight}
+baseP + theme_fivethirtyeight()
+```
+
+----
+## theme_stata
+
+```{r theme_stata}
+baseP + theme_stata()
+```
+
+----
+## theme_base
+
+```{r theme_base}
+baseP + theme_base()
+```
+
+----
+## theme_solarized
+
+```{r theme_solarized}
+baseP + theme_solarized()
+```
+
+----
+## theme_wsj
+
+```{r theme_wsj}
+baseP + theme_wsj()
+```
+
+----
+## Further customization
+(We're probably out of time, so...)
+* See http://docs.ggplot2.org/dev/vignettes/themes.html
+* See *ggplot2* book, Chapter 8
+
+<br>
+**Take Home Message:** If you want it to look a certain way, you can do it (essentially nothing is impossible). Often there are others who have developed themes that will be close to what you want, which is easier than developing your own theme (although that can be rewarding in its own right).
+
+---- .segue
+# At the edge of development
+
+----
+## ggvis
+* Eventual replacement for *ggplot2*
+* Currently fairly limited
+	+ Can't produce interactive plots within something like this slideshow
+Let's take a look! http://ggvis.rstudio.com/interactivity.html
+
+----
+## The *gganimate* extension to *ggplot2*
+
+```{r gganimate1, echo = FALSE, fig.show = "animate"}
+library(lattice)
+library(ggplot2)
+library(broom)
+
+mod <- loess(NOx ~ E, ethanol, degree = 1, span = .75)
+fit <- augment(mod)
+
+library(dplyr)
+
+dat <- ethanol %>%
+  inflate(center = unique(ethanol$E)) %>%
+  mutate(dist = abs(E - center)) %>%
+  filter(rank(dist) / n() <= .75) %>%
+  mutate(weight = (1 - (dist / max(dist)) ^ 3) ^ 3)
+
+fits <- data_frame(span = seq(.1, 1, .1)) %>%
+  group_by(span) %>%
+  do(augment(loess(NOx ~ E, ethanol, degree = 1, span = .$span)))
+
+p <- ggplot(fits, aes(E, NOx, frame = span)) +
+  geom_point() +
+  geom_line(aes(y = .fitted), color = "red") +
+  ggtitle("span = ")
+
+library(gganimate)
+gg_animate(p)
+
+```
+**Credit:** David Robinson (http://varianceexplained.org/files/loess.html)
+
+
+----
+## What does LOESS (and LOWESS) stand for again?
+* Locally weighted scatterplot smoothing
+* non-parametric
+* Similar in for to k-nearest neighbor models
+
+Let's visualize it!
+
+----
+## Animating LOESS fits with different spans
+
+```{r gganimate2, echo = FALSE, message = FALSE, warning = FALSE, fig.show = "animate", interval = 0.1}
+spans <- c(.25, .5, .75, 1)
+
+# create loess fits, one for each span
+fits <- data_frame(span = spans) %>%
+  group_by(span) %>%
+  do(augment(loess(NOx ~ E, ethanol, degree = 1, span = .$span)))
+
+# calculate weights to reproduce this with local weighted fits
+dat <- ethanol %>%
+  inflate(span = spans, center = unique(ethanol$E)) %>%
+  mutate(dist = abs(E - center)) %>%
+  filter(rank(dist) / n() <= span) %>%
+  mutate(weight = (1 - (dist / max(dist)) ^ 3) ^ 3)
+
+# create faceted plot with changing points, local linear fits, and vertical lines,
+# and constant hollow points and loess fit
+p <- ggplot(dat, aes(E, NOx)) +
+  geom_point(aes(alpha = weight, frame = center)) +
+  geom_smooth(aes(group = center, frame = center, weight = weight), method = "lm", se = FALSE) +
+  geom_vline(aes(xintercept = center, frame = center), lty = 2) +
+  geom_point(shape = 1, data = ethanol, alpha = .25) +
+  geom_line(aes(y = .fitted, frame = E, cumulative = TRUE), data = fits, color = "red") +
+  facet_wrap(~span) +
+  ylim(0, 5) +
+  ggtitle("x0 = ")
+
+gg_animate(p)
+
+```
+**Credit:** David Robinson (http://varianceexplained.org/files/loess.html)
+
+
+----
+## Other extensions
+
+See https://www.ggplot2-exts.org/ggiraph.html

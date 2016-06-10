@@ -598,10 +598,10 @@ head(pct)
 
 <slide class="" id="slide-10" style="background:;">
   <hgroup>
-    <h2>Create a new variable <strong>max</strong> variable</h2>
+    <h2>Create a new max variable</h2>
   </hgroup>
   <article data-timings="">
-    <p>Variable should include the name of the PCIP that corresponds to its maximum.</p>
+    <p>Variable should include the <strong>name</strong> of the PCIP that corresponds to the institution&#39;s maximum.</p>
 
 <pre><code class="r"># Remove rows with complete missing data
 pct2 &lt;- pct[apply(pct[ ,-1], 1, function(x) sum(is.na(x)) != (ncol(pct) -1)), ]
@@ -628,7 +628,7 @@ head(pct2[ ,35:40])
 
 <slide class="" id="slide-11" style="background:;">
   <hgroup>
-    <h2>Merge results back in</h2>
+    <h2>Merge results back into full dataset, plot results</h2>
   </hgroup>
   <article data-timings="">
     <pre><code class="r">scCard &lt;- merge(scCard, pct2[ ,c(1, ncol(pct2))], by = 1, all = TRUE)
@@ -2481,13 +2481,13 @@ cleanString(&quot;Coeur d&#39;Alene&quot;)
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=10 title='Create a new variable <strong>max</strong> variable'>
+        data-slide=10 title='Create a new max variable'>
          10
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=11 title='Merge results back in'>
+        data-slide=11 title='Merge results back into full dataset, plot results'>
          11
       </a>
     </li>
