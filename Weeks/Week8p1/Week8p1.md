@@ -278,6 +278,48 @@ p + geom_point(alpha = 0.01) + geom_density2d(color = "red")
 
 ![plot of chunk guidedp1_3d](assets/fig/guidedp1_3d-1.png)
 
+----
+## An alternative with base
+
+
+```r
+dens <- densCols(diamonds$carat, diamonds$price, 
+  colramp = colorRampPalette(c("black", "white")))
+
+cols <-  colorRampPalette(c("#000099", "#00FEFF", "#45FE4F", 
+                            "#FCFF00", "#FF9400", "#FF3100"))(250)
+diamonds$dens <- col2rgb(dens)[1,] + 1
+diamonds$col <- cols[diamonds$dens]
+diamonds <- diamonds[order(diamonds$dens),]
+plot(price ~ carat, 
+	 data=diamonds, 
+	 pch=20, 
+	 col=col, 
+	 bty = "n",
+	 xlim = c(0,5),
+	 ylim = c(0, 20000))
+```
+
+----
+
+![plot of chunk baseHDScatter](assets/fig/baseHDScatter-1.png)
+
+
+----
+## Add contour lines
+
+
+```r
+library(MASS)
+zd <- na.omit(cbind(diamonds$carat, diamonds$price))
+z <- kde2d(zd[ ,1], zd[ ,2], n=50)
+contour(z, drawlabels=FALSE, nlevels=8, add=TRUE)
+```
+
+![plot of chunk contour2](assets/fig/contour2-1.png)
+
+
+
 -----
 ## Quantiles
 Defaults to the 25th, 50th, and 75th percentiles

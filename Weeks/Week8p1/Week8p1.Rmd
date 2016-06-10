@@ -236,6 +236,87 @@ p + geom_bin2d()
 p + geom_point(alpha = 0.01) + geom_density2d(color = "red")
 ```
 
+----
+## An alternative with base
+
+```{r baseHDScatter1, eval = FALSE}
+dens <- densCols(diamonds$carat, diamonds$price, 
+  colramp = colorRampPalette(c("black", "white")))
+
+cols <-  colorRampPalette(c("#000099", "#00FEFF", "#45FE4F", 
+                            "#FCFF00", "#FF9400", "#FF3100"))(250)
+diamonds$dens <- col2rgb(dens)[1,] + 1
+diamonds$col <- cols[diamonds$dens]
+diamonds <- diamonds[order(diamonds$dens),]
+plot(price ~ carat, 
+	 data=diamonds, 
+	 pch=20, 
+	 col=col, 
+	 bty = "n",
+	 xlim = c(0,5),
+	 ylim = c(0, 20000))
+```
+
+----
+
+```{r baseHDScatter, echo = FALSE, fig.height = 8}
+dens <- densCols(diamonds$carat, diamonds$price, 
+  colramp = colorRampPalette(c("black", "white")))
+
+# Nice b & w version
+#cols <-  colorRampPalette(c("gray90", "black"))(250)
+cols <-  colorRampPalette(c("#000099", "#00FEFF", "#45FE4F", 
+                            "#FCFF00", "#FF9400", "#FF3100"))(250)
+diamonds$dens <- col2rgb(dens)[1,] + 1
+diamonds$col <- cols[diamonds$dens]
+diamonds <- diamonds[order(diamonds$dens),]
+plot(price ~ carat, 
+	 data=diamonds, 
+	 pch=20, 
+	 col=col, 
+	 bty = "n",
+	 xlim = c(0,5),
+	 ylim = c(0, 20000))
+```
+
+
+----
+## Add contour lines
+
+```{r contour1, eval = FALSE}
+library(MASS)
+zd <- na.omit(cbind(diamonds$carat, diamonds$price))
+z <- kde2d(zd[ ,1], zd[ ,2], n=50)
+contour(z, drawlabels=FALSE, nlevels=8, add=TRUE)
+```
+
+```{r contour2, echo = FALSE}
+dens <- densCols(diamonds$carat, diamonds$price, 
+  colramp = colorRampPalette(c("black", "white")))
+
+# Nice b & w version
+#cols <-  colorRampPalette(c("gray90", "black"))(250)
+cols <-  colorRampPalette(c("#000099", "#00FEFF", "#45FE4F", 
+                            "#FCFF00", "#FF9400", "#FF3100"))(250)
+diamonds$dens <- col2rgb(dens)[1,] + 1
+diamonds$col <- cols[diamonds$dens]
+diamonds <- diamonds[order(diamonds$dens),]
+plot(price ~ carat, 
+	 data=diamonds, 
+	 pch=20, 
+	 col=col, 
+	 bty = "n",
+	 xlim = c(0,5),
+	 ylim = c(0, 20000))
+
+library(MASS)
+zd <- na.omit(cbind(diamonds$carat, diamonds$price))
+z <- kde2d(zd[ ,1], zd[ ,2], n=50)
+contour(z, drawlabels=FALSE, nlevels=8, add=TRUE)
+```
+
+
+
 -----
 ## Quantiles
 Defaults to the 25th, 50th, and 75th percentiles

@@ -488,6 +488,57 @@ ggplot(mpg, aes(x = displ, y = hwy)) + geom_smooth()
 
 <slide class="" id="slide-24" style="background:;">
   <hgroup>
+    <h2>An alternative with base</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">dens &lt;- densCols(diamonds$carat, diamonds$price, 
+  colramp = colorRampPalette(c(&quot;black&quot;, &quot;white&quot;)))
+
+cols &lt;-  colorRampPalette(c(&quot;#000099&quot;, &quot;#00FEFF&quot;, &quot;#45FE4F&quot;, 
+                            &quot;#FCFF00&quot;, &quot;#FF9400&quot;, &quot;#FF3100&quot;))(250)
+diamonds$dens &lt;- col2rgb(dens)[1,] + 1
+diamonds$col &lt;- cols[diamonds$dens]
+diamonds &lt;- diamonds[order(diamonds$dens),]
+plot(price ~ carat, 
+     data=diamonds, 
+     pch=20, 
+     col=col, 
+     bty = &quot;n&quot;,
+     xlim = c(0,5),
+     ylim = c(0, 20000))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  <article data-timings="">
+    <p><img src="assets/fig/baseHDScatter-1.png" alt="plot of chunk baseHDScatter"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h2>Add contour lines</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">library(MASS)
+zd &lt;- na.omit(cbind(diamonds$carat, diamonds$price))
+z &lt;- kde2d(zd[ ,1], zd[ ,2], n=50)
+contour(z, drawlabels=FALSE, nlevels=8, add=TRUE)
+</code></pre>
+
+<p><img src="assets/fig/contour2-1.png" alt="plot of chunk contour2"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <hgroup>
     <h2>Quantiles</h2>
   </hgroup>
   <article data-timings="">
@@ -505,7 +556,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) + geom_smooth()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-25" style="background:;">
+<slide class="" id="slide-28" style="background:;">
   <hgroup>
     <h2>Quantiles</h2>
   </hgroup>
@@ -524,7 +575,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) + geom_smooth()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-26" style="background:;">
+<slide class="" id="slide-29" style="background:;">
   <hgroup>
     <h2>Add an extra layer</h2>
   </hgroup>
@@ -538,7 +589,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) + geom_smooth()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-27" style="background:;">
+<slide class="" id="slide-30" style="background:;">
   <hgroup>
     <h2>Color by cut</h2>
   </hgroup>
@@ -553,7 +604,7 @@ p2cut + geom_point()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-28" style="background:;">
+<slide class="" id="slide-31" style="background:;">
   <hgroup>
     <h2>Color by color</h2>
   </hgroup>
@@ -568,7 +619,7 @@ p2color + geom_point()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-29" style="background:;">
+<slide class="" id="slide-32" style="background:;">
   <hgroup>
     <h2>Color by clarity</h2>
   </hgroup>
@@ -583,7 +634,7 @@ p2clarity + geom_point()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-30" style="background:;">
+<slide class="" id="slide-33" style="background:;">
   <hgroup>
     <h2>geoms: One variable</h2>
   </hgroup>
@@ -631,7 +682,7 @@ p2clarity + geom_point()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-31" style="background:;">
+<slide class="" id="slide-34" style="background:;">
   <hgroup>
     <h2>Area plot</h2>
   </hgroup>
@@ -649,7 +700,7 @@ price + geom_area(stat = &quot;bin&quot;)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-32" style="background:;">
+<slide class="" id="slide-35" style="background:;">
   <hgroup>
     <h1>Frequency polygons</h1>
   </hgroup>
@@ -666,7 +717,7 @@ price + geom_area(stat = &quot;bin&quot;)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-33" style="background:;">
+<slide class="" id="slide-36" style="background:;">
   <hgroup>
     <h2>Evaluate frequencies by <em>cut</em></h2>
   </hgroup>
@@ -681,7 +732,7 @@ price2 + geom_freqpoly(bins = 50)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-34" style="background:;">
+<slide class="" id="slide-37" style="background:;">
   <hgroup>
     <h2>Histograms</h2>
   </hgroup>
@@ -698,7 +749,7 @@ price2 + geom_freqpoly(bins = 50)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-35" style="background:;">
+<slide class="" id="slide-38" style="background:;">
   <hgroup>
     <h1>Change binwidth</h1>
   </hgroup>
@@ -712,7 +763,7 @@ price2 + geom_freqpoly(bins = 50)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-36" style="background:;">
+<slide class="" id="slide-39" style="background:;">
   <hgroup>
     <h2>Barplots</h2>
   </hgroup>
@@ -726,7 +777,7 @@ price2 + geom_freqpoly(bins = 50)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-37" style="background:;">
+<slide class="" id="slide-40" style="background:;">
   <hgroup>
     <h2>Better: Tufte-esque</h2>
   </hgroup>
@@ -748,7 +799,7 @@ ggplot(mpg, aes(trans)) + geom_bar(fill = &quot;gray&quot;) + theme_tufte() +
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-38" style="background:;">
+<slide class="" id="slide-41" style="background:;">
   <article data-timings="">
     <p><img src="assets/fig/TufteBarplot2-1.png" alt="plot of chunk TufteBarplot2"></p>
 
@@ -756,7 +807,7 @@ ggplot(mpg, aes(trans)) + geom_bar(fill = &quot;gray&quot;) + theme_tufte() +
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="segue" id="slide-39" style="background:;">
+<slide class="segue" id="slide-42" style="background:;">
   <hgroup>
     <h1>Plotting categorical variables</h1>
   </hgroup>
@@ -766,7 +817,7 @@ ggplot(mpg, aes(trans)) + geom_bar(fill = &quot;gray&quot;) + theme_tufte() +
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-40" style="background:;">
+<slide class="" id="slide-43" style="background:;">
   <hgroup>
     <h2>boxplots</h2>
   </hgroup>
@@ -783,7 +834,7 @@ bp + geom_boxplot()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-41" style="background:;">
+<slide class="" id="slide-44" style="background:;">
   <hgroup>
     <h2>stripcharts</h2>
   </hgroup>
@@ -807,7 +858,7 @@ bp + geom_boxplot()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-42" style="background:;">
+<slide class="" id="slide-45" style="background:;">
   <hgroup>
     <h2>Control the amount of jittering</h2>
   </hgroup>
@@ -821,7 +872,7 @@ bp + geom_boxplot()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-43" style="background:;">
+<slide class="" id="slide-46" style="background:;">
   <hgroup>
     <h2>Useful together</h2>
   </hgroup>
@@ -835,7 +886,7 @@ bp + geom_boxplot()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-44" style="background:;">
+<slide class="" id="slide-47" style="background:;">
   <hgroup>
     <h2>Usually better: Violin plots</h2>
   </hgroup>
@@ -849,7 +900,7 @@ bp + geom_boxplot()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="segue" id="slide-45" style="background:;">
+<slide class="segue" id="slide-48" style="background:;">
   <hgroup>
     <h1>Modifying axes and labels</h1>
   </hgroup>
@@ -859,7 +910,7 @@ bp + geom_boxplot()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-46" style="background:;">
+<slide class="" id="slide-49" style="background:;">
   <hgroup>
     <h2>Changing labels</h2>
   </hgroup>
@@ -885,7 +936,7 @@ bp + geom_boxplot()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-47" style="background:;">
+<slide class="" id="slide-50" style="background:;">
   <hgroup>
     <h2>Adding a main title</h2>
   </hgroup>
@@ -902,7 +953,7 @@ bp + geom_boxplot()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-48" style="background:;">
+<slide class="" id="slide-51" style="background:;">
   <hgroup>
     <h2>Alternative specification</h2>
   </hgroup>
@@ -918,7 +969,7 @@ mpgHC + labs(title = &quot;Relation between city and highway miles per gallon&qu
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-49" style="background:;">
+<slide class="" id="slide-52" style="background:;">
   <hgroup>
     <h2>Labs also allows you to change legend names</h2>
   </hgroup>
@@ -934,7 +985,7 @@ mpgHC2 + labs(title = &quot;Relation between city and highway miles per gallon&q
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-50" style="background:;">
+<slide class="" id="slide-53" style="background:;">
   <hgroup>
     <h2>Omit labels</h2>
   </hgroup>
@@ -948,7 +999,7 @@ mpgHC2 + labs(title = &quot;Relation between city and highway miles per gallon&q
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-51" style="background:;">
+<slide class="" id="slide-54" style="background:;">
   <hgroup>
     <h2>Limit x-axis range</h2>
   </hgroup>
@@ -965,7 +1016,7 @@ mpgHC2 + labs(title = &quot;Relation between city and highway miles per gallon&q
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-52" style="background:;">
+<slide class="" id="slide-55" style="background:;">
   <hgroup>
     <h2>Limit y-axis range</h2>
   </hgroup>
@@ -982,7 +1033,7 @@ mpgHC2 + labs(title = &quot;Relation between city and highway miles per gallon&q
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="segue" id="slide-53" style="background:;">
+<slide class="segue" id="slide-56" style="background:;">
   <hgroup>
     <h1>Faceting</h1>
   </hgroup>
@@ -992,7 +1043,7 @@ mpgHC2 + labs(title = &quot;Relation between city and highway miles per gallon&q
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-54" style="background:;">
+<slide class="" id="slide-57" style="background:;">
   <hgroup>
     <h2>Produce separate plots according to a specific variable</h2>
   </hgroup>
@@ -1013,7 +1064,7 @@ hwy + geom_point() + facet_wrap(~class)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-55" style="background:;">
+<slide class="" id="slide-58" style="background:;">
   <hgroup>
     <h2>Add a linear function to each plot</h2>
   </hgroup>
@@ -1028,7 +1079,7 @@ hwy + geom_point() + geom_smooth(method = &quot;lm&quot;) + facet_wrap(~class)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-56" style="background:;">
+<slide class="" id="slide-59" style="background:;">
   <hgroup>
     <h2>Example with growth modeling</h2>
   </hgroup>
@@ -1061,7 +1112,7 @@ head(d, n = 15)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-57" style="background:;">
+<slide class="" id="slide-60" style="background:;">
   <hgroup>
     <h2>Random sampling</h2>
   </hgroup>
@@ -1088,7 +1139,7 @@ head(samp1)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-58" style="background:;">
+<slide class="" id="slide-61" style="background:;">
   <hgroup>
     <h2>Sample 1</h2>
   </hgroup>
@@ -1104,7 +1155,7 @@ head(samp1)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-59" style="background:;">
+<slide class="" id="slide-62" style="background:;">
   <hgroup>
     <h2>Sample 2</h2>
   </hgroup>
@@ -1120,7 +1171,7 @@ head(samp1)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-60" style="background:;">
+<slide class="" id="slide-63" style="background:;">
   <hgroup>
     <h2>Sample 3</h2>
   </hgroup>
@@ -1136,7 +1187,7 @@ head(samp1)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-61" style="background:;">
+<slide class="" id="slide-64" style="background:;">
   <hgroup>
     <h2>Alternative: Connect the dots</h2>
   </hgroup>
@@ -1153,7 +1204,7 @@ head(samp1)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-62" style="background:;">
+<slide class="" id="slide-65" style="background:;">
   <article data-timings="">
     <p>Or, put all lines in a single plot</p>
 
@@ -1167,7 +1218,7 @@ head(samp1)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-63" style="background:;">
+<slide class="" id="slide-66" style="background:;">
   <hgroup>
     <h2>What happens if you forget to specify the group?</h2>
   </hgroup>
@@ -1182,7 +1233,7 @@ head(samp1)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-64" style="background:;">
+<slide class="" id="slide-67" style="background:;">
   <hgroup>
     <h2>How bad is the nonlinearity, really?</h2>
   </hgroup>
@@ -1200,7 +1251,7 @@ head(samp1)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-65" style="background:;">
+<slide class="" id="slide-68" style="background:;">
   <article data-timings="">
     <pre><code class="r">ggplot(samp2, aes(Months, RIT)) + 
     geom_point() + geom_smooth(color = &quot;red&quot;, span = 2, se = FALSE) +
@@ -1213,7 +1264,7 @@ head(samp1)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-66" style="background:;">
+<slide class="" id="slide-69" style="background:;">
   <article data-timings="">
     <pre><code class="r">ggplot(samp3, aes(Months, RIT)) + 
     geom_point() + geom_smooth(color = &quot;red&quot;, span = 2, se = FALSE) +
@@ -1226,7 +1277,7 @@ head(samp1)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-67" style="background:;">
+<slide class="" id="slide-70" style="background:;">
   <hgroup>
     <h2>A few notes</h2>
   </hgroup>
@@ -1254,7 +1305,7 @@ head(samp1)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-68" style="background:;">
+<slide class="" id="slide-71" style="background:;">
   <hgroup>
     <h2>Different faceting</h2>
   </hgroup>
@@ -1267,7 +1318,7 @@ head(samp1)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-69" style="background:;">
+<slide class="" id="slide-72" style="background:;">
   <hgroup>
     <h2>Options for <code>facet_wrap</code></h2>
   </hgroup>
@@ -1284,7 +1335,7 @@ f + facet_wrap(~class, ncol = 4)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-70" style="background:;">
+<slide class="" id="slide-73" style="background:;">
   <article data-timings="">
     <p>Change the direction plots are produced</p>
 
@@ -1297,7 +1348,7 @@ f + facet_wrap(~class, ncol = 4)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-71" style="background:;">
+<slide class="" id="slide-74" style="background:;">
   <hgroup>
     <h2>Facet Grid</h2>
   </hgroup>
@@ -1313,7 +1364,7 @@ f + facet_wrap(~class, ncol = 4)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-72" style="background:;">
+<slide class="" id="slide-75" style="background:;">
   <article data-timings="">
     <pre><code class="r">f + facet_grid(drv ~ .)
 </code></pre>
@@ -1324,7 +1375,7 @@ f + facet_wrap(~class, ncol = 4)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-73" style="background:;">
+<slide class="" id="slide-76" style="background:;">
   <hgroup>
     <h2>Two variables</h2>
   </hgroup>
@@ -1338,7 +1389,7 @@ f + facet_wrap(~class, ncol = 4)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-74" style="background:;">
+<slide class="" id="slide-77" style="background:;">
   <hgroup>
     <h2>Two variables</h2>
   </hgroup>
@@ -1354,7 +1405,7 @@ f + facet_wrap(~class, ncol = 4)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-75" style="background:;">
+<slide class="" id="slide-78" style="background:;">
   <hgroup>
     <h2>Scales with faceting</h2>
   </hgroup>
@@ -1370,7 +1421,7 @@ f + facet_wrap(~class, ncol = 4)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-76" style="background:;">
+<slide class="" id="slide-79" style="background:;">
   <article data-timings="">
     <p>Free y-axis scale, fixed x</p>
 
@@ -1383,7 +1434,7 @@ f + facet_wrap(~class, ncol = 4)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-77" style="background:;">
+<slide class="" id="slide-80" style="background:;">
   <article data-timings="">
     <p>Free x-axis scale, fixed y</p>
 
@@ -1396,7 +1447,7 @@ f + facet_wrap(~class, ncol = 4)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-78" style="background:;">
+<slide class="" id="slide-81" style="background:;">
   <article data-timings="">
     <p>Change spacing with <code>facet_grid</code></p>
 
@@ -1409,7 +1460,7 @@ f + facet_wrap(~class, ncol = 4)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-79" style="background:;">
+<slide class="" id="slide-82" style="background:;">
   <hgroup>
     <h2>Faceting vs Grouping</h2>
   </hgroup>
@@ -1437,7 +1488,7 @@ f + facet_wrap(~class, ncol = 4)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-80" style="background:;">
+<slide class="" id="slide-83" style="background:;">
   <hgroup>
     <h2>Another option</h2>
   </hgroup>
@@ -1458,7 +1509,7 @@ ggplot(mpg, aes(displ, hwy)) +
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-81" style="background:;">
+<slide class="" id="slide-84" style="background:;">
   <hgroup>
     <h2>Guided practice</h2>
   </hgroup>
@@ -1489,7 +1540,7 @@ prefer?</li>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-82" style="background:;">
+<slide class="" id="slide-85" style="background:;">
   <article data-timings="">
     <p>Use faceting to view the conditional densities by <em>clarity</em>.</p>
 
@@ -1503,7 +1554,7 @@ base + geom_density() + facet_wrap(~ clarity)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-83" style="background:;">
+<slide class="" id="slide-86" style="background:;">
   <article data-timings="">
     <p>Modify the code to group by <em>clarity</em> and facet by <em>cut</em>.</p>
 
@@ -1517,7 +1568,7 @@ base2 + geom_density() + facet_wrap(~ cut)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-84" style="background:;">
+<slide class="" id="slide-87" style="background:;">
   <article data-timings="">
     <p>Modify the code so the points are colored according to their color.</p>
 
@@ -1530,7 +1581,7 @@ base2 + geom_density() + facet_wrap(~ cut)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-85" style="background:;">
+<slide class="" id="slide-88" style="background:;">
   <article data-timings="">
     <p>Use faceting to produce separate plots for each color.</p>
 
@@ -1543,7 +1594,7 @@ base2 + geom_density() + facet_wrap(~ cut)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="segue" id="slide-86" style="background:;">
+<slide class="segue" id="slide-89" style="background:;">
   <hgroup>
     <h1>Themes</h1>
   </hgroup>
@@ -1553,7 +1604,7 @@ base2 + geom_density() + facet_wrap(~ cut)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-87" style="background:;">
+<slide class="" id="slide-90" style="background:;">
   <hgroup>
     <h2>Overview of themes</h2>
   </hgroup>
@@ -1573,7 +1624,7 @@ base2 + geom_density() + facet_wrap(~ cut)
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-88" style="background:;">
+<slide class="" id="slide-91" style="background:;">
   <hgroup>
     <h2>theme_gray (default)</h2>
   </hgroup>
@@ -1588,7 +1639,7 @@ baseP + theme_gray()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-89" style="background:;">
+<slide class="" id="slide-92" style="background:;">
   <hgroup>
     <h2>theme_bw</h2>
   </hgroup>
@@ -1602,7 +1653,7 @@ baseP + theme_gray()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-90" style="background:;">
+<slide class="" id="slide-93" style="background:;">
   <hgroup>
     <h2>theme_classic</h2>
   </hgroup>
@@ -1616,7 +1667,7 @@ baseP + theme_gray()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-91" style="background:;">
+<slide class="" id="slide-94" style="background:;">
   <hgroup>
     <h2>theme_dark</h2>
   </hgroup>
@@ -1630,7 +1681,7 @@ baseP + theme_gray()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-92" style="background:;">
+<slide class="" id="slide-95" style="background:;">
   <hgroup>
     <h2>theme_minimal</h2>
   </hgroup>
@@ -1644,7 +1695,7 @@ baseP + theme_gray()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-93" style="background:;">
+<slide class="" id="slide-96" style="background:;">
   <hgroup>
     <h2>Some from the <em>ggthemes</em> packages</h2>
   </hgroup>
@@ -1663,7 +1714,7 @@ baseP + theme_tufte()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-94" style="background:;">
+<slide class="" id="slide-97" style="background:;">
   <hgroup>
     <h2>theme_fivethirtyeight</h2>
   </hgroup>
@@ -1677,7 +1728,7 @@ baseP + theme_tufte()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-95" style="background:;">
+<slide class="" id="slide-98" style="background:;">
   <hgroup>
     <h2>theme_stata</h2>
   </hgroup>
@@ -1691,7 +1742,7 @@ baseP + theme_tufte()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-96" style="background:;">
+<slide class="" id="slide-99" style="background:;">
   <hgroup>
     <h2>theme_base</h2>
   </hgroup>
@@ -1705,7 +1756,7 @@ baseP + theme_tufte()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-97" style="background:;">
+<slide class="" id="slide-100" style="background:;">
   <hgroup>
     <h2>theme_solarized</h2>
   </hgroup>
@@ -1719,7 +1770,7 @@ baseP + theme_tufte()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-98" style="background:;">
+<slide class="" id="slide-101" style="background:;">
   <hgroup>
     <h2>theme_wsj</h2>
   </hgroup>
@@ -1733,7 +1784,7 @@ baseP + theme_tufte()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-99" style="background:;">
+<slide class="" id="slide-102" style="background:;">
   <hgroup>
     <h2>Further customization</h2>
   </hgroup>
@@ -1752,7 +1803,7 @@ baseP + theme_tufte()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="segue" id="slide-100" style="background:;">
+<slide class="segue" id="slide-103" style="background:;">
   <hgroup>
     <h1>At the edge of development</h1>
   </hgroup>
@@ -1762,7 +1813,7 @@ baseP + theme_tufte()
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-101" style="background:;">
+<slide class="" id="slide-104" style="background:;">
   <hgroup>
     <h2>ggvis</h2>
   </hgroup>
@@ -1781,7 +1832,7 @@ Let&#39;s take a look! <a href="http://ggvis.rstudio.com/interactivity.html">htt
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-102" style="background:;">
+<slide class="" id="slide-105" style="background:;">
   <hgroup>
     <h2>The <em>gganimate</em> extension to <em>ggplot2</em></h2>
   </hgroup>
@@ -1793,7 +1844,7 @@ Let&#39;s take a look! <a href="http://ggvis.rstudio.com/interactivity.html">htt
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-103" style="background:;">
+<slide class="" id="slide-106" style="background:;">
   <hgroup>
     <h2>What does LOESS (and LOWESS) stand for again?</h2>
   </hgroup>
@@ -1810,7 +1861,7 @@ Let&#39;s take a look! <a href="http://ggvis.rstudio.com/interactivity.html">htt
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-104" style="background:;">
+<slide class="" id="slide-107" style="background:;">
   <hgroup>
     <h2>Animating LOESS fits with different spans</h2>
   </hgroup>
@@ -1822,7 +1873,7 @@ Let&#39;s take a look! <a href="http://ggvis.rstudio.com/interactivity.html">htt
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-105" style="background:;">
+<slide class="" id="slide-108" style="background:;">
   <hgroup>
     <h2>Other extensions</h2>
   </hgroup>
@@ -1977,247 +2028,247 @@ Let&#39;s take a look! <a href="http://ggvis.rstudio.com/interactivity.html">htt
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=24 title='Quantiles'>
+        data-slide=24 title='An alternative with base'>
          24
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=25 title='Quantiles'>
+        data-slide=25 title='NA'>
          25
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=26 title='Add an extra layer'>
+        data-slide=26 title='Add contour lines'>
          26
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=27 title='Color by cut'>
+        data-slide=27 title='Quantiles'>
          27
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=28 title='Color by color'>
+        data-slide=28 title='Quantiles'>
          28
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=29 title='Color by clarity'>
+        data-slide=29 title='Add an extra layer'>
          29
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=30 title='geoms: One variable'>
+        data-slide=30 title='Color by cut'>
          30
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=31 title='Area plot'>
+        data-slide=31 title='Color by color'>
          31
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=32 title='Frequency polygons'>
+        data-slide=32 title='Color by clarity'>
          32
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=33 title='Evaluate frequencies by <em>cut</em>'>
+        data-slide=33 title='geoms: One variable'>
          33
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=34 title='Histograms'>
+        data-slide=34 title='Area plot'>
          34
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=35 title='Change binwidth'>
+        data-slide=35 title='Frequency polygons'>
          35
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=36 title='Barplots'>
+        data-slide=36 title='Evaluate frequencies by <em>cut</em>'>
          36
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=37 title='Better: Tufte-esque'>
+        data-slide=37 title='Histograms'>
          37
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=38 title='NA'>
+        data-slide=38 title='Change binwidth'>
          38
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=39 title='Plotting categorical variables'>
+        data-slide=39 title='Barplots'>
          39
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=40 title='boxplots'>
+        data-slide=40 title='Better: Tufte-esque'>
          40
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=41 title='stripcharts'>
+        data-slide=41 title='NA'>
          41
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=42 title='Control the amount of jittering'>
+        data-slide=42 title='Plotting categorical variables'>
          42
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=43 title='Useful together'>
+        data-slide=43 title='boxplots'>
          43
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=44 title='Usually better: Violin plots'>
+        data-slide=44 title='stripcharts'>
          44
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=45 title='Modifying axes and labels'>
+        data-slide=45 title='Control the amount of jittering'>
          45
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=46 title='Changing labels'>
+        data-slide=46 title='Useful together'>
          46
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=47 title='Adding a main title'>
+        data-slide=47 title='Usually better: Violin plots'>
          47
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=48 title='Alternative specification'>
+        data-slide=48 title='Modifying axes and labels'>
          48
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=49 title='Labs also allows you to change legend names'>
+        data-slide=49 title='Changing labels'>
          49
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=50 title='Omit labels'>
+        data-slide=50 title='Adding a main title'>
          50
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=51 title='Limit x-axis range'>
+        data-slide=51 title='Alternative specification'>
          51
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=52 title='Limit y-axis range'>
+        data-slide=52 title='Labs also allows you to change legend names'>
          52
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=53 title='Faceting'>
+        data-slide=53 title='Omit labels'>
          53
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=54 title='Produce separate plots according to a specific variable'>
+        data-slide=54 title='Limit x-axis range'>
          54
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=55 title='Add a linear function to each plot'>
+        data-slide=55 title='Limit y-axis range'>
          55
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=56 title='Example with growth modeling'>
+        data-slide=56 title='Faceting'>
          56
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=57 title='Random sampling'>
+        data-slide=57 title='Produce separate plots according to a specific variable'>
          57
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=58 title='Sample 1'>
+        data-slide=58 title='Add a linear function to each plot'>
          58
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=59 title='Sample 2'>
+        data-slide=59 title='Example with growth modeling'>
          59
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=60 title='Sample 3'>
+        data-slide=60 title='Random sampling'>
          60
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=61 title='Alternative: Connect the dots'>
+        data-slide=61 title='Sample 1'>
          61
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=62 title='NA'>
+        data-slide=62 title='Sample 2'>
          62
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=63 title='What happens if you forget to specify the group?'>
+        data-slide=63 title='Sample 3'>
          63
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=64 title='How bad is the nonlinearity, really?'>
+        data-slide=64 title='Alternative: Connect the dots'>
          64
       </a>
     </li>
@@ -2229,115 +2280,115 @@ Let&#39;s take a look! <a href="http://ggvis.rstudio.com/interactivity.html">htt
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=66 title='NA'>
+        data-slide=66 title='What happens if you forget to specify the group?'>
          66
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=67 title='A few notes'>
+        data-slide=67 title='How bad is the nonlinearity, really?'>
          67
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=68 title='Different faceting'>
+        data-slide=68 title='NA'>
          68
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=69 title='Options for <code>facet_wrap</code>'>
+        data-slide=69 title='NA'>
          69
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=70 title='NA'>
+        data-slide=70 title='A few notes'>
          70
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=71 title='Facet Grid'>
+        data-slide=71 title='Different faceting'>
          71
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=72 title='NA'>
+        data-slide=72 title='Options for <code>facet_wrap</code>'>
          72
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=73 title='Two variables'>
+        data-slide=73 title='NA'>
          73
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=74 title='Two variables'>
+        data-slide=74 title='Facet Grid'>
          74
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=75 title='Scales with faceting'>
+        data-slide=75 title='NA'>
          75
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=76 title='NA'>
+        data-slide=76 title='Two variables'>
          76
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=77 title='NA'>
+        data-slide=77 title='Two variables'>
          77
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=78 title='NA'>
+        data-slide=78 title='Scales with faceting'>
          78
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=79 title='Faceting vs Grouping'>
+        data-slide=79 title='NA'>
          79
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=80 title='Another option'>
+        data-slide=80 title='NA'>
          80
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=81 title='Guided practice'>
+        data-slide=81 title='NA'>
          81
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=82 title='NA'>
+        data-slide=82 title='Faceting vs Grouping'>
          82
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=83 title='NA'>
+        data-slide=83 title='Another option'>
          83
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=84 title='NA'>
+        data-slide=84 title='Guided practice'>
          84
       </a>
     </li>
@@ -2349,122 +2400,140 @@ Let&#39;s take a look! <a href="http://ggvis.rstudio.com/interactivity.html">htt
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=86 title='Themes'>
+        data-slide=86 title='NA'>
          86
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=87 title='Overview of themes'>
+        data-slide=87 title='NA'>
          87
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=88 title='theme_gray (default)'>
+        data-slide=88 title='NA'>
          88
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=89 title='theme_bw'>
+        data-slide=89 title='Themes'>
          89
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=90 title='theme_classic'>
+        data-slide=90 title='Overview of themes'>
          90
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=91 title='theme_dark'>
+        data-slide=91 title='theme_gray (default)'>
          91
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=92 title='theme_minimal'>
+        data-slide=92 title='theme_bw'>
          92
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=93 title='Some from the <em>ggthemes</em> packages'>
+        data-slide=93 title='theme_classic'>
          93
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=94 title='theme_fivethirtyeight'>
+        data-slide=94 title='theme_dark'>
          94
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=95 title='theme_stata'>
+        data-slide=95 title='theme_minimal'>
          95
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=96 title='theme_base'>
+        data-slide=96 title='Some from the <em>ggthemes</em> packages'>
          96
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=97 title='theme_solarized'>
+        data-slide=97 title='theme_fivethirtyeight'>
          97
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=98 title='theme_wsj'>
+        data-slide=98 title='theme_stata'>
          98
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=99 title='Further customization'>
+        data-slide=99 title='theme_base'>
          99
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=100 title='At the edge of development'>
+        data-slide=100 title='theme_solarized'>
          100
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=101 title='ggvis'>
+        data-slide=101 title='theme_wsj'>
          101
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=102 title='The <em>gganimate</em> extension to <em>ggplot2</em>'>
+        data-slide=102 title='Further customization'>
          102
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=103 title='What does LOESS (and LOWESS) stand for again?'>
+        data-slide=103 title='At the edge of development'>
          103
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=104 title='Animating LOESS fits with different spans'>
+        data-slide=104 title='ggvis'>
          104
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=105 title='Other extensions'>
+        data-slide=105 title='The <em>gganimate</em> extension to <em>ggplot2</em>'>
          105
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=106 title='What does LOESS (and LOWESS) stand for again?'>
+         106
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=107 title='Animating LOESS fits with different spans'>
+         107
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=108 title='Other extensions'>
+         108
       </a>
     </li>
   </ul>
